@@ -19,47 +19,69 @@ function V = generate_flow_2d_rectangular(centroids, rotating_centres, node_cent
 % USAGE:
 %{
     
-% For only one rotating singularity
+% Ex: 1 - For only one rotating singularity
 centroid = [0.5; 0.5];
 rotating_centre = [1];
 node_centre     = [0];
-
-
-centroids = [[0.1; 0.1], [0.3; 0.3], [0.2; 0.8], [0.5; 0.5]];
-c = [0, 0, 0; 0 0 0];
-
 V = generate_flow_2d_rectangular(centroid, rotating_centre, node_centre);
-[h, hs] = plot_velocity_fields(V)
 
-Vn = perform_vf_normalization(V);
-plot_vf(Vn);
+%Ex: 2 -  For one source singularity
+centroid = [0.5; 0.5];
+rotating_centre = [0];
+node_centre     = [1];
+V = generate_flow_2d_rectangular(centroid, rotating_centre, node_centre);
 
+
+
+
+% Ex 3: For two singularities
+centroids = [[0.8; 0.8], ...
+             [0.2; 0.2]];
+rotating_centres = [1, 0];
+node_centres = [0, 1];
+V = generate_flow_2d_rectangular(centroids, rotating_centres, node_centres);
+
+% Ex 4: For four singularities
+centroids = [[0.8; 0.8], ...
+             [0.8; 0.2], ...
+             [0.1; 0.1], ...
+             [0.1; 0.6]];
+rotating_centres = [1, -1, 0, 0];
+node_centres = [0, 0, 1, -1];
+displacement = [[-0.1; -0.1],...
+                [ 0.1;  0.1],...
+                [  0;   0 ], ...
+                [  0;   0]];
+
+V = generate_flow_2d_rectangular(centroids, rotating_centres, node_centres);
+
+% Plotting for all the examples is achieved by
+figure;
+plot_velocity_field(V)
+
+Vn = normalise_vector_field(V, length(size(V)));
+figure;
+plot_velocity_field(Vn);
 
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-%   V = compute_flow(p, r, s, c, n);
-%
-% Generate a flow, using the equation
+% Generate a flow (velocity vector field), using the equation
 %           [ node  -rotating ]     d
 %   v(x) =  [                 ] * ----- + displacement  with d = x-p
 %           [ rotating   node ]    |d|
 %
 % If node_centre > 0 source 
 %    node_centre < 0 sink 
-% If rotating_centre > 0 (resp. <0) then there is a clockwise (spiral) 
-%    rotating_centre < 0 there is an aticlockwise rotation (spiral)
-%   vortex at location p.
+% If rotating_centre >  then there is a clockwise (spiral) 
+%    rotating_centre < 0 there is a counter-clockwise rotation (spiral)
+%    vortex at location centorid(j).
 %
-% IMPORTANT : The grid is assumed to be in the square with corners [0,0] [0, 1] [1, 0] [1, 1].
-%   The resulting flow is of size (n,n), regularly sampled
-%   in [0,1].
-%
-% If p is a (2, k) vector, then the resulting flow field is 
-%   the sum of the 'k' fields with the basic singularities.
-%   (and then 'r', 's' and 'c' should be length-k vectors).
-%
-% Original - Copyright (c) 2005 Gabriel Peyre
+% IMPORTANT : For simplicity, the rectangular grid is assumed to be in the 
+%             square with corners: [0,0] [0, 1] [1, 0] [1, 1].
+%             The resulting flow is of size (n,n), regularly sampled
+%             in [0,1].
+% TODO: generalise to grid of any size, including rectangular
 
 
 if nargin < 5
@@ -97,7 +119,7 @@ if size(displacement,1)~=2
     error('Displacement should be a vector of size (2, num_sing)');
 end
 
-if length(node_centres, 2) ~= num_sing || length(rotating_centres)~=num_sing
+if length(node_centres) ~= num_sing || length(rotating_centres)~=num_sing
     error('rotating_centres/node_centres should be of length num_sing.');
 end
 
