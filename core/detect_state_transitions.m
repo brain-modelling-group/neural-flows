@@ -50,8 +50,7 @@ function [out]= detect_state_transitions(dEnergy)
 
 %}
 %
-% MODIFICATION HISTORY:
-%     Original, Julien Lefevre -- brainstorm
+
 
 
 %% Test dbscan function for classification
