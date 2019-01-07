@@ -1,9 +1,11 @@
-function V = generate_flow_2d_rectangular(p, r, s, c, n)
+function V = generate_flow_2d_rectangular(centroids, rotating_centres, node_centres, displacement, grid_size)
 %% Generate a velocity vector field correspoding to a sink, source
 %  or vortex/spiral - rotational component
 %
 %
 % ARGUMENTS:
+%          centroids -- a [2 x num_sing] vector with the (x, y) coordinates of the
+%          singularities centroids.
 %    
 %
 % REQUIRES:
@@ -17,6 +19,21 @@ function V = generate_flow_2d_rectangular(p, r, s, c, n)
 % USAGE:
 %{
     
+% For only one rotating singularity
+centroid = [0.5; 0.5];
+rotating_centre = [1];
+node_centre     = [0];
+
+
+centroids = [[0.1; 0.1], [0.3; 0.3], [0.2; 0.8], [0.5; 0.5]];
+c = [0, 0, 0; 0 0 0];
+
+V = generate_flow_2d_rectangular(centroid, rotating_centre, node_centre);
+[h, hs] = plot_velocity_fields(V)
+
+Vn = perform_vf_normalization(V);
+plot_vf(Vn);
+
 
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -24,14 +41,14 @@ function V = generate_flow_2d_rectangular(p, r, s, c, n)
 %   V = compute_flow(p, r, s, c, n);
 %
 % Generate a flow, using the equation
-%           [ s  -r ]     d
-%   v(x) =  [       ] * ----- + c  with d = x-p
-%           [ r   s ]    |d|
+%           [ node  -rotating ]     d
+%   v(x) =  [                 ] * ----- + displacement  with d = x-p
+%           [ rotating   node ]    |d|
 %
-% If s > 0 source 
-%    s < 0 sink 
-% If r > 0 (resp. <0) then there is a clockwise (spiral) 
-%    r < 0 there is an aticlockwise rotation (spiral)
+% If node_centre > 0 source 
+%    node_centre < 0 sink 
+% If rotating_centre > 0 (resp. <0) then there is a clockwise (spiral) 
+%    rotating_centre < 0 there is an aticlockwise rotation (spiral)
 %   vortex at location p.
 %
 % IMPORTANT : The grid is assumed to be in the square with corners [0,0] [0, 1] [1, 0] [1, 1].
@@ -45,61 +62,77 @@ function V = generate_flow_2d_rectangular(p, r, s, c, n)
 % Original - Copyright (c) 2005 Gabriel Peyre
 
 
-if nargin<5
-    n= 64;
+if nargin < 5
+    grid_size = 64;
 end
 
-if size(p,1)~=2
-    p = p';
-end
-if size(p,1)~=2
-    error('p should be of size (2,k)');
+if size(centroids,1) ~= 2
+    centroids = centroids.';
 end
 
-k = size(p,2);
-
-if nargin<4
-    c = zeros(2,k);
+if size(centroids,1)~=2
+    error('Centroids should be a vector of size (2, num_sing)');
 end
 
-if length(s)~=k || length(r)~=k
-    error('r,s should be of length k.');
-end
-if size(c,1)~=2
-    c = c';
-end
-if size(c,2)==1
-    c = repmat(c, 1, k);
-end
-if size(c,1)~=2 || size(c,2)~=k
-    error('c should be of size (2,k).');
+% number of singularities
+num_sing = size(centroids, 2);
+
+% x, y displacement of each singularity -- assume it is
+if nargin < 4 
+    displacement = zeros(2, num_sing);
 end
 
-if k>1
-    V = zeros(n,n,2);
-    for i=1:size(p,2)
-        V = V + generate_flow_2d_rectangular(p(:,i), r(i), s(i), c(:,i), n);
+% Same displacement for every singularity
+if length(displacement) == 1
+   displacement = displacement*ones(2, num_sing);
+end
+
+% Check size of displacement
+if size(displacement,1) ~= 2
+    displacement = displacement.';
+end
+
+% Check again
+if size(displacement,1)~=2
+    error('Displacement should be a vector of size (2, num_sing)');
+end
+
+if length(node_centres, 2) ~= num_sing || length(rotating_centres)~=num_sing
+    error('rotating_centres/node_centres should be of length num_sing.');
+end
+
+% 
+if num_sing > 1
+    V = zeros(grid_size, grid_size, 2);
+    for this_singularity = 1:size(centroids, 2)
+        V = V + generate_flow_2d_rectangular(centroids(:,this_singularity), ...
+                                             rotating_centres(this_singularity), ...
+                                             node_centres(this_singularity), ...
+                                             displacement(:,this_singularity), grid_size);
     end
     return;
 end
 
-x = 0:1/(n-1):1;
+x = 0:1/(grid_size-1):1;
 
 [Y,X] = meshgrid(x, x);
 
 % Centre
-X1 = X - p(1);
-Y1 = Y - p(2);
+X1 = X - centroids(1);
+Y1 = Y - centroids(2);
 
 % Disk
 D = X1.^2 + Y1.^2;
 
 % Radidus from the centre
 D(D < eps) = 1;
+
+% Normalize grid points
 X1 = X1./D;
 Y1 = Y1./D;
+
 % Preallocate memory for the velocity field components Vx and Vy
-V = zeros(n, n, 2);
-V(:,:,1) = s*X1 - r*Y1 + c(1);
-V(:,:,2) = r*X1 + s*Y1 + c(2);
+V = zeros(grid_size, grid_size, 2);
+V(:,:,1) = node_centres*X1     - rotating_centres*Y1 + displacement(1);
+V(:,:,2) = rotating_centres*X1 + node_centres*Y1     + displacement(2);
 
