@@ -21,38 +21,38 @@ function [stream_handle, options] = draw_stream_arrow(X0, Y0, U, V, options)
 %{ 
 
 load wind
-options.stream_length_steps=4;
+options.stream_length_steps=10;
 options.curved_arrow = 1;
-draw_stream_arrow()
+options.start_points_mode = 'grid';
+
+draw_stream_arrow(x(:, :, 1), y(:, :, 1), u(:, :, 1), v(:, :, 1), options)
 
 %}
 %
 % REQUIRES:
 %         standardise_range()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+% Make some options local variables
 stream_length = options.stream_length_steps; 
 curved_arrow  = options.curved_arrow;
 
 % Vmag is used for colouring
-options.Vmag = get_set_options(options,'Vmag', sqrt(U.^2+V.^2));
+options.Vmag = get_set_options(options,'Vmag', sqrt(U.^2 + V.^2));
 options.cmap = get_set_options(options,'cmap', colormap(gray));
 cmap = options.cmap;
 
 
-
-% number of colours available in the colormap
+% Number of colours available in the colormap
 n_col = size(cmap, 1);
 n_col = n_col -1;
 
-% Graphics
-DX = abs(X0(1,1)-X0(1,2)); 
-DY = abs(Y0(1,1)-Y0(2,1)); 
-DD = min([DX DY]);
+% Graphics options
+dx = abs(X0(1,1)-X0(1,2)); 
+dy = abs(Y0(1,1)-Y0(2,1)); 
+dd = min([dx dy]);
 
-ks    = DD/100;   % Size of the "dot" for the tuft graphs
-alpha = 2;        % Size of arrow head relative to the length of the vector
-beta  = 0.2;      % Width of the base of the arrow head relative to the length
+% Arrow/Dot options
+ks    = dd/100;   % Dot size if we don't plot arrows
 
 switch options.start_points_mode
     case 'grid'
@@ -64,7 +64,7 @@ switch options.start_points_mode
     case 'random_sparse'
         start_X = min(X0(:)) + (max(X0(:)) - min(X0(:))) * rand(size(X0));
         start_Y = min(Y0(:)) + (max(Y0(:)) - min(Y0(:))) * rand(size(Y0));
-        XY = stream2(X0,Y0,U,V,start_X, start_Y);
+        XY = stream2(X0, Y0, U, V, start_X, start_Y);
         Vmag = standardise_range(options.Vmag);
         x0 = start_X(:); 
         y0 = start_Y(:);
@@ -81,74 +81,102 @@ switch options.start_points_mode
         y0 = start_Y(:);
     otherwise
         error(['patchflow:' mfilename ':NotImplemented'], ...
-              'The streamline init method you requested is not implemented.');
+              'The streamline init method you requested is not implemented yet.');
         
 end
 
 
-% Find indices of streamlines with L = 1
-
-% short_streamlines = [];
-% 
-% for kk=1:length(XY);
-%     
-
+%  XY is a cell array that contains cells with streamlines
+len_streams = zeros(1, length(XY));
 for k=1:length(XY)
-    
-    F = XY(k); 
-    [L, ~] = size(F{1});
-    
-        if L < stream_length
-            F0{1} = F{1}(1:L,:);
-            
-            if L==1
-                F1{1}=F{1}(L,:);
-            else
-                F1{1}=F{1}(L-1:L,:);
-            end
-            
-        else
-            F0{1}=F{1}(1:stream_length,:);
-            F1{1}=F{1}(stream_length-1:stream_length,:);
-        end
-        
-    % Tail    
-    P = F1{1};
+    [len_streams(k), ~] =  size(XY{k});
+end
 
-    vcol = floor(Vmag(k)*n_col)+1;
+long_streams  = find(len_streams > 1);
+short_streams = find(len_streams < 2); 
+
+if curved_arrow
+   head_marker = @plot_arrow;  
+else
+   head_marker = @plot_dot; 
+end
+
+for kk=1:length(long_streams)
+    
+    effective_length = min(len_streams(long_streams(kk)), stream_length);
+     
+    % Get the tail
+    F0{1} = XY{long_streams(kk)}(1:effective_length, :);
+    % Get head
+    F1{1} = XY{long_streams(kk)}(effective_length-1:effective_length, :);
+    
+    % Get the index for the colormap
+    vcol = floor(Vmag(long_streams(kk))*n_col)+1;
     this_colour = cmap(vcol,:);
     
-
+    % Plot this streamline
     stream_handle = streamline(F0);
-    set(stream_handle,'color',this_colour,'linewidth',.5);
+    set(stream_handle,'color', this_colour,'linewidth',.5);
     
-    % Plot arrows
-    if curved_arrow == 1 && L>1
-       x1=P(1,1); 
-       y1=P(1,2); 
-       
-       x2=P(2,1); 
-       y2=P(2,2);
-       
-       u = x1-x2; 
-       v = y1-y2; 
-       u=-u; 
-       v=-v;
-       
-       xa1 = x2+u-alpha*(u+beta*(v+eps)); 
-       xa2 = x2+u-alpha*(u-beta*(v+eps));
-       ya1 = y2+v-alpha*(v-beta*(u+eps)); 
-       ya2 = y2+v-alpha*(v+beta*(u+eps));
-       plot([xa1 x2 xa2],[ya1 y2 ya2],'color', this_colour); hold on
-   else
-    rectangle('position',[x0(k)-ks/2 y0(k)-ks/2 ks ks],'curvature',[1 1], ...
-              'facecolor',this_colour, 'edgecolor', this_colour)
-   end
-    
-            
-     
+    head_marker(F1{1}, x0(long_streams(kk)), y0(long_streams(kk)), this_colour, ks)
+
+end
+
+if ~isempty(short_streams)
+    head_marker = @plot_dot; 
+
+    for kk=1:length(short_streams)
+                
+        % Get the tail
+        F0{1} = XY{short_streams(kk)}(1, :);
+        % Get head
+        F1{1} = XY{short_streams(kk)}(1, :);
+        
+        % Get the index for the colormap
+        vcol = floor(Vmag(short_streams(kk))*n_col)+1;
+        this_colour = cmap(vcol,:);
+        
+        % Plot this streamline
+        stream_handle = streamline(F0);
+        set(stream_handle,'color', this_colour,'linewidth',.5);
+        
+        head_marker(F1, x0(short_streams(kk)), y0(short_streams(kk)), this_colour, ks)
+        
+    end
 end
 
 axis image
 
 end % function draw_stream_arrows()
+
+
+function plot_arrow(P, ~, ~, this_colour, ~) 
+       alpha = 2;        % Size of arrow head relative to the length of the vector
+       beta  = 0.2;      % Width of the base of the arrow head relative to the length
+
+       x1 = P(1,1); 
+       y1 = P(1,2); 
+       
+       x2 = P(2,1); 
+       y2 = P(2,2);
+       
+       u = x1-x2; 
+       v = y1-y2; 
+       u = -u; 
+       v = -v;
+       
+       xa1 = x2 +u-alpha*(u+beta*(v+eps)); 
+       xa2 = x2 +u-alpha*(u-beta*(v+eps));
+       ya1 = y2 +v-alpha*(v-beta*(u+eps)); 
+       ya2 = y2 +v-alpha*(v+beta*(u+eps));
+       plot([xa1 x2 xa2],[ya1 y2 ya2],'color', this_colour); hold on
+
+end % function plot_arrow()
+
+
+function plot_dot(~, x0, y0, this_colour, ks) 
+  
+     rectangle('position',[x0-ks/2 y0-ks/2 ks ks],'curvature',[1 1], ...
+               'facecolor',this_colour, 'edgecolor', this_colour)
+
+end % function plot_dot()
