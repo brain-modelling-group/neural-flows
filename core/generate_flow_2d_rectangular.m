@@ -149,7 +149,9 @@ D = X1.^2 + Y1.^2;
 % Radidus from the centre
 D(D < eps) = 1;
 
-% Normalize grid points
+% This part enhances the singularity at the centre.
+% It's good for visualization purposes, but not for calculating
+% zeros of the flow.
 X1 = X1./D;
 Y1 = Y1./D;
 
