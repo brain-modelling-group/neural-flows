@@ -1,4 +1,4 @@
-function [stable, transient, stablePoints, transientPoints, dEnergy, dEnergyF, dEnergyV] = compute_neuralflow_states(flow_field, surf_tess, embedding_dimension, time_vec, sampling_period, min_duration, extrema_detection, energy_mode, display_flag)
+function [stable, transient, stablePoints, transientPoints, dEnergy, dEnergyF, dEnergyV] = compute_energy_states(flow_field, surf_tess, embedding_dimension, time_vec, sampling_period, min_duration, extrema_detection, energy_mode, display_flag)
 % compute_neuralflow_states  Computation of low and high energy states based on optical flow estimates 
 % INPUT ARGUMENTS:
 %   flow_field          -- an array with optical flow field of size
