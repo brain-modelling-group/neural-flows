@@ -11,6 +11,7 @@ function [v, varargout] = get_set_options(options, fieldname, v)
 %   end
 %
 % Paula QIMR 2019
+% NOTE: probably better to have get and a set functions separately
 
 if nargin < 3
     error('Not enough arguments.');
