@@ -2,8 +2,8 @@ function v = phaseflow_cnem(yphasep, loc, dt)
 %% Calculate instantaneous phase flow at every time point
 %
 % ARGUMENTS:
-%          yphasep -- a 2D array of size [time x nodes] matrix of phases,
-%                     assumed unwrapped.
+%          yphasep -- a 2D array of size [time x nodes] matrix of activity
+%                     or phases (assumed unwrapped).
 %          loc     -- a 2D array of size [nodes x 3] with the x,y,z
 %                     coordinates of the nodes/regions centroids.
 %          dt      -- time step or sampling interval of the timseries in
@@ -12,12 +12,12 @@ function v = phaseflow_cnem(yphasep, loc, dt)
 % OUTPUT: 
 %          v -- velocity struct, with fields:
 %            -- vnormp - magnitude of velocity (speed) [time x nodes]
-%            -- vxp - x component of size [time x nodes]
-%            -- vyp - y component of size [time x nodes]
-%            -- vzp - z component of size [time x nodes]
+%            -- vxp - x component of the vector field of size [time x nodes]
+%            -- vyp - y component of the vector field of size [time x nodes]
+%            -- vzp - z component of the vector field of size [time x nodes]
 %
 % REQUIRES: 
-%          None
+%          grad_cnem()
 %
 % USAGE:
 %{     
@@ -32,15 +32,15 @@ function v = phaseflow_cnem(yphasep, loc, dt)
 
 % Assume phases unwrapped in time already
 % Calculate temporal gradient
-fprintf('Calculating temporal gradient dphi/dt ...')
+disp('Calculating temporal gradient dphi/dt ...')
 
-[~,dphidtp] = gradient(yphasep,dt);
+[~,dphidtp] = gradient(yphasep, dt);
 
-fprintf('Done.')
+disp('Done.')
 
 % Create alpha shapes 
-shpalpha = 30; % alpha radius; may need tweaking depending on geometry (of cortex?)
-shp = alphaShape(loc, shpalpha);
+shpalpha = 30; % alpha radius; may need tweaking depending on geometry and number of scattered points. 
+shp      = alphaShape(loc, shpalpha);
 
 % The boundary of the centroids is an approximation of the cortex
 bdy = shp.boundaryFacets;
@@ -49,7 +49,7 @@ bdy = shp.boundaryFacets;
 B = grad_B_cnem(loc, bdy);
 
 % Timepoints
-np = size(yphasep,1); 
+tpts = size(yphasep, 1); 
 
 % Allocate memory
 dphidxp = zeros(size(yphasep));
@@ -58,7 +58,7 @@ dphidzp = zeros(size(yphasep));
 
 fprintf('Calculating phase gradients ...')
 
-for j=1:np
+for j=1:tpts
     yphase=yphasep(j,:);
     
     % wrap phases by differentiating exp(i*phi)
