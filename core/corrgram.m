@@ -67,19 +67,19 @@ maxlag = floor(nx/10);
 window = floor(nx/10);
 noverlap = 0;
 
-if length(varargin) > 2 & ~isempty(varargin{3})
+if length(varargin) > 2 && ~isempty(varargin{3})
     maxlag = varargin{3};
     if maxlag < 0, error('Requires positive integer value for maximum lag.'), end
     if length(maxlag) > 1, error('Requires MAXLAG to be a scalar.'), end
 end
 
-if length(varargin) > 3 & ~isempty(varargin{4})
+if length(varargin) > 3 && ~isempty(varargin{4})
     window = varargin{4};
     if window < 0, error('Requires positive integer value for window length.'), end
     if length(window) > 1, error('Requires WINDOW to be a scalar.'), end
 end
 
-if length(varargin) > 4 & ~isempty(varargin{5})
+if length(varargin) > 4 && ~isempty(varargin{5})
     noverlap = varargin{5};
     if noverlap < 0, error('Requires positive integer value for NOVERLAP.'), end
     if length(noverlap) > 1, error('Requires NOVERLAP to be a scalar.'), end
@@ -100,20 +100,20 @@ C = zeros(2*maxlag+1, fix((nx-noverlap)/(window-noverlap)));
 if verbose, h = waitbar(0,'Compute cross correlation'); end
 
 % -MAXLAG:0
-[Yi dummy] = buffer(Y(:,1),window,noverlap,'nodelay'); 
+[Yi , ~] = buffer(Y(:,1),window,noverlap,'nodelay'); 
 Yi = normalize(Yi);
 for i = 1:size(X,2), if verbose, waitbar(cnt/(2*size(X,2))), end
-    [Xi dummy] = buffer(X(:,i),window,noverlap,'nodelay');
+    [Xi , ~] = buffer(X(:,i),window,noverlap,'nodelay');
     Xi = normalize(Xi);
     C(cnt,:) = mean(Xi .* Yi);
     cnt = cnt + 1;
 end
 
 % 0:MAXLAG
-[Xi dummy] = buffer(X(:,end),window,noverlap,'nodelay');
+[Xi , ~] = buffer(X(:,end),window,noverlap,'nodelay');
 Xi = normalize(Xi);
 for i = 2:size(Y,2), if verbose, waitbar(cnt/(2*size(X,2))), end
-    [Yi dummy] = buffer(Y(:,i),window,noverlap,'nodelay');
+    [Yi, ~] = buffer(Y(:,i),window,noverlap,'nodelay');
     Yi = normalize(Yi);
     C(cnt,:) = mean(Xi .* Yi);
     cnt = cnt + 1;
@@ -134,12 +134,12 @@ if nargout == 0
     xlabel('Time'), ylabel('Lag'), axis xy
     title('Windowed cross correlation', 'fontweight', 'bold')
     colorbar
-elseif nargout == 1,
+elseif nargout == 1
     c_out = C;
-elseif nargout == 2,
+elseif nargout == 2
     c_out = C;
     l_out = l;
-elseif nargout == 3,
+elseif nargout == 3
     c_out = C;
     l_out = l;
     t_out = t;
