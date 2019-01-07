@@ -1,6 +1,19 @@
 function v = normalise_vector_field(v, dim)
-% Normalizes vector field v along dimension 'dim'
-% Paula Sanz-Leon, 2019, QIMR 
+%% Normalises the input vector field using the L2 norm
+%
+% ARGUMENTS:
+%           v   -- nD array of size [M, N, dim];
+%           dim -- dimension of the embeeding space (eg, 2 or 3)
+% OUTPUT:
+%           v   -- nD array of size [M, N, dim] whose vectors have unit
+%                  norm.
+% AUTHOR:
+%     Paula Sanz-Leon
+% USAGE:
+%{
+    
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 norm_vf = sqrt(sum(v.^2, dim));
 
 % Avoid division by zero
