@@ -1,4 +1,4 @@
-function v = phaseflow_cnem(yphasep, loc, dt)
+function v = calculate_flow_cnem(phi, loc, dt, is_phase)
 %% Calculate instantaneous phase flow at every time point
 %
 % ARGUMENTS:
@@ -34,7 +34,7 @@ function v = phaseflow_cnem(yphasep, loc, dt)
 % Calculate temporal gradient
 disp('Calculating temporal gradient dphi/dt ...')
 
-[~,dphidtp] = gradient(yphasep, dt);
+[~,dphidtp] = gradient(phi, dt);
 
 disp('Done.')
 
@@ -49,26 +49,46 @@ bdy = shp.boundaryFacets;
 B = grad_B_cnem(loc, bdy);
 
 % Timepoints
-tpts = size(yphasep, 1); 
+tpts = size(phi, 1); 
 
 % Allocate memory
-dphidxp = zeros(size(yphasep));
-dphidyp = zeros(size(yphasep));
-dphidzp = zeros(size(yphasep));
+dphidxp = zeros(size(phi));
+dphidyp = zeros(size(phi));
+dphidzp = zeros(size(phi));
 
 fprintf('Calculating phase gradients ...')
 
-for j=1:tpts
-    yphase=yphasep(j,:);
+xdim=1;
+ydim=2;
+zdim=3;
+% Chec if the values in phi are a phase value (angle) or not
+if is_phase
     
-    % wrap phases by differentiating exp(i*phi)
-    yphasor   = exp(1i*yphase(:));
-    gradphasor= grad_cnem(B,yphasor);
-    
-    dphidxp(j,:)=real(-1i*gradphasor(:,1).*conj(yphasor));
-    dphidyp(j,:)=real(-1i*gradphasor(:,2).*conj(yphasor));
-    dphidzp(j,:)=real(-1i*gradphasor(:,3).*conj(yphasor));
+    for j=1:tpts
+        instant_phi = phi(j,:);
+
+        % wrap phases by differentiating exp(i*phi)
+        yphasor   = exp(1i*instant_phi(:));
+        gradphasor= grad_cnem(B, yphasor);
+
+        dphidxp(j,:)=real(-1i*gradphasor(:,xdim).*conj(yphasor));
+        dphidyp(j,:)=real(-1i*gradphasor(:,ydim).*conj(yphasor));
+        dphidzp(j,:)=real(-1i*gradphasor(:,zdim).*conj(yphasor));
+    end
+else
+    for j=1:tpts
+        instant_phi = phi(j,:);
+        instant_phi = instant_phi(:);
+        
+        gradphi = grad_cnem(B, instant_phi);
+        
+        dphidxp(j,:)= gradphi(:,xdim);
+        dphidyp(j,:)= gradphi(:,ydim);
+        dphidzp(j,:)= gradphi(:,zdim);
+    end
 end
+    
+    
 
 % L2 norm of the phase gradients
 normgradphip = sqrt(dphidxp.^2+dphidyp.^2+dphidzp.^2);
@@ -80,5 +100,5 @@ v.vnormp = vnormp;
 v.vxp=vnormp.*-dphidxp./normgradphip; % magnitude * unit vector component
 v.vyp=vnormp.*-dphidyp./normgradphip;
 v.vzp=vnormp.*-dphidzp./normgradphip;
-fprintf('Done. \n')
-end
+disp('Done. \n')
+end % function calculate_flow_cnem()

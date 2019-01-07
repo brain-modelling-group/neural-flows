@@ -74,7 +74,7 @@ function [activity_pattern] = generate_activity_2d_rectangular(data_type, singul
 
             otherwise
                 error(['patchflow:' mfilename ':NotImplemented'], ...
-                       'Unknown singularity type. Use plane, source, sinkk or saddle.');
+                       'Unknown singularity type. Use plane, source, sink or saddle.');
         end
         
         
