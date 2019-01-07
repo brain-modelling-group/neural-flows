@@ -1,29 +1,9 @@
-function [flowField, int_dF, errorData, errorReg, poincare_idx, time_flow] =   calculate_flow_bst(F, FV, t, idx_start, idx_end, hs_smoothness)
-% BST_OPTICALFLOW: Computes the optical flow of MEG/EEG activities on the cortical surface.
-%
+function [flowField, int_dF, errorData, errorReg, poincare_idx, time_flow] = estimate_flow_bst(F, FV, t, idx_start, idx_end, hs_smoothness, embedding_dimension)
+% Flow estimates of of MEG/EEG activities on the cortical surface or on
+% MEG/EEG sensor space.
+
 % USAGE:  [flow, dEnergy, int_dI, errorData, errorReg, index] = ...
 %   bst_opticalflow(dataFile, channelFile, tStart, tEnd, hornSchunck)
-%
-% @=============================================================================
-% This function is part of the Brainstorm software:
-% https://neuroimage.usc.edu/brainstorm
-% 
-% Copyright (c)2000-2018 University of Southern California & McGill University
-% This software is distributed under the terms of the GNU General Public License
-% as published by the Free Software Foundation. Further details on the GPLv3
-% license can be found at http://www.gnu.org/copyleft/gpl.html.
-% 
-% FOR RESEARCH PURPOSES ONLY. THE SOFTWARE IS PROVIDED "AS IS," AND THE
-% UNIVERSITY OF SOUTHERN CALIFORNIA AND ITS COLLABORATORS DO NOT MAKE ANY
-% WARRANTY, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
-% MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, NOR DO THEY ASSUME ANY
-% LIABILITY OR RESPONSIBILITY FOR THE USE OF THIS SOFTWARE.
-%
-% For more information type "brainstorm license" at command prompt.
-% =============================================================================@
-%
-% Authors: Julien Lefevre, 2006-2010
-%          Syed Ashrafulla, 2010
 
 % INPUTS
 %   F                 - Reconstructed sources timseries - 2D array of size number_of_vertices x timepoints
@@ -42,14 +22,10 @@ function [flowField, int_dF, errorData, errorReg, poincare_idx, time_flow] =   c
 %   poincare_idx          - Poincar� index
 %   time_flow         - time vector for flow
 
-%/---Script Authors---------------------\
-%|                                      | 
-%|   *** J.Lefevre, PhD                 |  
-%|   julien.lefevre@chups.jussieu.fr    |
-%|                                      | 
-%\--------------------------------------/
 
-dimension = 3; % 2 for projected maps
+if nargin < 
+    
+embedding_dimension = 3; % 2 for projected maps
 Faces    = FV.faces; 
 Vertices = FV.vertices; 
 VertexNormals = FV.VertexNormals;
@@ -89,14 +65,14 @@ intervalLength = tEndIndex-tStartIndex+1;   % Length of time interval for calcul
 M = max(max(abs(F(:,tStartIndex-1:tEndIndex)))); 
 F = F/M; % Scale values to avoid precision error, % TODO: maybe standardize the range on [-1 1]
 
-flowField = zeros(nVertices, dimension, intervalLength);
+flowField = zeros(nVertices, embedding_dimension, intervalLength);
 dEnergy   = zeros(1, intervalLength);
 errorData = zeros(1, intervalLength);
 errorReg  = zeros(1, intervalLength);
 int_dF    = zeros(1, intervalLength);
 
 [regularizerOld, gradientBasis, tangentPlaneBasisCell, tangentPlaneBasis, ...
-  triangleAreas, FaceNormals, sparseIndex1, sparseIndex2] =  regularizing_matrix(Faces, Vertices, VertexNormals, dimension); % 2 for projected maps
+  triangleAreas, FaceNormals, sparseIndex1, sparseIndex2] =  regularizing_matrix(Faces, Vertices, VertexNormals, embedding_dimension); % 2 for projected maps
 
 regularizer = hs_smoothness * regularizerOld;
 
@@ -119,13 +95,13 @@ for timePoint = tStartIndex:tEndIndex
     dF = F(:,timePoint)-F(:,timePoint-1);
     [dataFit, B] = data_fit_matrix(Faces, nVertices, ...
                                    gradientBasis, triangleAreas, tangentPlaneBasisCell, ...
-                                   F(:,timePoint), dF, dimension, sparseIndex1, sparseIndex2);
+                                   F(:,timePoint), dF, embedding_dimension, sparseIndex1, sparseIndex2);
   
   % Solve system of equations -- this may be the worst offender in terms of time
   X = (dataFit + regularizer) \ B;
   
   % Save flows correctly (for 3D surface, have to project back to 3D)
-  if dimension == 3 % X coordinates are in tangent space
+  if embedding_dimension == 3 % X coordinates are in tangent space
       % TODO: avoid using repmat: try to use smart inexing here
       flowField(:,:,timeIdx) = repmat(X(1:end/2), [1,3]) .* tangentPlaneBasis(:,:,1) + repmat(X(end/2+1:end), [1,3]) .* tangentPlaneBasis(:,:,2);
   else % X coordinates are in R^2
@@ -150,22 +126,12 @@ for timePoint = tStartIndex:tEndIndex
           
   end
 
-  % Displacement energy
-  v12 = sum((flowField(Faces(:,1),:,timeIdx)+flowField(Faces(:,2),:,timeIdx)).^2,2) / 4;
-  v23 = sum((flowField(Faces(:,2),:,timeIdx)+flowField(Faces(:,3),:,timeIdx)).^2,2) / 4;
-  v13 = sum((flowField(Faces(:,1),:,timeIdx)+flowField(Faces(:,3),:,timeIdx)).^2,2) / 4;
-  dEnergy(timeIdx) = sum(triangleAreas.*(v12+v23+v13));
-  
-  %bst_progress('inc', 1); % Update progress bar
 end 
 
 disp('Done');
   
-end
+end % function calculate_flow_bst()
 
-% =========================================================================
-% =====  EXTERNAL FUNCTIONS ===============================================
-% =========================================================================
 
 %% ===== TESSELATION NORMALS =====
 function [gradientBasis, triangleAreas, FaceNormals] =   geometry_tesselation(Faces, Vertices, dimension)
@@ -546,3 +512,33 @@ function theta = diffangle(theta2, theta1)
     end
   end
 end
+
+%
+% @=============================================================================
+% This function is part of the Brainstorm software:
+% https://neuroimage.usc.edu/brainstorm
+% 
+% Copyright (c)2000-2018 University of Southern California & McGill University
+% This software is distributed under the terms of the GNU General Public License
+% as published by the Free Software Foundation. Further details on the GPLv3
+% license can be found at http://www.gnu.org/copyleft/gpl.html.
+% 
+% FOR RESEARCH PURPOSES ONLY. THE SOFTWARE IS PROVIDED "AS IS," AND THE
+% UNIVERSITY OF SOUTHERN CALIFORNIA AND ITS COLLABORATORS DO NOT MAKE ANY
+% WARRANTY, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF
+% MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, NOR DO THEY ASSUME ANY
+% LIABILITY OR RESPONSIBILITY FOR THE USE OF THIS SOFTWARE.
+%
+% For more information type "brainstorm license" at command prompt.
+% =============================================================================@
+%
+% Authors: Julien Lefevre, 2006-2010
+%          Syed Ashrafulla, 2010
+
+
+%/---Script Authors---------------------\
+%|                                      | 
+%|   *** J.Lefevre, PhD                 |  
+%|   julien.lefevre@chups.jussieu.fr    |
+%|                                      | 
+%\--------------------------------------/
