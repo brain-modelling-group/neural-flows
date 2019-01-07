@@ -23,6 +23,6 @@ end
 
 % If the field did not exist before, the function creates it and assigns
 % the value passed as input argument.
-eval(['options.' name ' = v;']);
+eval(['options.' fieldname ' = v;']);
 varargout{1} = options;
 end
