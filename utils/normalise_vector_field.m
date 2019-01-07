@@ -23,7 +23,7 @@ try
     v = v./norm_vf;
 catch 
     disp('Cannot perform implicit expansion/broadcasting of arrays')
-    v = v .* repmat( 1./norm_vf, [ones(dim-1,1)' size(v, dim)] );
+    v = v .* repmat(1./norm_vf, [ones(dim-1,1)' size(v, dim)]);
 end
 
 end % function normalize_vector_field()
