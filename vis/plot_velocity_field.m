@@ -1,16 +1,13 @@
 function [h, hs] = plot_velocity_field(vf, M, options)
 
-% plot_vf - plot a vector field with 
-%   an optional image in the background.
+% plot_velocity_field - plot a vector field with 
+%   an optional image (M) in the background.
 %
-% plot_vf(vf, M, options);
+% plot_velocity_field(vf, M, options);
 %
 %   WORKS ONLY FOR 2D VECTOR FIELDS
 %
 %   set options.display_streamlines=1 to display streamlines.
-%   
-%   See also: plot_tensor_field.
-%
 %   Copyright (c) 2004 Gabriel Peyre
 
 if nargin<2

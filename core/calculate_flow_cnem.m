@@ -2,12 +2,14 @@ function v = calculate_flow_cnem(phi, loc, dt, is_phase)
 %% Calculate instantaneous phase flow at every time point
 %
 % ARGUMENTS:
-%          yphasep -- a 2D array of size [time x nodes] matrix of activity
+%          phi -- a 2D array of size [time x nodes] matrix of activity
 %                     or phases (assumed unwrapped).
 %          loc     -- a 2D array of size [nodes x 3] with the x,y,z
 %                     coordinates of the nodes/regions centroids.
 %          dt      -- time step or sampling interval of the timseries in
 %                     yphasep
+%          is_phase -- boolean flag to define is the input data phi is 
+%                      an (unwrapped) angle value.
 %
 % OUTPUT: 
 %          v -- velocity struct, with fields:

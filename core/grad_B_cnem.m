@@ -12,6 +12,7 @@ function B = grad_B_cnem(XYZ, IN_Tri_Ini)
 % REQUIRES: 
 %        CNEM: https://ff-m2p.cnrs.fr/projects/cnem/, which itself depends on 
 %        TBB: http://www.threadingbuildingblocks.org/  
+%        cal_B_Mat()
 %
 % USAGE:
 %{     

@@ -19,7 +19,7 @@ function [out]= detect_state_transitions(dEnergy)
 %   extrema_detection   -- string with the method used to detect local
 %                          extrema. {'peaks' | 'valleys'}.
 %
-%   energy_mode         -- string with the mode we should use to
+%   energy_mode         -- string with the element we should use to
 %                          calculate energy. {'vertex', 'triangle'}
 %   display_flag        -- flag to plot displacement energy vs time and timepoints 
 %                          labeled as non-transition or transition state
