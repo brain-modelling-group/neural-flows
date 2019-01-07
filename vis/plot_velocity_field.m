@@ -23,7 +23,7 @@ if iscell(vf)
     
     nrows = size(A, 1);
     ncols = size(A, 2);
-    lgd = getoptions(options, 'lgd', []);
+    lgd = get_set_options(options, 'lgd', []);
     
     for this_vf=1:num_plots
         if iscell(M)
@@ -44,17 +44,17 @@ if iscell(vf)
 end
 
 options.null = 1;
-is_oriented   = getoptions(options, 'is_oriented', 1);
-strech_factor = getoptions(options, 'strech_factor', .6);
-reorient  = getoptions(options, 'reorient', 0);
-linestyle = getoptions(options, 'linestyle', 'b');
-display_streamlines = getoptions(options, 'display_streamlines', 0);
-streamline_density  = getoptions(options, 'streamline_density', 8);
-streamline_width    = getoptions(options, 'streamline_width', 1);
-line_width = getoptions(options, 'line_width', 1);
-display_arrows = getoptions(options, 'display_arrows', 1);
-subsampling    = getoptions(options, 'subsampling', []);
-normalize_flow = getoptions(options, 'normalize_flow', 0);
+is_oriented   = get_set_options(options, 'is_oriented', 1);
+strech_factor = get_set_options(options, 'strech_factor', .6);
+reorient      = get_set_options(options, 'reorient', 0);
+linestyle     = get_set_options(options, 'linestyle', 'b');
+display_streamlines = get_set_options(options, 'display_streamlines', 0);
+streamline_density  = get_set_options(options, 'streamline_density', 8);
+streamline_width    = get_set_options(options, 'streamline_width', 1);
+line_width = get_set_options(options, 'line_width', 1);
+display_arrows = get_set_options(options, 'display_arrows', 1);
+subsampling    = get_set_options(options, 'subsampling', []);
+normalize_flow = get_set_options(options, 'normalize_flow', 0);
 
 if display_streamlines && ~isfield(options, 'display_arrows')
     display_arrows = 0;
