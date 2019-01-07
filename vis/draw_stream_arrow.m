@@ -10,6 +10,8 @@ function [stream_handle, options] = draw_stream_arrow(X0, Y0, U, V, options)
 %           .stream_length_steps  -- an integer number of 'time' steps to
 %                                    display. It determines the length of
 %                                    the streamlines.
+%           .curved_arrows        -- true or false, 0 or 1. Draws arrows at
+%                                    the head of the streamline
 %
 % OUTPUT:
 %    stream_handle -- streamline objects handle
@@ -21,7 +23,7 @@ function [stream_handle, options] = draw_stream_arrow(X0, Y0, U, V, options)
 %{ 
 
 load wind
-options.stream_length_steps=10;
+options.stream_length_steps=42;
 options.curved_arrow = 1;
 options.start_points_mode = 'grid';
 
@@ -52,7 +54,7 @@ dy = abs(Y0(1,1)-Y0(2,1));
 dd = min([dx dy]);
 
 % Arrow/Dot options
-ks    = dd/100;   % Dot size if we don't plot arrows
+rs    = dd/100;   % Dot size if we don't plot arrows
 
 switch options.start_points_mode
     case 'grid'
@@ -174,9 +176,9 @@ function plot_arrow(P, ~, ~, this_colour, ~)
 end % function plot_arrow()
 
 
-function plot_dot(~, x0, y0, this_colour, ks) 
+function plot_dot(~, x0, y0, this_colour, rs) 
   
-     rectangle('position',[x0-ks/2 y0-ks/2 ks ks],'curvature',[1 1], ...
+     rectangle('position',[x0-rs/2 y0-rs/2 rs rs],'curvature',[1 1], ...
                'facecolor',this_colour, 'edgecolor', this_colour)
 
 end % function plot_dot()
