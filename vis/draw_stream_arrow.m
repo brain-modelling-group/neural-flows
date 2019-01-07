@@ -120,7 +120,7 @@ for kk=1:length(long_streams)
     stream_handle = streamline(F0);
     set(stream_handle,'color', this_colour,'linewidth',.5);
     
-    head_marker(F1{1}, x0(long_streams(kk)), y0(long_streams(kk)), this_colour, ks)
+    head_marker(F1{1}, x0(long_streams(kk)), y0(long_streams(kk)), this_colour, rs)
 
 end
 
@@ -142,7 +142,7 @@ if ~isempty(short_streams)
         stream_handle = streamline(F0);
         set(stream_handle,'color', this_colour,'linewidth',.5);
         
-        head_marker(F1, x0(short_streams(kk)), y0(short_streams(kk)), this_colour, ks)
+        head_marker(F1, x0(short_streams(kk)), y0(short_streams(kk)), this_colour, rs)
         
     end
 end
