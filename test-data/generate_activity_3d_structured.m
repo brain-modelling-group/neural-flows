@@ -29,7 +29,7 @@ function [A, B] = generate_activity_3d_structured(domain_shape, aff_tform)
    domain_shape = [128, 128, 128]; 
    [A, B] = generate_activity_3d_structured(domain_shape);
    figure; 
-   z_slice = floor(shape(3)/2);
+   z_slice = floor(domain_shape(3)/2);
    imshowpair(A(:, :, z_slice), B(:, :, z_slice), 'montage')
 
 %}
