@@ -89,16 +89,16 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, operator_size)
     
         % Spatial derivatives are computed as the average of 
         % the two image/frame gradients along each direction
-        Ix = 0.5 * (nanconvn(F1, Gx) + nanconvn(F2, Gx));
-        Iy = 0.5 * (nanconvn(F1, Gy) + nanconvn(F2, Gy));
-        Iz = 0.5 * (nanconvn(F1, Gz) + nanconvn(F2, Gz));
-        It = 0.5 * (nanconvn(F1, Gt) - nanconvn(F2, Gt));
+        Ix = 0.5 * (nanconvn(F1, Gx, 'same') + nanconvn(F2, Gx, 'same'));
+        Iy = 0.5 * (nanconvn(F1, Gy, 'same') + nanconvn(F2, Gy, 'same'));
+        Iz = 0.5 * (nanconvn(F1, Gz, 'same') + nanconvn(F2, Gz, 'same'));
+        It = 0.5 * (nanconvn(F1, Gt, 'same') - nanconvn(F2, Gt, 'same'));
 
         % Adjusting sizes - the derivatives are smaller than the inputs
-        Ix = Ix(adjusted_size_start:size(Ix,1)-1, adjusted_size_start:size(Ix,2)-1, adjusted_size_start:size(Ix,3)-1);
-        Iy = Iy(adjusted_size_start:size(Iy,1)-1, adjusted_size_start:size(Iy,2)-1, adjusted_size_start:size(Iy,3)-1);
-        Iz = Iz(adjusted_size_start:size(Iz,1)-1, adjusted_size_start:size(Iz,2)-1, adjusted_size_start:size(Iz,3)-1);
-        It = It(adjusted_size_start:size(It,1)-1, adjusted_size_start:size(It,2)-1, adjusted_size_start:size(It,3)-1);
+        %Ix = Ix(adjusted_size_start:size(Ix,1)-1, adjusted_size_start:size(Ix,2)-1, adjusted_size_start:size(Ix,3)-1);
+        %Iy = Iy(adjusted_size_start:size(Iy,1)-1, adjusted_size_start:size(Iy,2)-1, adjusted_size_start:size(Iy,3)-1);
+        %Iz = Iz(adjusted_size_start:size(Iz,1)-1, adjusted_size_start:size(Iz,2)-1, adjusted_size_start:size(Iz,3)-1);
+        %It = It(adjusted_size_start:size(It,1)-1, adjusted_size_start:size(It,2)-1, adjusted_size_start:size(It,3)-1);
 
 
 end % function calculate_derivatives_hsd3()

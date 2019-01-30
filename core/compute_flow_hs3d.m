@@ -30,9 +30,15 @@ elseif nargin < 4
 end
 
 if ~exist('uxo', 'var') % assume the other do not exist either
-    
+  rng(42) % TODO: make it an optional parameter
+  a   = -0.125;
+  b   =  0.125;
+  uxo = a + (b-a).*rand(size(F1));
+  uyo = a + (b-a).*rand(size(F1));
+  uzo = a + (b-a).*rand(size(F1));
+end
 
-% Preallocate output arrys
+% Intial conditions; 
 ux = uxo; 
 uy = uyo; 
 uz = uzo;
@@ -64,20 +70,15 @@ for i=1:max_iterations
     uy_avg = nanconvn(uy, stencil,'same');
     uz_avg = nanconvn(uz, stencil,'same');
     
-    ux = ux_avg - (Ix.*((Ix.*uxAvg) + (Iy.*uyAvg) + (Iz.*uzAvg) + It))...
+    ux = ux_avg - (Ix.*((Ix.*ux_avg) + (Iy.*uy_avg) + (Iz.*uz_avg) + It))...
         ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
     
-    uy = uy_avg - ( Iy.*( (Ix.*uxAvg) + (Iy.*uyAvg) + (Iz.*uzAvg) + It))...
+    uy = uy_avg - ( Iy.*( (Ix.*ux_avg) + (Iy.*uy_avg) + (Iz.*uz_avg) + It))...
         ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
     
-    uz = uz_avg - ( Iz.*( (Ix.*uxAvg) + (Iy.*uyAvg) + (Iz.*uzAvg) + It))...
+    uz = uz_avg - ( Iz.*( (Ix.*ux_avg) + (Iy.*uy_avg) + (Iz.*uz_avg) + It))...
         ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
 end
-
-% Hackery
-ux(isnan(ux))=0;
-uy(isnan(uy))=0;
-uz(isnan(uz))=0;
 
 end
 
