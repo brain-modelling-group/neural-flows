@@ -45,9 +45,19 @@ uz = uzo;
 stencil = zeros(3, 3, 3);
 
 kk=2; % This is where our point of interest is centred along the z-axis
-stencil(:,:,kk-1) = [0 0 0; 0 1 0; 0 0 0]/6;
-stencil(:,:,kk)   = [0 1 0; 1 0 1; 0 1 0]/6;
-stencil(:,:,kk+1) = [0 0 0; 0 1 0; 0 0 0]/6;
+
+% Averaging filter
+stencil(:,:,kk-1) = [0 0 0; 
+                     0 1 0; 
+                     0 0 0]/6;
+                 
+stencil(:,:,kk)   = [0 1 0; 
+                     1 0 1; 
+                     0 1 0]/6;
+                 
+stencil(:,:,kk+1) = [0 0 0; 
+                     0 1 0; 
+                     0 0 0]/6;
 
 for i=1:max_iterations
     ux_avg = nanconvn(ux, stencil,'same');
@@ -55,13 +65,13 @@ for i=1:max_iterations
     uz_avg = nanconvn(uz, stencil,'same');
     
     ux = ux_avg - (Ix.*((Ix.*uxAvg) + (Iy.*uyAvg) + (Iz.*uzAvg) + It))...
-        ./ ( alpha.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
+        ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
     
     uy = uy_avg - ( Iy.*( (Ix.*uxAvg) + (Iy.*uyAvg) + (Iz.*uzAvg) + It))...
-        ./ ( alpha.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
+        ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
     
     uz = uz_avg - ( Iz.*( (Ix.*uxAvg) + (Iy.*uyAvg) + (Iz.*uzAvg) + It))...
-        ./ ( alpha.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
+        ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
 end
 
 % Hackery
