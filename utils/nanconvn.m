@@ -47,10 +47,6 @@ function c = nanconvn(A, B, shape, varargin)
         nanout = true; 
     end
 
-    if ~exist('is1D','var') 
-        is1D = false; 
-    end
-
     if ~exist('shape','var') 
         shape = 'same';
         
@@ -61,16 +57,6 @@ function c = nanconvn(A, B, shape, varargin)
     % Get the size of 'A' for use later.
     array_shape = size(A);
 
-    % If 1D, then convert them both to columns.
-    % This modification only matters if 'a' or 'k' is a row vector, and the
-    % other is a column vector. Otherwise, this argument has no effect.
-    if(is1D)
-        if(~isvector(A) || ~isvector(B))
-            error('MATLAB:conv:AorBNotVector','A and B must be vectors.');
-        end
-        A = A(:); 
-        B = B(:);
-    end
 
     % Flat function for comparison.
     o  = ones(array_shape);
@@ -109,9 +95,5 @@ function c = nanconvn(A, B, shape, varargin)
     % If requested, replace output values with NaNs corresponding to input.
     if(nanout); c(nan_idx) = NaN; end
 
-    % If 1D, convert back to the original shape.
-    if(is1D && arrray_shape(1) == 1) 
-        c = c.'; 
-    end
 
 end % function nanconvn()
