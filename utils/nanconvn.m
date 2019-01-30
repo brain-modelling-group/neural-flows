@@ -60,7 +60,7 @@ end
 
 % Apply default options when necessary.
 if ~exist('edge','var') 
-    edge = false; 
+    edge = true; 
 end
 
 if ~exist('nanout','var')
