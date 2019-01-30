@@ -42,19 +42,19 @@ function c = nanconvn(A, B, varargin)
 for arg = 1:nargin-2
     switch lower(varargin{arg})
         case 'edge' 
-             edge = true;    % Apply edge correction
+             edge = true;           % Apply edge correction
         case 'noedge' 
-             edge = false;   % Do not apply edge correction
+             edge = false;          % Do not apply edge correction
         case {'same','full','valid'} 
              shape = varargin{arg}; % Specify shape
         case 'nanout'
-             nanout = true;  % Include original NaNs in the output.
+             nanout = true;         % Include original NaNs in the output.
         case 'nonanout' 
-             nanout = false; % Do not include NaNs in the output.
+             nanout = false;        % Do not include NaNs in the output.
         case {'2d','is2d', 'nd', '3d'} 
-             is1D = false;   % Treat the input as ND
+             is1D = false;          % Treat the input as ND
         case {'1d','is1d'} 
-            is1D = true;     % Treat the input as 1D
+            is1D = true;            % Treat the input as 1D
     end
 end
 
