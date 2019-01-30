@@ -1,4 +1,4 @@
-function [ Ix, Iy, Iz, It ] = calculate_derivatives_hsd3(F1, F2, stencil_size)
+function [ Ix, Iy, Iz, It ] = calculate_derivatives_hsd3(F1, F2, operator_size)
 %This fuction computes 3D derivatives between two 3D images. 
 %
 %   Description :
@@ -46,18 +46,7 @@ function [ Ix, Iy, Iz, It ] = calculate_derivatives_hsd3(F1, F2, stencil_size)
 
         Gt = ones(2, 2, 2);
 
-        % Spatial derivatives are computed as the average of 
-        % the gradients along each direction
-        Ix = 0.5 * (nanconvn(F1, Gx) + nanconvn(F2, Gx));
-        Iy = 0.5 * (nanconvn(F1, Gy) + nanconvn(F2, Gy));
-        Iz = 0.5 * (nanconvn(F1, Gz) + nanconvn(F2, Gz));
-        It = 0.5 * (nanconvn(F1, Gt) - nanconvn(F2, Gt));
-
-        % Adjusting sizes
-        Ix = Ix(1:size(Ix,1)-1, 1:size(Ix,2)-1, 1:size(Ix,3)-1);
-        Iy = Iy(1:size(Iy,1)-1, 1:size(Iy,2)-1, 1:size(Iy,3)-1);
-        Iz = Iz(1:size(Iz,1)-1, 1:size(Iz,2)-1, 1:size(Iz,3)-1);
-        It = It(1:size(It,1)-1, 1:size(It,2)-1, 1:size(It,3)-1);
+        adjusted_size_start = 1;
 
 
     elseif stencil_size==3
@@ -93,20 +82,24 @@ function [ Ix, Iy, Iz, It ] = calculate_derivatives_hsd3(F1, F2, stencil_size)
         Gz = Gz/4;
 
         Gt = ones(3, 3, 3);
-        Gt = Gt/1;
+        
+        adjusted_size_start = 2;
 
-        % Computing derivatives
-        Ix = 0.5 * (nanconvn(F1,Gx) + nanconvn(F2,Gx));
-        Iy = 0.5 * (nanconvn(F1,Gy) + nanconvn(F2,Gy));
-        Iz = 0.5 * (nanconvn(F1,Gz) + nanconvn(F2,Gz));
-        It = 0.5 * (nanconvn(F1,Gt) - nanconvn(F2,Gt));
+    end
+    
+    % Spatial derivatives are computed as the average of 
+        % the gradients along each direction
+        Ix = 0.5 * (nanconvn(F1, Gx) + nanconvn(F2, Gx));
+        Iy = 0.5 * (nanconvn(F1, Gy) + nanconvn(F2, Gy));
+        Iz = 0.5 * (nanconvn(F1, Gz) + nanconvn(F2, Gz));
+        It = 0.5 * (nanconvn(F1, Gt) - nanconvn(F2, Gt));
 
         % Adjusting sizes
-        Ix = Ix(2:size(Ix,1)-1, 2:size(Ix,2)-1, 2:size(Ix,3)-1);
-        Iy = Iy(2:size(Iy,1)-1, 2:size(Iy,2)-1, 2:size(Iy,3)-1);
-        Iz = Iz(2:size(Iz,1)-1, 2:size(Iz,2)-1, 2:size(Iz,3)-1);
-        It = It(2:size(It,1)-1, 2:size(It,2)-1, 2:size(It,3)-1);
-    end
+        Ix = Ix(adjusted_size_start:size(Ix,1)-1, adjusted_size_start:size(Ix,2)-1, adjusted_size_start:size(Ix,3)-1);
+        Iy = Iy(adjusted_size_start:size(Iy,1)-1, adjusted_size_start:size(Iy,2)-1, adjusted_size_start:size(Iy,3)-1);
+        Iz = Iz(adjusted_size_start:size(Iz,1)-1, adjusted_size_start:size(Iz,2)-1, adjusted_size_start:size(Iz,3)-1);
+        It = It(adjusted_size_start:size(It,1)-1, adjusted_size_start:size(It,2)-1, adjusted_size_start:size(It,3)-1);
+
 
 end % function calculate_derivatives_hsd3()
 
