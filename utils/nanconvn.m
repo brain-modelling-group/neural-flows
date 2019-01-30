@@ -1,4 +1,4 @@
-function c = nanconvn(A, B, varargin)
+function c = nanconvn(A, B, shape, varargin)
 % NANCONVN Convolution in ND ignoring NaNs.
 %   C = NANCONV(A, K) convolves A and K, correcting for any NaN values
 %   in the input vector A. The result is the same size as A (as though you
@@ -38,26 +38,6 @@ function c = nanconvn(A, B, varargin)
 % Copyright (c) 2013, Benjamin Kraus
 % $Id: nanconv.m 4861 2013-05-27 03:16:22Z bkraus $
 
-% Process input arguments
-    for arg = 1:nargin-2
-        switch lower(varargin{arg})
-            case 'edge' 
-                 edge = true;           % Apply edge correction
-            case 'noedge' 
-                 edge = false;          % Do not apply edge correction
-            case {'same','full','valid'} 
-                 shape = varargin{arg}; % Specify shape
-            case 'nanout'
-                 nanout = true;         % Include original NaNs in the output.
-            case 'nonanout' 
-                 nanout = false;        % Do not include NaNs in the output.
-            case {'2d','is2d', 'nd', '3d'} 
-                 is1D = false;          % Treat the input as ND
-            case {'1d','is1d'} 
-                is1D = true;            % Treat the input as 1D
-        end
-    end
-
     % Apply default options when necessary.
     if ~exist('edge','var') 
         edge = true; 
@@ -72,7 +52,8 @@ function c = nanconvn(A, B, varargin)
     end
 
     if ~exist('shape','var') 
-        shape = 'same';    
+        shape = 'same';
+        
     elseif(~strcmp(shape,'same'))
         error([mfilename ':NotImplemented'],'Shape ''%s'' not implemented', shape);
     end
@@ -134,4 +115,3 @@ function c = nanconvn(A, B, varargin)
     end
 
 end % function nanconvn()
-
