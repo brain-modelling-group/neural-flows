@@ -1,4 +1,4 @@
-function c = nanconvn(a, k, varargin)
+function c = nanconvn(A, B, varargin)
 % NANCONVN Convolution in ND ignoring NaNs.
 %   C = NANCONV(A, K) convolves A and K, correcting for any NaN values
 %   in the input vector A. The result is the same size as A (as though you
@@ -41,73 +41,97 @@ function c = nanconvn(a, k, varargin)
 % Process input arguments
 for arg = 1:nargin-2
     switch lower(varargin{arg})
-        case 'edge'; edge = true; % Apply edge correction
-        case 'noedge'; edge = false; % Do not apply edge correction
-        case {'same','full','valid'}; shape = varargin{arg}; % Specify shape
-        case 'nanout'; nanout = true; % Include original NaNs in the output.
-        case 'nonanout'; nanout = false; % Do not include NaNs in the output.
-        case {'2d','is2d'}; is1D = false; % Treat the input as 2D
-        case {'1d','is1d'}; is1D = true; % Treat the input as 1D
+        case 'edge' 
+             edge = true;    % Apply edge correction
+        case 'noedge' 
+             edge = false;   % Do not apply edge correction
+        case {'same','full','valid'} 
+             shape = varargin{arg}; % Specify shape
+        case 'nanout'
+             nanout = true;  % Include original NaNs in the output.
+        case 'nonanout' 
+             nanout = false; % Do not include NaNs in the output.
+        case {'2d','is2d', 'nd', '3d'} 
+             is1D = false;   % Treat the input as ND
+        case {'1d','is1d'} 
+            is1D = true;     % Treat the input as 1D
     end
 end
 
 % Apply default options when necessary.
-if(exist('edge','var')~=1); edge = false; end
-if(exist('nanout','var')~=1); nanout = false; end
-if(exist('is1D','var')~=1); is1D = false; end
-if(exist('shape','var')~=1); shape = 'same';
-elseif(~strcmp(shape,'same'))
-    error([mfilename ':NotImplemented'],'Shape ''%s'' not implemented',shape);
+if ~exist('edge','var') 
+    edge = false; 
 end
 
-% Get the size of 'a' for use later.
-sza = size(a);
+if ~exist('nanout','var')
+    nanout = false; 
+end
+
+if ~exist('is1D','var') 
+    is1D = false; 
+end
+
+if ~exist('shape','var') 
+    shape = 'same';    
+elseif(~strcmp(shape,'same'))
+    error([mfilename ':NotImplemented'],'Shape ''%s'' not implemented', shape);
+end
+
+% Get the size of 'A' for use later.
+array_shape = size(A);
 
 % If 1D, then convert them both to columns.
 % This modification only matters if 'a' or 'k' is a row vector, and the
 % other is a column vector. Otherwise, this argument has no effect.
 if(is1D)
-    if(~isvector(a) || ~isvector(k))
+    if(~isvector(A) || ~isvector(B))
         error('MATLAB:conv:AorBNotVector','A and B must be vectors.');
     end
-    a = a(:); k = k(:);
+    A = A(:); 
+    B = B(:);
 end
 
 % Flat function for comparison.
-o = ones(size(a));
+o  = ones(array_shape);
 
 % Flat function with NaNs for comparison.
-on = ones(size(a));
+on = ones(array_shape);
 
 % Find all the NaNs in the input.
-n = isnan(a);
+nan_idx = isnan(A);
 
-% Replace NaNs with zero, both in 'a' and 'on'.
-a(n) = 0;
-on(n) = 0;
+% Replace NaNs with zero, both in 'A' and 'on'.
+A(nan_idx)  = 0;
+on(nan_idx) = 0;
 
 % Check that the filter does not have NaNs.
-if(any(isnan(k)))
-    error([mfilename ':NaNinFilter'],'Filter (k) contains NaN values.');
+if(any(isnan(B)))
+    error([mfilename ':NaNinFilter'],'Filter (B) contains NaN values.');
 end
 
 % Calculate what a 'flat' function looks like after convolution.
-if(any(n(:)) || edge)
-    flat = conv2(on,k,shape);
-else flat = o;
+if(any(nan_idx(:)) || edge)
+    flat = convn(on, B, shape);
+else
+    flat = o;
 end
 
 % The line above will automatically include a correction for edge effects,
 % so remove that correction if the user does not want it.
-if(any(n(:)) && ~edge); flat = flat./conv2(o,k,shape); end
+if(any(nan_idx(:)) && ~edge)
+    flat = flat./convn(o, B, shape); 
+end
 
 % Do the actual convolution
-c = convn(a,k,shape)./flat;
+c = convn(A, B, shape)./flat;
 
 % If requested, replace output values with NaNs corresponding to input.
-if(nanout); c(n) = NaN; end
+if(nanout); c(nan_idx) = NaN; end
 
 % If 1D, convert back to the original shape.
-if(is1D && sza(1) == 1); c = c.'; end
-
+if(is1D && arrray_shape(1) == 1) 
+    c = c.'; 
 end
+
+end % function nanconvn()
+
