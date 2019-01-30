@@ -6,12 +6,12 @@ function [ Ix, Iy, Iz, It ] = calculate_derivatives_hsd3(F1, F2, stencil_size)
 %   There are four derivatives here; three along X, Y, Z axes and one along
 %   timeline axis.
 %
-%   -F1, F2 :   two subsequent images or frames
+%   - F1, F2 :   two subsequent images or frames
 %   - hx, hy, hz -  assumed to be 1
 %   - ht         -  assumed to be 1
-%   -Ix, Iy, Iz : derivatives along X, Y and Z axes respectively
-%   -It         : derivatives along timeline axis
-%   -stencil_size : size of the finite difference operator used in convolution
+%   - Ix, Iy, Iz : derivatives along X, Y and Z axes respectively
+%   - It         : derivatives along timeline axis
+%   - stencil_size : size of the finite difference operator used in convolution
 %                   If stencil_size = 2; backward differences
 %                   If stencil_size = 3; central differences
 %   AUTHORS : Original - Mohammad Mustafa, The University of Nottingham and Mirada Medical Limited,
@@ -24,27 +24,34 @@ function [ Ix, Iy, Iz, It ] = calculate_derivatives_hsd3(F1, F2, stencil_size)
 
     if stencil_size == 2
         Gx = zeros(2,2,2);
-        Gx(:,:,1) = [-1 1; -1 1 ]; 
-        Gx(:,:,2) = [-1 1; -1 1 ];
+        Gx(:,:,1) = [-1 1; 
+                     -1 1 ]; 
+        Gx(:,:,2) = [-1 1; 
+                     -1 1 ];
         Gx = Gx/4;
 
         Gy = zeros(2,2,2);
-        Gy(:,:,1) = [-1 -1; 1 1 ]; 
-        Gy(:,:,2) = [-1 -1; 1 1 ];
+        Gy(:,:,1) = [-1 -1; 
+                      1  1]; 
+        Gy(:,:,2) = [-1 -1; 
+                      1  1 ];
         Gy = Gy/4;
 
         Gz = zeros(2,2,2);
-        Gz(:,:,1) = [-1 -1; -1 -1 ]; 
-        Gz(:,:,2)=[1 1; 1 1 ];
+        Gz(:,:,1) = [-1 -1; 
+                     -1 -1 ]; 
+        Gz(:,:,2) = [1 1; 
+                     1 1 ];
         Gz = Gz/4;
 
-        Gt = ones(2,2,2);
-        Gt = Gt/4;
+        Gt = ones(2, 2, 2);
 
-        Ix = 0.5 * (nanconvn(image1,Gx) + nanconvn(image2,Gx));
-        Iy = 0.5 * (nanconvn(image1,Gy) + nanconvn(image2,Gy));
-        Iz = 0.5 * (nanconvn(image1,Gz) + nanconvn(image2,Gz));
-        It = 0.5 * (nanconvn(image1,Gt) - nanconvn(image2,Gt));
+        % Spatial derivatives are computed as the average of 
+        % the gradients along each direction
+        Ix = 0.5 * (nanconvn(F1, Gx) + nanconvn(F2, Gx));
+        Iy = 0.5 * (nanconvn(F1, Gy) + nanconvn(F2, Gy));
+        Iz = 0.5 * (nanconvn(F1, Gz) + nanconvn(F2, Gz));
+        It = 0.5 * (nanconvn(F1, Gt) - nanconvn(F2, Gt));
 
         % Adjusting sizes
         Ix = Ix(1:size(Ix,1)-1, 1:size(Ix,2)-1, 1:size(Ix,3)-1);
@@ -54,7 +61,7 @@ function [ Ix, Iy, Iz, It ] = calculate_derivatives_hsd3(F1, F2, stencil_size)
 
 
     elseif stencil_size==3
-        % Gradient operators
+        % Sobel gradient operators
         Gx = zeros(3, 3, 3); 
         Gy = Gx; 
         Gz = Gx;
@@ -89,10 +96,10 @@ function [ Ix, Iy, Iz, It ] = calculate_derivatives_hsd3(F1, F2, stencil_size)
         Gt = Gt/1;
 
         % Computing derivatives
-        Ix = 0.5 * (nanconvn(F1,Gx) + nanconvn(F2,Gx) );
-        Iy = 0.5 * (nanconvn(F1,Gy) + nanconvn(F2,Gy) );
-        Iz = 0.5 * (nanconvn(F1,Gz) + nanconvn(F2,Gz) );
-        It = 0.5 * (nanconvn(F1,Gt) - nanconvn(F2,Gt) );
+        Ix = 0.5 * (nanconvn(F1,Gx) + nanconvn(F2,Gx));
+        Iy = 0.5 * (nanconvn(F1,Gy) + nanconvn(F2,Gy));
+        Iz = 0.5 * (nanconvn(F1,Gz) + nanconvn(F2,Gz));
+        It = 0.5 * (nanconvn(F1,Gt) - nanconvn(F2,Gt));
 
         % Adjusting sizes
         Ix = Ix(2:size(Ix,1)-1, 2:size(Ix,2)-1, 2:size(Ix,3)-1);
