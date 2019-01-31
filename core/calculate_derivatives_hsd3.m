@@ -15,6 +15,8 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2)
     [Gx, Gy, Gz] = get_sobel_3d_operator();
 
     Gt = ones(3, 3, 3);
+    % I'm gonna average a little bit before calculating the time derivative
+    Gt = Gt./ sum(Gt(:));
 
 
     % Spatial derivatives are computed as the average of 
