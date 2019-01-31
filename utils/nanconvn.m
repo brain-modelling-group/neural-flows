@@ -1,4 +1,4 @@
-function c = nanconvn(A, B, shape, varargin)
+function C = nanconvn(A, B, shape, varargin)
 % NANCONVN Convolution in ND ignoring NaNs.
 %   C = NANCONV(A, K) convolves A and K, correcting for any NaN values
 %   in the input vector A. The result is the same size as A (as though you
@@ -11,8 +11,6 @@ function c = nanconvn(A, B, shape, varargin)
 %     'nonanout' - The result C should have ignored NaNs removed (default).
 %                  Even with this option, C will have NaN values where the
 %                  number of consecutive NaNs is too large to ignore.
-%     'nd'       - Treat the input vectors as ND matrices (default).
-%     '1d'       - Treat the input vectors as 1D vectors.
 %                  This option only matters if 'a' or 'k' is a row vector,
 %                  and the other is a column vector. Otherwise, this
 %                  option has no effect.
@@ -39,8 +37,8 @@ function c = nanconvn(A, B, shape, varargin)
 % $Id: nanconv.m 4861 2013-05-27 03:16:22Z bkraus $
 
     % Apply default options when necessary.
-    if ~exist('edge','var') 
-        edge = true; 
+    if ~exist('edge_correction','var') 
+        edge_correction = true; 
     end
 
     if ~exist('nanout','var')
@@ -59,41 +57,43 @@ function c = nanconvn(A, B, shape, varargin)
 
 
     % Flat function for comparison.
-    o  = ones(array_shape);
+    unos  = ones(array_shape);
 
     % Flat function with NaNs for comparison.
-    on = ones(array_shape);
+    onan  = ones(array_shape);
 
     % Find all the NaNs in the input.
     nan_idx = isnan(A);
 
-    % Replace NaNs with zero, both in 'A' and 'on'.
-    A(nan_idx)  = 0;
-    on(nan_idx) = 0;
+    % Replace NaNs with zero, both in 'A' and 'onan'.
+    A(nan_idx)    = 0;
+    onan(nan_idx) = 0;
 
     % Check that the filter does not have NaNs.
     if(any(isnan(B)))
         error([mfilename ':NaNinFilter'],'Filter (B) contains NaN values.');
     end
 
-    % Calculate what a 'flat' function looks like after convolution.
-    if(any(nan_idx(:)) || edge)
-        flat = convn(on, B, shape);
+    % Calculate what a 'flat' function looks like after convolution with B.
+    if(any(nan_idx(:)) || edge_correction)
+        flat = convn(onan, B, shape);
     else
-        flat = o;
+        flat = unos;
     end
 
     % The line above will automatically include a correction for edge effects,
     % so remove that correction if the user does not want it.
-    if(any(nan_idx(:)) && ~edge)
-        flat = flat./convn(o, B, shape); 
+    if(any(nan_idx(:)) && ~edge_correction)
+        flat = flat./convn(unos, B, shape); 
     end
 
     % Do the actual convolution
-    c = convn(A, B, shape)./flat;
+    C = convn(A, B, shape)./flat;
 
     % If requested, replace output values with NaNs corresponding to input.
-    if(nanout); c(nan_idx) = NaN; end
+    if(nanout)
+        C(nan_idx) = NaN; 
+    end
 
 
 end % function nanconvn()
