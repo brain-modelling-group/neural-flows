@@ -1,4 +1,4 @@
-function C = nanconvn(A, B, shape, varargin)
+function [C, varargout] = nanconvn(A, B, shape, precalc_flat, varargin)
 % NANCONVN Convolution in ND ignoring NaNs.
 %   C = NANCONV(A, B) convolves A and B, correcting for any NaN values
 %   in the input vector A. The result is the same size as A (as though you
@@ -43,6 +43,12 @@ function C = nanconvn(A, B, shape, varargin)
     if ~exist('nanout','var')
         nanout = true; 
     end
+    
+    if ~exist('precalc_flat','var') % This may speed up subsequent calls to the function because it avoids a convolution per call
+        flat = [];
+    else
+        flat = precalc_flat;
+    end
 
     if ~exist('shape','var') 
         shape = 'same';
@@ -69,7 +75,7 @@ function C = nanconvn(A, B, shape, varargin)
     nan_idx = isnan(A);
 
     % Replace NaNs with zero, both in 'A' and 'onan'.
-    A(anan)    = 0;
+    A(anan)        = 0;
     onan(isnan(A)) = 0;
 
     % Check that the filter does not have NaNs.
@@ -77,17 +83,19 @@ function C = nanconvn(A, B, shape, varargin)
         error([mfilename ':NaNinFilter'],'Filter (B) contains NaN values.');
     end
 
-    % Calculate what a 'flat' function looks like after convolution with B.
-    if(any(nan_idx(:)) || edge_correction)
-        flat = convn(onan, B, shape);
-    else
-        flat = unos;
-    end
+    if isempty(flat)
+       % Calculate what a 'flat' function looks like after convolution with B.
+        if(any(nan_idx(:)) || edge_correction)
+            flat = convn(onan, B, shape);
+        else
+            flat = unos;
+        end
 
     % The line above will automatically include a correction for edge effects,
     % so remove that correction if the user does not want it.
-    if(any(nan_idx(:)) && ~edge_correction)
-        flat = flat./convn(unos, B, shape); 
+        if(any(nan_idx(:)) && ~edge_correction)
+            flat = flat./convn(unos, B, shape); 
+        end
     end
 
     % Do the actual convolution
@@ -97,6 +105,6 @@ function C = nanconvn(A, B, shape, varargin)
     if(nanout)
         C(anan) = NaN; 
     end
-
+    varargout{1} = flat;
 
 end % function nanconvn()
