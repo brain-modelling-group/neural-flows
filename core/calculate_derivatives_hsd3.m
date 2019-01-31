@@ -28,7 +28,6 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, operator_3d)
     % the two image/frame gradients along each direction
     
 
-    sobel_norm_factor = 44;
     Ix = 0.5 * (convn(F1, Gx, 'same') + convn(F2, Gx, 'same'));
     Iy = 0.5 * (convn(F1, Gy, 'same') + convn(F2, Gy, 'same'));
     Iz = 0.5 * (convn(F1, Gz, 'same') + convn(F2, Gz, 'same'));
