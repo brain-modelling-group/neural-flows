@@ -1,14 +1,16 @@
 function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, operator_3d)
-%This fuction computes 3D derivatives between two 3D images. 
-%There are four derivatives here; three along X, Y, Z axes and one along
-%timeline axis.
+% This fuction computes 3D+t partial derivatives between two 3D image frames. 
+% This function basically does the same as imgradientxyz, but it also
+% calculates the temporal derivative.
+% There are four derivatives here; three along X, Y, Z axes and one along
+% T  axis.
 %
 %   - F1, F2 :   two subsequent images or frames
 %   - hx, hy, hz -  assumed to be 1
 %   - ht         -  assumed to be 1
 %   - Ix, Iy, Iz : derivatives along X, Y and Z axes respectively
 %   - It         : derivatives along timeline axis
-%             Modified - Paula Sanz-Leon optimized, handles nans
+             
     
     if nargin < 3 
         operator_3d = @get_sobel_3d_operator;
