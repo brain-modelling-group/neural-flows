@@ -43,32 +43,42 @@ ux = uxo;
 uy = uyo; 
 uz = uzo;
 
+% Call nanconv with the parametes we're going to use to get the edge 
+% correction image, and avoid further calls in the iterations.
+% TODO: Probably a good idea to do this before calling the optical flow
+% routine
+
+
+
+
 % Calculate derivatives
 [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2);
 
 
-% Neumann  neighbourhood in 3D - nearest neighbours for averaging 
-stencil = zeros(3, 3, 3);
+% Neumann neighbourhood in 3D - 6-nearest neighbours for averaging 
+avg_filter = zeros(3, 3, 3);
 
 kk=2; % This is where our point of interest is centred along the z-axis
 
 % Averaging filter
-stencil(:,:,kk-1) = [0 0 0; 
-                     0 1 0; 
-                     0 0 0]/6;
+avg_filter(:,:,kk-1) = [0 0 0; 
+                        0 1 0; 
+                        0 0 0]/6;
                  
-stencil(:,:,kk)   = [0 1 0; 
-                     1 0 1; 
-                     0 1 0]/6;
+avg_filter(:,:,kk)   = [0 1 0; 
+                       1 0 1; 
+                       0 1 0]/6;
                  
-stencil(:,:,kk+1) = [0 0 0; 
-                     0 1 0; 
-                     0 0 0]/6;
+avg_filter(:,:,kk+1) = [0 0 0; 
+                        0 1 0; 
+                        0 0 0]/6;
 
+[~, edge_corrected_image] = nanconv(ux, avg_filter, 'same');                
+                 
 for i=1:max_iterations
-    ux_avg = nanconvn(ux, stencil,'same');
-    uy_avg = nanconvn(uy, stencil,'same');
-    uz_avg = nanconvn(uz, stencil,'same');
+    ux_avg = nanconvn(ux, avg_filter,'same', edge_corrected_image);
+    uy_avg = nanconvn(uy, avg_filter,'same', edge_corrected_image);
+    uz_avg = nanconvn(uz, avg_filter,'same', edge_corrected_image);
     
     ux = ux_avg - (Ix.*((Ix.*ux_avg) + (Iy.*uy_avg) + (Iz.*uz_avg) + It))...
         ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
