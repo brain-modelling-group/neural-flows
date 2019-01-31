@@ -73,7 +73,7 @@ avg_filter(:,:,kk+1) = [0 0 0;
                         0 1 0; 
                         0 0 0]/6;
 
-[~, edge_corrected_image] = nanconv(ux, avg_filter, 'same');                
+[~, edge_corrected_image] = nanconvn(ux, avg_filter, 'same');                
                  
 % TODO: replace FOR by WHILE after introducing the Charbonnier penalty/tolerance 
 
