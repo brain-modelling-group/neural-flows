@@ -30,7 +30,8 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, operator_3d)
     [Gx, Gy, Gz] = operator_3d();
 
     Gt = ones(3, 3, 3);
-    % Make these parameters
+    
+    % Make these parameters optional inputs
     hx = 1; % 1 mm
     hy = 1; % 1 mm
     hz = 1; % 1 mm
