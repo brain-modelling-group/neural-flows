@@ -1,108 +1,50 @@
-function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, operator_size)
+function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2)
 %This fuction computes 3D derivatives between two 3D images. 
-%
-%   Description :
-%  
-%   There are four derivatives here; three along X, Y, Z axes and one along
-%   timeline axis.
+%There are four derivatives here; three along X, Y, Z axes and one along
+%timeline axis.
 %
 %   - F1, F2 :   two subsequent images or frames
 %   - hx, hy, hz -  assumed to be 1
 %   - ht         -  assumed to be 1
 %   - Ix, Iy, Iz : derivatives along X, Y and Z axes respectively
 %   - It         : derivatives along timeline axis
-%   - stencil_size : size of the finite difference operator used in convolution
-%                   If stencil_size = 2; backward differences
-%                   If stencil_size = 3; central differences
-%   AUTHORS : Original - Mohammad Mustafa, The University of Nottingham and Mirada Medical Limited,
 %             Modified - Paula Sanz-Leon optimized, handles nans
 
-% Use central differences by default
-    if nargin < 3
-        operator_size = 3;
-    end
 
-    if operator_size == 2
-        Gx = zeros(2,2,2);
-        Gx(:,:,1) = [-1 1; 
-                     -1 1 ]; 
-        Gx(:,:,2) = [-1 1; 
-                     -1 1 ];
-        Gx = Gx/4;
+    % Sobel 3D Kernel along X, Y and Z direction
+    [Gx, Gy, Gz] = get_sobel_3d_operator();
 
-        Gy = zeros(2,2,2);
-        Gy(:,:,1) = [-1 -1; 
-                      1  1]; 
-        Gy(:,:,2) = [-1 -1; 
-                      1  1 ];
-        Gy = Gy/4;
-
-        Gz = zeros(2,2,2);
-        Gz(:,:,1) = [-1 -1; 
-                     -1 -1 ]; 
-        Gz(:,:,2) = [1 1; 
-                     1 1 ];
-        Gz = Gz/4;
-
-        Gt = ones(2, 2, 2);
-
-        adjusted_size_start = 1;
+    Gt = ones(3, 3, 3);
 
 
-    elseif operator_size==3
-        % Sobel gradient operators
-        Gx = zeros(3, 3, 3); 
-        Gy = Gx; 
-        Gz = Gx;
-        
-        % Gradient operator along X
-        Gx(:,:,1) = [-1 0 1; 
-                     -2 0 2; 
-                     -1 0 1];
-                 
-        Gx(:,:,2) =  Gx(:,:,1);
-        Gx(:,:,3) =  Gx(:,:,1);
-        Gx=Gx/4;
-        
-        % Gradient operator along Y
-        Gy(:,:,1) = Gx(:,:,1)';
-        Gy(:,:,2) = Gx(:,:,2)';
-        Gy(:,:,3) = Gx(:,:,3)';
-        
-        % Gradient operator along Z
-        Gz(:,:,1) = [-1 -2 -1; 
-                     -1 -2 -1; 
-                     -1 -2 -1]; 
-        Gz(:,:,2) = [ 0  0  0; 
-                      0  0  0; 
-                      0  0  0]; 
-        Gz(:,:,3) = [ 1  2  1; 
-                      1  2  1; 
-                      1  2  1]; 
-        Gz = Gz/4;
-
-        Gt = ones(3, 3, 3);
-        
-        adjusted_size_start = 2;
-
-    end
-    
-        % Spatial derivatives are computed as the average of 
-        % the two image/frame gradients along each direction
-        Ix = 0.5 * (nanconvn(F1, Gx, 'same') + nanconvn(F2, Gx, 'same'));
-        Iy = 0.5 * (nanconvn(F1, Gy, 'same') + nanconvn(F2, Gy, 'same'));
-        Iz = 0.5 * (nanconvn(F1, Gz, 'same') + nanconvn(F2, Gz, 'same'));
-        It = 0.5 * (nanconvn(F1, Gt, 'same') - nanconvn(F2, Gt, 'same'));
-
-        % Adjusting sizes - the derivatives are smaller than the inputs
-        %Ix = Ix(adjusted_size_start:size(Ix,1)-1, adjusted_size_start:size(Ix,2)-1, adjusted_size_start:size(Ix,3)-1);
-        %Iy = Iy(adjusted_size_start:size(Iy,1)-1, adjusted_size_start:size(Iy,2)-1, adjusted_size_start:size(Iy,3)-1);
-        %Iz = Iz(adjusted_size_start:size(Iz,1)-1, adjusted_size_start:size(Iz,2)-1, adjusted_size_start:size(Iz,3)-1);
-        %It = It(adjusted_size_start:size(It,1)-1, adjusted_size_start:size(It,2)-1, adjusted_size_start:size(It,3)-1);
-
+    % Spatial derivatives are computed as the average of 
+    % the two image/frame gradients along each direction
+    Ix = 0.5 * (nanconvn(F1, Gx, 'same') + nanconvn(F2, Gx, 'same'));
+    Iy = 0.5 * (nanconvn(F1, Gy, 'same') + nanconvn(F2, Gy, 'same'));
+    Iz = 0.5 * (nanconvn(F1, Gz, 'same') + nanconvn(F2, Gz, 'same'));
+    It = 0.5 * (nanconvn(F1, Gt, 'same') - nanconvn(F2, Gt, 'same'));
 
 end % function calculate_derivatives_hsd3()
 
-%   Published under a Creative Commons Attribution-Non-Commercial-Share Alike
-%   3.0 Unported Licence http://creativecommons.org/licenses/by-nc-sa/3.0/
+function [Gx, Gy, Gz] = get_sobel_3d_operator()
+    % Returns the 3D Normalized Sobel kernels
+        
+        norm_factor = 44; % sum(abs(G_i(:))); I just happen to know it's 44
+        Gx(:,:,1) = [-1  0  1; -3  0  3; -1  0  1];
+        Gx(:,:,2) = [-3  0  3; -6  0  6; -3  0  3];
+        Gx(:,:,3) = [-1  0  1; -3  0  3; -1  0  1];
+        Gx = Gx./norm_factor;
+
+        Gy(:,:,1) = [-1 -3 -1;  0  0  0;  1  3  1];
+        Gy(:,:,2) = [-3 -6 -3;  0  0  0;  3  6  3];
+        Gy(:,:,3) = [-1 -3 -1;  0  0  0;  1  3  1];
+        Gy = Gy./norm_factor;
+
+        Gz(:,:,1) = [-1 -3 -1; -3 -6 -3; -1 -3 -1];
+        Gz(:,:,2) = [ 0  0  0;  0  0  0;  0  0  0];
+        Gz(:,:,3) = [ 1  3  1;  3  6  3;  1  3  1];
+        Gz = Gz./norm_factor;
+        
+end % function get_sobel_3d_operator()
+
  
