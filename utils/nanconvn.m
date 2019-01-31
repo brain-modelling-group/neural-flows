@@ -69,7 +69,7 @@ function C = nanconvn(A, B, shape, varargin)
     nan_idx = isnan(A);
 
     % Replace NaNs with zero, both in 'A' and 'onan'.
-    A(isnan(A))    = 0;
+    A(anan)    = 0;
     onan(isnan(A)) = 0;
 
     % Check that the filter does not have NaNs.
