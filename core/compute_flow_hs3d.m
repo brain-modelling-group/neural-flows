@@ -75,6 +75,8 @@ avg_filter(:,:,kk+1) = [0 0 0;
 
 [~, edge_corrected_image] = nanconv(ux, avg_filter, 'same');                
                  
+% TODO: replace FOR by WHILE after introducing the Charbonnier penalty/tolerance 
+
 for i=1:max_iterations
     ux_avg = nanconvn(ux, avg_filter,'same', edge_corrected_image);
     uy_avg = nanconvn(uy, avg_filter,'same', edge_corrected_image);
@@ -89,6 +91,7 @@ for i=1:max_iterations
     uz = uz_avg - ( Iz.*( (Ix.*ux_avg) + (Iy.*uy_avg) + (Iz.*uz_avg) + It))...
         ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
 end
+
 
 end
 
