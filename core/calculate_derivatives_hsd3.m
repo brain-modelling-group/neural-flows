@@ -1,16 +1,26 @@
 function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, operator_3d)
-% This fuction computes 3D+t partial derivatives between two 3D image frames. 
+%%This fuction computes 3D+t partial derivatives between two 3D image frames. 
 % This function basically does the same as imgradientxyz, but it also
-% calculates the temporal derivative.
-% There are four derivatives here; three along X, Y, Z axes and one along
-% T  axis.
+% calculates the temporal derivative and returns correctly normalised
+% derivatives.
 %
-%   - F1, F2 :   two subsequent images or frames
-%   - hx, hy, hz -  assumed to be 1
-%   - ht         -  assumed to be 1
-%   - Ix, Iy, Iz : derivatives along X, Y and Z axes respectively
-%   - It         : derivatives along timeline axis
-             
+% ARGUMENTS:
+%       F1, F2      --    two subsequent 3D arrays or 3D image frames
+%       operator_3d --   a function handle with the operator to use. 
+%                        Default is @get_sobel_3d_operator
+%   TODO: hx, hy, hz -  assumed to be 1 mm
+%   TODO: ht         -  assumed to be 1 ms
+%    
+% OUTPUT:
+%   Ix, Iy, Iz, It  --  derivatives along X, Y, Z and T axes respectively
+%
+% AUTHOR:
+%     Paula Sanz-Leon
+% USAGE:
+%{
+    
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%             
     
     if nargin < 3 
         operator_3d = @get_sobel_3d_operator;
@@ -67,7 +77,7 @@ function [Gx, Gy, Gz] = get_laplacian_3d_operator()
     Gx(:,:,2) = [-1 0 1; -2 0 2; -1 0 1]; 
     Gx(:,:,3) = [-1 0 1; -2 0 2; -1 0 1]; 
     Gx = Gx./sum(abs(Gx(:)));
-
+x
     Gy(:,:,1) = Gx(:,:,1)';
     Gy(:,:,2) = Gx(:,:,2)';
     Gy(:,:,3) = Gx(:,:,3)';
