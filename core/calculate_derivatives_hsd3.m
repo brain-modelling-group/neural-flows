@@ -87,6 +87,4 @@ x
     Gz(:,:,3) = [ 1  2  1;  1  2  1;  1  2  1]; 
     Gz = Gz./sum(abs(Gz(:)));
 
-end
-
- 
+end % function get_laplacian_3d_operator()
