@@ -61,13 +61,17 @@ function C = nanconvn(A, B, shape, varargin)
 
     % Flat function with NaNs for comparison.
     onan  = ones(array_shape);
+    
+    anan  = false(array_shape);
+    
+    anan(isnan(A)) = true;
 
     % Find all the NaNs in the input.
     nan_idx = isnan(A);
 
     % Replace NaNs with zero, both in 'A' and 'onan'.
-    A(nan_idx)    = 0;
-    onan(nan_idx) = 0;
+    A(isnan(A))    = 0;
+    onan(isnan(A)) = 0;
 
     % Check that the filter does not have NaNs.
     if(any(isnan(B)))
@@ -92,7 +96,7 @@ function C = nanconvn(A, B, shape, varargin)
 
     % If requested, replace output values with NaNs corresponding to input.
     if(nanout)
-        C(nan_idx) = NaN; 
+        C(anan) = NaN; 
     end
 
 
