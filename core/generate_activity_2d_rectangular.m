@@ -14,14 +14,16 @@ function [activity_pattern] = generate_activity_2d_rectangular(data_type, singul
     % makes it easier for the treatment of periodic boundary conditions
     half_ds = data_type.ds / 2;
 
-    % NOTE: Time starts at dt
-    [x, y, t] = meshgrid((1:data_type.xyz_shape(1))*data_type.ds - half_ds, ...
-                         (1:data_type.xyz_shape(2))*data_type.ds - half_ds, ...
-                         (1:data_type.t_shape)*data_type.dt);
     
     % Idiomatic indexing for space
     xdim = 1;
     ydim = 2;
+    % NOTE: Time starts at dt
+    [x, y, t] = meshgrid((1:data_type.xyz_shape(xdim))*data_type.ds - half_ds, ...
+                         (1:data_type.xyz_shape(ydim))*data_type.ds - half_ds, ...
+                         (1:data_type.t_shape)*data_type.dt);
+    
+
         
     % Check if we want a gaussian window around the singularity
     % Gaussian width parameter
@@ -45,7 +47,7 @@ function [activity_pattern] = generate_activity_2d_rectangular(data_type, singul
            w = -w;
         end
         
-        loc = singularity_type.centroids(this_singularity);
+        loc = singularity_type.centroids{this_singularity};
 
         vel = singularity_type.vel{this_singularity};
         
@@ -59,18 +61,18 @@ function [activity_pattern] = generate_activity_2d_rectangular(data_type, singul
             case {'sink', 'source'}
                 % Sink pattern
                 activity_pattern = activity_pattern + exp(1i * (w*t + k*sqrt((x-loc(xdim)-vel(ydim)*t).^2 + ...
-                    (y-loc(ydim)-vel(ydim)*t).^2))) .* gaussian_handle(c, loc).';
+                                  (y-loc(ydim)-vel(ydim)*t).^2))) .* gaussian_handle(c, loc).';
 
             case 'spiral'
                 % Spiral wave
                 activity_pattern = activity_pattern + ...
-                    exp(1i*(-w*t + angle(x-loc(xdim)-vel(dim)*t + 1i*(y-loc(ydim)-vel(ydim)*t))- ...
-                    k*sqrt((x-loc(xdim)-vel(xdim)*t).^2 + (y-loc(ydim)-vel(ydim)*t).^2))).* gaussian_handle(c, loc).' ;
+                                   exp(1i*(-w*t + angle(x-loc(xdim)-vel(xdim)*t + 1i*(y-loc(ydim)-vel(ydim)*t))- ...
+                                   k*sqrt((x-loc(xdim)-vel(xdim)*t).^2 + (y-loc(ydim)-vel(ydim)*t).^2))).* gaussian_handle(c, loc).' ;
 
             case 'saddle'
                 % Saddle pattern
                 activity_pattern = activity_pattern + exp(1i * (-w*t + k*abs(x-loc(xdim)-vel(xdim)*t) - ...
-                    k*abs(y-loc(ydim)-vel(ydim)*t))) .* gaussian_handle(c, loc).';
+                                   k*abs(y-loc(ydim)-vel(ydim)*t))) .* gaussian_handle(c, loc).';
 
             otherwise
                 error(['patchflow:' mfilename ':NotImplemented'], ...
