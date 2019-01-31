@@ -1,13 +1,12 @@
 function C = nanconvn(A, B, shape, varargin)
 % NANCONVN Convolution in ND ignoring NaNs.
-%   C = NANCONV(A, K) convolves A and K, correcting for any NaN values
+%   C = NANCONV(A, B) convolves A and B, correcting for any NaN values
 %   in the input vector A. The result is the same size as A (as though you
-%   called 'conv' or 'conv2' with the 'same' shape).
+%   called 'convn' 'same' shape).
 %
-%   C = NANCONV(A, K, 'param1', 'param2', ...) specifies one or more of the following:
-%     'edge'     - Apply edge correction to the output.
+%   C = NANCONV(A, B, 'param1', 'param2', ...) specifies one or more of the following:
+%     'edge_correction'     - Apply edge correction to the output.
 %     'noedge'   - Do not apply edge correction to the output (default).
-%     'nanout'   - The result C should have NaNs in the same places as A.
 %     'nonanout' - The result C should have ignored NaNs removed (default).
 %                  Even with this option, C will have NaN values where the
 %                  number of consecutive NaNs is too large to ignore.
@@ -15,7 +14,7 @@ function C = nanconvn(A, B, shape, varargin)
 %                  and the other is a column vector. Otherwise, this
 %                  option has no effect.
 %
-%   NANCONV works by running 'conv2' either two or three times. The first
+%   NANCONV works by running 'convn' either two or three times. The first
 %   time is run on the original input signals A and K, except all the
 %   NaN values in A are replaced with zeros. The 'same' input argument is
 %   used so the output is the same size as A. The second convolution is
