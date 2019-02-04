@@ -7,41 +7,42 @@ function interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask)
 %  locs: locations of known data
 %  data: scatter data known at locs of size tpts x nodes
 % X, Y Z -- grid points to get interpolation out
+% in_bdy_mask -- indices with points of the grid that are inside the
+% convex hull of the brain/cortex
 
 % This is the key step for the optical flow method to work
-% These parameters are eesential
-
-neighbour_method = 'natural';
-extrapolation_method = 'none';
-
-
-% Frame A
-
-x_dim = 1;
-y_dim = 2;
-z_dim = 3;
+% These parameters are essential
+    neighbour_method = 'natural';
+    extrapolation_method = 'none';
 
 
-mfile_object = matfile('temp_file_interpolated_data.mat','Writable', true);
+    % Frame A
 
-mfile_object.data(size(X, x_dim), size(Y, y_dim), size(Z, z_dim), tpts) = 0;
+    x_dim = 1;
+    y_dim = 2;
+    z_dim = 3;
 
-temp_data = nan(size(X));
 
-for this_tpt=1:tpts
-    
-    data_interpolant = scatteredInterpolant(locs(1:end, x_dim), ...
-                                            locs(1:end, y_dim), ...
-                                            locs(1:end, z_dim), ...
-                                            data(this_tpt, :).', ...
-                                            neighbour_method, ...
-                                            extrapolation_method);
+    mfile_object = matfile('temp_file_interpolated_data.mat','Writable', true);
+    mfile_object.data(size(X, x_dim), size(Y, y_dim), size(Z, z_dim), tpts) = 0;
+    temp_data = nan(size(X));
 
-    temp_data(in_bdy_mask) = data_interpolant(X(in_bdy_mask).', Y(in_bdy_mask).', Z(in_bdy_mask).');
-    
-    % Only get 
-    mfile_object.data(:, :, :, this_tpt) = temp_data;
+    % NOTE: We could do this with a parfor loop but at the expense of RAM memory
+    %       Also, with a parfor we can't use the matfile object
+    for this_tpt=1:tpts
 
-end
+        data_interpolant = scatteredInterpolant(locs(1:end, x_dim), ...
+                                                locs(1:end, y_dim), ...
+                                                locs(1:end, z_dim), ...
+                                                data(this_tpt, :).', ...
+                                                neighbour_method, ...
+                                                extrapolation_method);
+
+        temp_data(in_bdy_mask) = data_interpolant(X(in_bdy_mask).', Y(in_bdy_mask).', Z(in_bdy_mask).');
+
+        % Only get 
+        mfile_object.data(:, :, :, this_tpt) = temp_data;
+
+    end
 
 end
