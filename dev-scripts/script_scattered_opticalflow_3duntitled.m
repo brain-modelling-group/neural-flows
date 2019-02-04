@@ -9,7 +9,7 @@ function compute_neural_flows_3d_unstructured(data)
     % TODO: estimate timeppints of interest using the second order temporal
     % derivative
     % NOTEs on perfromance: Elapsed time is 2602.606860 seconds for half
-    % hemisphere
+    % hemisphere, 32 iterations max per pair of frames
 
     % Labels for dimensions of 4D arrays arrays
     x_dim = 1;
@@ -73,8 +73,8 @@ function compute_neural_flows_3d_unstructured(data)
 
     
     % Default parameters -- could be changed
-    alpha_smooth = 1;
-    max_iterations = 32;
+    alpha_smooth   = 1;
+    max_iterations = 8;
     
     % Determine some initial conditions based
     NAN_MASK = ~inside_boundary_idx;
