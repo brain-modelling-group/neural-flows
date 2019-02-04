@@ -25,16 +25,7 @@ elseif nargin < 4
 end
 
 if ~exist('uxo', 'var') % assume the other do not exist either
-  rng(42) % TODO: make it an optional parameter
-  a   = -0.125;
-  b   =  0.125;
-  uxo = a + (b-a).*rand(size(F1));
-  uyo = a + (b-a).*rand(size(F1));
-  uzo = a + (b-a).*rand(size(F1));
-  uxo(isnan(F1)) = NaN;
-  uyo(isnan(F1)) = NaN;
-  uzo(isnan(F1)) = NaN;
-
+  [uxo, uyo, uzo] = get_initial_velocity_distribution(F1, isnan(F1));
 end
 
 % Intial conditions; 
