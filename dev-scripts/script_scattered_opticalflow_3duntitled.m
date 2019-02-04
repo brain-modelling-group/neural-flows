@@ -146,6 +146,17 @@ for this_tpt=1:tpts-1
 end
 
 %% 
+data =  mfile_object.data;
+%%
+[min_data, max_data] = find_min_max(data, 'symmetric');
+%%
+for this_tpt=1:tpts-1
+    temp_data =  data(:, :, :, this_tpt);
+    pcolor3(X, Y, Z, temp_data)
+    caxis([min_data, max_data])
+    drawnow()
+end
+%%
 % pcolor3(xx, yy, zz, cav, 'direct', 'alpha', 0.5)
 % cmap = bluered(256);
 % max_val = max(abs(cav(:)));
