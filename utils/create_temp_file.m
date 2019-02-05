@@ -1,4 +1,4 @@
-function [mfile_obj, temp_file_sentinel] = create_temp_file(fname)
+function [mfile_obj, temp_file_sentinel] = create_temp_file(fname, keep_file)
 % Creates a matfile object for temporary storage of chubby nDarrays
 % Returns a file sentinel to delete the temporary file 
     
@@ -6,8 +6,13 @@ function [mfile_obj, temp_file_sentinel] = create_temp_file(fname)
     temp_fname = [temp_fname, '.mat'];
     mfile_obj  = matfile(temp_fname, 'Writable', true);
 
-    % Clean up after ourselves    
-    temp_file_sentinel = onCleanup(@() remove_temp_file(temp_fname));
+    % Clean up after ourselves
+    if ~keep_file
+        temp_file_sentinel = onCleanup(@() remove_temp_file(temp_fname));
+    else
+        temp_file_sentinel = [];
+    end
+    
     fprintf('%s \n', 'Creating file:')
     fprintf('\t \t %s \n', temp_fname)
 end
