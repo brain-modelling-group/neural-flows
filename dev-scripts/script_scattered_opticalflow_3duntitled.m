@@ -10,6 +10,10 @@ function compute_neural_flows_3d_unstructured(data)
     % derivative
     % NOTEs on perfromance: Elapsed time is 2602.606860 seconds for half
     % hemisphere, 32 iterations max per pair of frames
+    
+    
+    keep_interp_file = true;
+    keep_vel_file    = true;
 
     % Labels for dimensions of 4D arrays arrays
     x_dim = 1;
@@ -37,86 +41,76 @@ function compute_neural_flows_3d_unstructured(data)
     rh_idx = [257:512];
 
     this_hm = lh_idx;
-    int_COG = floor(COG);
+    locs = COG(this_hm, :);
+    int_locs = floor(locs);
     
     % Get limits for the structured grid if people did not give those
-    min_x = min(int_COG(this_hm, x_dim));
-    min_y = min(int_COG(this_hm, y_dim));
-    min_z = min(int_COG(this_hm, z_dim));
+    min_x = min(int_locs(:, x_dim));
+    min_y = min(int_locs(:, y_dim));
+    min_z = min(int_locs(:, z_dim));
 
-    max_x = max(int_COG(this_hm, x_dim));
-    max_y = max(int_COG(this_hm, y_dim));
-    max_z = max(int_COG(this_hm, z_dim));
+    max_x = max(int_locs(:, x_dim));
+    max_y = max(int_locs(:, y_dim));
+    max_z = max(int_locs(:, z_dim));
     
     % Create the grid
     [X, Y, Z] = meshgrid(min_x:down_factor_xyz:max_x, ...
                          min_y:down_factor_xyz:max_y, ...
                          min_z:down_factor_xyz:max_z);
    
-
-
-    % This is the key step for the optical flow method to work
-    neighbour_method = 'natural';
-    extrapolation_method = 'none';
     
     
     % Trial run to get 
-    
     shp_alpha_radius = 30; % alpha radius. May be adjustable
     shp = alphaShape(COG(this_hm, :), shp_alpha_radius);
 
     % The boundary of the centroids is an approximation of the cortex
-    bdy = shp.boundaryFacets;
+    %bdy = shp.boundaryFacets;
     
-    %% Detect which points are in the alpha shape.
-    inside_boundary_idx = inShape(shp, X(:), Y(:), Z(:));
+    % Detect which points are in the alpha shape.
+    in_boundary_mask = inShape(shp, X(:), Y(:), Z(:));
+    
+    % Perform interpolation on the data
+    if keep_interp_file
+        [mfile_interp, ~] = interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask);
+    else
+        [mfile_interp, mfile_interp_sentinel] = interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask);
+    end 
 
-    
     % Default parameters -- could be changed
     alpha_smooth   = 1;
     max_iterations = 8;
     
     % Determine some initial conditions based
-    NAN_MASK = ~inside_boundary_idx;
+    NAN_MASK = ~in_boundary_mask;
     
     % Get some dummy initial conditions
     [uxo, uyo, uzo] = get_initial_velocity_distribution(X, NAN_MASK, 42);
     
     % We open a matfile to store output and avoid huge memory usage 
-    mfile_object = matfile('test_file.mat','Writable', true);
-    mfile_object.ux(size(uxo, x_dim), size(uxo, y_dim), size(uxo, z_dim), tpts-1) = 0;    
-    mfile_object.uy(size(uyo, x_dim), size(uyo, y_dim), size(uyo, z_dim), tpts-1) = 0;
-    mfile_object.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), tpts-1) = 0;
+    root_fname_vel = 'temp_velocity';
+    
+    [mfile_vel, mfile_vel_sentinel] = create_temp_file(root_fname_vel);
+    
+    % The following lines will create the file on disk
+    mfile_vel.ux(size(uxo, x_dim), size(uxo, y_dim), size(uxo, z_dim), tpts-1) = 0;    
+    mfile_vel.uy(size(uyo, x_dim), size(uyo, y_dim), size(uyo, z_dim), tpts-1) = 0;
+    mfile_vel.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), tpts-1) = 0;
+    
    %% 
    tic;
     for this_tpt = 1:tpts-1
-        % Frame A
-        data_interpolant_a = scatteredInterpolant(COG(this_hm, x_dim), ...
-                                            COG(this_hm, y_dim), ...
-                                            COG(this_hm, z_dim), ...
-                                            data_hm(this_tpt, this_hm).', ...
-                                            neighbour_method, ...
-                                            extrapolation_method);
-        % Frame B
-        data_interpolant_b = scatteredInterpolant(COG(this_hm, x_dim), ...
-                                            COG(this_hm, y_dim), ...
-                                            COG(this_hm, z_dim), ...
-                                            data_hm(this_tpt+1, this_hm).', ...
-                                            neighbour_method, ...
-                                            extrapolation_method);
-
-
-        FA = data_interpolant_a(X, Y, Z);
+        
+       FA = mfile_interp.data(:, :, :, this_tpt);
+       FB = mfile_interp.data(:, :, :, this_tpt+1);
        
-        FB = data_interpolant_b(X, Y, Z);
-
-
        % Calculate the velocity components
        [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, max_iterations, ...
                                            uxo, uyo, uzo);                                
               
        % Save the velocity components
-       % TODO: do it every 5-10 samples
+       % TODO: do it every 5-10 samples perhaps - spinning disks may be a
+       % problem for execution times
        mfile_object.ux(:, :, :, this_tpt) = uxo;
        mfile_object.uy(:, :, :, this_tpt) = uyo;
        mfile_object.uz(:, :, :, this_tpt) = uzo;
@@ -124,7 +118,15 @@ function compute_neural_flows_3d_unstructured(data)
     end
     % Free some space
     clear uxo uyo uzo
+    
+    % Delete interpolated data file
+    if ~keep_interp_file
+        clear mfile_interp_sentinel
+    end
+    
     toc;
+    %% 
+
 %%
     quiver_downsample = 2;
 
@@ -150,10 +152,18 @@ data =  mfile_object.data;
 %%
 [min_data, max_data] = find_min_max(data, 'symmetric');
 %%
-for this_tpt=1:tpts-1
+    this_tpt = 1;
     temp_data =  data(:, :, :, this_tpt);
-    pcolor3(X, Y, Z, temp_data)
-    caxis([min_data, max_data])
+    hpcolor3 = pcolor3(X, Y, Z, temp_data, 'nx', size(temp_data, x_dim), ...
+                                'ny', size(temp_data, y_dim), ...
+                                'nz', size(temp_data, z_dim));
+colormap(cmap)                            
+for this_tpt=2:10;%tpts-1
+    temp_data =  data(:, :, :, this_tpt);
+    pcolor3(X, Y, Z, temp_data, 'nx', size(temp_data, x_dim), ...
+                                'ny', size(temp_data, y_dim), ...
+                                'nz', size(temp_data, z_dim))
+    caxis([min_data/2, max_data/2])
     drawnow()
 end
 %%
