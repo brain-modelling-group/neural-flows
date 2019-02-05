@@ -26,11 +26,12 @@ function compute_neural_flows_3d_ug(data)
     num_nodes = size(data, 2);
     
     down_factor_t = 50; % Downsampling factor for t-axis
-    data_hm = data(1:down_factor_t:tpts, :);
+    data_hm = data(1:down_factor_t:tpts-1, :);
     % Recalculate timepoints
     tpts = size(data_hm, 1);
 
     clear data
+    data = data_hm; clear data_hm
     
     % NOTE: full resolution (eg, approx dxyz=1mm^3), each interpolation
     % step takes about 24 seconds.
@@ -45,6 +46,7 @@ function compute_neural_flows_3d_ug(data)
     this_hm = lh_idx;
     locs = COG(this_hm, :);
     int_locs = floor(locs);
+    data = data(:, this_hm);
     
     % Get limits for the structured grid if people did not give those
     min_x = min(int_locs(:, x_dim));
@@ -70,7 +72,7 @@ function compute_neural_flows_3d_ug(data)
     %bdy = shp.boundaryFacets;
     
     % Detect which points are in the alpha shape.
-    in_boundary_mask = inShape(shp, X(:), Y(:), Z(:));
+    in_bdy_mask = inShape(shp, X(:), Y(:), Z(:));
     
     % Perform interpolation on the data and save in temp file
     if keep_interp_file
@@ -86,7 +88,7 @@ function compute_neural_flows_3d_ug(data)
     max_iterations = 8;
     
     % Determine some initial conditions based
-    NAN_MASK = ~in_boundary_mask;
+    NAN_MASK = ~in_bdy_mask;
     
     % Get some dummy initial conditions
     [uxo, uyo, uzo] = get_initial_velocity_distribution(X, NAN_MASK, 42);
