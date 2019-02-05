@@ -30,6 +30,7 @@ num_critical_points = size(critical_xyz_idx, 1);
 % linear index of the centre point in a moore neighbourhood in 3D
 centre_point_lidx = 14;
 
+% Iterate over critical points and calculate their jacobian
 for this_point = 1:num_critical_points
     
 
@@ -64,6 +65,6 @@ for this_point = 1:num_critical_points
    
 end
     
-end
+end % function jacobian3d()
 
 
