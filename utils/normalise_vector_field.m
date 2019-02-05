@@ -2,10 +2,10 @@ function v = normalise_vector_field(v, dim)
 %% Normalises the input vector field using the L2 norm
 %
 % ARGUMENTS:
-%           v   -- nD array of size [M, N, dim];
+%           v   -- nD array of size [M, N, [P], dim];
 %           dim -- dimension of the embeeding space (eg, 2 or 3)
 % OUTPUT:
-%           v   -- nD array of size [M, N, dim] whose vectors have unit
+%           v   -- nD array of size [M, N, [P], dim] whose vectors have unit
 %                  norm.
 % AUTHOR:
 %     Paula Sanz-Leon

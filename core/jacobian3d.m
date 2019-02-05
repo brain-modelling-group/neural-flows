@@ -1,4 +1,4 @@
-function [] = jacobian3d(critical_xyz_idx, vx, vy, vz, hx, hy, hz)
+function [J3D] = jacobian3d(critical_xyz_idx, vx, vy, vz, hx, hy, hz)
 % Estimates the 3 x 3 Jacobian of ux, uy, uz around the estimated critical points
 % critical_xyz_idx are the indices of the estimated points
 
@@ -60,7 +60,7 @@ for this_point = 1:num_critical_points
                              dvydx(centre_point_lidx) dvydy(centre_point_lidx)  dvydz(centre_point_lidx);
                              dvzdx(centre_point_lidx) dvzdy(centre_point_lidx)  dvzdz(centre_point_lidx)];
     
-
+    
 
    
 end
