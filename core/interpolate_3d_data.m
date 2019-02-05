@@ -1,4 +1,4 @@
-function interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask)
+function [mfile_obj, temp_file_sentinel] = interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask)
 % This is a wrapper function for scattered interpolant. We can interpolate
 % each frame independtly using parfor and save the interpolated data for 
 % later use with optical flow and then just delete the interpolated data
@@ -22,9 +22,10 @@ function interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask)
     y_dim = 2;
     z_dim = 3;
 
-
-    mfile_object = matfile('temp_file_interpolated_data.mat','Writable', true);
-    mfile_object.data(size(X, x_dim), size(Y, y_dim), size(Z, z_dim), tpts) = 0;
+    root_fname = 'temp_interp_data';
+    [mfile_obj, temp_file_sentinel] = create_temp_file(root_fname);
+    mfile_obj.data(size(X, x_dim), size(Y, y_dim), size(Z, z_dim), tpts) = 0;
+    
     temp_data = nan(size(X));
 
     % NOTE: We could do this with a parfor loop but at the expense of RAM memory
@@ -41,7 +42,7 @@ function interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask)
         temp_data(in_bdy_mask) = data_interpolant(X(in_bdy_mask).', Y(in_bdy_mask).', Z(in_bdy_mask).');
 
         % Only get 
-        mfile_object.data(:, :, :, this_tpt) = temp_data;
+        mfile_obj.data(:, :, :, this_tpt) = temp_data;
 
     end
 
