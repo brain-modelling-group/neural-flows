@@ -19,6 +19,7 @@ function [mfile_interp_obj, temp_file_sentinel] = interpolate_3d_data(data, locs
     x_dim = 1;
     y_dim = 2;
     z_dim = 3;
+    tpts = size(data, 1);
 
     root_fname = 'temp_interp';
     [mfile_interp_obj, temp_file_sentinel] = create_temp_file(root_fname);
