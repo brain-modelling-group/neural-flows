@@ -38,7 +38,7 @@ end
 for this_temp_file = 1:numel(WorkerFname)
     worker_fname = WorkerFname{this_temp_file};
     % Load the worker temp file
-    worker_matfile = matfile(worker_filename);
+    worker_matfile = matfile(worker_fname);
     
     for jdx = 1:number_of_things
         if worker_matfile.got_result(1, jdx)
