@@ -21,7 +21,7 @@ function open_parpool(workers_proportion)
   open_parpool(0.5) % uses half of the physically available workers
 %}
 % AUTHOR: 
-%         Paula Sanz-Leon, QIMR Berghofer 2019
+%         Paula Sanz-Leon, QIMR Berghofer 2019-02
 %
 
     p = gcp('nocreate'); 
