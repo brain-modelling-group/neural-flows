@@ -40,46 +40,46 @@ function [output_matfile_obj] = spmd_parfor_with_matfiles(number_of_things, parf
 %        Paula Sanz-Leon, QIMR Berghofer 2019-02
 %
 
-% Step 1: create a matfile per worker using SPMD
-spmd
-    WorkerFname      = tempname(pwd); % each worker gets a unique filename and writes to disk
-    worker_matfile   = matfile(WorkerFname, 'Writable', true);  
-    % Seed the variables in the matfile object
-    worker_matfile.result     = cell(1, number_of_things);
-    worker_matfile.got_result = false(1, number_of_things);
-end
-
-% Step 2: create a parallel.pool.Constant from the 'Composite' 
-% This allows the worker-local-variable to used inside PARFOR
-matfile_constant = parallel.pool.Constant(worker_matfile);
-
-%%Step 3: run PARFOR
-parfor idx = 1:number_of_things
-    % DO THE THING HERE
-    result_to_save = feval(parfun, idx);
-    % Get the correct matfile object for each worker
-    matfile_obj   = matfile_constant.Value;
-    % Assign into 'testOut'
-    matfile_obj.result(1, idx) = {result_to_save}
-    matfile_obj.got_result(1, idx) = true;
-end
-
-% Step 4: accumulate results on a separate file 
-% Here we retrieve the filenames from 'WorkerFname' Composite,
-% and use them to accumulate the overall result in disk
-
-for this_temp_file = 1:numel(WorkerFname)
-    worker_fname = WorkerFname{this_temp_file};
-    % Load the worker temp file
-    worker_matfile = matfile(worker_fname);
-    
-    for jdx = 1:number_of_things
-        if worker_matfile.got_result(1, jdx)
-             result = worker_matfile.result(1, jdx);
-            %  This line is meant to be generic and adaptbale
-            eval(['temp_matfile_obj.' storage_expression  '= result{1};']);
-        end
+    % Step 1: create a matfile per worker using SPMD
+    spmd
+        WorkerFname      = tempname(pwd); % each worker gets a unique filename and writes to disk
+        worker_matfile   = matfile(WorkerFname, 'Writable', true);  
+        % Seed the variables in the matfile object
+        worker_matfile.result     = cell(1, number_of_things);
+        worker_matfile.got_result = false(1, number_of_things);
     end
-    delete([worker_fname '.mat'])
-end
+
+    % Step 2: create a parallel.pool.Constant from the 'Composite' 
+    % This allows the worker-local-variable to used inside PARFOR
+    matfile_constant = parallel.pool.Constant(worker_matfile);
+
+    %%Step 3: run PARFOR
+    parfor idx = 1:number_of_things
+        % DO THE THING HERE
+        result_to_save = feval(parfun, idx);
+        % Get the correct matfile object for each worker
+        matfile_obj   = matfile_constant.Value;
+        % Assign into 'testOut'
+        matfile_obj.result(1, idx) = {result_to_save}
+        matfile_obj.got_result(1, idx) = true;
+    end
+
+    % Step 4: accumulate results on a separate file 
+    % Here we retrieve the filenames from 'WorkerFname' Composite,
+    % and use them to accumulate the overall result in disk
+
+    for this_temp_file = 1:numel(WorkerFname)
+        worker_fname = WorkerFname{this_temp_file};
+        % Load the worker temp file
+        worker_matfile = matfile(worker_fname);
+
+        for jdx = 1:number_of_things
+            if worker_matfile.got_result(1, jdx)
+                 result = worker_matfile.result(1, jdx);
+                %  This line is meant to be generic and adaptbale
+                eval(['temp_matfile_obj.' storage_expression  '= result{1};']);
+            end
+        end
+        delete([worker_fname '.mat'])
+    end
 end % function spdm_parfor_with_matfiles()
