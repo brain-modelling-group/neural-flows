@@ -1,4 +1,4 @@
-function compute_neural_flows_3d_ug(data, locs, interpolated_data)
+function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolated_data)
     % data: a 2D array of size T x Nodes or 4D array
     % compute neural flows from (u)nstructured (g)rids/scattered datapoints
     % locs: coordinates points in 3D Euclidean space for which data values are known. 
@@ -70,38 +70,39 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data)
                          min_z:down_factor_xyz:max_z);
    
     
-    [in_bdy_mask, ~] = get_domain_boundary(locs, X(:), Y(:), Z(:));
-
+    [in_bdy_mask, ~] = get_boundary_info(locs, X(:), Y(:), Z(:));
+    in_bdy_mask = reshape(in_bdy_mask, size(X));
     
     % Perform interpolation on the data and save in temp file
     
     if ~interpolated_data.exists
         fprintf('%s \n', strcat('patchflow: ', mfilename, ': Interpolating data'))
+        
         % Sequential interpolation
         %[mfile_interp, mfile_interp_sentinel] = interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file); 
         
         % Parallel interpolation with the parallel toolbox
         [mfile_interp, mfile_interp_sentinel] = par_interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file); 
-         % Clean up parallel pool
+         
+        % Clean up parallel pool
          delete(gcp);
          interpolated_data.exists = true;
-         % Saves full path to the file
-         interpolated_data.interp_fname = mfile_interp.Peroperties.Source;s
+        
+         % Saves full path to file
+         interpolated_data.interp_fname = mfile_interp.Properties.Source;
     else
-        % Load the data if already exists
+        % Load the data if file already exists
         mfile_interp = matfile(interpolated_data.interp_fname);
         mfile_interp_sentinel = [];
     end
 
-    % Default parameters -- could be changed
+    % Parameters for optical flow-- could be changed
     alpha_smooth   = 1;
     max_iterations = 8;
-    interpolated_data.interp_fname
-    % Determine some initial conditions based
-    NAN_MASK = ~in_bdy_mask;
-    
+        
     % Get some dummy initial conditions
-    [uxo, uyo, uzo] = get_initial_velocity_distribution(X, NAN_MASK, 42);
+    seed_init_vel = 42;
+    [uxo, uyo, uzo] = get_initial_velocity_distribution(X, ~in_bdy_mask, seed_init_vel);
     
     % We open a matfile to store output and avoid huge memory usage 
     root_fname_vel = 'temp_velocity';
@@ -113,10 +114,11 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data)
     mfile_vel.uy(size(uyo, x_dim), size(uyo, y_dim), size(uyo, z_dim), tpts-1) = 0;
     mfile_vel.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), tpts-1) = 0;
     
-   %% 
+   %%
    tic;
     for this_tpt = 1:tpts-1
-           
+       
+        % Read data
        FA = mfile_interp.data(:, :, :, this_tpt);
        FB = mfile_interp.data(:, :, :, this_tpt+1);
        
@@ -132,9 +134,11 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data)
        mfile_vel.uz(:, :, :, this_tpt) = uzo;
        
     end
+    
     % Free some space
     clear uxo uyo uzo
-    
+    toc;
+
     % Delete sentinels. If these varibales are OnCleanup objects, then the 
     % files will be deleted.
     
@@ -142,22 +146,21 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data)
     delete(mfile_vel_sentinel)
     
     
-    toc;
-    %% 
 
-%%
-    quiver_downsample = 2;
+
+
+    quiver_downsample = 1;
 
     xx = Z(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(X,y_dim),1:quiver_downsample:size(X,z_dim));
     yy = Y(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(X,y_dim),1:quiver_downsample:size(X,z_dim));
     zz = Z(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(X,y_dim),1:quiver_downsample:size(X,z_dim));
-%%    
+  
 for this_tpt=1:tpts-1
     
     % Enhance the quiver plot visually by downsizing vectors  
-    uu = mfile_object.ux(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(X,y_dim),1:quiver_downsample:size(Z,z_dim), this_tpt); 
-    vv = mfile_object.uy(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(Y,y_dim),1:quiver_downsample:size(Z,z_dim), this_tpt); 
-    ww = mfile_object.uz(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(Y,y_dim),1:quiver_downsample:size(Z,z_dim), this_tpt); 
+    uu = mfile_vel.ux(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(X,y_dim),1:quiver_downsample:size(Z,z_dim), this_tpt); 
+    vv = mfile_vel.uy(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(Y,y_dim),1:quiver_downsample:size(Z,z_dim), this_tpt); 
+    ww = mfile_vel.uz(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(Y,y_dim),1:quiver_downsample:size(Z,z_dim), this_tpt); 
     quiver3(xx, yy, zz, uu, vv, ww, 1)
     xlim([min_x, max_x])
     ylim([min_y, max_y])
@@ -165,44 +168,44 @@ for this_tpt=1:tpts-1
     drawnow
 end
 
-%% 
-data =  mfile_object.data;
-%%
-[min_data, max_data] = find_min_max(data, 'symmetric');
-%%
-    this_tpt = 1;
-    temp_data =  data(:, :, :, this_tpt);
-    hpcolor3 = pcolor3(X, Y, Z, temp_data, 'nx', size(temp_data, x_dim), ...
-                                'ny', size(temp_data, y_dim), ...
-                                'nz', size(temp_data, z_dim));
-colormap(cmap)                            
-for this_tpt=2:10;%tpts-1
-    temp_data =  data(:, :, :, this_tpt);
-    pcolor3(X, Y, Z, temp_data, 'nx', size(temp_data, x_dim), ...
-                                'ny', size(temp_data, y_dim), ...
-                                'nz', size(temp_data, z_dim))
-    caxis([min_data/2, max_data/2])
-    drawnow()
-end
-%
-% pcolor3(xx, yy, zz, cav, 'direct', 'alpha', 0.5)
-% cmap = bluered(256);
-% max_val = max(abs(cav(:)));
-% caxis([-max_val/2, max_val/2])
+% %% 
+% data =  mfile_object.data;
 % %%
-% pcolor3(xx, yy, zz, v2, 'direct', 'alpha', 0.5)
-% v2in(~in) = nan;
-% figure; pcolor3(xx, yy, zz, v2in, 'direct', 'alpha', 0.5);
-% 
-% trisurf(bdy, COG(this_hm, 1), COG(this_hm, 2), COG(this_hm, 3))
-% 
-% %% Plot isosurfaces
-% isosurface(xx,yy,zz,round(1000*v2in),-140);isonormals(xx,yy,zz,v2in,p)
-% daspect([1 1 1])
-% trisurf(bdy, COG(this_hm, 1), COG(this_hm, 2), COG(this_hm, 3))
-% 
-% nodeidx = 20;
-% ellipsoid(COG(nodeidx, 1), COG(nodeidx, 2), COG(nodeidx, 3), 5, 5, 5)
+% [min_data, max_data] = find_min_max(data, 'symmetric');
+% %%
+%     this_tpt = 1;
+%     temp_data =  data(:, :, :, this_tpt);
+%     hpcolor3 = pcolor3(X, Y, Z, temp_data, 'nx', size(temp_data, x_dim), ...
+%                                 'ny', size(temp_data, y_dim), ...
+%                                 'nz', size(temp_data, z_dim));
+% colormap(cmap)                            
+% for this_tpt=2:10%tpts-1
+%     temp_data =  data(:, :, :, this_tpt);
+%     pcolor3(X, Y, Z, temp_data, 'nx', size(temp_data, x_dim), ...
+%                                 'ny', size(temp_data, y_dim), ...
+%                                 'nz', size(temp_data, z_dim))
+%     caxis([min_data/2, max_data/2])
+%     drawnow()
+% end
+% %
+% % pcolor3(xx, yy, zz, cav, 'direct', 'alpha', 0.5)
+% % cmap = bluered(256);
+% % max_val = max(abs(cav(:)));
+% % caxis([-max_val/2, max_val/2])
+% % %%
+% % pcolor3(xx, yy, zz, v2, 'direct', 'alpha', 0.5)
+% % v2in(~in) = nan;
+% % figure; pcolor3(xx, yy, zz, v2in, 'direct', 'alpha', 0.5);
+% % 
+% % trisurf(bdy, COG(this_hm, 1), COG(this_hm, 2), COG(this_hm, 3))
+% % 
+% % %% Plot isosurfaces
+% % isosurface(xx,yy,zz,round(1000*v2in),-140);isonormals(xx,yy,zz,v2in,p)
+% % daspect([1 1 1])
+% % trisurf(bdy, COG(this_hm, 1), COG(this_hm, 2), COG(this_hm, 3))
+% % 
+% % nodeidx = 20;
+% % ellipsoid(COG(nodeidx, 1), COG(nodeidx, 2), COG(nodeidx, 3), 5, 5, 5)
 
 
 end % function compute_neural_flows_3d_ug()
