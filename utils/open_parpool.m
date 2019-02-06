@@ -35,7 +35,7 @@ function open_parpool(workers_proportion)
     num_workers  = round(workers_proportion*my_cluster.NumWorkers);
     
     if num_workers > 0
-        parpool(round(workers_proportion*my_cluster.NumWorkers));
+        parpool(num_workers);
     else
         error('Cannot open parpool with zero workers')
     end
