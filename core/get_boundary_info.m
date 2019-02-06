@@ -33,7 +33,7 @@ function [in_bdy_mask, bdy] = get_boundary_info(locs, xq, yq, zq, alpha_radius)
 % 
 
 
-if nargin < 4
+if nargin < 5
     alpha_radius = 30;
 end
     shp = alphaShape(locs, alpha_radius);
