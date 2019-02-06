@@ -1,4 +1,4 @@
-function spmd_parfor_with_matfiles(number_of_things, parfun, temp_fname_obj, field_expression)
+function [temp_fname_obj] = spmd_parfor_with_matfiles(number_of_things, parfun, temp_fname_obj, storage_expression)
 % This is a gorrible name, but I'm not sure what else to write
 % Assumes a parpool is open
 % number_of_things is the variable we are iterating over
@@ -6,9 +6,6 @@ function spmd_parfor_with_matfiles(number_of_things, parfun, temp_fname_obj, fie
 % field of interest -- where to store the data in temp_fname_ibj
 % after
 % the parfor loop
-
-N = 400;
-
 % Step 1: create a mat-file per worker using SPMD
 spmd
     WorkerFname      = tempname(pwd); % each worker gets a unique filename and writes to disk
@@ -23,10 +20,8 @@ end
 matfile_constant = parallel.pool.Constant(worker_matfile);
 
 %%Step 3: run PARFOR
-m = 3;
-n = 2;
 
-parfor idx = 1:N
+parfor idx = 1:number_of_things
     % DO THE THING HERE
     resultToSave = parfun(idx);
     matfileObj   = matfile_constant.Value;
@@ -39,8 +34,7 @@ end
 % Here we retrieve the filenames from 'WorkerFname' Composite,
 % and use them to accumulate the overall result in dik
 % We're going to concatenate results in the 4th dimension
-%%
-
+%
 for this_temp_file = 1:numel(WorkerFname)
     worker_fname = WorkerFname{this_temp_file};
     % Load the worker temp file
@@ -51,7 +45,7 @@ for this_temp_file = 1:numel(WorkerFname)
              result = worker_matfile.result(1, jdx);
             %  This line should be generic and adaptbale
             
-            temp_fname_obj.data(:, :, :, jdx) = result{1};
+            eval(['temp_fname_obj.' storage_expression  '= result{1};']);
         end
     end
     delete([worker_fname '.mat'])
