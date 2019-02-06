@@ -77,7 +77,7 @@ function [output_matfile_obj] = spmd_parfor_with_matfiles(number_of_things, parf
             if worker_matfile.got_result(1, jdx)
                  result = worker_matfile.result(1, jdx);
                 %  This line is meant to be generic and adaptbale
-                eval(['temp_matfile_obj.' storage_expression  '= result{1};']);
+                eval(['output_matfile_obj.' storage_expression  '= result{1};']);
             end
         end
         delete([worker_fname '.mat'])
