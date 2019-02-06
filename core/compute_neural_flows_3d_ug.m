@@ -16,37 +16,34 @@ function compute_neural_flows_3d_ug(data)
     keep_interp_file = true;
     keep_vel_file    = true;
 
-    % Labels for dimensions of 4D arrays arrays
-    x_dim = 1;
-    y_dim = 2;
-    z_dim = 3;
-    t_dim = 4;
+    % Labels for 2D input arrays
+    n_dim = 1; % time
+    t_dim = 2; % nodes/regions
     
-    tpts      = size(data, 1);
-    num_nodes = size(data, 2);
+    tpts      = size(data, t_dim);
+    num_nodes = size(data, n_dim);
     
     down_factor_t = 50; % Downsampling factor for t-axis
     data_hm = data(1:down_factor_t:tpts-1, :);
     % Recalculate timepoints
     tpts = size(data_hm, 1);
 
-    clear data
-    data = data_hm; clear data_hm
+  
     
     % NOTE: full resolution (eg, approx dxyz=1mm^3), each interpolation
     % step takes about 24 seconds.
     % downsampling to 8mm^3 - side 2mm it takes 3s.
     
-    down_factor_xyz = 2; % Not allowed to get different downsampling for space
-
-
-    lh_idx = [1:256, 513];
-    rh_idx = [257:512];
-
-    this_hm = lh_idx;
-    locs = COG(this_hm, :);
     int_locs = floor(locs);
     data = data(:, this_hm);
+    
+    % Labels for dimensions of 4D arrays arrays
+    x_dim = 1;
+    y_dim = 2;
+    z_dim = 3;
+    %t_dim = 4;
+    down_factor_xyz = 2; % Not allowed to get different downsampling for space
+
     
     % Get limits for the structured grid if people did not give those
     min_x = min(int_locs(:, x_dim));
@@ -75,13 +72,10 @@ function compute_neural_flows_3d_ug(data)
     in_bdy_mask = inShape(shp, X(:), Y(:), Z(:));
     
     % Perform interpolation on the data and save in temp file
-    if keep_interp_file
-        fprintf('%s \n', ['patchflow: ' mfilename ': Interpolating data'])
-        [mfile_interp, ~] = interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask);
-    else
-        fprintf('%s \n', ['patchflow: ' mfilename ': Interpolating data'])
-        [mfile_interp, mfile_interp_sentinel] = interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask);
-    end 
+    
+    fprintf('%s \n', strcat('patchflow: ', mfilename, ': Interpolating data'))
+    [mfile_interp, mfile_interp_sentinel] = interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file); 
+    
 
     % Default parameters -- could be changed
     alpha_smooth   = 1;
@@ -96,7 +90,7 @@ function compute_neural_flows_3d_ug(data)
     % We open a matfile to store output and avoid huge memory usage 
     root_fname_vel = 'temp_velocity';
     
-    [mfile_vel, mfile_vel_sentinel] = create_temp_file(root_fname_vel);
+    [mfile_vel, mfile_vel_sentinel] = create_temp_file(root_fname_vel, keep_vel_file); 
     
     % The following lines will create the file on disk
     mfile_vel.ux(size(uxo, x_dim), size(uxo, y_dim), size(uxo, z_dim), tpts-1) = 0;    
@@ -125,10 +119,10 @@ function compute_neural_flows_3d_ug(data)
     % Free some space
     clear uxo uyo uzo
     
-    % Delete interpolated data file
-    if ~keep_interp_file
-        clear mfile_interp_sentinel
-    end
+    % Delete interpolated data file if keep_interp_file==true, otherwise
+    % the variable is an empty array.
+    clear mfile_interp_sentinel mfile_vel_sentinel
+    
     
     toc;
     %% 
@@ -192,9 +186,5 @@ end
 % nodeidx = 20;
 % ellipsoid(COG(nodeidx, 1), COG(nodeidx, 2), COG(nodeidx, 3), 5, 5, 5)
 
-
-if ~keep_vel_file
-    clear mfile_vel_sentinel
-end
 
 end % function compute_neural_flows_3d_ug()
