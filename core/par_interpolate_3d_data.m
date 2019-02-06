@@ -10,8 +10,7 @@ function [mfile_interp_obj, mfile_interp_sentinel] = par_interpolate_3d_data(dat
 % in_bdy_mask -- indices with points of the grid that are inside the
 % convex hull of the brain/cortex
 
-% This is the key step for the optical flow method to work
-% These parameters are essential
+    % These parameters are essential
     neighbour_method = 'natural';
     extrapolation_method = 'none';
 
@@ -26,26 +25,24 @@ function [mfile_interp_obj, mfile_interp_sentinel] = par_interpolate_3d_data(dat
     [mfile_interp_obj, mfile_interp_sentinel] = create_temp_file(root_fname, keep_interp_data);
     
     % Write dummy data to disk
-    mfile_interp_obj.data(size(X, x_dim), size(Y, y_dim), size(Z, z_dim), tpts) = 0;
-    
-    %             
+    mfile_interp_obj.data(size(X, x_dim), size(Y, y_dim), size(Z, z_dim), tpts) = 0;          
 
-    
     % Open a pallell pool using all available workers
     open_parpool(1)
     
-    %spmd_parfor_with_matfiles(number_of_things, parfun, temp_fname_obj, field_of_interest)
+    %spmd_parfor_with_matfiles(number_of_things, parfun, temp_fname_obj, storage_expression)
     parfun = @interpolate_step;
-    storage_expression = 'data(:, :, :, jdx)';
-    [mfile_interp_obj] = spmd_parfor_with_matfiles(tpts, parfun, mfile_interp_obj, storage_expression);
-
-
+    interpolation_3d_storage_expression = 'data(:, :, :, jdx)';
+    [mfile_interp_obj] = spmd_parfor_with_matfiles(tpts, parfun, mfile_interp_obj, interpolation_3d_storage_expression);
+    
+    % Make the matfile read-only
+    mfile_interp_obj.Properties.Writable = false;
 
     
-    % Local function with access to local scope variables from parent
+    % Child function with access to local scope variables from parent
     % function
     function temp_data = interpolate_step(idx)
-            % Create nan array so the i
+            % Create nan array so the output is in the right shape
             temp_data = nan(size(X));
             data_interpolant = scatteredInterpolant(locs(:, x_dim), ...
                                                     locs(:, y_dim), ...
