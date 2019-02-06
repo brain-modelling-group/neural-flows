@@ -37,24 +37,7 @@ uz = uzo;
 % Calculate derivatives
 [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2);
 
-
-% Neumann neighbourhood in 3D - 6-nearest neighbours for averaging 
-avg_filter = zeros(3, 3, 3);
-
-kk=2; % This is where our point of interest is centred along the z-axis
-
-% Averaging filter
-avg_filter(:,:,kk-1) = [0 0 0; 
-                        0 1 0; 
-                        0 0 0]/6;
-                 
-avg_filter(:,:,kk)   = [0 1 0; 
-                       1 0 1; 
-                       0 1 0]/6;
-                 
-avg_filter(:,:,kk+1) = [0 0 0; 
-                        0 1 0; 
-                        0 0 0]/6;
+avg_filter = vonneumann_neighbourhood_3d();
 
 % Call nanconvn with the parametes we're going to use to get the edge 
 % correction image, and avoid further calls in the iterations.
@@ -80,6 +63,28 @@ avg_filter(:,:,kk+1) = [0 0 0;
             ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
     end
 
+
+end
+
+function avg_filter = vonneumann_neighbourhood_3d()
+    % Neumann neighbourhood in 3D - 6-nearest neighbours for averaging 
+    avg_filter = zeros(3, 3, 3);
+
+    % This is where our point of interest is centred along the z-axis in a vonNeumann neighbourhood 
+    kk=2; 
+
+    % Averaging filter over space
+    avg_filter(:,:,kk-1) = [0 0 0; 
+                            0 1 0; 
+                            0 0 0]/6;
+
+    avg_filter(:,:,kk)   = [0 1 0; 
+                            1 0 1; 
+                            0 1 0]/6;
+
+    avg_filter(:,:,kk+1) = [0 0 0; 
+                            0 1 0; 
+                            0 0 0]/6;
 
 end
 
