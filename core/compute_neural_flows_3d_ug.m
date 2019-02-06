@@ -1,13 +1,15 @@
 
-function compute_neural_flows_3d_ug(data)
+function compute_neural_flows_3d_ug(data, locs)
     % data: a 2D array of size T x Nodes or 4D array
     % compute neural flows from (u)nstructured (g)rids/scattered datapoints
-    % cogs: centres of gravity: node locations assumed to be a brain network embedded in 3D dimensional space
+    % locs: coordinates points in 3D Euclidean space for which data values are known. 
+    %       these corresponds to the centres of gravity: ie, node locations 
+    %       of brain network embedded in 3D dimensional space
     % we need: dt
-    % limits of space, presumably coming from fmri data
-    % flag to process one hemisphere or the whole brain. Default bh, lh, rh
-    % TODO: estimate timeppints of interest using the second order temporal
+    % limits of XYZ space, presumably coming from fmri data
+    % TODO: estimate timepponts of interest using the second order temporal
     % derivative
+    % NOTES: on performance on interpolation
     % NOTEs on performance: Elapsed time is 2602.606860 seconds for half
     % hemisphere, 32 iterations max per pair of frames
     % 
@@ -21,10 +23,11 @@ function compute_neural_flows_3d_ug(data)
     t_dim = 2; % nodes/regions
     
     tpts      = size(data, t_dim);
-    num_nodes = size(data, n_dim);
+    %num_nodes = size(data, n_dim);
     
     down_factor_t = 50; % Downsampling factor for t-axis
-    data_hm = data(1:down_factor_t:tpts-1, :);
+    data_hm = data(1:down_factor_t:tpts, :);
+    
     % Recalculate timepoints
     tpts = size(data_hm, 1);
 
@@ -35,7 +38,6 @@ function compute_neural_flows_3d_ug(data)
     % downsampling to 8mm^3 - side 2mm it takes 3s.
     
     int_locs = floor(locs);
-    data = data(:, this_hm);
     
     % Labels for dimensions of 4D arrays arrays
     x_dim = 1;
@@ -62,13 +64,13 @@ function compute_neural_flows_3d_ug(data)
     
     
     % Trial run to get 
-    shp_alpha_radius = 30; % alpha radius. May be adjustable
+    shp_alpha_radius = 30; % alpha radius. May be an adjustable parameter
     shp = alphaShape(locs, shp_alpha_radius);
 
     % The boundary of the centroids is an approximation of the cortex
     %bdy = shp.boundaryFacets;
     
-    % Detect which points are in the alpha shape.
+    % Detect which points are inside the resulting alpha shape.
     in_bdy_mask = inShape(shp, X(:), Y(:), Z(:));
     
     % Perform interpolation on the data and save in temp file
