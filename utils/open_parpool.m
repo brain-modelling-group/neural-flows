@@ -28,10 +28,10 @@ function open_parpool(workers_proportion)
     % If the parpool is not empty, then deletes the current parppol and
     % opens a new one with the requested proportion of workers.
     if ~isempty(p)
-        delete(p)
+        delete(p);
     end
         
     my_cluster = parcluster('local');
-    parpool(round(workers_proportion*my_cluster.NumWorkers))
+    parpool(round(workers_proportion*my_cluster.NumWorkers));
     
 end % function open_parpool()
