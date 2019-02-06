@@ -1,35 +1,44 @@
-
-function compute_neural_flows_3d_ug(data, locs)
+function compute_neural_flows_3d_ug(data, locs, interpolated_data)
     % data: a 2D array of size T x Nodes or 4D array
     % compute neural flows from (u)nstructured (g)rids/scattered datapoints
     % locs: coordinates points in 3D Euclidean space for which data values are known. 
     %       these corresponds to the centres of gravity: ie, node locations 
     %       of brain network embedded in 3D dimensional space
+    % interpolated_data: a structure
+    %                   --  .exists  a boolean flag to determine if the 
+    %                               interpolated data had been precalculated or not
+    %                               and skip that step. 
+    % interpolated_data: -- .interp_fname a string with the name of the
+    %                        matfile where the interpolated data is stored
     % we need: dt
     % limits of XYZ space, presumably coming from fmri data
     % TODO: estimate timepponts of interest using the second order temporal
     % derivative
-    % NOTES: on performance on interpolation
-    % NOTEs on performance: Elapsed time is 2602.606860 seconds for half
-    % hemisphere, 32 iterations max per pair of frames
-    % 
+    % NOTES: on performance on interpolation sequential for loop with 201 tpts - 8.5 
+    % mins. That means that for the full simulation of 400,000 tpts
+    % We would require 5h per dataset, just to interpolate data.
+    
+    % With the parallel interpolation this task takes under one 1h;
+    
+    % NOTEs on performance optical flow: 
+    
     
     % flags to decide what to do with temp intermediate files
     keep_interp_file = true;
     keep_vel_file    = true;
 
     % Labels for 2D input arrays
-    n_dim = 1; % time
-    t_dim = 2; % nodes/regions
+    n_dim = 2; % time
+    t_dim = 1; % nodes/regions
     
     tpts      = size(data, t_dim);
     %num_nodes = size(data, n_dim);
     
-    down_factor_t = 50; % Downsampling factor for t-axis
-    data_hm = data(1:down_factor_t:tpts, :);
+    down_factor_t = 100; % Downsampling factor for t-axis
+    data = data(1:down_factor_t:tpts, :);
     
     % Recalculate timepoints
-    tpts = size(data_hm, 1);
+    tpts = size(data, 1);
 
   
     
@@ -75,14 +84,28 @@ function compute_neural_flows_3d_ug(data, locs)
     
     % Perform interpolation on the data and save in temp file
     
-    fprintf('%s \n', strcat('patchflow: ', mfilename, ': Interpolating data'))
-    [mfile_interp, mfile_interp_sentinel] = interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file); 
-    
+    if ~interpolated_data.exists
+        fprintf('%s \n', strcat('patchflow: ', mfilename, ': Interpolating data'))
+        % Sequential interpolation
+        %[mfile_interp, mfile_interp_sentinel] = interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file); 
+        
+        % Parallel interpolation with the parallel toolbox
+        [mfile_interp, mfile_interp_sentinel] = par_interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file); 
+         % Clean up parallel pool
+         delete(gcp);
+         interpolated_data.exists = true;
+         % Saves full path to the file
+         interpolated_data.interp_fname = mfile_interp.Peroperties.Source;s
+    else
+        % Load the data if already exists
+        mfile_interp = matfile(interpolated_data.interp_fname);
+        mfile_interp_sentinel = [];
+    end
 
     % Default parameters -- could be changed
     alpha_smooth   = 1;
     max_iterations = 8;
-    
+    interpolated_data.interp_fname
     % Determine some initial conditions based
     NAN_MASK = ~in_bdy_mask;
     
@@ -113,17 +136,19 @@ function compute_neural_flows_3d_ug(data, locs)
        % Save the velocity components
        % TODO: do it every 5-10 samples perhaps - spinning disks may be a
        % problem for execution times
-       mfile_object.ux(:, :, :, this_tpt) = uxo;
-       mfile_object.uy(:, :, :, this_tpt) = uyo;
-       mfile_object.uz(:, :, :, this_tpt) = uzo;
+       mfile_vel.ux(:, :, :, this_tpt) = uxo;
+       mfile_vel.uy(:, :, :, this_tpt) = uyo;
+       mfile_vel.uz(:, :, :, this_tpt) = uzo;
        
     end
     % Free some space
     clear uxo uyo uzo
     
-    % Delete interpolated data file if keep_interp_file==true, otherwise
-    % the variable is an empty array.
-    clear mfile_interp_sentinel mfile_vel_sentinel
+    % Delete sentinels. If these varibales are OnCleanup objects, then the 
+    % files will be deleted.
+    
+    delete(mfile_interp_sentinel) 
+    delete(mfile_vel_sentinel)
     
     
     toc;
