@@ -39,7 +39,6 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data)
     
     % Recalculate timepoints
     tpts = size(data, 1);
-
   
     
     % NOTE: full resolution (eg, approx dxyz=1mm^3), each interpolation
@@ -71,16 +70,8 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data)
                          min_z:down_factor_xyz:max_z);
    
     
-    
-    % Trial run to get 
-    shp_alpha_radius = 30; % alpha radius. May be an adjustable parameter
-    shp = alphaShape(locs, shp_alpha_radius);
+    [in_bdy_mask, ~] = get_domain_boundary(locs, X(:), Y(:), Z(:));
 
-    % The boundary of the centroids is an approximation of the cortex
-    %bdy = shp.boundaryFacets;
-    
-    % Detect which points are inside the resulting alpha shape.
-    in_bdy_mask = inShape(shp, X(:), Y(:), Z(:));
     
     % Perform interpolation on the data and save in temp file
     
