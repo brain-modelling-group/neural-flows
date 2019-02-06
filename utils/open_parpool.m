@@ -6,7 +6,7 @@ function open_parpool(workers_proportion)
 %  on the hardware and the proportion specified in the input.
 %
 % ARGUMENTS:
-%        workers_proportion -- a number between 0 and 1 (ideally 0.25, 0.5)
+%        workers_proportion -- a number > 0 or <=1 (ideally 0.25, 0.5, 0.8)
 %                              specifying the proportion of workers that the 
 %                              parallel pool will have available.
 %
@@ -21,7 +21,7 @@ function open_parpool(workers_proportion)
   open_parpool(0.5) % uses half of the physically available workers
 %}
 % AUTHOR: 
-%         Paula Sanz-Leon, QIMR Berghofer 2019-02
+%         Paula Sanz-Leon, QIMR Berghofer 2019
 %
 
     p = gcp('nocreate'); 
@@ -32,6 +32,11 @@ function open_parpool(workers_proportion)
     end
         
     my_cluster = parcluster('local');
-    parpool(round(workers_proportion*my_cluster.NumWorkers));
+    num_workers  = round(workers_proportion*my_cluster.NumWorkers);
     
+    if num_workers > 0
+        parpool(round(workers_proportion*my_cluster.NumWorkers));
+    else
+        error('Cannot open parpool with zero workers')
+    end
 end % function open_parpool()
