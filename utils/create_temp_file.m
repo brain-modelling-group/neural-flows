@@ -39,7 +39,7 @@ function [mfile_obj, temp_file_sentinel] = create_temp_file(fname, keep_file)
     
     fprintf('%s \n', 'Creating file:')
     fprintf('\t \t %s \n', temp_fname)
-end
+end % function create_temp_file()
 
 function remove_temp_file(fname)
 % This action will be performed when
@@ -49,4 +49,4 @@ function remove_temp_file(fname)
  fprintf('\t \t %s \n', fname)
  delete(fname)
  
-end
+end % function remove_temp_file()
