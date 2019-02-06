@@ -23,7 +23,7 @@ matfile_constant = parallel.pool.Constant(worker_matfile);
 
 parfor idx = 1:number_of_things
     % DO THE THING HERE
-    resultToSave = parfun(idx);
+    resultToSave = feval(parfun, idx);
     matfileObj   = matfile_constant.Value;
     % Assign into 'testOut'
     matfileObj.result(1, idx) = {resultToSave}
