@@ -49,8 +49,8 @@ function [A, B] = generate_activity_3d_structured(domain_shape, aff_tform)
         aff_tform(4, 1:3) = 1; % Move/translate blob along x, y, z
     end
     if length(domain_shape) < 3
-        error(['patchflow:' mfilename ':BadInputArgument'], ...
-              ['The shape vector must have 3 elements.'])
+        error(['patchflow:' mfilename ':BadInputArgument'...
+               'The shape vector must have 3 elements.'])
     end
 
     % Human readable indexing
