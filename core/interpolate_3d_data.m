@@ -21,12 +21,18 @@ function [mfile_interp_obj, mfile_interp_sentinel] = interpolate_3d_data(data, l
     z_dim = 3;
     tpts = size(data, 1);
 
+    % Create file for the interpolated data
     root_fname = 'temp_interp';
     [mfile_interp_obj, mfile_interp_sentinel] = create_temp_file(root_fname, keep_interp_data);
-    % Write file to disk
+    
+    % Write dummy data to disk
     mfile_interp_obj.data(size(X, x_dim), size(Y, y_dim), size(Z, z_dim), tpts) = 0;
     
     temp_data = nan(size(X));
+    
+    
+    %  Here we should put the function that handles multiple 
+    
 
     % NOTE: We could do this with a parfor loop but at the expense of RAM memory
     %       Also, with a parfor we can't use the matfile object
