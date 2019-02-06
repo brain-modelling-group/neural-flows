@@ -1,7 +1,38 @@
 function [Mx, My, Mz] = moore_neighbourhood_3d(ii, jj, kk)
-% Returns 3x3x3 matrices with the subscripts for each dimension of the
-% neighbours of point located at ii, jj, kk in a 3D Moore neighbourhood. 
-        
+%% Returns 3 matrices of size 3x3x3 matrices with the subscripts 
+% of the neighbours of point located at ii, jj, kk in a 3D Moore neighbourhood. 
+%
+%
+% ARGUMENTS:
+%        ii -- subscript of the centre point along the +first+ dimension
+%        jj -- subscript of the centre point along the +second+ dimension
+%        kk -- subscript of the centre point along the +third+ dimension
+%
+% OUTPUT: 
+%        Mx -- 3 x 3 x 3 array with the subscripts along the +first+ dimension 
+%              of the 26 nearest neighbours 
+%        My -- 3 x 3 x 3 array with the subscripts along the +second+ dimension 
+%              of the 26 nearest neighbours 
+%        Mz -- 3 x 3 x 3 array with the subscripts along the +third+ dimension 
+%              of the 26 nearest neighbours 
+
+% REQUIRES: 
+%        None
+%
+% USAGE:
+%{
+    [Mx, My, Mz] = moore_neighbourhood_3d(21, 42, 84)
+%}
+%
+% AUTHOR: 
+%       Paula Sanz-Leon, QIMR Berghifer, 2019-02
+% 
+% TODO: warn for negative subscripts, if this was written in python that 
+%       wouldn't be a problem. The user may want to use negative subscripts
+%       for handling boundary conditions
+
+% In the 3x3x3 cube, this is the subscript of the central point along the 
+% third dimension.
 k_centre = 2;
 
            Mx(:, :, k_centre-1) = [ ii-1  ii   ii+1;
