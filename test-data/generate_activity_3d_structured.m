@@ -54,20 +54,20 @@ function [A, B] = generate_activity_3d_structured(domain_shape, aff_tform)
     end
 
     % Human readable indexing
-    x = 1;
-    y = 2;
-    z = 3;
+    x_dim = 1;
+    y_dim = 2;
+    z_dim = 3;
     
     % Centre of the sphere
-    xo = floor(domain_shape(x)/2);
-    yo = floor(domain_shape(y)/2);
-    zo = floor(domain_shape(z)/2);
+    xo = floor(domain_shape(x_dim)/2);
+    yo = floor(domain_shape(y_dim)/2);
+    zo = floor(domain_shape(z_dim)/2);
     
     % Radius
     r  = floor(min(domain_shape)/4);
-    vx = ((1:domain_shape(x)) - xo) .^ 2;
-    vy = ((1:domain_shape(y)) - yo) .^ 2;
-    vz = ((1:domain_shape(z)) - zo) .^ 2;
+    vx = ((1:domain_shape(x_dim)) - xo) .^ 2;
+    vy = ((1:domain_shape(y_dim)) - yo) .^ 2;
+    vz = ((1:domain_shape(z_dim)) - zo) .^ 2;
     
     % Blob
     A = double((vx.' + vy + reshape(vz, [1, 1, length(vz)])) < r^2);
