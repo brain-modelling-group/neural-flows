@@ -78,7 +78,7 @@ function [Gx, Gy, Gz] = get_laplacian_3d_operator()
     Gx(:,:,2) = [-1 0 1; -2 0 2; -1 0 1]; 
     Gx(:,:,3) = [-1 0 1; -2 0 2; -1 0 1]; 
     Gx = Gx./sum(abs(Gx(:)));
-x
+
     Gy(:,:,1) = Gx(:,:,1)';
     Gy(:,:,2) = Gx(:,:,2)';
     Gy(:,:,3) = Gx(:,:,3)';
