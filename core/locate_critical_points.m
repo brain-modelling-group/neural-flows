@@ -8,10 +8,19 @@ function [xyz_idx] = locate_critical_points(vx, vy, vz, X, Y, Z, critical_isoval
 vmag = sqrt(vx.^2 + vy.^2 + vz.^2);
 
 if nargin < 6
-    % Magnitude of the vecloity that is considered almost 0
+    % Magnitude of the velocity that is considered almost 0
     critical_isovalue = 2^-8; 
     index_mode = 'subscript';
 end
+
+
+X_ndgrid = permute(X,[2,1,3]);
+
+Y_ndgrid = permute(Y,[2,1,3]);
+
+Z_ndgrid = permute(Z,[2,1,3]);
+
+
 [~, vertices] = isosurface(X, Y, Z, vmag, critical_isovalue);
 
 
@@ -19,6 +28,8 @@ end
 % TODO: this function returns a very rough approximation
 % The location may not be exact and we may need to interpolate
 xyz_lidx = coordinate_to_linear_index(vertices, X, Y, Z);
+
+
 
 
 switch index_mode
@@ -39,16 +50,18 @@ function xyz_lidx = coordinate_to_linear_index(points, X, Y, Z)
     Y = Y(:);
     Z = Z(:);
     
-    R = sqrt(X.^2+Y.^2+Z.^2);
-    r_points = sqrt(sum(points.^2, size(points, 2)));
 
     % Allocate memory
     xyz_lidx(size(points, 1), 1) = 0;
 
     parfor idx=1:size(points, 1)
-        [~, temp_r] = min(abs(R-r_points(idx)));
-        xyz_lidx(idx) = temp_r;
+        [~, temp_dist] = min(abs( (X-points(idx, 1)).^2 + ...
+                                  (Y-points(idx, 2)).^2 + ...
+                                  (Z-points(idx, 3)).^2 ));
+        xyz_lidx(idx) = temp_dist;
     end
+    
+    xyz_lidx = unique(xyz_lidx);
 
 end % function coordinate_to_linear_index()
 

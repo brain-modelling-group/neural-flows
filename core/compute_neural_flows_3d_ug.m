@@ -16,11 +16,21 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
     % derivative
     % NOTES: on performance on interpolation sequential for loop with 201 tpts - 8.5 
     % mins. That means that for the full simulation of 400,000 tpts
-    % We would require 5h per dataset, just to interpolate data.
+    % We would require 5h per dataset, just to interpolate data with a
+    % resolution of 2mm.
+    % Same dataset with a resolution of 1 mm -- matching fmri resolution
+    % takes 430 s -- 
+    
     
     % With the parallel interpolation this task takes under one 1h;
     
     % NOTEs on performance optical flow: 
+    % max_iterations=16 
+    % tpts ~ 200
+    % hs = 2mm
+    % takes about 35s to calculate vector fields.
+    % hs= 1mm
+    % takes 214 s - 240
     
     
     % flags to decide what to do with temp intermediate files
@@ -52,7 +62,7 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
     y_dim = 2;
     z_dim = 3;
     %t_dim = 4;
-    down_factor_xyz = 2; % Not allowed to get different downsampling for space
+    down_factor_xyz = 1; % Not allowed to get different downsampling for space
 
     
     % Get limits for the structured grid if people did not give those
@@ -82,7 +92,7 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
         %[mfile_interp, mfile_interp_sentinel] = interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file); 
         
         % Parallel interpolation with the parallel toolbox
-        [mfile_interp, mfile_interp_sentinel] = par_interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file); 
+        tic;[mfile_interp, mfile_interp_sentinel] = par_interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file); toc
          
         % Clean up parallel pool
          delete(gcp);
@@ -98,18 +108,21 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
 
     % Parameters for optical flow-- could be changed
     alpha_smooth   = 1;
-    max_iterations = 8;
+    max_iterations = 16;
         
-    % Get some dummy initial conditions
-    seed_init_vel = 42;
-    [uxo, uyo, uzo] = get_initial_velocity_distribution(X, ~in_bdy_mask, seed_init_vel);
+    
     
     % We open a matfile to store output and avoid huge memory usage 
     root_fname_vel = 'temp_velocity';
     
     [mfile_vel, mfile_vel_sentinel] = create_temp_file(root_fname_vel, keep_vel_file); 
     
+    % Get some dummy initial conditions
+    seed_init_vel = 42;
+    [uxo, uyo, uzo] = get_initial_velocity_distribution(X, ~in_bdy_mask, seed_init_vel);
+    
     % The following lines will create the file on disk
+    
     mfile_vel.ux(size(uxo, x_dim), size(uxo, y_dim), size(uxo, z_dim), tpts-1) = 0;    
     mfile_vel.uy(size(uyo, x_dim), size(uyo, y_dim), size(uyo, z_dim), tpts-1) = 0;
     mfile_vel.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), tpts-1) = 0;
@@ -125,7 +138,8 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
        % Calculate the velocity components
        [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, max_iterations, ...
                                            uxo, uyo, uzo);                                
-              
+       
+       keyboard                                
        % Save the velocity components
        % TODO: do it every 5-10 samples perhaps - spinning disks may be a
        % problem for execution times
@@ -136,7 +150,7 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
     end
     
     % Free some space
-    clear uxo uyo uzo
+    %clear uxo uyo uzo
     toc;
 
     % Delete sentinels. If these varibales are OnCleanup objects, then the 
@@ -146,22 +160,35 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
     delete(mfile_vel_sentinel)
     
     
-
-
-
-    quiver_downsample = 1;
+    quiver_downsample = 2;
 
     xx = Z(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(X,y_dim),1:quiver_downsample:size(X,z_dim));
     yy = Y(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(X,y_dim),1:quiver_downsample:size(X,z_dim));
     zz = Z(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(X,y_dim),1:quiver_downsample:size(X,z_dim));
-  
+    
+    % downsample the mask
+    in_bdy_mask_decimated = in_bdy_mask(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(X,y_dim),1:quiver_downsample:size(X,z_dim));
+    
 for this_tpt=1:tpts-1
     
     % Enhance the quiver plot visually by downsizing vectors  
     uu = mfile_vel.ux(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(X,y_dim),1:quiver_downsample:size(Z,z_dim), this_tpt); 
     vv = mfile_vel.uy(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(Y,y_dim),1:quiver_downsample:size(Z,z_dim), this_tpt); 
     ww = mfile_vel.uz(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(Y,y_dim),1:quiver_downsample:size(Z,z_dim), this_tpt); 
-    quiver3(xx, yy, zz, uu, vv, ww, 1)
+    quiver3(xx(in_bdy_mask_decimated), yy(in_bdy_mask_decimated), zz(in_bdy_mask_decimated), ...
+                                                                  uu(in_bdy_mask_decimated), ...
+                                                                  vv(in_bdy_mask_decimated), ...
+                                                                  ww(in_bdy_mask_decimated), 1)
+    xlim([min_x, max_x])
+    ylim([min_y, max_y])
+    zlim([min_z, max_z])
+    drawnow
+end
+
+    
+for this_tpt=1:1%!;tpts-1
+    
+    pcolor3(mfile_vel.ux(:, :, :, this_tpt))
     xlim([min_x, max_x])
     ylim([min_y, max_y])
     zlim([min_z, max_z])
