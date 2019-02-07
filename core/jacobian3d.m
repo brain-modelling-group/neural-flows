@@ -20,9 +20,6 @@ J3D(3, 3, size(critical_xyz_idx, 1)) = 0;
 % Approximate Jacobian matrix elements -- may have to find a better way to
 % do this
 
-
-
-
                   
 num_critical_points = size(critical_xyz_idx, 1);
 

@@ -24,6 +24,12 @@ function singularity_type = classify_critical_points_3d(J3D)
 %                      if a > 0 -- spiral saddle
 %                      if a < 0 -- spiral sink
 % Calculate matrix with eigenvalues of Jacobian
+
+if any(isnan(J3D(:)))
+    singularity_type = 'nan';
+    return
+end
+
 [V, D] = eig(J3D);
 
 % Return only eigenvalues
@@ -35,6 +41,8 @@ if rank(V, tolerance) < 3
     singularity_type = classify_orbits_3d(E);
     return
 end
+
+
 
 % Check if we have complex numbers -- if there is at least one complex
 % eigenvalue, then all the values in E are cast as complex 
