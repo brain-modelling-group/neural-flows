@@ -1,11 +1,10 @@
 function [xyz_idx] = locate_critical_points(vx, vy, vz, X, Y, Z, critical_isovalue, index_mode)
 % Locates the critical points in a 3D vector field
-% returns the location in indices x_idx, y_idx, z_idx 
-% Find volumes enclosed by isosurfaces of 0 magnitude in the the 
-% vector field
+% returns the location of the singularities in indices xyz_lidx, or in 
+% subscripts x_idx, y_idx, z_idx 
+% Find volumes enclosed by isosurfaces of 0 magnitude in the each component
+% of the vector field.
 
-% Magnitude of the vector field
-vmag = sqrt(vx.^2 + vy.^2 + vz.^2);
 
 if nargin < 6
     % Magnitude of the velocity that is considered almost 0
@@ -14,22 +13,24 @@ if nargin < 6
 end
 
 
-X_ndgrid = permute(X,[2,1,3]);
 
-Y_ndgrid = permute(Y,[2,1,3]);
-
-Z_ndgrid = permute(Z,[2,1,3]);
-
-
-[~, vertices] = isosurface(X, Y, Z, vmag, critical_isovalue);
+[~, vertices_x] = isosurface(X, Y, Z, vx, critical_isovalue);
+[~, vertices_y] = isosurface(X, Y, Z, vy, critical_isovalue);
+[~, vertices_z] = isosurface(X, Y, Z, vy, critical_isovalue);
 
 
 % Get linear indices of each vertex (approximate location of critical points)
 % TODO: this function returns a very rough approximation
 % The location may not be exact and we may need to interpolate
-xyz_lidx = coordinate_to_linear_index(vertices, X, Y, Z);
+xyz_lidx_x = coordinate_to_linear_index(vertices_x, X, Y, Z);
+xyz_lidx_y = coordinate_to_linear_index(vertices_y, X, Y, Z);
+xyz_lidx_z = coordinate_to_linear_index(vertices_z, X, Y, Z);
+
+% DO the same for th different isosurfaces. Works better than using the
+% magnitud. 
 
 
+xyz_lidx = intersect(intersect(xyz_lidx_x, xyz_lidx_y), xyz_lidx_z);
 
 
 switch index_mode
