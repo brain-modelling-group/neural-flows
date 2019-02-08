@@ -17,7 +17,7 @@ end
 
 [~, vertices_x] = isosurface(X, Y, Z, vx, critical_isovalue);
 [~, vertices_y] = isosurface(X, Y, Z, vy, critical_isovalue);
-[~, vertices_z] = isosurface(X, Y, Z, vy, critical_isovalue);
+[~, vertices_z] = isosurface(X, Y, Z, vz, critical_isovalue);
 
 
 % Get linear indices of each vertex (approximate location of critical points)
