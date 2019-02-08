@@ -5,14 +5,14 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
     %       these corresponds to the centres of gravity: ie, node locations 
     %       of brain network embedded in 3D dimensional space
     % interpolated_data: a structure
-    %                   --  .exists  a boolean flag to determine if the 
+    %                    --  .exists  a boolean flag to determine if the 
     %                               interpolated data had been precalculated or not
     %                               and skip that step. 
     % interpolated_data: -- .interp_fname a string with the name of the
     %                        matfile where the interpolated data is stored
     % we need: dt
     % limits of XYZ space, presumably coming from fmri data
-    % TODO: estimate timepponts of interest using the second order temporal
+    % TODO: estimate timepoints of interest using the second order temporal
     % derivative
     % NOTES: on performance on interpolation sequential for loop with 201 tpts - 8.5 
     % mins. That means that for the full simulation of 400,000 tpts
@@ -127,31 +127,24 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
     mfile_vel.uy(size(uyo, x_dim), size(uyo, y_dim), size(uyo, z_dim), tpts-1) = 0;
     mfile_vel.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), tpts-1) = 0;
     
-   %%
-   tic;
-    for this_tpt = 1:tpts-1
-       
-        % Read data
-       FA = mfile_interp.data(:, :, :, this_tpt);
-       FB = mfile_interp.data(:, :, :, this_tpt+1);
-       
-       % Calculate the velocity components
-       [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, max_iterations, ...
-                                           uxo, uyo, uzo);                                
-       
-       keyboard                                
-       % Save the velocity components
-       % TODO: do it every 5-10 samples perhaps - spinning disks may be a
-       % problem for execution times
-       mfile_vel.ux(:, :, :, this_tpt) = uxo;
-       mfile_vel.uy(:, :, :, this_tpt) = uyo;
-       mfile_vel.uz(:, :, :, this_tpt) = uzo;
-       
-    end
+   %
+    % This function runs the loop over timepoints and saves the velocity
+    % fields into a file
+    compute_flows_3d()
     
-    % Free some space
-    %clear uxo uyo uzo
-    toc;
+    % Save grid - needed for singularity tracking and visualisation
+    % TODO: save time; 
+    % Considet saving min max values and step, saves memory
+    mfile_vel.X = X;
+    mfile_vel.Y = Y;
+    mfile_vel.Z = Z;
+    
+   % Close the file to avoid corruption
+    mfile_vel.Properties.Writable = false;
+   
+   %
+   
+   
 
     % Delete sentinels. If these varibales are OnCleanup objects, then the 
     % files will be deleted.
@@ -160,79 +153,28 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
     delete(mfile_vel_sentinel)
     
     
-    quiver_downsample = 2;
+    function compute_flows_3d()
+        
+        for this_tpt = 1:tpts-1
 
-    xx = Z(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(X,y_dim),1:quiver_downsample:size(X,z_dim));
-    yy = Y(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(X,y_dim),1:quiver_downsample:size(X,z_dim));
-    zz = Z(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(X,y_dim),1:quiver_downsample:size(X,z_dim));
-    
-    % downsample the mask
-    in_bdy_mask_decimated = in_bdy_mask(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(X,y_dim),1:quiver_downsample:size(X,z_dim));
-    
-for this_tpt=1:tpts-1
-    
-    % Enhance the quiver plot visually by downsizing vectors  
-    uu = mfile_vel.ux(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(X,y_dim),1:quiver_downsample:size(Z,z_dim), this_tpt); 
-    vv = mfile_vel.uy(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(Y,y_dim),1:quiver_downsample:size(Z,z_dim), this_tpt); 
-    ww = mfile_vel.uz(1:quiver_downsample:size(X,x_dim),1:quiver_downsample:size(Y,y_dim),1:quiver_downsample:size(Z,z_dim), this_tpt); 
-    quiver3(xx(in_bdy_mask_decimated), yy(in_bdy_mask_decimated), zz(in_bdy_mask_decimated), ...
-                                                                  uu(in_bdy_mask_decimated), ...
-                                                                  vv(in_bdy_mask_decimated), ...
-                                                                  ww(in_bdy_mask_decimated), 1)
-    xlim([min_x, max_x])
-    ylim([min_y, max_y])
-    zlim([min_z, max_z])
-    drawnow
-end
+                % Read data
+    % Save grid - needed for singularity trackin
+               FA = mfile_interp.data(:, :, :, this_tpt);
+               FB = mfile_interp.data(:, :, :, this_tpt+1);
 
+               % Calculate the velocity components
+               [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, max_iterations, ...
+                                                           uxo, uyo, uzo);                                
+
+               % Save the velocity components
+               % TODO: do it every 5-10 samples perhaps - spinning disks may be a
+               % problem for execution times
+               mfile_vel.ux(:, :, :, this_tpt) = uxo;
+               mfile_vel.uy(:, :, :, this_tpt) = uyo;
+               mfile_vel.uz(:, :, :, this_tpt) = uzo;
+
+        end
     
-for this_tpt=1:1%!;tpts-1
+    end 
     
-    pcolor3(mfile_vel.ux(:, :, :, this_tpt))
-    xlim([min_x, max_x])
-    ylim([min_y, max_y])
-    zlim([min_z, max_z])
-    drawnow
-end
-
-% %% 
-% data =  mfile_object.data;
-% %%
-% [min_data, max_data] = find_min_max(data, 'symmetric');
-% %%
-%     this_tpt = 1;
-%     temp_data =  data(:, :, :, this_tpt);
-%     hpcolor3 = pcolor3(X, Y, Z, temp_data, 'nx', size(temp_data, x_dim), ...
-%                                 'ny', size(temp_data, y_dim), ...
-%                                 'nz', size(temp_data, z_dim));
-% colormap(cmap)                            
-% for this_tpt=2:10%tpts-1
-%     temp_data =  data(:, :, :, this_tpt);
-%     pcolor3(X, Y, Z, temp_data, 'nx', size(temp_data, x_dim), ...
-%                                 'ny', size(temp_data, y_dim), ...
-%                                 'nz', size(temp_data, z_dim))
-%     caxis([min_data/2, max_data/2])
-%     drawnow()
-% end
-% %
-% % pcolor3(xx, yy, zz, cav, 'direct', 'alpha', 0.5)
-% % cmap = bluered(256);
-% % max_val = max(abs(cav(:)));
-% % caxis([-max_val/2, max_val/2])
-% % %%
-% % pcolor3(xx, yy, zz, v2, 'direct', 'alpha', 0.5)
-% % v2in(~in) = nan;
-% % figure; pcolor3(xx, yy, zz, v2in, 'direct', 'alpha', 0.5);
-% % 
-% % trisurf(bdy, COG(this_hm, 1), COG(this_hm, 2), COG(this_hm, 3))
-% % 
-% % %% Plot isosurfaces
-% % isosurface(xx,yy,zz,round(1000*v2in),-140);isonormals(xx,yy,zz,v2in,p)
-% % daspect([1 1 1])
-% % trisurf(bdy, COG(this_hm, 1), COG(this_hm, 2), COG(this_hm, 3))
-% % 
-% % nodeidx = 20;
-% % ellipsoid(COG(nodeidx, 1), COG(nodeidx, 2), COG(nodeidx, 3), 5, 5, 5)
-
-
 end % function compute_neural_flows_3d_ug()
