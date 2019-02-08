@@ -1,14 +1,15 @@
 function [xyz_idx] = locate_critical_points(vx, vy, vz, X, Y, Z, critical_isovalue, index_mode)
-% Locates the critical points in a 3D vector field
-% returns the location of the singularities in indices xyz_lidx, or in 
+% Locates the critical points in a 3D vector field. This
+% function locates the intersectopm of the three isosrufaces (one per
+% velocity component) at v = 0.
+% Returns the location of the singularities as linear indices xyz_lidx, or as 
 % subscripts x_idx, y_idx, z_idx 
-% Find volumes enclosed by isosurfaces of 0 magnitude in the each component
-% of the vector field.
+
 
 
 if nargin < 6
     % Magnitude of the velocity that is considered almost 0
-    critical_isovalue = 2^-8; 
+    critical_isovalue = 0; 
     index_mode = 'subscript';
 end
 
