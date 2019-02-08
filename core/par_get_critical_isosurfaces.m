@@ -29,7 +29,7 @@ function par_get_critical_isosurfaces(mfile_vel)
     parfun = @isosurface_step;
 
     % This expression will create a structure of size (1, tpts) in the file;
-    isosurf_storage_expression = 'result(1, jdx)';
+    isosurf_storage_expression = 'isosurfs(1, jdx)';
 
     [mfile_surf_obj] = spmd_parfor_with_matfiles(tpts, parfun, mfile_surf_obj, isosurf_storage_expression);
 
