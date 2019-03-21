@@ -1,14 +1,29 @@
 function [mfile_interp_obj, mfile_interp_sentinel] = par_interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_data)
-% This is a wrapper function for scattered interpolant. We can interpolate
-% each frame independtly using parfor and save the interpolated data for 
-% later use with optical flow and then just delete the interpolated data
-% or offer to keep it.
-
-%  locs: locations of known data
-%  data: scatter data known at locs of size tpts x nodes
-% X, Y Z -- grid points to get interpolation out
-% in_bdy_mask -- indices with points of the grid that are inside the
-% convex hull of the brain/cortex
+% This is a wrapper function for Matlab's ScatteredInterpolant. We can interpolate
+% each frame of a 4D array independtly using parfor and save the interpolated data for 
+% later use with optical flow. Then, just delete the interpolated data
+% or offer to keep it, because this step is really a time piggy.
+% ARGUMENTS:
+%           locs: locations of known data
+%           data: scatter data known at locs of size tpts x nodes
+%           X, Y Z: -- grid points to get interpolation out
+%           in_bdy_mask -- indices of points within the
+%                          brain's convex hull boundary. Same size as X,
+%                          Y, or Z.
+%    
+% OUTPUT:
+%       mfile_interp_obj: matfile handle to the file with the interpolated
+%                         data.
+%       mfile_interp_sentinel: OnCleanUp object. If keep_interp_data is
+%                              true, then this variable is an empty array.
+%
+% AUTHOR:
+%     Paula Sanz-Leon
+% USAGE:
+%{
+    
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
     % These parameters are essential
     neighbour_method = 'natural';
@@ -28,7 +43,8 @@ function [mfile_interp_obj, mfile_interp_sentinel] = par_interpolate_3d_data(dat
     mfile_interp_obj.data(size(X, x_dim), size(Y, y_dim), size(Z, z_dim), tpts) = 0;          
 
     % Open a pallell pool using all available workers
-    open_parpool(1)
+    percentage_of_workers = 1; % 1 --> all workers
+    open_parpool(percentage_of_workers);
     
     %spmd_parfor_with_matfiles(number_of_things, parfun, temp_fname_obj, storage_expression)
     parfun = @interpolate_step;
@@ -55,4 +71,3 @@ function [mfile_interp_obj, mfile_interp_sentinel] = par_interpolate_3d_data(dat
     end
 
 end
-
