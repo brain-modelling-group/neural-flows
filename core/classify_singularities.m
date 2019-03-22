@@ -1,13 +1,12 @@
 function  [singularity_classification] =   classify_singularities(xyz_idx, mfile_vel_obj)
 % This function is kind of a wrapper: 1) calculate jacobian for each
 % critical point, and then 2) classify type of critical point. 
-
 % In: xyz_idx -- for the time being  cell array with the position of the
 % crtitical points for each velocity (time) frame.
 %     mfile_vel_obj -- matfile object handle to the velocity fields, need
 %     them to calculate the jacobian 3D. 
 
-singularity_classification = cell(size(xyz_idx));
+singularity_classification = cell(size(xyz_idx), 1);
    for tt=1:size(xyz_idx, 1) % parallizable stuff but the classification runs very fas
 
        hx = 1;
