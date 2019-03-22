@@ -1,4 +1,4 @@
-function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolated_data)
+function [singularity_classification] = compute_neural_flows_3d_ug(data, locs, interpolated_data_options) 
     % data: a 2D array of size T x Nodes or 4D array
     % compute neural flows from (u)nstructured (g)rids/scattered datapoints
     % locs: coordinates points in 3D Euclidean space for which data values are known. 
@@ -29,7 +29,7 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
     % tpts ~ 200
     % hs = 2mm
     % takes about 35s to calculate vector fields.
-    % hs= 1mm
+    % hs = 1mm
     % takes 214 s - 240
     
     
@@ -39,7 +39,7 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
 
     % Labels for 2D input arrays
     n_dim = 2; % time
-    t_dim = 1; % nodes/regions
+    t_dim = 1; % time
     
     tpts      = size(data, t_dim);
     %num_nodes = size(data, n_dim);
@@ -85,7 +85,7 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
     
     % Perform interpolation on the data and save in temp file
     
-    if ~interpolated_data.exists
+    if ~interpolated_data_options.exists % Or not necesary because it is fmri data
         fprintf('%s \n', strcat('patchflow: ', mfilename, ': Interpolating data'))
         
         % Sequential interpolation
@@ -96,13 +96,13 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
          
         % Clean up parallel pool
          delete(gcp);
-         interpolated_data.exists = true;
+         interpolated_data_options.exists = true;
         
          % Saves full path to file
-         interpolated_data.interp_fname = mfile_interp.Properties.Source;
+         interpolated_data_options.interp_fname = mfile_interp.Properties.Source;
     else
         % Load the data if file already exists
-        mfile_interp = matfile(interpolated_data.interp_fname);
+        mfile_interp = matfile(interpolated_data_options.interp_fname);
         mfile_interp_sentinel = [];
     end
 
@@ -141,10 +141,6 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
     
    % Close the file to avoid corruption
     mfile_vel.Properties.Writable = false;
-   
-   %
-   
-   
 
     % Delete sentinels. If these varibales are OnCleanup objects, then the 
     % files will be deleted.
@@ -152,18 +148,19 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
     delete(mfile_interp_sentinel) 
     delete(mfile_vel_sentinel)
     
-    
+    % No way around a sequential for loop for optical flows
     function compute_flows_3d()
         
         for this_tpt = 1:tpts-1
 
                 % Read data
-    % Save grid - needed for singularity trackin
+                % Save grid - needed for singularity tracking
                FA = mfile_interp.data(:, :, :, this_tpt);
                FB = mfile_interp.data(:, :, :, this_tpt+1);
 
                % Calculate the velocity components
-               [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, max_iterations, ...
+               [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, ...
+                                                           max_iterations, ...
                                                            uxo, uyo, uzo);                                
 
                % Save the velocity components
@@ -175,6 +172,21 @@ function [interpolated_data] = compute_neural_flows_3d_ug(data, locs, interpolat
 
         end
     
-    end 
-    
+    end
+
+   % Calculate critical isosurfaces
+   [mfile_surf, mfile_surf_sentinel] = par_get_critical_isosurfaces(mfile_vel);
+   
+
+   % Detect intersection of critical isosurfaces
+   [xyz_idx] = par_locate_critical_points(mfile_surf, mfile_vel);
+   
+   % Delete isosurface sentinel, if it's oncleanup ibject, the file will be
+   % deleted
+   delete(mfile_surf_sentinel)
+   
+   % Calculate jacobian and classify singularities
+   singularity_classification = classify_singularities(xyz_idx, mfile_vel);
+
+
 end % function compute_neural_flows_3d_ug()
