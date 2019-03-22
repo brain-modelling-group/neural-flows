@@ -5,12 +5,12 @@ function [mfile_surf_obj,  mfile_surf_sentinel] = par_get_critical_isosurfaces(m
 
 % 
 % ARGUMENTS:
-%       mfile_vel: matfile handle to file with the velocity component data 
+%       mfile_vel: matfile handle to file with the velocity components data 
 %    
 % OUTPUT:
-%       mfile_interp_obj: matfile handle to the file with the interpolated
+%       mfile_surf_obj: matfile handle to the file with the interpolated
 %                         data.
-%       mfile_interp_sentinel: OnCleanUp object. If keep_interp_data is
+%       mfile_surf_sentinel: OnCleanUp object. If keep_interp_data is
 %                              true, then this variable is an empty array.
 %
 % AUTHOR:
