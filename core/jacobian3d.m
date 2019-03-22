@@ -18,11 +18,8 @@ kk = 3;
 J3D(3, 3, size(critical_xyz_idx, 1)) = 0;   
 
 % Approximate Jacobian matrix elements -- may have to find a better way to
-% do this
-
-                  
+% do this                  
 num_critical_points = size(critical_xyz_idx, 1);
-
 
 % linear index of the centre point in a moore neighbourhood in 3D
 centre_point_lidx = 14;
