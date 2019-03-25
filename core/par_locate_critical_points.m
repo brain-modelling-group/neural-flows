@@ -27,30 +27,15 @@ X = mfile_vel_obj.X;
 Y = mfile_vel_obj.Y;
 Z = mfile_vel_obj.Z;
 
-xyz_idx = cell(tpts, 1);
+xyz_idx = struct([]); %(tpts, 1); %TODO: change to struct
     for tt=1:tpts
     
-
     % Get linear indices of each vertex (approximate location of critical points)
         % TODO: this function returns a very rough approximation
         % The location may not be exact and we may need to interpolate
-        temp_struct = mfile_isosurf_obj.isosurfs(1, tpts);
-        xyz_lidx_x = coordinate_to_linear_index(temp_struct.vertices_x, X, Y, Z);
-        xyz_lidx_y = coordinate_to_linear_index(temp_struct.vertices_y, X, Y, Z);
-        xyz_lidx_z = coordinate_to_linear_index(temp_struct.vertices_z, X, Y, Z);
 
-        % Do the same for the different isosurfaces. Works better than using the
-        % magnitud. 
-
-        xyz_lidx = intersect(intersect(xyz_lidx_x, xyz_lidx_y), xyz_lidx_z);
-
-        switch index_mode
-            case 'linear'
-                xyz_idx{tt} = xyz_lidx;
-            case 'subscript'
-                [x_idx, y_idx, z_idx] = ind2sub(size(X),xyz_lidx);
-                xyz_idx{tt} = [x_idx, y_idx, z_idx];
-        end
+        xyz_idx(tt).xyz_idx = locate_coordinates(mfile_isosurf_obj.isosurfs(1, tt), X, Y, Z);
+        
     end     
 
 end % function locate_critical_points()
@@ -76,4 +61,40 @@ function xyz_lidx = coordinate_to_linear_index(points, X, Y, Z)
 
 end % function coordinate_to_linear_index()
 
+% function xyz_lidx = coordinate_to_linear_index(points, X, Y, Z)
+%  % Quick and dirty solution to find indices in the 3d grid
+%  % points is N x Dimension 
+%     X = X(:); % Fix this -- no  need to recast into vectot every time
+%     Y = Y(:);
+%     Z = Z(:);
+%     
+%     % Allocate memory
+%     %xyz_lidx(size(points, 1), 1) = 0;
+%     px  = points(:, 1).';
+%     py  = points(:, 2).';
+%     pz  = points(:, 3).';
+%     
+%     [~, temp_dist_idx] = min(abs((X-px).^2 + (Y-py).^2 + (Z-pz).^2), [], 1);
+%     
+%     xyz_lidx = unique(temp_dist_idx);
+% 
+% end % function coordinate_to_linear_index()
+
+function xyz_idx = locate_coordinates(temp_surf_struct, X, Y, Z, index_mode)
+
+        xyz_lidx_x = coordinate_to_linear_index(temp_surf_struct.vertices_x, X, Y, Z);
+        xyz_lidx_y = coordinate_to_linear_index(temp_surf_struct.vertices_y, X, Y, Z);
+        xyz_lidx_z = coordinate_to_linear_index(temp_surf_struct.vertices_z, X, Y, Z);
+
+        xyz_lidx = intersect(intersect(xyz_lidx_x, xyz_lidx_y), xyz_lidx_z);
+
+        switch index_mode
+            case 'linear'
+                xyz_idx = xyz_lidx;
+            case 'subscript'
+                [x_idx, y_idx, z_idx] = ind2sub(size(X),xyz_lidx);
+                xyz_idx = [x_idx, y_idx, z_idx];
+        end
+
+end
 
