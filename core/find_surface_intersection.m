@@ -122,7 +122,7 @@ normalize = @(V) bsxfun(@rdivide,V, sqrt(sum(V.^2, 2)));
 %                   1 (intersects).
 % NOTE: Negative values are for internal use only.
 % NOTE: This generates a stupidly big matrix for high-resolution surfaces.
-intersection_matrix(nFace1 ,nFace2) = -2; % -2 indicates that there was no succesful test yet
+intersection_matrix(nFace1 ,nFace2) = int8(-2); % -2 indicates that there was no succesful test yet
 intSurface.vertices = [];
 intSurface.faces    = [];
 intSurface.edges    = [];
@@ -142,9 +142,9 @@ intSurface.edges    = [];
 
 %% compute plane equations for each triangle of the surface #1
 % plane equation #1: N1.X-d1=0
-V1 = surface1.vertices(surface1.faces(:,1),:);
-V2 = surface1.vertices(surface1.faces(:,2),:);
-V3 = surface1.vertices(surface1.faces(:,3),:);
+V1 = surface1.vertices(surface1.faces(:, xdim),:);
+V2 = surface1.vertices(surface1.faces(:, ydim),:);
+V3 = surface1.vertices(surface1.faces(:, zdim),:);
 N1 = cross_prod(V2-V1,V3-V1); % array size nFace1 x 3
 N1 = normalize(N1);
 d1 = dot_prod(N1,V1);         % array size nFace1 x 1
