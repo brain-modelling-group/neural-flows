@@ -1,6 +1,6 @@
-function [intMatrix, intSurface] = find_surface_intersection(surface1, surface2, varargin)
+function [intersection_matrix, intSurface] = find_surface_intersection(surface1, surface2, varargin)
 %SURFACEINTERSECTION intersection of 2 surfaces
-% [intMatrix, intSurface] = SurfaceIntersection(surface1, surface2)
+% [intersection_matrix, intSurface] = SurfaceIntersection(surface1, surface2)
 % calculates the intersection of surfaces 1 and 2. Code can either return
 % just the matrix indicating which face of surface1 intersected with face
 % of surface2, which is calculated using Tomas Moller algorithm, or can
@@ -18,7 +18,7 @@ function [intMatrix, intSurface] = find_surface_intersection(surface1, surface2,
 %    - 'delaunayTriangulation' class
 %
 % OUTPUT:
-% * intMatrix - sparse Matrix with n1 x n2 dimension where n1 and n2 are
+% * intersection_matrix - sparse Matrix with n1 x n2 dimension where n1 and n2 are
 %               number of faces in surfaces
 % * intSurface - a structure with following fields:
 %     intSurface.vertices - N x 3 array of unique points
@@ -109,14 +109,14 @@ dot_prod = @(a,b) a(:,1).*b(:,1)+a(:,2).*b(:,2)+a(:,3).*b(:,3);
 normalize = @(V) bsxfun(@rdivide,V, sqrt(sum(V.^2,2)));
 
 %% Initialize output variables
-% intMatrix is a nFace1 x nFace2 matrix. 
+% intersection_matrix is a nFace1 x nFace2 matrix. 
 % Possible values: -2 (do not know),
 %                  -1 (coplanar with unknown overlap), 
 %                   0 (no intersections), 
 %                   1 (intersects).
 % NOTE: Negative values are for internal use only.
 % NOTE: This generates a stupidly big matrix for high-resolution surfaces.
-intMatrix(nFace1 ,nFace2) = -2; % -2 indicates that there was no succesful test yet
+intersection_matrix(nFace1 ,nFace2) = -2; % -2 indicates that there was no succesful test yet
 intSurface.vertices = [];
 intSurface.faces    = [];
 intSurface.edges    = [];
@@ -160,12 +160,12 @@ du1 = du(:,surface2.faces(:,1));
 du2 = du(:,surface2.faces(:,2));
 du3 = du(:,surface2.faces(:,3));
 if debug
-  assert(all(size(du1)==size(intMatrix)), 'Incorrect array dimensions: du1')
+  assert(all(size(du1)==size(intersection_matrix)), 'Incorrect array dimensions: du1')
 end
 clear du
-intMatrix(du1.*du2>0 & du1.*du3>0) = 0;   % same sign on all of them & not equal 0
-if(all(intMatrix==0)), return; end        % no intersections
-intMatrix(du1==0 & du2==0 & du3==0) = -1; % coplanar with unknown overlap
+intersection_matrix(du1.*du2>0 & du1.*du3>0) = 0;   % same sign on all of them & not equal 0
+if(all(intersection_matrix==0)), return; end        % no intersections
+intersection_matrix(du1==0 & du2==0 & du3==0) = -1; % coplanar with unknown overlap
 
 %% compute plane of triangle (U0,U1,U2)
 % plane equation 2: N2.X-d2=0
@@ -193,19 +193,19 @@ dv1 = dv(:,surface1.faces(:,1))';
 dv2 = dv(:,surface1.faces(:,2))';
 dv3 = dv(:,surface1.faces(:,3))';
 if debug
-  assert(all(size(dv1)==size(intMatrix)), 'Incorrect array dimensions: dv1')
+  assert(all(size(dv1)==size(intersection_matrix)), 'Incorrect array dimensions: dv1')
 end
 clear dv
-intMatrix(dv1.*dv2>0 & dv1.*dv3>0) = 0;   % same sign on all of them & not equal 0
-if(all(intMatrix==0)), return; end        % no intersections
-intMatrix(dv1==0 & dv2==0 & dv3==0) = -1; % coplanar with unknown overlap
+intersection_matrix(dv1.*dv2>0 & dv1.*dv3>0) = 0;   % same sign on all of them & not equal 0
+if(all(intersection_matrix==0)), return; end        % no intersections
+intersection_matrix(dv1==0 & dv2==0 & dv3==0) = -1; % coplanar with unknown overlap
 
 % =======================================================================
 %% === Stage 2 ==========================================================
 % =======================================================================
 
 %% Process remaining (non-coplanar) triangle pairs
-tMsk = (intMatrix==-2);
+tMsk = (intersection_matrix==-2);
 n = nnz(tMsk);
 if n>0
   [face1, face2] = find(tMsk);
@@ -219,7 +219,7 @@ if n>0
         du = [du1(tMsk), du2(tMsk), du3(tMsk)];
       end
       
-      [intMatrix(tMsk), intSurface] = TriangleIntersection3D_Moller(...
+      [intersection_matrix(tMsk), intSurface] = TriangleIntersection3D_Moller(...
         V1(face1,:), V2(face1,:), V3(face1,:), N1(face1,:), d1(face1,:), dv, ...
         U1(face2,:), U2(face2,:), U3(face2,:), N2(face2,:), d2(face2,:), du, ...
         getIntersection, debug);
@@ -227,7 +227,7 @@ if n>0
       % Undocumented experimental feature. In some experiments I got
       % identical results as with Moller algorithm, but others gave
       % different results. Often faster tham Moller.
-      intMatrix(tMsk) = TriangleIntersection3D_Rapid( ...
+      intersection_matrix(tMsk) = TriangleIntersection3D_Rapid( ...
         V1(face1,:), V2(face1,:), V3(face1,:), ...
         U1(face2,:), U2(face2,:), U3(face2,:), N1(face1,:), N2(face2,:) );
     otherwise
@@ -237,7 +237,7 @@ end % if
 
 %% Process coplanar triangle pairs. Pass #1:
 % compare the overlap of the bounding boxes
-tMsk = (intMatrix==-1);
+tMsk = (intersection_matrix==-1);
 if nnz(tMsk)>0
   [face1, face2] = find(tMsk);
   overlap = true;
@@ -250,21 +250,21 @@ if nnz(tMsk)>0
     s2 = max(u,[],2);
     overlap = overlap & (s1<=t2 & t1<=s2);
   end
-  % if overlap intMatrix will remain "-1" otherwise it will change to "0"
-  intMatrix(tMsk) = -1*overlap;
+  % if overlap intersection_matrix will remain "-1" otherwise it will change to "0"
+  intersection_matrix(tMsk) = -1*overlap;
   clear v u t1 t2 s1 s2 overlap
 end
 
 %% Process coplanar triangle pairs. Pass #2:
 % use edge-edge intersections
-tMsk = (intMatrix==-1);
+tMsk = (intersection_matrix==-1);
 if nnz(tMsk)>0
   [face1, face2] = find(tMsk);
   
   % repack data prior to function call
   V(:,:,1)=V1(face1,:); V(:,:,2)=V2(face1,:); V(:,:,3)=V3(face1,:);
   U(:,:,1)=U1(face2,:); U(:,:,2)=U2(face2,:); U(:,:,3)=U3(face2,:);
-  [intMatrix(tMsk), intSurface2] = TriangleIntersection2D(V, U, ...
+  [intersection_matrix(tMsk), intSurface2] = TriangleIntersection2D(V, U, ...
     N1(face1,:), getIntersection, debug);
   
   %% Merge surfaces
@@ -282,7 +282,7 @@ if nnz(tMsk)>0
 end
 
 %% Clean up the outputs
-intMatrix = sparse(double(intMatrix));
+intersection_matrix = sparse(double(intersection_matrix));
 if(getIntersection)
   % make point array unique
   P = round(intSurface.vertices*PointRoundingTol)/PointRoundingTol;
