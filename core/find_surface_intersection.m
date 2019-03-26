@@ -13,7 +13,8 @@ function [intersection_matrix, intSurface] = find_surface_intersection(surface1,
 % INPUT:
 %  * surface1 & surface2 - two surfaces defined as structs or classes.
 %    Several inputs are possible:
-%    - struct with "faces" and "vertices" fields
+%    - struct with "faces" and "vertices" fields with sizes nfaces x 3 and
+%       nvertex x 3
 %    - 'triangulation' class (only the boundary surface will be used)
 %    - 'delaunayTriangulation' class
 %
@@ -64,19 +65,6 @@ zdim = 3;
 vxi = 1;
 vxj = 2;
 vxk = 3;
-%% Flip dimentions if necessery
-if size(surface1.faces,1)==3 && size(surface1.faces,2)~=3
-  surface1.faces = surface1.faces';
-end
-if size(surface1.vertices,1)==3 && size(surface1.vertices,2)~=3
-  surface1.vertices = surface1.vertices';
-end
-if size(surface2.faces,1)==3 && size(surface2.faces,2)~=3
-  surface2.faces = surface2.faces';
-end
-if size(surface2.vertices,1)==3 && size(surface2.vertices,2)~=3
-  surface2.vertices = surface2.vertices';
-end
 
 %% Parse extra parameters
 getIntersection = (nargout>1);
