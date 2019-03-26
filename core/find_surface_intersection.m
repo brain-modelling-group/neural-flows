@@ -115,10 +115,15 @@ normalize = @(V) bsxfun(@rdivide,V, sqrt(sum(V.^2, 2)));
 %                   1 (intersects).
 
 % New value to optimise memory usage & use sparse matrices.
-% 0: do not know 
+
+unknown_intersection = 0;
+no_intersection = 1;
+coplanar_intersection = 2;
+noncoplanar_interesection = 3;
+% 0: do not know - default
 % 1: no intersections
-% 2: coplanar
-% 3: intersects
+% 2: coplanar intersection
+% 3: intersects - no-coplanar intersection
 
 intersection_matrix = sparse(nFace1 ,nFace2); % 
 intSurface.vertices = [];
@@ -171,12 +176,12 @@ if debug
   assert(all(size(du1)==size(intersection_matrix)), 'Incorrect array dimensions: du1')
 end
 clear du
-intersection_matrix(du1.*du2>0 & du1.*du3>0) = 0;   % same sign on all of them & not equal 0
-if sum(intersection_matrix(:))
+intersection_matrix(du1.*du2>0 & du1.*du3>0) = no_intersection;   %1: no intersection: same sign on all of them & not equal 0
+if sum(intersection_matrix(:))== (nFace1*nFace2)
     disp('No intersections found.')
     return; 
 end       
-intersection_matrix(du1==0 & du2==0 & du3==0) = -1; % coplanar with unknown overlap
+intersection_matrix(du1==0 & du2==0 & du3==0) = coplanar_intersection; % 2: coplanar intersection with unknown overlap
 
 %% compute plane of triangle (U0,U1,U2)
 % plane equation 2: N2.X-d2=0
@@ -207,23 +212,25 @@ if debug
   assert(all(size(dv1)==size(intersection_matrix)), 'Incorrect array dimensions: dv1')
 end
 clear dv
-intersection_matrix(dv1.*dv2>0 & dv1.*dv3>0) = 0;   % same sign on all of them & not equal 0
+intersection_matrix(dv1.*dv2>0 & dv1.*dv3>0) = no_intersection; %1: no intersection same sign on all of them & not equal 0
 
 if sum(intersection_matrix(:))
     disp('No intersections found.')
     return; 
 end 
-intersection_matrix(dv1==0 & dv2==0 & dv3==0) = -1; % coplanar with unknown overlap
+intersection_matrix(dv1==0 & dv2==0 & dv3==0) = coplanar_intersection; % coplanar with unknown overlap
 
 % =======================================================================
 %% === Stage 2 ==========================================================
 % =======================================================================
 
-%% Process remaining (non-coplanar) triangle pairs
-tMsk = (intersection_matrix==-2);
-n = nnz(tMsk);
-if n>0
-  [face1, face2] = find(tMsk);
+%% Process remaining (presumably non-coplanar) triangle pairs
+% Sparse logical array
+tMsk = (intersection_matrix==unknown_intersection);
+n_faces = nnz(tMsk);
+
+if n_faces>0
+  [face_in_1, face_in_2] = find(tMsk);
   switch lower(algorithm)
     case 'moller'
       if size(dv1(tMsk),1)==1
@@ -235,16 +242,16 @@ if n>0
       end
       
       [intersection_matrix(tMsk), intSurface] = TriangleIntersection3D_Moller(...
-        V1(face1,:), V2(face1,:), V3(face1,:), N1(face1,:), d1(face1,:), dv, ...
-        U1(face2,:), U2(face2,:), U3(face2,:), N2(face2,:), d2(face2,:), du, ...
+        V1(face_in_1,:), V2(face_in_1,:), V3(face_in_1,:), N1(face_in_1,:), d1(face_in_1,:), dv, ...
+        U1(face_in_2,:), U2(face_in_2,:), U3(face_in_2,:), N2(face_in_2,:), d2(face_in_2,:), du, ...
         getIntersection, debug);
     case 'rapid'
       % Undocumented experimental feature. In some experiments I got
       % identical results as with Moller algorithm, but others gave
       % different results. Often faster tham Moller.
       intersection_matrix(tMsk) = TriangleIntersection3D_Rapid( ...
-        V1(face1,:), V2(face1,:), V3(face1,:), ...
-        U1(face2,:), U2(face2,:), U3(face2,:), N1(face1,:), N2(face2,:) );
+        V1(face_in_1,:), V2(face_in_1,:), V3(face_in_1,:), ...
+        U1(face_in_2,:), U2(face_in_2,:), U3(face_in_2,:), N1(face_in_1,:), N2(face_in_2,:) );
     otherwise
       error('Unknown algorithm name');
   end
@@ -252,35 +259,36 @@ end % if
 
 %% Process coplanar triangle pairs. Pass #1:
 % compare the overlap of the bounding boxes
-tMsk = (intersection_matrix==-1);
+tMsk = (intersection_matrix == coplanar_intersection);
+
 if nnz(tMsk)>0
-  [face1, face2] = find(tMsk);
+  [face_in_1, face_in_2] = find(tMsk);
   overlap = true;
   for idim = 1:3
-    v = [V1(face1,idim), V2(face1,idim), V3(face1,idim)];
-    u = [U1(face2,idim), U2(face2,idim), U3(face2,idim)];
+    v = [V1(face_in_1,idim), V2(face_in_1,idim), V3(face_in_1,idim)];
+    u = [U1(face_in_2,idim), U2(face_in_2,idim), U3(face_in_2,idim)];
     t1 = min(v,[],2);
     t2 = max(v,[],2);
     s1 = min(u,[],2);
     s2 = max(u,[],2);
     overlap = overlap & (s1<=t2 & t1<=s2);
   end
-  % if overlap intersection_matrix will remain "-1" otherwise it will change to "0"
-  intersection_matrix(tMsk) = -1*overlap;
+  % if overlap, intersection_matrix will remain "2: coplanar" otherwise it will change to "1: no intersection"
+  intersection_matrix(tMsk) = overlap+1;
   clear v u t1 t2 s1 s2 overlap
 end
 
 %% Process coplanar triangle pairs. Pass #2:
 % use edge-edge intersections
-tMsk = (intersection_matrix==-1);
+tMsk = (intersection_matrix == coplanar_intersection);
 if nnz(tMsk)>0
-  [face1, face2] = find(tMsk);
+  [face_in_1, face_in_2] = find(tMsk);
   
   % repack data prior to function call
-  V(:,:,1)=V1(face1,:); V(:,:,2)=V2(face1,:); V(:,:,3)=V3(face1,:);
-  U(:,:,1)=U1(face2,:); U(:,:,2)=U2(face2,:); U(:,:,3)=U3(face2,:);
+  V(:,:,1)=V1(face_in_1,:); V(:,:,2)=V2(face_in_1,:); V(:,:,3)=V3(face_in_1,:);
+  U(:,:,1)=U1(face_in_2,:); U(:,:,2)=U2(face_in_2,:); U(:,:,3)=U3(face_in_2,:);
   [intersection_matrix(tMsk), intSurface2] = TriangleIntersection2D(V, U, ...
-    N1(face1,:), getIntersection, debug);
+    N1(face_in_1,:), getIntersection, debug);
   
   %% Merge surfaces
   if getIntersection
@@ -297,7 +305,6 @@ if nnz(tMsk)>0
 end
 
 %% Clean up the outputs
-intersection_matrix = sparse(double(intersection_matrix));
 if(getIntersection)
   % make point array unique
   P = round(intSurface.vertices*PointRoundingTol)/PointRoundingTol;
