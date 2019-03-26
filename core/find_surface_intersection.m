@@ -80,6 +80,7 @@ end
 
 %% Parse extra parameters
 getIntersection = (nargout>1);
+% NOTE: These should be input arguments
 debug = true;
 PointRoundingTol = 1e6;
 algorithm = 'moller';
@@ -149,66 +150,76 @@ intSurface.edges    = [];
 V1 = surface1.vertices(surface1.faces(:, vxi),:);
 V2 = surface1.vertices(surface1.faces(:, vxj),:);
 V3 = surface1.vertices(surface1.faces(:, vxk),:);
-N1 = cross_prod(V2-V1, V3-V1); % Calculate normal vectors -- array size nFace1 x 3
+N1 = cross_prod(V2-V1, V3-V1); % Calculate traingle normal vectors -- array size nFace1 x 3
 N1 = normalize(N1);            % Normalise vectors
 d1 = dot_prod(N1,V1);          % array size nFace1 x 1
 
 %% Distance from surface #2 vertices to planes of surface #1
-% Calculate signed distance from all vertices of surface #2 to each plane
-% of of surface #1
+% Calculate signed distance from all vertices of surface #2 to each
+% plane/face of surface #1
 du(nFace1, nVert2) = 0;
+
 % NOTE: can do in parallel
 for iVert2 = 1:nVert2
-  p = surface2.vertices(iVert2,:);
-  du(:,iVert2) = N1(:,1)*p(1) + N1(:,2)*p(2) + N1(:,3)*p(3) - d1;
+  p = surface2.vertices(iVert2, :);
+  du(:, iVert2) = N1(:,1)*p(1) + N1(:,2)*p(2) + N1(:,3)*p(3) - d1;
 end
 if debug
-  assert(all(size(du)==[nFace1,nVert2]), 'Incorrect array dimensions: dv')
+  assert(all(size(du)==[nFace1,nVert2]), 'Incorrect array dimensions: du')
 end
-du(abs(du) < epsilon)=0; % robustness check
-% Distances from vertex 1, 2 & 3 of faces of surface #2 to planes of surface #1
+
+du(abs(du) < epsilon)=0; % robustness check, NOTE: maybe not ideaal outside the loop
+% Distances from vertices i, j & k of faces of surface #2 to planes of surface #1
 du1 = du(:,surface2.faces(:, vxi));
 du2 = du(:,surface2.faces(:, vxj));
 du3 = du(:,surface2.faces(:, vxk));
+
 if debug
   assert(all(size(du1)==size(intersection_matrix)), 'Incorrect array dimensions: du1')
 end
 clear du
 intersection_matrix(du1.*du2>0 & du1.*du3>0) = 0;   % same sign on all of them & not equal 0
-if(all(intersection_matrix==0)), return; end        % no intersections
+if sum(intersection_matrix(:))
+    disp('No intersections found.')
+    return; 
+end       
 intersection_matrix(du1==0 & du2==0 & du3==0) = -1; % coplanar with unknown overlap
 
 %% compute plane of triangle (U0,U1,U2)
 % plane equation 2: N2.X-d2=0
-U1 = surface2.vertices(surface2.faces(:,1),:);
-U2 = surface2.vertices(surface2.faces(:,2),:);
-U3 = surface2.vertices(surface2.faces(:,3),:);
-N2 = cross_prod(U2-U1,U3-U1); % array size nFace1 x 3
+U1 = surface2.vertices(surface2.faces(:, vxi),:);
+U2 = surface2.vertices(surface2.faces(:, vxj),:);
+U3 = surface2.vertices(surface2.faces(:, vxk),:);
+N2 = cross_prod(U2-U1, U3-U1); % array size nFace1 x 3
 N2 = normalize(N2);
-d2 = dot_prod(N2,U1);        % array size nFace1 x 1
+d2 = dot_prod(N2, U1);           % array size nFace1 x 1
 
 %% Distance from surface #1 vertices to planes of surface #2
 % Calculate signed distance from all vertices of surface #1 to each plane
 % of of surface #2
-dv = zeros(nFace2,nVert1);
+dv(nFace2,nVert1) = 0;
 for iVert1 = 1:nVert1
   p = surface1.vertices(iVert1,:);
-  dv(:,iVert1) = N2(:,1)*p(1) + N2(:,2)*p(2) + N2(:,3)*p(3) - d2;
+  dv(:, iVert1) = N2(:, vxi)*p(xdim) + N2(:, vxj)*p(ydim) + N2(:, vxk)*p(zdim) - d2;
 end
 if debug
   assert(all(size(dv)==[nFace2,nVert1]), 'Incorrect array dimensions: dv')
 end
 dv(abs(dv)<epsilon)=0; % robustness check
-% Distances from vertex 1, 2 & 3 of faces of surface #1 to planes of surface #2
-dv1 = dv(:,surface1.faces(:,1))';
-dv2 = dv(:,surface1.faces(:,2))';
-dv3 = dv(:,surface1.faces(:,3))';
+% Distances from vertex i, j & k of faces of surface #1 to planes of surface #2
+dv1 = dv(:,surface1.faces(:, vxi)).';
+dv2 = dv(:,surface1.faces(:, vxj)).';
+dv3 = dv(:,surface1.faces(:, vxk)).';
 if debug
   assert(all(size(dv1)==size(intersection_matrix)), 'Incorrect array dimensions: dv1')
 end
 clear dv
 intersection_matrix(dv1.*dv2>0 & dv1.*dv3>0) = 0;   % same sign on all of them & not equal 0
-if(all(intersection_matrix==0)), return; end        % no intersections
+
+if sum(intersection_matrix(:))
+    disp('No intersections found.')
+    return; 
+end 
 intersection_matrix(dv1==0 & dv2==0 & dv3==0) = -1; % coplanar with unknown overlap
 
 % =======================================================================
