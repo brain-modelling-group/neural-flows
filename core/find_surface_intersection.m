@@ -109,10 +109,14 @@ dot_prod = @(a,b) a(:,1).*b(:,1)+a(:,2).*b(:,2)+a(:,3).*b(:,3);
 normalize = @(V) bsxfun(@rdivide,V, sqrt(sum(V.^2,2)));
 
 %% Initialize output variables
-% intersect is a nFace1 x nFace2 matrix. Possible values: -2 (do not know),
-% -1 (coplanar with unknown overlap), 0 (no intersections), 1 (intersects).
-% Negative values are internal only.
-intMatrix  = zeros([nFace1,nFace2], 'int8')-2; % -2 indicates that there was no succesful test yet
+% intMatrix is a nFace1 x nFace2 matrix. 
+% Possible values: -2 (do not know),
+%                  -1 (coplanar with unknown overlap), 
+%                   0 (no intersections), 
+%                   1 (intersects).
+% NOTE: Negative values are for internal use only.
+% NOTE: This generates a stupidly big matrix for high-resolution surfaces.
+intMatrix(nFace1 ,nFace2) = -2; % -2 indicates that there was no succesful test yet
 intSurface.vertices = [];
 intSurface.faces    = [];
 intSurface.edges    = [];
