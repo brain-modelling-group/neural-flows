@@ -56,10 +56,14 @@ ok2 = isstruct(surface2) && isfield(surface2, 'vertices') && isfield(surface2, '
 assert(ok1, 'Surface #1 must be a struct with "faces" and "vertices" fields' );
 assert(ok2, 'Surface #2 must be a struct with "faces" and "vertices" fields' );
 
-% Idomatic indexing
+% Idomatic indexing for Euclidean axes
 xdim = 1;
 ydim = 2;
 zdim = 3;
+% Idomatic indexing for vertices forming a triangular face
+vxi = 1;
+vxj = 2;
+vxk = 3;
 %% Flip dimentions if necessery
 if size(surface1.faces,1)==3 && size(surface1.faces,2)~=3
   surface1.faces = surface1.faces';
@@ -98,7 +102,7 @@ while (k<=nVarargs)
 end
 
 %% Initialize variables
-epsilon = eps;
+epsilon = eps; % Error
 nFace1 = size(surface1.faces,1);
 nFace2 = size(surface2.faces,1);
 nVert1 = size(surface1.vertices,1);
@@ -142,17 +146,18 @@ intSurface.edges    = [];
 
 %% compute plane equations for each triangle of the surface #1
 % plane equation #1: N1.X-d1=0
-V1 = surface1.vertices(surface1.faces(:, xdim),:);
-V2 = surface1.vertices(surface1.faces(:, ydim),:);
-V3 = surface1.vertices(surface1.faces(:, zdim),:);
-N1 = cross_prod(V2-V1,V3-V1); % array size nFace1 x 3
-N1 = normalize(N1);
-d1 = dot_prod(N1,V1);         % array size nFace1 x 1
+V1 = surface1.vertices(surface1.faces(:, vxi),:);
+V2 = surface1.vertices(surface1.faces(:, vxj),:);
+V3 = surface1.vertices(surface1.faces(:, vxk),:);
+N1 = cross_prod(V2-V1, V3-V1); % Calculate normal vectors -- array size nFace1 x 3
+N1 = normalize(N1);            % Normalise vectors
+d1 = dot_prod(N1,V1);          % array size nFace1 x 1
 
 %% Distance from surface #2 vertices to planes of surface #1
 % Calculate signed distance from all vertices of surface #2 to each plane
 % of of surface #1
 du = zeros(nFace1,nVert2);
+% NOTE: can do in parallel
 for iVert2 = 1:nVert2
   p = surface2.vertices(iVert2,:);
   du(:,iVert2) = N1(:,1)*p(1) + N1(:,2)*p(2) + N1(:,3)*p(3) - d1;
@@ -160,11 +165,11 @@ end
 if debug
   assert(all(size(du)==[nFace1,nVert2]), 'Incorrect array dimensions: dv')
 end
-du(abs(du)<epsilon)=0; % robustness check
+du(abs(du) < epsilon)=0; % robustness check
 % Distances from vertex 1, 2 & 3 of faces of surface #2 to planes of surface #1
-du1 = du(:,surface2.faces(:,1));
-du2 = du(:,surface2.faces(:,2));
-du3 = du(:,surface2.faces(:,3));
+du1 = du(:,surface2.faces(:,vxi));
+du2 = du(:,surface2.faces(:,vxj));
+du3 = du(:,surface2.faces(:,vxk));
 if debug
   assert(all(size(du1)==size(intersection_matrix)), 'Incorrect array dimensions: du1')
 end
