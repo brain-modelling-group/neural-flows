@@ -56,6 +56,10 @@ ok2 = isstruct(surface2) && isfield(surface2, 'vertices') && isfield(surface2, '
 assert(ok1, 'Surface #1 must be a struct with "faces" and "vertices" fields' );
 assert(ok2, 'Surface #2 must be a struct with "faces" and "vertices" fields' );
 
+% Idomatic indexing
+xdim = 1;
+ydim = 2;
+zdim = 3;
 %% Flip dimentions if necessery
 if size(surface1.faces,1)==3 && size(surface1.faces,2)~=3
   surface1.faces = surface1.faces';
@@ -102,11 +106,13 @@ nVert2 = size(surface2.vertices,1);
 
 %% create strip down versions of MATLAB cross and dot function
 cross_prod = @(a,b) [...
-  a(:,2).*b(:,3)-a(:,3).*b(:,2), ...
-  a(:,3).*b(:,1)-a(:,1).*b(:,3), ...
-  a(:,1).*b(:,2)-a(:,2).*b(:,1)];
-dot_prod = @(a,b) a(:,1).*b(:,1)+a(:,2).*b(:,2)+a(:,3).*b(:,3);
-normalize = @(V) bsxfun(@rdivide,V, sqrt(sum(V.^2,2)));
+  a(:, ydim).*b(:, zdim)-a(:, zdim).*b(:, ydim), ...
+  a(:, zdim).*b(:, xdim)-a(:, xdim).*b(:, zdim), ...
+  a(:, xdim).*b(:, ydim)-a(:, ydim).*b(:, xdim)];
+
+dot_prod = @(a,b) a(:, xdim).*b(:, xdim) + a(:, ydim).*b(:, ydim) + a(:, zdim).*b(:, zdim);
+
+normalize = @(V) bsxfun(@rdivide,V, sqrt(sum(V.^2, 2)));
 
 %% Initialize output variables
 % intersection_matrix is a nFace1 x nFace2 matrix. 
