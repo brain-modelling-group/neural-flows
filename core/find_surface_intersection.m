@@ -156,7 +156,7 @@ d1 = dot_prod(N1,V1);          % array size nFace1 x 1
 %% Distance from surface #2 vertices to planes of surface #1
 % Calculate signed distance from all vertices of surface #2 to each plane
 % of of surface #1
-du = zeros(nFace1,nVert2);
+du(nFace1, nVert2) = 0;
 % NOTE: can do in parallel
 for iVert2 = 1:nVert2
   p = surface2.vertices(iVert2,:);
@@ -167,9 +167,9 @@ if debug
 end
 du(abs(du) < epsilon)=0; % robustness check
 % Distances from vertex 1, 2 & 3 of faces of surface #2 to planes of surface #1
-du1 = du(:,surface2.faces(:,vxi));
-du2 = du(:,surface2.faces(:,vxj));
-du3 = du(:,surface2.faces(:,vxk));
+du1 = du(:,surface2.faces(:, vxi));
+du2 = du(:,surface2.faces(:, vxj));
+du3 = du(:,surface2.faces(:, vxk));
 if debug
   assert(all(size(du1)==size(intersection_matrix)), 'Incorrect array dimensions: du1')
 end
