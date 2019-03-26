@@ -13,8 +13,7 @@ function [intersection_matrix, intSurface] = find_surface_intersection(surface1,
 % INPUT:
 %  * surface1 & surface2 - two surfaces defined as structs or classes.
 %    Several inputs are possible:
-%    - struct with "faces" and "vertices" fields with sizes nfaces x 3 and
-%       nvertex x 3
+%    - struct with "faces" and "vertices" fields with sizes nfaces x 3 and nvertex x 3
 %    - 'triangulation' class (only the boundary surface will be used)
 %    - 'delaunayTriangulation' class
 %
@@ -57,18 +56,27 @@ ok2 = isstruct(surface2) && isfield(surface2, 'vertices') && isfield(surface2, '
 assert(ok1, 'Surface #1 must be a struct with "faces" and "vertices" fields' );
 assert(ok2, 'Surface #2 must be a struct with "faces" and "vertices" fields' );
 
+%% Flip dimentions if necessery
+if size(surface1.faces,1)==3 && size(surface1.faces,2)~=3
+  surface1.faces = surface1.faces';
+end
+if size(surface1.vertices,1)==3 && size(surface1.vertices,2)~=3
+  surface1.vertices = surface1.vertices';
+end
+if size(surface2.faces,1)==3 && size(surface2.faces,2)~=3
+  surface2.faces = surface2.faces';
+end
+if size(surface2.vertices,1)==3 && size(surface2.vertices,2)~=3
+  surface2.vertices = surface2.vertices';
+end
+
 % Idomatic indexing for Euclidean axes
-xdim = 1;
-ydim = 2;
-zdim = 3;
+xdim = 1;ydim = 2; zdim = 3; 
 % Idomatic indexing for vertices forming a triangular face
-vxi = 1;
-vxj = 2;
-vxk = 3;
+vxi = 1; vxj = 2; vxk = 3;
 
 %% Parse extra parameters
-getIntersection = (nargout>1);
-% NOTE: These should be input arguments
+getIntersection = (nargout>1);% NOTE: These should be input arguments
 debug = true;
 PointRoundingTol = 1e6;
 algorithm = 'moller';
@@ -99,13 +107,12 @@ nVert2 = size(surface2.vertices,1);
 
 %% create strip down versions of MATLAB cross and dot function
 cross_prod = @(a,b) [...
-  a(:, ydim).*b(:, zdim)-a(:, zdim).*b(:, ydim), ...
-  a(:, zdim).*b(:, xdim)-a(:, xdim).*b(:, zdim), ...
-  a(:, xdim).*b(:, ydim)-a(:, ydim).*b(:, xdim)];
+  a(:,ydim).*b(:,3)-a(:,3).*b(:,2), ...
+  a(:,zdim).*b(:,1)-a(:,1).*b(:,3), ...
+  a(:,xdim).*b(:,2)-a(:,2).*b(:,1)];
+dot_prod = @(a,b) a(:,1).*b(:,1)+a(:,2).*b(:,2)+a(:,3).*b(:,3);
+normalize = @(V) bsxfun(@rdivide,V, sqrt(sum(V.^2,2)));
 
-dot_prod = @(a,b) a(:, xdim).*b(:, xdim) + a(:, ydim).*b(:, ydim) + a(:, zdim).*b(:, zdim);
-
-normalize = @(V) bsxfun(@rdivide,V, sqrt(sum(V.^2, 2)));
 
 %% Initialize output variables
 % intersection_matrix is a nFace1 x nFace2 matrix. 
@@ -116,16 +123,16 @@ normalize = @(V) bsxfun(@rdivide,V, sqrt(sum(V.^2, 2)));
 
 % New value to optimise memory usage & use sparse matrices.
 
-unknown_intersection = 0;
-no_intersection = 1;
-coplanar_intersection = 2;
-noncoplanar_interesection = 3;
+unknown_intersection = -2;
+no_intersection = 0;
+coplanar_intersection = -1;
+noncoplanar_interesection = 1;
 % 0: do not know - default
 % 1: no intersections
 % 2: coplanar intersection
 % 3: intersects - no-coplanar intersection
 
-intersection_matrix = sparse(nFace1 ,nFace2); % 
+intersection_matrix  = zeros([nFace1,nFace2], 'int8')-2; % -2 indicates that there was no succesful test yet
 intSurface.vertices = [];
 intSurface.faces    = [];
 intSurface.edges    = [];
@@ -177,10 +184,8 @@ if debug
 end
 clear du
 intersection_matrix(du1.*du2>0 & du1.*du3>0) = no_intersection;   %1: no intersection: same sign on all of them & not equal 0
-if sum(intersection_matrix(:))== (nFace1*nFace2)
-    disp('No intersections found.')
-    return; 
-end       
+if(all(intersection_matrix==no_intersection)), disp('no interesections'), return; end        % no intersections
+
 intersection_matrix(du1==0 & du2==0 & du3==0) = coplanar_intersection; % 2: coplanar intersection with unknown overlap
 
 %% compute plane of triangle (U0,U1,U2)
@@ -198,26 +203,24 @@ d2 = dot_prod(N2, U1);           % array size nFace1 x 1
 dv(nFace2,nVert1) = 0;
 for iVert1 = 1:nVert1
   p = surface1.vertices(iVert1,:);
-  dv(:, iVert1) = N2(:, vxi)*p(xdim) + N2(:, vxj)*p(ydim) + N2(:, vxk)*p(zdim) - d2;
+  dv(:, iVert1) = N2(:, 1)*p(1) + N2(:, 2)*p(2) + N2(:, 3)*p(3) - d2;
 end
 if debug
   assert(all(size(dv)==[nFace2,nVert1]), 'Incorrect array dimensions: dv')
 end
 dv(abs(dv)<epsilon)=0; % robustness check
 % Distances from vertex i, j & k of faces of surface #1 to planes of surface #2
-dv1 = dv(:,surface1.faces(:, vxi)).';
-dv2 = dv(:,surface1.faces(:, vxj)).';
-dv3 = dv(:,surface1.faces(:, vxk)).';
+dv1 = dv(:,surface1.faces(:, vxi))';
+dv2 = dv(:,surface1.faces(:, vxj))';
+dv3 = dv(:,surface1.faces(:, vxk))';
 if debug
   assert(all(size(dv1)==size(intersection_matrix)), 'Incorrect array dimensions: dv1')
 end
 clear dv
 intersection_matrix(dv1.*dv2>0 & dv1.*dv3>0) = no_intersection; %1: no intersection same sign on all of them & not equal 0
 
-if sum(intersection_matrix(:))
-    disp('No intersections found.')
-    return; 
-end 
+if(all(intersection_matrix==0)), return; end        % no intersections
+
 intersection_matrix(dv1==0 & dv2==0 & dv3==0) = coplanar_intersection; % coplanar with unknown overlap
 
 % =======================================================================
@@ -274,7 +277,7 @@ if nnz(tMsk)>0
     overlap = overlap & (s1<=t2 & t1<=s2);
   end
   % if overlap, intersection_matrix will remain "2: coplanar" otherwise it will change to "1: no intersection"
-  intersection_matrix(tMsk) = overlap+1;
+  intersection_matrix(tMsk) = -1*overlap;
   clear v u t1 t2 s1 s2 overlap
 end
 
@@ -305,6 +308,7 @@ if nnz(tMsk)>0
 end
 
 %% Clean up the outputs
+intersection_matrix= sparse(double(intersection_matrix));
 if(getIntersection)
   % make point array unique
   P = round(intSurface.vertices*PointRoundingTol)/PointRoundingTol;
@@ -355,9 +359,9 @@ end
 
 %% create strip down versions of MATLAB cross and dot function
 cross_prod = @(a,b) [...
-  a(:,ydim).*b(:,zdim)-a(:,3).*b(:,2), ...
-  a(:,zdim).*b(:,xdim)-a(:,xdim).*b(:,3), ...
-  a(:,xdim).*b(:,ydim)-a(:,ydim).*b(:,1)];
+  a(:,2).*b(:,3)-a(:,3).*b(:,2), ...
+  a(:,3).*b(:,1)-a(:,1).*b(:,3), ...
+  a(:,1).*b(:,2)-a(:,2).*b(:,1)];
 dot_prod = @(a,b) a(:,1).*b(:,1)+a(:,2).*b(:,2)+a(:,3).*b(:,3);
 normalize = @(V) bsxfun(@rdivide,V, sqrt(sum(V.^2,2)));
 
