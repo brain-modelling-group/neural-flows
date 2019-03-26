@@ -113,6 +113,13 @@ normalize = @(V) bsxfun(@rdivide,V, sqrt(sum(V.^2, 2)));
 %                  -1 (coplanar with unknown overlap), 
 %                   0 (no intersections), 
 %                   1 (intersects).
+
+% New value to optimise memory usage & use sparse matrices.
+% 0: do not know 
+% 1: no intersections
+% 2: coplanar
+% 3: intersects
+
 % NOTE: Negative values are for internal use only.
 % NOTE: This generates a stupidly big matrix for high-resolution surfaces.
 intersection_matrix(nFace1 ,nFace2) = int8(-2); % -2 indicates that there was no succesful test yet
@@ -304,10 +311,9 @@ end
 end % function
 
 %% ========================================================================
-function [iMsk, intSurface] = TriangleIntersection3D_Moller(...
-  V1, V2, V3, N1, d1, dv, ...
-  U1, U2, U3, N2, d2, du, ...
-  getIntersection, debug)
+function [iMsk, intSurface] = TriangleIntersection3D_Moller(V1, V2, V3, N1, d1, dv, ...
+                                                            U1, U2, U3, N2, d2, du, ...
+                                                            getIntersection, debug)
 %TriangleIntersection3D tests if 2 triangles defined in 3D intersect.
 % This is a secondary test following Tomas Moller algorithm
 %
@@ -316,8 +322,8 @@ function [iMsk, intSurface] = TriangleIntersection3D_Moller(...
 %   U1, U2, U3, - Nx3 array of surface 2 triangle vertex coordinates
 %   N1, d1      - Nx3 array of surface 1 triangle plane equations N1.X-d1=0
 %   N2, d2      - Nx3 array of surface 2 triangle plane equations N2.X-d2=0
-%   dv          - Nx3 array of distances of surface 1 triangle vertices to surface 2 planes
-%   du          - Nx3 array of distances of surface 2 triangle vertices to surface 1 planes
+%   dv          - Nx3 array of distances of surface1 vertices to surface 2 triangle
+%   du          - Nx3 array of distances of surface2 vertices to surface 1 triangle
 %   getIntersection - do we need to output the intersecting surface?
 %      Algorithm is much simpler if we do not.
 %   debug       - In the debugging mode much more extra "sanity check" test
@@ -344,9 +350,9 @@ end
 
 %% create strip down versions of MATLAB cross and dot function
 cross_prod = @(a,b) [...
-  a(:,2).*b(:,3)-a(:,3).*b(:,2), ...
-  a(:,3).*b(:,1)-a(:,1).*b(:,3), ...
-  a(:,1).*b(:,2)-a(:,2).*b(:,1)];
+  a(:,ydim).*b(:,zdim)-a(:,3).*b(:,2), ...
+  a(:,zdim).*b(:,xdim)-a(:,xdim).*b(:,3), ...
+  a(:,xdim).*b(:,ydim)-a(:,ydim).*b(:,1)];
 dot_prod = @(a,b) a(:,1).*b(:,1)+a(:,2).*b(:,2)+a(:,3).*b(:,3);
 normalize = @(V) bsxfun(@rdivide,V, sqrt(sum(V.^2,2)));
 
