@@ -120,9 +120,7 @@ normalize = @(V) bsxfun(@rdivide,V, sqrt(sum(V.^2, 2)));
 % 2: coplanar
 % 3: intersects
 
-% NOTE: Negative values are for internal use only.
-% NOTE: This generates a stupidly big matrix for high-resolution surfaces.
-intersection_matrix(nFace1 ,nFace2) = int8(-2); % -2 indicates that there was no succesful test yet
+intersection_matrix = sparse(nFace1 ,nFace2); % 
 intSurface.vertices = [];
 intSurface.faces    = [];
 intSurface.edges    = [];
