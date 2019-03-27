@@ -97,7 +97,13 @@ end
 
 function xyz_idx = use_isosurfaces(mfile_surf_obj, mfile_vel_obj, index_mode)
 
-tpts = size(mfile_isosurf_obj, 'isosurfs', 2);
+try
+    tpts = size(mfile_surf_obj, 'isosurfs', 2);
+catch
+    disp('This is a struct not a matfile.')
+    tpts = length(mfile_surf_obj.isosurfs);
+end
+
 X = mfile_vel_obj.X;
 Y = mfile_vel_obj.Y;
 Z = mfile_vel_obj.Z;
