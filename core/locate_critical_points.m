@@ -1,11 +1,20 @@
 function [xyz_idx] = locate_critical_points(vx, vy, vz, X, Y, Z, critical_isovalue, index_mode)
-% Locates the critical points in a 3D vector field. This
-% function locates the intersectopm of the three isosrufaces (one per
-% velocity component) at v = 0.
+% Locates the critical points in a 3D vector field. This function finds 
+% the intersection of the three isosrufaces (one per velocity component) at v = critical_isovalue.
 % Returns the location of the singularities as linear indices xyz_lidx, or as 
 % subscripts x_idx, y_idx, z_idx 
-
-
+% 
+% ARGUMENTS:
+%      
+%    
+% OUTPUT:
+%       
+% AUTHOR:
+%     Paula Sanz-Leon, QIMR Berghofer 2019
+% USAGE:
+%{
+    
+%}
 
 if nargin < 6
     % Magnitude of the velocity that is considered almost 0
@@ -27,12 +36,10 @@ xyz_lidx_x = coordinate_to_linear_index(vertices_x, X, Y, Z);
 xyz_lidx_y = coordinate_to_linear_index(vertices_y, X, Y, Z);
 xyz_lidx_z = coordinate_to_linear_index(vertices_z, X, Y, Z);
 
-% DO the same for th different isosurfaces. Works better than using the
+% Do the same for the different isosurfaces. Works better than using the
 % magnitud. 
 
-
 xyz_lidx = intersect(intersect(xyz_lidx_x, xyz_lidx_y), xyz_lidx_z);
-
 
 switch index_mode
     case 'linear'

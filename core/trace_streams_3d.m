@@ -19,10 +19,17 @@ verts = stream3(X, Y, Z, 10000*mfile_vel.ux(:, :, :, tt), ...
                          10000*mfile_vel.uz(:, :, :, tt), ...
                          seed_locs(:, x_dim), ...
                          seed_locs(:, y_dim), ...
-                         seed_locs(:, z_dim), [2^-2 2^11]);
+                         seed_locs(:, z_dim), [2^-12]); % TODO: adjuts parameters
 
 % Remove nan vertices from streamlines (points outside the convex hull)                     
 verts = cellfun(@remove_nans, verts, 'UniformOutput', false);
+% Make all streamlines of the same length so we can use streamparticles
+stream_lengths   = cellfun(@(c)  size(c, 1), verts);
+max_length = max(stream_lengths);
+wrap_func = @(verts) add_vertices(verts, max_length);
+verts = cellfun(wrap_func, dummy_cell, 'UniformOutput', false);
+
+%verts = cellfun(@add_vertices, verts, 'UniformOutput', false);
 
 sl = streamline(verts);
 set(sl,'LineWidth',1);
@@ -41,9 +48,10 @@ haxes = gca;
 %h = line;
 haxes.XLim = [min(X(:)), max(X(:))];
 haxes.YLim = [min(Y(:)), max(Y(:))];
+
 haxes.ZLim = [min(Z(:)), max(Z(:))];
 
-streamparticles(haxes, verts(13), 42, 'animate', Inf, 'ParticleAlignment', 'on', 'MarkerfaceColor', 'blue');
+streamparticles(haxes, verts, 42, 'animate', Inf, 'ParticleAlignment', 'on', 'MarkerfaceColor', 'blue');
 
 displaynow 
 
@@ -55,5 +63,8 @@ function x = remove_nans(x)
 % Dummy function to be call by cellfun
     x(isnan(x)) = [];
     
-
 end
+
+
+
+

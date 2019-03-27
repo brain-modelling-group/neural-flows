@@ -34,17 +34,53 @@ title ('Three test surfaces')
 legend({'#1', '#2', '#3'});
 
 
-%% Decimate surfaces for detection
+%% Decimate surfaces for detection -- try this to move on 
+
+fraction_to_keep = 0.2;
+
+[mF, mV] = reducepatch(surfx.faces, surfx.vertices, fraction_to_keep);
+dsurfx.faces = mF;
+dsurfx.vertices = mV;
+
+[mF, mV] = reducepatch(surfy.faces, surfy.vertices, fraction_to_keep);
+dsurfy.faces = mF;
+dsurfy.vertices = mV;
+
+[mF, mV] = reducepatch(surfz.faces, surfz.vertices, fraction_to_keep);
+dsurfz.faces = mF;
+dsurfz.vertices = mV;
 
 
+
+figure_dsurf = figure; 
+ax = subplot(1,1,1);
+hold(ax, 'on')
+
+% 
+xdim = 1;
+ydim = 2;
+zdim = 3;
+
+trisurf(dsurfx.faces, dsurfx.vertices(:, xdim), dsurfx.vertices(:, ydim), dsurfx.vertices(:, zdim), 'FaceAlpha', 0.1, 'FaceColor', 'r', 'Edgecolor', 'none');
+trisurf(dsurfy.faces, dsurfy.vertices(:, xdim), dsurfy.vertices(:, ydim), dsurfy.vertices(:, zdim), 'FaceAlpha', 0.1, 'FaceColor', 'g', 'Edgecolor', 'none');
+trisurf(dsurfz.faces, dsurfz.vertices(:, xdim), dsurfz.vertices(:, ydim), dsurfz.vertices(:, zdim), 'FaceAlpha', 0.1, 'FaceColor', 'b', 'Edgecolor', 'none');
+view([3 1 1])
+axis equal
+title ('Three decimated surfaces')
+legend({'#1', '#2', '#3'});
 
 
 %% Run SurfaceIntersection and plot the results
 % Parts of Surface #1 and #2 are on the same plane and the intersection is
 % a 2D area instead of collection of 1D edges
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         [intersect12, SurfXY] = SurfaceIntersection(surfx, surfy);
-[intersect13, SurfXZ] = SurfaceIntersection(surfx, surfz);
-[intersect23, SurfYZ] = SurfaceIntersection(surfy, surfz);
+tic;[intersect13, SurfXZ] = find_surface_intersection(dsurfx, dsurfz);toc
+[intersect23, SurfYZ] = find_surface_intersection(dsurfy, dsurfz);
+[intersect12, SurfXY] = find_surface_intersection(dsurfx, dsurfy);
+
+%figure_intersection =figure;
+%ax  = subplot(1,1,1);
+%hold(ax, 'on');
 
 S=SurfXY; 
 trisurf(S.faces, S.vertices(:,1),S.vertices(:,2),S.vertices(:,3),'EdgeColor', 'r', 'FaceColor', 'r');
