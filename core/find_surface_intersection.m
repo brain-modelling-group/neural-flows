@@ -181,7 +181,7 @@ du2 = du(:,surface2.faces(:, vxj));
 du3 = du(:,surface2.faces(:, vxk));
 
 if debug
-  assert(all(size(du1)==size([nFace1,nFace2])), 'Incorrect array dimensions: du1')
+  assert(all(size(du1)==[nFace1,nFace2]), 'Incorrect array dimensions: du1')
 end
 clear du
 intersection_matrix(du1.*du2>0 & du1.*du3>0) = no_intersection;   %1: no intersection: same sign on all of them & not equal 0
