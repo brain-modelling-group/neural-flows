@@ -75,10 +75,8 @@ function xyz_idx = locate_null_surf_coordinates(temp_surf_struct, X, Y, Z, index
         xyz_lidx_z = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_z, X, Y, Z);
 
         xyz_lidx = intersect(intersect(xyz_lidx_x, xyz_lidx_y), xyz_lidx_z);
-
-        xyz_idx = switch_index_mode(xyz_lidx, index_mode, X);
+        xyz_idx  = switch_index_mode(xyz_lidx, index_mode, X);
         
-
 end
 
 
