@@ -24,8 +24,11 @@ end
 
 switch data_mode
     case 'surf'
+        % Slow with full resolution surfaces (50k faces each) but seems to give precise-ish locations
         xyz_idx = use_isosurfaces(mfile_surf_obj, mfile_vel_obj, index_mode);
     case 'vel'
+        % Super fast, but gives lots of points that do not seem to be
+        % intersecting
         xyz_idx = use_velocity_fields(mfile_vel_obj, index_mode);   
 end
         
