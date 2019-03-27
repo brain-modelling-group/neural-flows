@@ -99,7 +99,7 @@ while (k<=nVarargs)
 end
 
 %% Initialize variables
-epsilon = eps; % Error
+epsilon = eps; % Minimal distance to be conisdered almost coplanar. Geometrically, this means that if a point is "close enough" to the other triangle's plane, it is considered as being on the plane.
 nFace1 = size(surface1.faces,1);
 nFace2 = size(surface2.faces,1);
 nVert1 = size(surface1.vertices,1);
@@ -133,6 +133,7 @@ noncoplanar_interesection = 1;
 % 3: intersects - no-coplanar intersection
 
 intersection_matrix  = zeros([nFace1,nFace2], 'int8')-2; % -2 indicates that there was no succesful test yet
+%intersection_matrix(nFace1, nFace2) = unknown_intersection;
 intSurface.vertices = [];
 intSurface.faces    = [];
 intSurface.edges    = [];
@@ -140,18 +141,18 @@ intSurface.edges    = [];
 % =======================================================================
 %% === Stage 1 ==========================================================
 % =======================================================================
-% Each triangle is a subset of the plane it lies in, so for two triangles
+% Each triangle is a subset of the plane it lies on, so for two triangles
 % to intersect they must overlap along the line of intersection of their
 % planes. Hence, a necessary condition for intersection is that each
 % triangle must intersect the plane of the other.
-% M�ller�s method begins by checking the mutual intersection of each
+% Mullers method begins by checking the mutual intersection of each
 % triangle with the plane of the other. To do so, it determines for each
-% triangle on which side of the other triangle�s supporting plane its
+% triangle on which side of the other triangles supporting plane its
 % vertices lie. Now, if all vertices of one triangle lie on the same side
 % and no vertex is on the plane, the intersection is rejected.
 
 %% compute plane equations for each triangle of the surface #1
-% plane equation #1: N1.X-d1=0
+% plane equation #1: N1.X-d1 = 0
 V1 = surface1.vertices(surface1.faces(:, vxi),:);
 V2 = surface1.vertices(surface1.faces(:, vxj),:);
 V3 = surface1.vertices(surface1.faces(:, vxk),:);
@@ -180,7 +181,7 @@ du2 = du(:,surface2.faces(:, vxj));
 du3 = du(:,surface2.faces(:, vxk));
 
 if debug
-  assert(all(size(du1)==size(intersection_matrix)), 'Incorrect array dimensions: du1')
+  assert(all(size(du1)==size([nFace1,nFace2])), 'Incorrect array dimensions: du1')
 end
 clear du
 intersection_matrix(du1.*du2>0 & du1.*du3>0) = no_intersection;   %1: no intersection: same sign on all of them & not equal 0
