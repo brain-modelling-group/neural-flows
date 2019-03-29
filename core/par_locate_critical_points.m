@@ -45,10 +45,10 @@ function xyz_lidx = vertex_coordinate_to_linear_index(points, X, Y, Z)
     xyz_lidx(size(points, 1), 1) = 0;
 
     parfor idx=1:size(points, 1)
-        [~, temp_dist] = min(abs( (X-points(idx, 1)).^2 + ...
+        [~, temp_dist(idx)] = min(abs( (X-points(idx, 1)).^2 + ...
                                   (Y-points(idx, 2)).^2 + ...
                                   (Z-points(idx, 3)).^2 ));
-        xyz_lidx(idx) = temp_dist;
+        xyz_lidx(idx) = temp_dist(idx);
     end
     
     xyz_lidx = unique(xyz_lidx);
@@ -97,6 +97,7 @@ end
 
 function xyz_idx = use_isosurfaces(mfile_surf_obj, mfile_vel_obj, index_mode)
 
+% mfile_surf_ob can be a matfile or a struct -- with the same 'structure'
 try
     tpts = size(mfile_surf_obj, 'isosurfs', 2);
 catch
@@ -109,7 +110,7 @@ Y = mfile_vel_obj.Y;
 Z = mfile_vel_obj.Z;
 xyz_idx = struct([]); 
 
-    parfor tt=1:tpts
+    for tt=42:42;%tpts
         xyz_idx(tt).xyz_idx = locate_null_surf_coordinates(mfile_surf_obj.isosurfs(1, tt), X, Y, Z, index_mode);        
     end 
 
