@@ -6,14 +6,15 @@ function  [singularity_classification] =   classify_singularities(xyz_idx, mfile
 %     mfile_vel_obj -- matfile object handle to the velocity fields, need
 %     them to calculate the jacobian 3D. 
 
-singularity_classification = cell(size(xyz_idx), 1);
+singularity_classification = cell(size(xyz_idx));
+
    for tt=1:size(xyz_idx, 1) % parallizable stuff but the classification runs very fast
 
        hx = 1;
        hy = 1;
        hz = 1;
     
-       [J3D] = jacobian3d(xyz_idx(tt).xyz_idx, mfile_vel_obj.ux(:, :, :, tt), mfile_vel_obj.uy(:, :, :, tt), mfile_vel_obj.uz(:, :, :, 1), hx, hy, hz);
+       [J3D] = jacobian3d(xyz_idx(tt).xyz_idx, mfile_vel_obj.ux(:, :, :, tt), mfile_vel_obj.uy(:, :, :, tt), mfile_vel_obj.uz(:, :, :, tt), hx, hy, hz);
        
        singularity_labels = cell(size(J3D, 3), 1);
        for ss = 1:size(J3D, 3)

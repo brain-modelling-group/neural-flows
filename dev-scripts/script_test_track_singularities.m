@@ -15,6 +15,7 @@ toc;
 % Locate singularities
 data_mode = 'surf';
 tic;
+% This takes about 50 minutes with a surf decimated to 10% of original
 [xyz_idx] = par_locate_critical_points(decimated_surf_obj, mfile_vel, data_mode);
 toc;
 
