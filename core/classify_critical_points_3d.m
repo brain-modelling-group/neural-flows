@@ -5,27 +5,28 @@ function singularity_type = classify_critical_points_3d(J3D)
 % Assumes nondegenerate jacobian
 % J3D: 3 x 3 -- jacobian matrix around a point
 % 
-% l1: first  eigenvalue of Jacobin
-% l2: second eigenvalue
-% l3: third  eigenvalue
+% l1: first  eigenvalue of Jacobian
+% l2: second eigenvalue of Jacobian
+% l3: third  eigenvalue of Jacobian
 % 
 % Classification of stationary points in 3D
 % l1, l2, l3 are eigenvalues of the jacbian
-% If l1, l2, l3 are real then:
+% If l1, l2, l3 are all real then:
 %    all positive > source
 %    all negative > sink
 %    1 positive, 2 negative > 1:2 saddle
 %    2 positive, 1 negative > 2:1 saddle
 % If one eigenvalue is real and the two imaginary eigenvalues are complex
-% congjugates (a+ib, a-ib):
+% conjugates (a+ib, a-ib):
 %    if real eigenvalue > 0
 %                      if a > 0 --> spiral source
-%                      if a < 0 -- spiral saddle  
+%                      if a < 0 --> spiral saddle  
 %    if real eigenvalue < 0
-%                      if a > 0 -- spiral saddle
-%                      if a < 0 -- spiral sink
+%                      if a > 0 --> spiral saddle
+%                      if a < 0 --> spiral sink
 % Calculate matrix with eigenvalues of Jacobian
 
+% Check if anything went wrong with the Jacobian calculation
 if any(isnan(J3D(:)))
     singularity_type = 'nan';
     return
