@@ -55,7 +55,7 @@ function xyz_lidx = vertex_coordinate_to_linear_index(points, X, Y, Z)
 
 end % vertex_function coordinate_to_linear_index()
 
-
+% Uses the vector fields to locate singularities
 function xyz_idx = locate_null_velocity_coordinates(ux, uy, uz, X, index_mode)
         
         % Find linear indices
@@ -67,7 +67,7 @@ function xyz_idx = locate_null_velocity_coordinates(ux, uy, uz, X, index_mode)
         xyz_idx = switch_index_mode(xyz_lidx, index_mode, X);
 end
 
-
+% uses surfaces to locate singularities
 function xyz_idx = locate_null_surf_coordinates(temp_surf_struct, X, Y, Z, index_mode)
 
         xyz_lidx_x = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_x, X, Y, Z);
