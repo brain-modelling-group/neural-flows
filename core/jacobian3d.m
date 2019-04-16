@@ -14,7 +14,7 @@ ii = 1;
 jj = 2;
 kk = 3;
 
-% Jacobian - 3D array of size 3 x 3 x num_crtical_points
+% Jacobian - 3D array of size 3 x 3 x num_critical_points
 J3D(3, 3, size(critical_xyz_idx, 1)) = 0;   
 
 % Approximate Jacobian matrix elements -- may have to find a better way to
