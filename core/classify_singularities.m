@@ -14,11 +14,12 @@ if size(xyz_idx(1).xyz_idx, 2) < 3
            'The input xyz_idx must be a N x 3 array');
 end
 
-   for tt=1:size(xyz_idx, 2) % parallizable stuff but the classification runs very fast
+tpts = size(xyz_idx, 2);
+   for tt=1:tpts % parallizable stuff but the classification runs very fast
 
-       hx = 1;
-       hy = 1;
-       hz = 1;
+       hx = 1; % NOTE: to updated once I figure out the dimensionality of stuff
+       hy = 1; % NOTE: to updated once I figure out the dimensionality of stuff
+       hz = 1; % NOTE: to updated once I figure out the dimensionality of stuff
     
        [J3D] = jacobian3d(xyz_idx(tt).xyz_idx, mfile_vel_obj.ux(:, :, :, tt), mfile_vel_obj.uy(:, :, :, tt), mfile_vel_obj.uz(:, :, :, tt), hx, hy, hz);
        
