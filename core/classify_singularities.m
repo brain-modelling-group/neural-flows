@@ -14,20 +14,26 @@ if size(xyz_idx(1).xyz_idx, 2) < 3
            'The input xyz_idx must be a N x 3 array');
 end
 
-tpts = size(xyz_idx, 2);
+   tpts = size(xyz_idx, 2);
    for tt=1:tpts % parallizable stuff but the classification runs very fast
 
        hx = 1; % NOTE: to updated once I figure out the dimensionality of stuff
        hy = 1; % NOTE: to updated once I figure out the dimensionality of stuff
        hz = 1; % NOTE: to updated once I figure out the dimensionality of stuff
+       
+       % Check if we have critical points. There are 'frames' for which
+       % nothing was calculated.
+       if isempty(xyz_idx(tt).xyz_idx)
+           continue
+       end
+       
     
+       % Calculate the Jacobian at each point
        [J3D] = jacobian3d(xyz_idx(tt).xyz_idx, mfile_vel_obj.ux(:, :, :, tt), mfile_vel_obj.uy(:, :, :, tt), mfile_vel_obj.uz(:, :, :, tt), hx, hy, hz);
        
        singularity_labels = cell(size(J3D, 3), 1);
        for ss = 1:size(J3D, 3)
-    
            singularity_labels{ss} = classify_critical_points_3d(J3D(:, :, ss));
-    
        end
 
        singularity_classification{tt} = singularity_labels;
