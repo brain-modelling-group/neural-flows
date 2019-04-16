@@ -9,7 +9,7 @@ function  [singularity_classification] =   classify_singularities(xyz_idx, mfile
 
 singularity_classification = cell(size(xyz_idx));
 
-if size(xyz_idx(tt).xyz_idx, 2) < 3
+if size(xyz_idx(1).xyz_idx, 2) < 3
     error(['neuralflows:' mfilename ':BadInput'], ...
            'The input xyz_idx must be a N x 3 array');
 end
