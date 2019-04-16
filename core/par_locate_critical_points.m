@@ -110,7 +110,7 @@ Y = mfile_vel_obj.Y;
 Z = mfile_vel_obj.Z;
 xyz_idx = struct([]); 
 
-    for tt=42:42;%tpts
+    for tt=1:tpts
         xyz_idx(tt).xyz_idx = locate_null_surf_coordinates(mfile_surf_obj.isosurfs(1, tt), X, Y, Z, index_mode);        
     end 
 
