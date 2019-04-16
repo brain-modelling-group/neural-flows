@@ -18,4 +18,4 @@ tic;
 [xyz_idx] = par_locate_critical_points(decimated_surf_obj, mfile_vel, data_mode);
 toc;
 
-[singularity_classification] =   classify_singularities(xyz_idx, mfile_vel_obj)
+[singularity_classification] =   classify_singularities(xyz_idx, mfile_vel);
