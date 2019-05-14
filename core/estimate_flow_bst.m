@@ -23,9 +23,9 @@ function [flowField, int_dF, errorData, errorReg, poincare_idx, time_flow] = est
 %   time_flow         - time vector for flow
 
 
-if nargin < 
-    
-embedding_dimension = 3; % 2 for projected maps
+if nargin < 7
+    embedding_dimension = 3; % 2 for projected maps
+end
 Faces    = FV.faces; 
 Vertices = FV.vertices; 
 VertexNormals = FV.VertexNormals;
