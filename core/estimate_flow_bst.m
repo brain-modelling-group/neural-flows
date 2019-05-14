@@ -19,7 +19,7 @@ function [flowField, int_dF, errorData, errorReg, poincare_idx, time_flow] = est
 %   int_dF            - Constant term in variational formulation
 %   errorData         - Error in fit to data
 %   errorReg          - Energy in regularization
-%   poincare_idx          - Poincar� index
+%   poincare_idx      - Poincare index
 %   time_flow         - time vector for flow
 
 
@@ -82,11 +82,6 @@ for facesIdx = 1:nFaces
     Pn(:,:,facesIdx) = eye(3) - (FaceNormals(facesIdx,:)'*FaceNormals(facesIdx,:));
 end
 poincare_idx = zeros(nFaces, intervalLength);
-
-% Optical flow calculations
-% bst_progress('start', 'Optical Flow', 'Computing optical flow ...', tStartIndex-1, tEndIndex);
-% TODO: add progress functionality
-
 
 for timePoint = tStartIndex:tEndIndex
     timeIdx = timePoint-tStartIndex+1;
@@ -223,38 +218,42 @@ end
 
 end
 
-%% ===== TESSELATION TANGENT BUNDLE =====
-function tangentPlaneBasis = basis_vertices(VertNormals)
+%% ===================== TESSELATION TANGENT BUNDLE =======================
+function tangent_plane_basis = basis_vertices(vertex_normals)
 % BASIS_VERTICES  Gives an orthonormal basis orthogonal to several vectors
 %
 % INPUTS:
-%   VertNormals       - list of 3D vectors
-%   type              - 'uniform' for normal structure of orthonormal
-%                       'polar' for R/theta structure of the orthonormal
-% OUTPUTS:
-%   tangentPlaneBasis - for each vertex, a pair of vectors defining
-%                       the orthonormal basis to that vertex using
-%                       the normal to the surface at that vertex
-% The cheat: if [x y z] is the normal-to-surface, then the tangent plane
-% includes the vector [z-y x-z y-x]
+%   vertex_normals    - array of size [number_of_vertices x 3] 
 
-nVertices = size(VertNormals,1); VertNormals = -VertNormals;
-tangentPlaneBasis = zeros(nVertices, 3, 2); % Initialize
+% OUTPUTS:
+%   tangent_plane_basis - for each vertex, a pair of vectors defining
+%                         the orthonormal basis of a tangent plane to that vertex using
+%                         the (vertex) normal to the surface at that vertex
+% The cheat: if [x y z] is the normal-to-surface, then the tangent plane
+% includes the vector defined by [z-y, x-z, y-x]
+
+number_of_vertices  = size(vertex_normals,1); 
+vertex_normals      = -vertex_normals;
+tangent_plane_basis = zeros(number_of_vertices, 3, 2);
 
 % First vector in basis: [3-2 1-3 2-1]
-tangentPlaneBasis(:,:,1) = diff(VertNormals(:, [2 3 1 2]).').';
+zdim = 3;
+ydim = 2;
+xdim = 1;
+tangent_plane_basis(:,:,1) = diff(vertex_normals(:, [ydim zdim xdim ydim]).').';
 
 % Correct for [1 1 1]-ish vertices: use [y -x 0]
-bad = abs(dot(VertNormals, ones(nVertices,3)/sqrt(3), 2)) > 0.97;
-tangentPlaneBasis(bad,:,1) = ...
-    [VertNormals(bad,2) -VertNormals(bad,1) zeros(sum(bad),1)];
+bad = abs(dot(vertex_normals, ones(number_of_vertices,3)/sqrt(3), 2)) > 0.97;
+tangent_plane_basis(bad,:,1) = [vertex_normals(bad, ydim), ...
+                               -vertex_normals(bad,1), ...
+                                zeros(sum(bad),xdim)];
 
 % Second vector in basis by cross product
-tangentPlaneBasis(:,:,2) = cross(VertNormals, tangentPlaneBasis(:,:,1));
+tangent_plane_basis(:,:,2) = cross(vertex_normals, tangent_plane_basis(:,:,1));
 
 % Normalize to get orthonormal basis
-tangentPlaneBasisNorm = sqrt(sum(tangentPlaneBasis.^2,2));
-tangentPlaneBasis = tangentPlaneBasis ./ tangentPlaneBasisNorm(:,[1 1 1],:);
+tangent_planes_basis_norm = sqrt(sum(tangent_plane_basis.^2,2));
+tangent_plane_basis = tangent_plane_basis ./ tangent_planes_basis_norm(:,[1 1 1],:);
 
 end
 
