@@ -66,13 +66,13 @@ function [mfile_surf_obj,  mfile_surf_sentinel] = par_get_critical_isosurfaces(m
         temp_data.faces_x = Fx;
         % Uy surface
         [Fy, Vy] = reducepatch(faces_y, vertices_y, fraction_to_keep);    
-        temp_data.vertices_x = Vy;
-        temp_data.faces_x = Fy;
+        temp_data.vertices_y = Vy;
+        temp_data.faces_y = Fy;
 
         % Uz surface
         [Fz, Vz] = reducepatch(faces_z, vertices_z, fraction_to_keep);    
-        temp_data.vertices_x = Vz;
-        temp_data.faces_x = Fz;
+        temp_data.vertices_z = Vz;
+        temp_data.faces_z = Fz;
 
     end
 
