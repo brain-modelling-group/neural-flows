@@ -59,7 +59,7 @@ function xyz_lidx = vertex_coordinate_to_linear_index(points, X, Y, Z)
     parfor idx=1:size(points, 1)
         [~, temp_dist(idx)] = min(abs( (X-points(idx, 1)).^2 + ...
                                        (Y-points(idx, 2)).^2 + ...
-                                       (Z-points(idx, 3)).^2 )); %#ok<PFOUS>
+                                       (Z-points(idx, 3)).^2 )); %#ok<PFBNS,PFOUS>
         xyz_lidx(idx) = temp_dist(idx);
     end
     
@@ -101,7 +101,7 @@ xyz_idx = struct([]);
     parfor tt=1:tpts
          xyz_idx(tt).xyz_idx = locate_null_velocity_coordinates(mfile_vel_obj.ux(:, :, :, tt), ...
                                                                 mfile_vel_obj.uy(:, :, :, tt), ...
-                                                                mfile_vel_obj.uz(:, :, :, tt), X, index_mode);       
+                                                                mfile_vel_obj.uz(:, :, :, tt), X, index_mode);        %#ok<PFBNS>
     end 
 
 end
@@ -111,8 +111,7 @@ function xyz_idx = use_isosurfaces(mfile_surf_obj, mfile_vel_obj, index_mode)
 % mfile_surf_obj can be a matfile or a struct -- with the same internal 'structure'
 % 
 try
-    tpts = size(mfile_surf_obj, 'isosurfs', 2); %#ok<GTAR        % HACK to speed up things: should be removed from here -->        
-G>
+    tpts = size(mfile_surf_obj, 'isosurfs', 2); %#ok<GTARG>
 catch
     disp('This is a struct not a matfile.')
     tpts = length(mfile_surf_obj.isosurfs);
