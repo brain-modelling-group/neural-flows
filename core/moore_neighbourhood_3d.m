@@ -4,9 +4,9 @@ function [Mx, My, Mz] = moore_neighbourhood_3d(ii, jj, kk)
 %
 %
 % ARGUMENTS:
-%        ii -- subscript of the centre point along the +first+ dimension
-%        jj -- subscript of the centre point along the +second+ dimension
-%        kk -- subscript of the centre point along the +third+ dimension
+%        ii -- subscript of the centre point along the +1st+ spatial dimension
+%        jj -- subscript of the centre point along the +2nd+ spatial dimension
+%        kk -- subscript of the centre point along the +3rd+ spatial dimension
 %
 % OUTPUT: 
 %        Mx -- 3 x 3 x 3 array with the subscripts along the +first+ dimension 

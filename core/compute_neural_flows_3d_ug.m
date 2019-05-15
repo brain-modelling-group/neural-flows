@@ -185,7 +185,6 @@ function [singularity_classification] = compute_neural_flows_3d_ug(data, locs, i
    % Delete isosurface sentinel, if it's oncleanup ibject, the file will be
    % deleted
    delete(mfile_surf_sentinel)
-      tic;[xyz_idx] = par_locate_critical_points(mfile_surf, mfile_vel);toc
    % Calculate jacobian and classify singularities
    tic;singularity_classification = classify_singularities(xyz_idx, mfile_vel);toc;
 

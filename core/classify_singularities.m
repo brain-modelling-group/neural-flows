@@ -9,10 +9,10 @@ function  [singularity_classification] =   classify_singularities(xyz_idx, mfile
 
 singularity_classification = cell(size(xyz_idx));
 
-if size(xyz_idx(1).xyz_idx, 2) < 3
-    error(['neuralflows:' mfilename ':BadInput'], ...
-           'The input xyz_idx must be a N x 3 array');
-end
+%if size(xyz_idx(1).xyz_idx, 2) < 3
+%    error(['neuralflows:' mfilename ':BadInput'], ...
+%           'The input xyz_idx must be a N x 3 array');
+%end
 
    tpts = size(xyz_idx, 2);
    for tt=1:tpts % parallizable stuff but the classification runs very fast

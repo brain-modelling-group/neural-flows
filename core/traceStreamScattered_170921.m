@@ -11,16 +11,18 @@ function streams=traceStreamScattered(XYZ,IN_Tri_Ini,UVW,SXYZ,step,maxVert)
 numVerts = 0;
 
 if nargin<6
-    maxVert=200;
+    maxVert=200; % What's max vert? Maximum vertices/length of streamlines
 end
 
 Type_FF=0;
 
+% Number of streamlines
 ns=size(SXYZ,1);
+% 
 live=true(ns,1); % streamlines that are still going
 
 %streams=cell(1,ns);
-streams=zeros(ns,3,maxVert); % preallocate, will prune later
+streams=zeros(ns, 3, maxVert); % preallocate, will prune later
 
 
 for j=1:maxVert
