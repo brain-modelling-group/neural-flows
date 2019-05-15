@@ -1,6 +1,7 @@
 function [singularity_classification] = compute_neural_flows_3d_ug(data, locs, interpolated_data_options) 
-    % data: a 2D array of size T x Nodes or 4D array
-    % compute neural flows from (u)nstructured (g)rids/scattered datapoints
+    % Compute neural flows from (u)nstructured (g)rids/scattered datapoints
+    % data: a 2D array of size [timepoints x nodes/points] or 
+    %         4D array of size [timepoints x xcoord x ycoord x zcoord]
     % locs: coordinates points in 3D Euclidean space for which data values are known. 
     %       these corresponds to the centres of gravity: ie, node locations 
     %       of brain network embedded in 3D dimensional space
@@ -8,8 +9,8 @@ function [singularity_classification] = compute_neural_flows_3d_ug(data, locs, i
     %                    --  .exists  a boolean flag to determine if the 
     %                               interpolated data had been precalculated or not
     %                               and skip that step. 
-    % interpolated_data: -- .interp_fname a string with the name of the
-    %                        matfile where the interpolated data is stored
+    % interpolated_data: -- .interp_filename a string with the name of the
+    %                        matfile where the interpolated data are stored
     % we need: dt
     % limits of XYZ space, presumably coming from fmri data
     % TODO: estimate timepoints of interest using the second order temporal
@@ -57,7 +58,7 @@ function [singularity_classification] = compute_neural_flows_3d_ug(data, locs, i
     
     int_locs = floor(locs);
     
-    % Labels for dimensions of 4D arrays arrays
+    % Human-readable labels for indexing dimensions of 4D arrays
     x_dim = 1;
     y_dim = 2;
     z_dim = 3;
@@ -99,10 +100,10 @@ function [singularity_classification] = compute_neural_flows_3d_ug(data, locs, i
          interpolated_data_options.exists = true;
         
          % Saves full path to file
-         interpolated_data_options.interp_fname = mfile_interp.Properties.Source;
+         interpolated_data_options.interp_filename = mfile_interp.Properties.Source;
     else
         % Load the data if file already exists
-        mfile_interp = matfile(interpolated_data_options.interp_fname);
+        mfile_interp = matfile(interpolated_data_options.interp_filename);
         mfile_interp_sentinel = [];
     end
 
