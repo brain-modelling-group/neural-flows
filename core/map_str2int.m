@@ -1,6 +1,6 @@
 function [label, color] = map_str2int(str_label)
-% This funciton maps singularity human readbale labels into integer numbers
-% for quantitative purposed better classification.
+% This function maps singularity human-readable labels into integer numbers
+% for quantitative classification.
 
 % Classification of stationary points in 3D
 % l1, l2, l3 are eigenvalues of the jacbian

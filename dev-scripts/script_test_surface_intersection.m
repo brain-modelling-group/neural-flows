@@ -4,15 +4,15 @@ mfile_surf = matfile('temp_isosurf_2019-03-21_16-45-07_qvGv');
 surf_data = mfile_surf.isosurfs(1, 42);
 
 % First isosurface
-surfx.vertices = surf_data.vertices_x;
+surfx.vertices = surf_data.vertices_ux;
 surfx.faces    = surf_data.faces_x;
 
 % Second isosurface
-surfy.vertices = surf_data.vertices_y;
+surfy.vertices = surf_data.vertices_uy;
 surfy.faces    = surf_data.faces_y;
 
 % Thirs isosurface
-surfz.vertices = surf_data.vertices_z;
+surfz.vertices = surf_data.vertices_uz;
 surfz.faces    = surf_data.faces_z;
 
 %% Plot surfaces

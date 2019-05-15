@@ -24,17 +24,17 @@ end
 
 
 
-[~, vertices_x] = isosurface(X, Y, Z, vx, critical_isovalue);
-[~, vertices_y] = isosurface(X, Y, Z, vy, critical_isovalue);
-[~, vertices_z] = isosurface(X, Y, Z, vz, critical_isovalue);
+[~, vertices_ux] = isosurface(X, Y, Z, vx, critical_isovalue);
+[~, vertices_uy] = isosurface(X, Y, Z, vy, critical_isovalue);
+[~, vertices_uz] = isosurface(X, Y, Z, vz, critical_isovalue);
 
 
 % Get linear indices of each vertex (approximate location of critical points)
 % TODO: this function returns a very rough approximation
 % The location may not be exact and we may need to interpolate
-xyz_lidx_x = coordinate_to_linear_index(vertices_x, X, Y, Z);
-xyz_lidx_y = coordinate_to_linear_index(vertices_y, X, Y, Z);
-xyz_lidx_z = coordinate_to_linear_index(vertices_z, X, Y, Z);
+xyz_lidx_x = coordinate_to_linear_index(vertices_ux, X, Y, Z);
+xyz_lidx_y = coordinate_to_linear_index(vertices_uy, X, Y, Z);
+xyz_lidx_z = coordinate_to_linear_index(vertices_uz, X, Y, Z);
 
 % Do the same for the different isosurfaces. Works better than using the
 % magnitud. 

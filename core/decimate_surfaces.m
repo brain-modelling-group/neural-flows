@@ -22,16 +22,16 @@ for tt=1:tpts
    
    isosurfs =  mfile_surf.isosurfs(1, tt);
    
-   [F, V] = reducepatch(isosurfs.faces_x, isosurfs.vertices_x, fraction_to_keep);
-   decimated_surf_obj.isosurfs(1, tt).vertices_x = V;
+   [F, V] = reducepatch(isosurfs.faces_x, isosurfs.vertices_ux, fraction_to_keep);
+   decimated_surf_obj.isosurfs(1, tt).vertices_ux = V;
    decimated_surf_obj.isosurfs(1, tt).faces_x = F;
    
-   [F, V] = reducepatch(isosurfs.faces_y, isosurfs.vertices_y, fraction_to_keep);
-   decimated_surf_obj.isosurfs(1, tt).vertices_y = V;
+   [F, V] = reducepatch(isosurfs.faces_y, isosurfs.vertices_uy, fraction_to_keep);
+   decimated_surf_obj.isosurfs(1, tt).vertices_uy = V;
    decimated_surf_obj.isosurfs(1, tt).faces_y = F;
    
-   [F, V] = reducepatch(isosurfs.faces_z, isosurfs.vertices_z, fraction_to_keep);
-   decimated_surf_obj.isosurfs(1, tt).vertices_z = V;
+   [F, V] = reducepatch(isosurfs.faces_z, isosurfs.vertices_uz, fraction_to_keep);
+   decimated_surf_obj.isosurfs(1, tt).vertices_uz = V;
    decimated_surf_obj.isosurfs(1, tt).faces_x = F;
    
 end

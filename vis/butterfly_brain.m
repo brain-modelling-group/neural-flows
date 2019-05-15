@@ -35,24 +35,24 @@ EdgeAlphaValue = 0.05;
 FaceAlphaValue = 0.1;
 
 
-patch_handle_x = patch(ax, 'Faces', temp_struct.faces_x, 'Vertices', temp_struct.vertices_x/factor, ....
+patch_handle_x = patch(ax, 'Faces', temp_struct.faces_x, 'Vertices', temp_struct.vertices_ux/factor, ....
                            'FaceAlpha', FaceAlphaValue,'FaceColor', color_x,  ...
                            'EdgeAlpha', EdgeAlphaValue, 'EdgeColor', color_x);
 
-patch_handle_y = patch(ax, 'Faces', temp_struct.faces_y, 'Vertices', temp_struct.vertices_y/factor, ....
+patch_handle_y = patch(ax, 'Faces', temp_struct.faces_y, 'Vertices', temp_struct.vertices_uy/factor, ....
                            'FaceAlpha', FaceAlphaValue,'FaceColor', color_y,  ...
                            'EdgeAlpha', EdgeAlphaValue, 'EdgeColor', color_y);
     
-patch_handle_z = patch(ax, 'Faces', temp_struct.faces_z, 'Vertices', temp_struct.vertices_z/factor, ....
+patch_handle_z = patch(ax, 'Faces', temp_struct.faces_z, 'Vertices', temp_struct.vertices_uz/factor, ....
                            'FaceAlpha', FaceAlphaValue, 'FaceColor', color_z,  ...
                            'EdgeAlpha', EdgeAlphaValue, 'EdgeColor', color_z);
                        
 
 for this_tpt = 1:tpts
     temp_struct = mfile_surf.result(1, this_tpt);
-    set(patch_handle_x, 'Faces', temp_struct.faces_x, 'Vertices', temp_struct.vertices_x)
-    set(patch_handle_y, 'Faces', temp_struct.faces_y, 'Vertices', temp_struct.vertices_y)
-    set(patch_handle_z, 'Faces', temp_struct.faces_z, 'Vertices', temp_struct.vertices_z)
+    set(patch_handle_x, 'Faces', temp_struct.faces_x, 'Vertices', temp_struct.vertices_ux)
+    set(patch_handle_y, 'Faces', temp_struct.faces_y, 'Vertices', temp_struct.vertices_uy)
+    set(patch_handle_z, 'Faces', temp_struct.faces_z, 'Vertices', temp_struct.vertices_uz)
     export_fig(sprintf( './frame_%03d.png', this_tpt ), '-r150', '-nocrop', figure_butterfly)
 end
 
@@ -65,20 +65,20 @@ factor = 100;
 spacing = 0.05;
 for this_tpt = 10:10:tpts
     temp_struct = mfile_surf.result(1, this_tpt);
-    vertices_x = temp_struct.vertices_x/factor;
-    vertices_x(:, 2) = vertices_x(:, 2) + spacing*this_tpt;
-    vertices_y = temp_struct.vertices_y/factor;
-    vertices_y(:, 2) = vertices_y(:, 2) + spacing*this_tpt;
-    vertices_z = temp_struct.vertices_z/factor;
-    vertices_z(:, 2) = vertices_z(:, 2) + spacing*this_tpt;
+    vertices_ux = temp_struct.vertices_ux/factor;
+    vertices_ux(:, 2) = vertices_ux(:, 2) + spacing*this_tpt;
+    vertices_uy = temp_struct.vertices_uy/factor;
+    vertices_uy(:, 2) = vertices_uy(:, 2) + spacing*this_tpt;
+    vertices_uz = temp_struct.vertices_uz/factor;
+    vertices_uz(:, 2) = vertices_uz(:, 2) + spacing*this_tpt;
     
-    patch(ax, 'Faces', temp_struct.faces_x, 'Vertices', vertices_x, ....
+    patch(ax, 'Faces', temp_struct.faces_x, 'Vertices', vertices_ux, ....
                            'FaceAlpha', alpha_value(this_tpt), 'FaceColor', color_x,  ...
                            'EdgeAlpha', alpha_value(this_tpt), 'EdgeColor', color_x);
-    patch(ax, 'Faces', temp_struct.faces_y, 'Vertices', vertices_y, ....
+    patch(ax, 'Faces', temp_struct.faces_y, 'Vertices', vertices_uy, ....
                            'FaceAlpha', alpha_value(this_tpt), 'FaceColor', color_y,  ...
                            'EdgeAlpha', alpha_value(this_tpt), 'EdgeColor', color_y);
-    patch(ax, 'Faces', temp_struct.faces_z, 'Vertices', vertices_z, ....
+    patch(ax, 'Faces', temp_struct.faces_z, 'Vertices', vertices_uz, ....
                            'FaceAlpha', alpha_value(this_tpt), 'FaceColor', color_z,  ...
                            'EdgeAlpha', alpha_value(this_tpt), 'EdgeColor', color_z);
     drawnow()
