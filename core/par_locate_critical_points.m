@@ -46,8 +46,8 @@ function xyz_lidx = vertex_coordinate_to_linear_index(points, X, Y, Z)
 
     parfor idx=1:size(points, 1)
         [~, temp_dist(idx)] = min(abs( (X-points(idx, 1)).^2 + ...
-                                  (Y-points(idx, 2)).^2 + ...
-                                  (Z-points(idx, 3)).^2 ));
+                                       (Y-points(idx, 2)).^2 + ...
+                                       (Z-points(idx, 3)).^2 ));
         xyz_lidx(idx) = temp_dist(idx);
     end
     
@@ -69,10 +69,11 @@ end
 
 % uses surfaces to locate singularities
 function xyz_idx = locate_null_surf_coordinates(temp_surf_struct, X, Y, Z, index_mode)
-
-        xyz_lidx_x = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_x, X, Y, Z);
-        xyz_lidx_y = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_y, X, Y, Z);
-        xyz_lidx_z = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_z, X, Y, Z);
+        % NOTE: vertices_ux is a bad name --> vertices_ux (vertices of the null surface of ux)
+        % HACK to speed up things: should be removed from here -->        
+        xyz_lidx_x = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_ux, X, Y, Z);
+        xyz_lidx_y = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_uy, X, Y, Z);
+        xyz_lidx_z = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_uz, X, Y, Z);
 
         xyz_lidx = intersect(intersect(xyz_lidx_x, xyz_lidx_y), xyz_lidx_z);
         xyz_idx  = switch_index_mode(xyz_lidx, index_mode, X);
@@ -122,7 +123,7 @@ function xyz_idx = switch_index_mode(xyz_lidx, index_mode, X)
         switch index_mode
             case 'linear'
                 xyz_idx = xyz_lidx;
-            case 'subscript' % NOTe: I vaguely remember this part not working properly.
+            case 'subscript' % NOTE: I vaguely remember this part not working properly.
                 [x_idx, y_idx, z_idx] = ind2sub(size(X),xyz_lidx); 
                 xyz_idx = [x_idx, y_idx, z_idx];
         end

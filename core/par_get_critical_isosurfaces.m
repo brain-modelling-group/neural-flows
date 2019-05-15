@@ -52,27 +52,27 @@ function [mfile_surf_obj,  mfile_surf_sentinel] = par_get_critical_isosurfaces(m
     function temp_data = isosurface_step(idx)
 
 
-        [faces_x, vertices_ux] = isosurface(X, Y, Z, mfile_vel.ux(:, :, :, idx), critical_isovalue);
-        [faces_y, vertices_uy] = isosurface(X, Y, Z, mfile_vel.uy(:, :, :, idx), critical_isovalue);
-        [faces_z, vertices_uz] = isosurface(X, Y, Z, mfile_vel.uz(:, :, :, idx), critical_isovalue);
+        [faces_ux, vertices_ux] = isosurface(X, Y, Z, mfile_vel.ux(:, :, :, idx), critical_isovalue);
+        [faces_uy, vertices_uy] = isosurface(X, Y, Z, mfile_vel.uy(:, :, :, idx), critical_isovalue);
+        [faces_uz, vertices_uz] = isosurface(X, Y, Z, mfile_vel.uz(:, :, :, idx), critical_isovalue);
 
         %HACK: should be removed from here or parameter 'fraction ot keep'
         %should  be available.
 
         fraction_to_keep = 0.1; 
         % Ux surface
-        [Fx, Vx] = reducepatch(faces_x, vertices_ux, fraction_to_keep);    
+        [Fx, Vx] = reducepatch(faces_ux, vertices_ux, fraction_to_keep);    
         temp_data.vertices_ux = Vx;
-        temp_data.faces_x = Fx;
+        temp_data.faces_ux = Fx;
         % Uy surface
-        [Fy, Vy] = reducepatch(faces_y, vertices_uy, fraction_to_keep);    
+        [Fy, Vy] = reducepatch(faces_uy, vertices_uy, fraction_to_keep);    
         temp_data.vertices_uy = Vy;
-        temp_data.faces_y = Fy;
+        temp_data.faces_uy = Fy;
 
         % Uz surface
-        [Fz, Vz] = reducepatch(faces_z, vertices_uz, fraction_to_keep);    
+        [Fz, Vz] = reducepatch(faces_uz, vertices_uz, fraction_to_keep);    
         temp_data.vertices_uz = Vz;
-        temp_data.faces_z = Fz;
+        temp_data.faces_uz = Fz;
 
     end
 

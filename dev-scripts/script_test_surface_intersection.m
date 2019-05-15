@@ -5,15 +5,15 @@ surf_data = mfile_surf.isosurfs(1, 42);
 
 % First isosurface
 surfx.vertices = surf_data.vertices_ux;
-surfx.faces    = surf_data.faces_x;
+surfx.faces    = surf_data.faces_ux;
 
 % Second isosurface
 surfy.vertices = surf_data.vertices_uy;
-surfy.faces    = surf_data.faces_y;
+surfy.faces    = surf_data.faces_uy;
 
 % Thirs isosurface
 surfz.vertices = surf_data.vertices_uz;
-surfz.faces    = surf_data.faces_z;
+surfz.faces    = surf_data.faces_uz;
 
 %% Plot surfaces
 figure_surf = figure; 
