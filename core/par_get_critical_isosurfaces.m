@@ -59,7 +59,7 @@ function [mfile_surf_obj,  mfile_surf_sentinel] = par_get_critical_isosurfaces(m
         %HACK: should be removed from here or parameter 'fraction ot keep'
         %should  be available.
 
-        fraction_to_keep = 0.15; 
+        fraction_to_keep = 0.1; 
         % Ux surface
         [Fx, Vx] = reducepatch(faces_x, vertices_x, fraction_to_keep);    
         temp_data.vertices_x = Vx;
