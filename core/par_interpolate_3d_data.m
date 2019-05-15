@@ -34,6 +34,10 @@ function [mfile_interp_obj, mfile_interp_sentinel] = par_interpolate_3d_data(dat
     y_dim = 2;
     z_dim = 3;
     tpts = size(data, 1);
+    
+    if tpts < 2
+        disp('NOTE to self: This will fail becaus there is only one data point')
+    end
 
     % Create file for the interpolated data
     root_fname = 'temp_interp';
