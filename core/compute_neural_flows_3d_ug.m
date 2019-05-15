@@ -112,7 +112,7 @@ function [singularity_classification] = compute_neural_flows_3d_ug(data, locs, i
     max_iterations = 16;
         
     
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Claculating velocity fields'))
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Calculating velocity fields'))
     % We open a matfile to store output and avoid huge memory usage 
     root_fname_vel = 'temp_velocity';
     
@@ -179,7 +179,7 @@ function [singularity_classification] = compute_neural_flows_3d_ug(data, locs, i
    % Calculate critical isosurfaces
    [mfile_surf, mfile_surf_sentinel] = par_get_critical_isosurfaces(mfile_vel);
    
-   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Locate critical points'))
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Locating critical points'))
    % Detect intersection of critical isosurfaces
    data_mode  = 'surf';
    index_mode = 'linear';
