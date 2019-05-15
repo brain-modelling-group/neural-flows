@@ -81,15 +81,14 @@ end
 
 % Uses surfaces to locate singularities
 function xyz_idx = locate_null_surf_coordinates(temp_surf_struct, X, Y, Z, index_mode)
-        xyz_lidx_x = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_ux, X, Y, Z);
-        xyz_lidx_y = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_uy, X, Y, Z);
-        xyz_lidx_z = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_uz, X, Y, Z);
+        xyz_lidx_ux = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_ux, X, Y, Z);
+        xyz_lidx_uy = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_uy, X, Y, Z);
+        xyz_lidx_uz = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_uz, X, Y, Z);
 
-        xyz_lidx = intersect(intersect(xyz_lidx_x, xyz_lidx_y), xyz_lidx_z);
+        xyz_lidx = intersect(intersect(xyz_lidx_ux, xyz_lidx_uy), xyz_lidx_uz);
         xyz_idx  = switch_index_mode(xyz_lidx, index_mode, X);
         
 end
-        % HACK to speed up things: should be removed from here -->        
 
 
 function xyz_idx = use_velocity_fields(mfile_vel_obj, index_mode)
