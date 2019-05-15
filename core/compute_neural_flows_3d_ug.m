@@ -1,4 +1,4 @@
-function [singularity_classification] = compute_neural_flows_3d_ug(data, locs, interpolated_data_options) 
+function compute_neural_flows_3d_ug(data, locs, interpolated_data_options) 
     % Compute neural flows from (u)nstructured (g)rids/scattered datapoints
     % data: a 2D array of size [timepoints x nodes/points] or 
     %         4D array of size [timepoints x xcoord x ycoord x zcoord]
