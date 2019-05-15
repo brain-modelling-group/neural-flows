@@ -45,7 +45,7 @@ function [singularity_classification] = compute_neural_flows_3d_ug(data, locs, i
     tpts      = size(data, t_dim);
     %num_nodes = size(data, n_dim);
     
-    down_factor_t = 100; % Downsampling factor for t-axis
+    down_factor_t = 1; % Downsampling factor for t-axis
     data = data(1:down_factor_t:tpts, :);
     
     % Recalculate timepoints
@@ -87,13 +87,13 @@ function [singularity_classification] = compute_neural_flows_3d_ug(data, locs, i
     % Perform interpolation on the data and save in temp file
     
     if ~interpolated_data_options.exists % Or not necesary because it is fmri data
-        fprintf('%s \n', strcat('patchflow: ', mfilename, ': Interpolating data'))
+        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Interpolating data'))
         
         % Sequential interpolation
         %[mfile_interp, mfile_interp_sentinel] = interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file); 
         
         % Parallel interpolation with the parallel toolbox
-        tic;[mfile_interp, mfile_interp_sentinel] = par_interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file); toc
+        [mfile_interp, mfile_interp_sentinel] = par_interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file);
          
         % Clean up parallel pool
          delete(gcp);
@@ -112,7 +112,7 @@ function [singularity_classification] = compute_neural_flows_3d_ug(data, locs, i
     max_iterations = 16;
         
     
-    
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Claculating velocity fields'))
     % We open a matfile to store output and avoid huge memory usage 
     root_fname_vel = 'temp_velocity';
     
@@ -175,18 +175,21 @@ function [singularity_classification] = compute_neural_flows_3d_ug(data, locs, i
     
     end
 
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Extracting isosurfaces'))
    % Calculate critical isosurfaces
    [mfile_surf, mfile_surf_sentinel] = par_get_critical_isosurfaces(mfile_vel);
    
-
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Locate critical points'))
    % Detect intersection of critical isosurfaces
-   tic;[xyz_idx] = par_locate_critical_points(mfile_surf, mfile_vel);toc
+   data_mode  = 'surf';
+   index_mode = 'linear';
+   [xyz_idx]  = par_locate_critical_points(mfile_surf, mfile_vel, data_mode, index_mode);
    
    % Delete isosurface sentinel, if it's oncleanup ibject, the file will be
    % deleted
    delete(mfile_surf_sentinel)
    % Calculate jacobian and classify singularities
-   tic;singularity_classification = classify_singularities(xyz_idx, mfile_vel);toc;
+   %tic;singularity_classification = classify_singularities(xyz_idx, mfile_vel);toc;
 
 
 end % function compute_neural_flows_3d_ug()
