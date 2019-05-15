@@ -1,14 +1,24 @@
 function [xyz_idx] = par_locate_critical_points(mfile_surf_obj, mfile_vel_obj, data_mode, index_mode)
-% Locates the critical points at the intersection of the three isosrufaces (one per velocity component) at v = critical_isovalue.
-% Returns the location of the singularities as linear indices xyz_lidx, or as 
-% subscripts x_idx, y_idx, z_idx 
-% data_mode: 'surf' or 'vel' -- data to use to detect the locations of
-% critical points
+% Locates the critical points of the velocity fields. 
+% Returns the location of the singularities either as: 
+% linear indices xyz_lidx, or as 
+% subscripts [x_idx, y_idx, z_idx]. 
 % 
 % ARGUMENTS:
-%      
+%          mfile_surf_obj -- a MatFile handle pointing to the isosurfaces
+%          mfiel_vel_ob   -- a MatFile handle pointing to the velocity
+%                            fields
+%          data_mode      -- a string to determine whther to use surfaces or
+%                            velocity fields to detect the critical points. 
+%                            Using velocity fields is fast but very innacurate.
+%                            Using surfaces is accurate but painfully slow.
+%                            Values: {'surf' | 'vel'}. Default: 'surf'.
+%         index_mode      -- a string to determine whther to retunr linear
+%                            indices or subscripts.
 %    
 % OUTPUT:
+%         xyz_idx  --  a struct of size [1 x no. timepoints]
+%                  -- .xyz_idx linear indices of subscripts of all critical points     
 %       
 % AUTHOR:
 %     Paula Sanz-Leon, QIMR Berghofer 2019
@@ -18,7 +28,6 @@ function [xyz_idx] = par_locate_critical_points(mfile_surf_obj, mfile_vel_obj, d
 %}
 
 if nargin < 4
-    % Magnitude of the velocity that is considered almost 0
     index_mode = 'linear';
 end
 
@@ -47,7 +56,7 @@ function xyz_lidx = vertex_coordinate_to_linear_index(points, X, Y, Z)
     parfor idx=1:size(points, 1)
         [~, temp_dist(idx)] = min(abs( (X-points(idx, 1)).^2 + ...
                                        (Y-points(idx, 2)).^2 + ...
-                                       (Z-points(idx, 3)).^2 ));
+                                       (Z-points(idx, 3)).^2 )); %#ok<PFOUS>
         xyz_lidx(idx) = temp_dist(idx);
     end
     
@@ -67,10 +76,8 @@ function xyz_idx = locate_null_velocity_coordinates(ux, uy, uz, X, index_mode)
         xyz_idx = switch_index_mode(xyz_lidx, index_mode, X);
 end
 
-% uses surfaces to locate singularities
+% Uses surfaces to locate singularities
 function xyz_idx = locate_null_surf_coordinates(temp_surf_struct, X, Y, Z, index_mode)
-        % NOTE: vertices_ux is a bad name --> vertices_ux (vertices of the null surface of ux)
-        % HACK to speed up things: should be removed from here -->        
         xyz_lidx_x = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_ux, X, Y, Z);
         xyz_lidx_y = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_uy, X, Y, Z);
         xyz_lidx_z = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_uz, X, Y, Z);
@@ -83,7 +90,7 @@ end
 
 function xyz_idx = use_velocity_fields(mfile_vel_obj, index_mode)
 
-tpts = size(mfile_vel_obj, 'isosurfs', 4);
+tpts = size(mfile_vel_obj, 'isosurfs', 4); %#ok<GTARG>
 X = mfile_vel_obj.X;
 xyz_idx = struct([]); 
 
@@ -97,10 +104,10 @@ end
 
 
 function xyz_idx = use_isosurfaces(mfile_surf_obj, mfile_vel_obj, index_mode)
-
-% mfile_surf_ob can be a matfile or a struct -- with the same 'structure'
+% mfile_surf_obj can be a matfile or a struct -- with the same internal 'structure'
+% 
 try
-    tpts = size(mfile_surf_obj, 'isosurfs', 2);
+    tpts = size(mfile_surf_obj, 'isosurfs', 2); %#ok<GTARG>
 catch
     disp('This is a struct not a matfile.')
     tpts = length(mfile_surf_obj.isosurfs);
