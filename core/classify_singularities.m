@@ -39,7 +39,7 @@ if size(xyz_idx(1).xyz_idx, 2) < 2
 
     for tt=1:tpts
         xyz_subs = switch_index_mode(xyz_idx(tt).xyz_idx, 'subscript', mfile_vel_obj.X);
-        
+        xyz_idx(tt).xyz_idx = xyz_subs;
         % Check if any subscript -- 1. This will cause a problem in the
         % jacobian calculation
     end    
