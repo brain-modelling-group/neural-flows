@@ -51,7 +51,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     data = data(time_vec, :);
     
     % Recalculate timepoints
-    tpts = size(data, 1);
+    dtpts = size(data, t_dim);
   
     
     % NOTE: full resolution (eg, approx dxyz=1mm^3), each interpolation
@@ -161,7 +161,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     % No way around a sequential for loop for optical flows
     function compute_flows_3d()
         
-        for this_tpt = 1:tpts-1
+        for this_tpt = 1:dtpts-1
 
                 % Read data
                 % Save grid - needed for singularity tracking
