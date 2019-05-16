@@ -197,6 +197,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
    % Delete isosurface sentinel, if it's oncleanup ibject, the file will be
    % deleted
    delete(mfile_surf_sentinel)
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Classifying singularities'))
    % Calculate jacobian and classify singularities
    singularity_classification = classify_singularities(xyz_idx, mfile_vel);
    mfile_sings.singularity_classification = singularity_classification;
