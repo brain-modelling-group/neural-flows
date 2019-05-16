@@ -65,7 +65,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     y_dim = 2;
     z_dim = 3;
     %t_dim = 4;
-    down_factor_xyz = 1; % Not allowed to get different downsampling for space
+    down_factor_xyz = 2; % Not allowed to get different downsampling for space
     
     % Get limits for the structured grid if people did not give those
     min_x = min(int_locs(:, x_dim));
@@ -149,6 +149,12 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     mfile_vel.Y = Y;
     mfile_vel.Z = Z;
     
+    % Save time and space step sizes
+    mfile_vel.hx = hx; % mm
+    mfile_vel.hy = hy; % mm
+    mfile_vel.hz = hz; % mm
+    mfile_vel.ht = ht; % ms
+    
    % Close the file to avoid corruption
     mfile_vel.Properties.Writable = false;
 
@@ -185,11 +191,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     
     end
 
-   % Save time and space step sizes
-   mfile_vel.hx = hx; % mm
-   mfile_vel.hy = hy; % mm
-   mfile_vel.hz = hz; % mm
-   mfile_vel.ht = ht; % ms
+
 
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Extracting isosurfaces'))
    % Calculate critical isosurfaces
