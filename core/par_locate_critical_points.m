@@ -47,7 +47,10 @@ end
 end % function par_locate_critical_points()
 
 
-function [xyz_lidx_ux, xyz_lidx_uy, xyz_lidx_uz] = vertex_to_linear_index(vertices_ux, ...                                                                vertices_uy, ...                                                                      vertices_uz, .                                                                          X, Y, Z, in_bdy_mask)
+function [xyz_lidx_ux, xyz_lidx_uy, xyz_lidx_uz] = vertex_to_linear_index(vertices_ux, ...
+                                                                          vertices_uy, ...
+                                                                          vertices_uz, ...
+                                                                          X, Y, Z, in_bdy_mask)
  % Quick and dirty solution to find indices in the 3d grid, take 2
  % points is N x Dimension 
     X = X(in_bdy_mask);
