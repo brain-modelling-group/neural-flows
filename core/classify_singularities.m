@@ -6,19 +6,9 @@ function  [singularity_classification] =   classify_singularities(xyz_idx, mfile
 %          xyz_idx        -- a struct of size [1 x no. timepoints]
 %                         -- .xyz_idx [no. of singularities x 1] -- linear indices 
 %                                     [no. of singularities x 3] -- subscripts
-%          mfiel_vel_obj  -- a MatFile handle pointing to the flows/velocity
+%          mfile_vel_obj  -- a MatFile handle pointing to the flows/velocity
 %                            fields. Needed for the calculation of the
 %                            jacobian matrix. 
-%          data_mode      -- a string to determine whther to use surfaces or
-%                            velocity fields to detect the critical points. 
-%                            Using velocity fields is fast but very innacurate.
-%                            Using surfaces is accurate but painfully slow.
-%                            Values: {'surf' | 'vel'}. Default: 'surf'.
-%          index_mode      -- a string to determine whther to retunr linear
-%                            indices or subscripts.
-%                            Values: {'linear' | 'subscript'}. 
-%                            Default:'linear'.
-%    
 % OUTPUT:
 %         singularity_classification  --  a cell array of size [1 x no. timepoints]
 %                                         where each element is a cell of size
