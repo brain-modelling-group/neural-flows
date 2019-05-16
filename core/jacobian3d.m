@@ -45,8 +45,6 @@ for this_point = 1:num_critical_points
         vz_cube(this_elem) = vz(Mx(this_elem), My(this_elem), Mz(this_elem));
     end
 
-
-    
     [dvxdx, dvxdy, dvxdz] = gradient(vx_cube, hx, hy, hz);
     [dvydx, dvydy, dvydz] = gradient(vy_cube, hx, hy, hz);
     [dvzdx, dvzdy, dvzdz] = gradient(vz_cube, hx, hy, hz);
