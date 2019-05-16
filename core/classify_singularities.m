@@ -36,11 +36,13 @@ if size(xyz_idx(1).xyz_idx, 2) < 2
     
 end
 
+hx = mfile_vel_obj.hx; % NOTE: to updated once I figure out the dimensionality of stuff
+hy = mfile_vel_obj.hy; % NOTE: to updated once I figure out the dimensionality of stuff
+hz = mfile_vel_obj.hz; % NOTE: to updated once I figure out the dimensionality of stuff
+
 for tt=1:tpts % parallizable stuff but the classification runs very fast
 
-       hx = 1; % NOTE: to updated once I figure out the dimensionality of stuff
-       hy = 1; % NOTE: to updated once I figure out the dimensionality of stuff
-       hz = 1; % NOTE: to updated once I figure out the dimensionality of stuff
+      
        
        % Check if we have critical points. There are 'frames' for which
        % nothing was detected, we should not attempt to calculate jacobian.
