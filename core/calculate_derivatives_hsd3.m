@@ -1,4 +1,4 @@
-function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, operator_3d, hx, hy, hz, ht)
+function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht, operator_3d)
 %%This fuction computes 3D+t partial derivatives between two 3D image frames. 
 % This function basically does the same as imgradientxyz, but it also
 % calculates the temporal derivative and returns correctly normalised
@@ -22,7 +22,7 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, operator_3d, hx, 
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%             
     
-    if nargin < 3 
+    if nargin < 6 
         operator_3d = @get_sobel_3d_operator;
     end
 

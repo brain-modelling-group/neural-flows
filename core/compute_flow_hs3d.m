@@ -1,4 +1,4 @@
-function [ux, uy, uz] = compute_flow_hs3d(F1, F2, alpha_smooth, max_iterations, uxo, uyo, uzo)
+function [ux, uy, uz] = compute_flow_hs3d(F1, F2, alpha_smooth, max_iterations, uxo, uyo, uzo, hx, hy, hz, ht)
 % This function estimates the velocity components between two subsequent 3D 
 % images using the Horn-Schunck optical flow method. 
 %
@@ -35,7 +35,7 @@ uz = uzo;
 
 
 % Calculate derivatives
-[Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2);
+[Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht);
 
 avg_filter = vonneumann_neighbourhood_3d();
 
