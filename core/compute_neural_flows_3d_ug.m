@@ -185,6 +185,12 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     
     end
 
+   % Save time and space step sizes
+   mfile_vel.hx = hx; % mm
+   mfile_vel.hy = hy; % mm
+   mfile_vel.hz = hz; % mm
+   mfile_vel.ht = ht; % ms
+
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Extracting isosurfaces'))
    % Calculate critical isosurfaces
    [mfile_surf, mfile_surf_sentinel] = par_get_critical_isosurfaces(mfile_vel);
