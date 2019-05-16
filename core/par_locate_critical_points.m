@@ -46,30 +46,6 @@ end
         
 end % function par_locate_critical_points()
 
-function xyz_lidx = vertex_coordinate_to_linear_index(points, X, Y, Z)
- % Quick and dirty solution to find indices in the 3d grid
- % points is N x Dimension 
-    X = X(:);
-    Y = Y(:);
-    Z = Z(:);
-    xdim = 1;
-    ydim = 2;
-    zdim = 3;
-    
-    % Allocate memory
-    xyz_lidx(size(points, 1), 1) = 0;
-
-    parfor idx=1:size(points, 1)
-        [~, temp_dist(idx)] = min(abs( (X-points(idx, xdim)).^2 + ...
-                                       (Y-points(idx, ydim)).^2 + ...
-                                       (Z-points(idx, zdim)).^2 )); %#ok<PFBNS,PFOUS>
-        xyz_lidx(idx) = temp_dist(idx);
-    end
-    
-    xyz_lidx = unique(xyz_lidx);
-
-end % vertex_function coordinate_to_linear_index()
-
 
 function [xyz_lidx_ux, xyz_lidx_uy, xyz_lidx_uz] = vertex_to_linear_index(vertices_ux, ...
                                                                           vertices_uy, ...
@@ -94,15 +70,15 @@ function [xyz_lidx_ux, xyz_lidx_uy, xyz_lidx_uz] = vertex_to_linear_index(vertic
     parfor idx=1:length(X) % 500,000 points
         min_temp_ux(idx) =   min( ((X(idx)-vertices_ux(:, xdim)).^2 + ...
                                    (Y(idx)-vertices_ux(:, ydim)).^2 + ...
-                                   (Z(idx)-vertices_ux(:, zdim)).^2 ));
+                                   (Z(idx)-vertices_ux(:, zdim)).^2 )); %#ok<PFBNS>
        
         min_temp_uy(idx) =   min( ((X(idx)-vertices_uy(:, xdim)).^2 + ...
                                    (Y(idx)-vertices_uy(:, ydim)).^2 + ...
-                                   (Z(idx)-vertices_uy(:, zdim)).^2 ));
+                                   (Z(idx)-vertices_uy(:, zdim)).^2 )); %#ok<PFBNS>
                                     
         min_temp_uz(idx) =   min( ((X(idx)-vertices_uz(:, xdim)).^2 + ...
                                    (Y(idx)-vertices_uz(:, ydim)).^2 + ...
-                                   (Z(idx)-vertices_uz(:, zdim)).^2 ));                            
+                                   (Z(idx)-vertices_uz(:, zdim)).^2 ));                             %#ok<PFBNS>
         
         % Asssing 1 means the surface goes through that point                        
         xyz_lidx_ux(idx)    = min_temp_ux(idx) < distance_threshold;                                                
@@ -191,3 +167,27 @@ function xyz_idx = switch_index_mode(xyz_lidx, index_mode, X)
                 xyz_idx = [x_idx, y_idx, z_idx];
         end
 end
+
+% function xyz_lidx = vertex_coordinate_to_linear_index(points, X, Y, Z)
+%  % Quick and dirty solution to find indices in the 3d grid
+%  % points is N x Dimension 
+%     X = X(:);
+%     Y = Y(:);
+%     Z = Z(:);
+%     xdim = 1;
+%     ydim = 2;
+%     zdim = 3;
+%     
+%     % Allocate memory
+%     xyz_lidx(size(points, 1), 1) = 0;
+% 
+%     parfor idx=1:size(points, 1)
+%         [~, temp_dist(idx)] = min(abs( (X-points(idx, xdim)).^2 + ...
+%                                        (Y-points(idx, ydim)).^2 + ...
+%                                        (Z-points(idx, zdim)).^2 )); %#ok<PFBNS,PFOUS>
+%         xyz_lidx(idx) = temp_dist(idx);
+%     end
+%     
+%     xyz_lidx = unique(xyz_lidx);
+% 
+% end % vertex_function coordinate_to_linear_index()
