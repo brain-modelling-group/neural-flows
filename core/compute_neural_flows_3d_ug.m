@@ -115,7 +115,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Calculating velocity fields'))
     % We open a matfile to store output and avoid huge memory usage 
-    root_fname_vel = 'temp_velocity';
+    root_fname_vel = 'temp_flows';
     
     [mfile_vel, mfile_vel_sentinel] = create_temp_file(root_fname_vel, keep_vel_file); 
     % Save mask with points inside the convex hull of the brain
@@ -188,7 +188,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
    index_mode = 'linear';
    [xyz_idx]  = par_locate_critical_points(mfile_surf, mfile_vel, data_mode, index_mode);
    
-   root_fname_sings = 'temp_sings';
+   root_fname_sings = 'temp_snglrty';
    keep_sings_file = true; 
    [mfile_sings, mfile_sings_sentinel] = create_temp_file(root_fname_sings, keep_sings_file);
    mfile_sings.xyz_idx = xyz_idx;
@@ -198,7 +198,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
    % deleted
    delete(mfile_surf_sentinel)
    % Calculate jacobian and classify singularities
-   tic;singularity_classification = classify_singularities(xyz_idx, mfile_vel);toc;
+   %tic;singularity_classification = classify_singularities(xyz_idx, mfile_vel);toc;
 
 
 end % function compute_neural_flows_3d_ug()
