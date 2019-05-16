@@ -1,5 +1,5 @@
 function [Mx, My, Mz] = moore_neighbourhood_3d(ii, jj, kk)
-%% Returns 3 matrices of size 3x3x3 matrices with the subscripts 
+% Returns 3 matrices of size 3x3x3 with the subscripts 
 % of the neighbours of point located at ii, jj, kk in a 3D Moore neighbourhood. 
 %
 %
