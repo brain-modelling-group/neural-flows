@@ -188,11 +188,17 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
    index_mode = 'linear';
    [xyz_idx]  = par_locate_critical_points(mfile_surf, mfile_vel, data_mode, index_mode);
    
+   root_fname_sings = 'temp_sings';
+   keep_sings_file = true; 
+   [mfile_sings, mfile_sings_sentinel] = create_temp_file(root_fname_sings, keep_sings_file);
+   mfile_sings.xyz_idx = xyz_idx;
+   delete(mfile_sings_sentinel)
+   
    % Delete isosurface sentinel, if it's oncleanup ibject, the file will be
    % deleted
    delete(mfile_surf_sentinel)
    % Calculate jacobian and classify singularities
-   %tic;singularity_classification = classify_singularities(xyz_idx, mfile_vel);toc;
+   tic;singularity_classification = classify_singularities(xyz_idx, mfile_vel);toc;
 
 
 end % function compute_neural_flows_3d_ug()
