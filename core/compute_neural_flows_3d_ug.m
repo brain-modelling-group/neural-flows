@@ -39,14 +39,16 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     keep_vel_file    = true;
 
     % Labels for 2D input arrays
-    n_dim = 2; % time
+    %n_dim = 2; % time
     t_dim = 1; % time
     
     tpts      = size(data, t_dim);
     %num_nodes = size(data, n_dim);
     
     down_factor_t = 1; % Downsampling factor for t-axis
-    data = data(1:down_factor_t:tpts, :);
+    time_vec = 1:down_factor_t:tpts; % in milliseconds
+    ht = time_vec(2) - time_vec(1);
+    data = data(time_vec, :);
     
     % Recalculate timepoints
     tpts = size(data, 1);
@@ -64,7 +66,6 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     z_dim = 3;
     %t_dim = 4;
     down_factor_xyz = 1; % Not allowed to get different downsampling for space
-
     
     % Get limits for the structured grid if people did not give those
     min_x = min(int_locs(:, x_dim));
@@ -76,10 +77,15 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     max_z = max(int_locs(:, z_dim));
     
     % Create the grid
-    [X, Y, Z] = meshgrid(min_x:down_factor_xyz:max_x, ...
-                         min_y:down_factor_xyz:max_y, ...
-                         min_z:down_factor_xyz:max_z);
+    xx = min_x:down_factor_xyz:max_x;
+    yy = min_y:down_factor_xyz:max_y;
+    zz = min_z:down_factor_xyz:max_z;
+    [X, Y, Z] = meshgrid(xx, yy, zz);
    
+    hx = xx(2)-xx(1);
+    hy = yy(2)-yy(1);
+    hz = zz(2)-zz(1);
+    
     
     [in_bdy_mask, ~] = get_boundary_info(locs, X(:), Y(:), Z(:));
     in_bdy_mask = reshape(in_bdy_mask, size(X));
@@ -165,7 +171,8 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
                % Calculate the velocity components
                [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, ...
                                                            max_iterations, ...
-                                                           uxo, uyo, uzo);                                
+                                                           uxo, uyo, uzo, ...
+                                                           hx, hy, hz, ht);                                
 
                % Save the velocity components
                % TODO: do it every 5-10 samples perhaps - spinning disks may be a
