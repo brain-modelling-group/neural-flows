@@ -46,9 +46,9 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     %num_nodes = size(data, n_dim);
     
     down_factor_t = 1; % Downsampling factor for t-axis
-    time_vec = 1:down_factor_t:tpts; % in milliseconds
-    ht = time_vec(2) - time_vec(1);
-    data = data(time_vec, :);
+    time_vec      = 1:down_factor_t:tpts; % in milliseconds
+    ht            = time_vec(2) - time_vec(1);
+    data          = data(time_vec, :);
     
     % Recalculate timepoints
     dtpts = size(data, t_dim);
@@ -65,7 +65,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     y_dim = 2;
     z_dim = 3;
     %t_dim = 4;
-    down_factor_xyz = 2; % Not allowed to get different downsampling for space
+    down_factor_xyz = 1; % Not allowed to get different downsampling for space
     
     % Get limits for the structured grid if people did not give those
     min_x = min(int_locs(:, x_dim));
@@ -133,9 +133,9 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     
     % The following lines will create the file on disk
     
-    mfile_vel.ux(size(uxo, x_dim), size(uxo, y_dim), size(uxo, z_dim), tpts-1) = 0;    
-    mfile_vel.uy(size(uyo, x_dim), size(uyo, y_dim), size(uyo, z_dim), tpts-1) = 0;
-    mfile_vel.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), tpts-1) = 0;
+    mfile_vel.ux(size(uxo, x_dim), size(uxo, y_dim), size(uxo, z_dim), dtpts-1) = 0;    
+    mfile_vel.uy(size(uyo, x_dim), size(uyo, y_dim), size(uyo, z_dim), dtpts-1) = 0;
+    mfile_vel.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
     
    %
     % This function runs the loop over timepoints and saves the velocity
