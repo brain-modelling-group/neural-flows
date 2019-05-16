@@ -105,7 +105,7 @@ end
 
 % Uses surfaces to locate singularities
 function xyz_idx = locate_null_surf_coordinates(temp_surf_struct, X, Y, Z, index_mode, in_bdy_mask)
-        %xyz_lidx_ux = vertex_coordinate_to_lin/mnt/lustre/working/lab_lucac/lucaC/fmriprep/ear_index(temp_surf_struct.vertices_ux, X, Y, Z);
+        %xyz_lidx_ux = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_ux, X, Y, Z);
         %xyz_lidx_uy = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_uy, X, Y, Z);
         %xyz_lidx_uz = vertex_coordinate_to_linear_index(temp_surf_struct.vertices_uz, X, Y, Z);
         
