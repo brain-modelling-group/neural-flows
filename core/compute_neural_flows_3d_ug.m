@@ -84,6 +84,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     [in_bdy_mask, ~] = get_boundary_info(locs, X(:), Y(:), Z(:));
     in_bdy_mask = reshape(in_bdy_mask, size(X));
     
+    
     % Perform interpolation on the data and save in temp file
     
     if ~interpolated_data_options.exists % Or not necesary because it is fmri data
@@ -117,6 +118,8 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     root_fname_vel = 'temp_velocity';
     
     [mfile_vel, mfile_vel_sentinel] = create_temp_file(root_fname_vel, keep_vel_file); 
+    % Save mask with points inside the convex hull of the brain
+    mfile_vel.in_bdy_mask = in_bdy_mask;
     
     % Get some dummy initial conditions
     seed_init_vel = 42;
@@ -179,11 +182,11 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
    % Calculate critical isosurfaces
    [mfile_surf, mfile_surf_sentinel] = par_get_critical_isosurfaces(mfile_vel);
    
-   %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Locating critical points'))
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Locating critical points'))
    % Detect intersection of critical isosurfaces
-   %data_mode  = 'surf';
-   %index_mode = 'linear';
-   %[xyz_idx]  = par_locate_critical_points(mfile_surf, mfile_vel, data_mode, index_mode);
+   data_mode  = 'surf';
+   index_mode = 'linear';
+   [xyz_idx]  = par_locate_critical_points(mfile_surf, mfile_vel, data_mode, index_mode);
    
    % Delete isosurface sentinel, if it's oncleanup ibject, the file will be
    % deleted
