@@ -22,6 +22,8 @@ function  [singularity_classification] =   classify_singularities(xyz_idx, mfile
 %{
     
 %}
+% NOTE: as the timeseries get longer, we can in principle parallelise this
+% function.
 singularity_classification = cell(size(xyz_idx));
 tpts = size(xyz_idx, 2);
 
