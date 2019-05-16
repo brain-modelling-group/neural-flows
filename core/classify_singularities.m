@@ -42,10 +42,6 @@ if size(xyz_idx(1).xyz_idx, 2) < 2
         
         % Check if any subscript -- 1. This will cause a problem in the
         % jacobian calculation
-        if intersect(xyz_subs, 1)
-            continue
-        end
-        xyz_idx(tt).xyz_idx = xyz_subs;
     end    
     
 end
@@ -66,7 +62,12 @@ for tt=1:tpts % parallizable stuff but the classification runs very fast
        singularity_labels  = cell(num_critical_points, 1);
 
        for ss=1:num_critical_points
-           ss
+           
+           if intersect(xyz_idx(tt).xyz_idx(ss, :), 1)
+                singularity_labels{ss} = 'boundary';
+            continue
+           end
+     
            % Calculate the Jacobian at each critical point 
            [J3D] = jacobian3d(xyz_idx(tt).xyz_idx(ss, :), mfile_vel_obj.ux(:, :, :, tt), mfile_vel_obj.uy(:, :, :, tt), mfile_vel_obj.uz(:, :, :, tt), hx, hy, hz);
            singularity_labels{ss} = classify_critical_points_3d(J3D);
