@@ -35,7 +35,7 @@ function [mfile_surf_obj,  mfile_surf_sentinel] = par_get_critical_isosurfaces(m
     [mfile_surf_obj, mfile_surf_sentinel] = create_temp_file(root_fname, keep_surf_data);
 
     % Open a pallell pool using all available workers
-    open_parpool(1)
+    %open_parpool(1)
 
     %spmd_parfor_with_matfiles(number_of_things, parfun, temp_fname_obj, storage_expression)
     parfun = @isosurface_step;

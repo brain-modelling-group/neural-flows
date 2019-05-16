@@ -47,8 +47,8 @@ function [mfile_interp_obj, mfile_interp_sentinel] = par_interpolate_3d_data(dat
     mfile_interp_obj.data(size(X, x_dim), size(Y, y_dim), size(Z, z_dim), tpts) = 0;          
 
     % Open a pallell pool using all available workers
-    percentage_of_workers = 1; % 1 --> all workers
-    open_parpool(percentage_of_workers);
+    %percentage_of_workers = 1; % 1 --> all workers
+    %open_parpool(percentage_of_workers);
     
     %spmd_parfor_with_matfiles(number_of_things, parfun, temp_fname_obj, storage_expression)
     parfun = @interpolate_step;
