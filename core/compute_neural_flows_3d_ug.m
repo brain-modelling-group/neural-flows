@@ -97,7 +97,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
         [mfile_interp, mfile_interp_sentinel] = par_interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file);
          
         % Clean up parallel pool
-         delete(gcp);
+        % delete(gcp);
          interpolated_data_options.exists = true;
         
          % Saves full path to file
