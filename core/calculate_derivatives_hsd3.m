@@ -1,4 +1,4 @@
-function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, operator_3d)
+function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, operator_3d, hx, hy, hz, ht)
 %%This fuction computes 3D+t partial derivatives between two 3D image frames. 
 % This function basically does the same as imgradientxyz, but it also
 % calculates the temporal derivative and returns correctly normalised
@@ -32,19 +32,19 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, operator_3d)
     Gt = ones(3, 3, 3);
     
     % Make these parameters optional inputs
-    hx = 1; % 1 mm
-    hy = 1; % 1 mm
-    hz = 1; % 1 mm
-    ht = 1; % 1 ms
+    %hx = 1; % 1 mm
+    %hy = 1; % 1 mm
+    %hz = 1; % 1 mm
+    %ht = 1; % 1 ms
 
     % Spatial derivatives are computed as the average of 
     % the two image/frame gradients along each direction
     
 
-    Ix = 0.5 * (convn(F1, Gx, 'same') + convn(F2, Gx, 'same'));
-    Iy = 0.5 * (convn(F1, Gy, 'same') + convn(F2, Gy, 'same'));
-    Iz = 0.5 * (convn(F1, Gz, 'same') + convn(F2, Gz, 'same'));
-    It = 0.5 * (convn(F1, Gt, 'same') - convn(F2, Gt, 'same'));
+    Ix = (0.5 * (convn(F1, Gx, 'same') + convn(F2, Gx, 'same')))/hx;
+    Iy = (0.5 * (convn(F1, Gy, 'same') + convn(F2, Gy, 'same')))/hy;
+    Iz = (0.5 * (convn(F1, Gz, 'same') + convn(F2, Gz, 'same')))/hz;
+    It = (0.5 * (convn(F1, Gt, 'same') - convn(F2, Gt, 'same')))/ht;
 
 end % function calculate_derivatives_hsd3()
 
