@@ -35,6 +35,15 @@ function  [singularity_classification] =   classify_singularities(xyz_idx, mfile
 singularity_classification = cell(size(xyz_idx));
 tpts = size(xyz_idx, 2);
 
+if size(xyz_idx(1).xyz_idx, 2) < 2
+
+    for tt=1:tpts
+        xyz_subs = switch_index_mode(xyz_idx(tt).xyz_idx, 'subscript', mfile_vel_obj.X);
+        xyz_idx(tt).xyz_idx = xyz_subs;
+    end    
+    
+end
+
 for tt=1:tpts % parallizable stuff but the classification runs very fast
 
        hx = 1; % NOTE: to updated once I figure out the dimensionality of stuff
