@@ -198,7 +198,8 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
    % deleted
    delete(mfile_surf_sentinel)
    % Calculate jacobian and classify singularities
-   %tic;singularity_classification = classify_singularities(xyz_idx, mfile_vel);toc;
+   singularity_classification = classify_singularities(xyz_idx, mfile_vel);
+   mfile_sings.singularity_classification = singularity_classification;
 
 
 end % function compute_neural_flows_3d_ug()
