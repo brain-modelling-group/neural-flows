@@ -30,8 +30,6 @@ if size(xyz_idx(1).xyz_idx, 2) < 2
     for tt=1:tpts
         xyz_subs = switch_index_mode(xyz_idx(tt).xyz_idx, 'subscript', mfile_vel_obj.X);
         xyz_idx(tt).xyz_idx = xyz_subs;
-        % Check if any subscript -- 1. This will cause a problem in the
-        % jacobian calculation
     end    
     
 end
@@ -52,7 +50,8 @@ for tt=1:tpts % parallizable stuff but the classification runs very fast
        singularity_labels  = cell(num_critical_points, 1);
 
        for ss=1:num_critical_points
-           
+           % Check if any subscript == 1. This will cause a problem in the
+           % jacobian calculation
            if intersect(xyz_idx(tt).xyz_idx(ss, :), 1)
                 singularity_labels{ss} = 'boundary';
             continue
