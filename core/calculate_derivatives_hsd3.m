@@ -22,7 +22,7 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht, o
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%             
     
-    if nargin < 6 
+    if nargin < 7 
         operator_3d = @get_sobel_3d_operator;
     end
 
