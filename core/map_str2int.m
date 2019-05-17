@@ -68,7 +68,7 @@ switch str_label
     case 'spiral-sink-po'
         label = 12;
         color = [161, 215, 106, 1];
-    case {'nan', 'orbit?', 'boundary'}
+    case {'nan', 'orbit?', 'boundary', 'zero'}
         label = 0;
         color = [0, 0, 0, 0];
     otherwise
