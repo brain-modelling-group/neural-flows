@@ -1,6 +1,5 @@
 function  [singularity_classification] =   classify_singularities(xyz_idx, mfile_vel_obj)
-% This function is kind of a wrapper: 
-% 1) calculate jacobian for each critical point, and then 
+% 1) calculates jacobian for each critical point, and then 
 % 2) classify type of critical point. 
 % ARGUMENTS:
 %          xyz_idx        -- a struct of size [1 x no. timepoints]
@@ -40,11 +39,8 @@ hx = mfile_vel_obj.hx; % NOTE: to updated once I figure out the dimensionality o
 hy = mfile_vel_obj.hy; % NOTE: to updated once I figure out the dimensionality of stuff
 hz = mfile_vel_obj.hz; % NOTE: to updated once I figure out the dimensionality of stuff
 
-xdim=1;
-ydim=2;
-zdim=3;
-grid_size =  size(mfile_vel_obj.X);
 
+grid_size =  size(mfile_vel_obj.X);
 
 for tt=1:tpts % parallizable stuff but the classification runs very fast
 
@@ -64,19 +60,20 @@ for tt=1:tpts % parallizable stuff but the classification runs very fast
            % This will cause a problem in the jacobian calculation. 
            % Also, that should not a
            
-           boundary_vec = [intersect(xyz_idx(tt).xyz_idx(ss, :), 1), ...
-                           intersect(xyz_idx(tt).xyz_idx(ss, xdim), grid_size(xdim)), ...
-                           intersect(xyz_idx(tt).xyz_idx(ss, ydim), grid_size(ydim)), ...
-                           intersect(xyz_idx(tt).xyz_idx(ss, zdim), grid_size(zdim))];
-                          
+           point = xyz_idx(tt).xyz_idx(ss, :);
+           % Move points a little
+           point = rectify_boundary_points(point, grid_size);
+           % Flag points at the boundary
+           boundary_vec = detect_boundary_points(point, grid_size);               
                             
            if ~isempty(boundary_vec)
                 singularity_labels{ss} = 'boundary';
             continue
            end
-     
+           
+           
            % Calculate the Jacobian at each critical point 
-           [J3D] = jacobian3d(xyz_idx(tt).xyz_idx(ss, :), mfile_vel_obj.ux(:, :, :, tt), mfile_vel_obj.uy(:, :, :, tt), mfile_vel_obj.uz(:, :, :, tt), hx, hy, hz);
+           [J3D] = jacobian3d(point, mfile_vel_obj.ux(:, :, :, tt), mfile_vel_obj.uy(:, :, :, tt), mfile_vel_obj.uz(:, :, :, tt), hx, hy, hz);
            singularity_labels{ss} = classify_critical_points_3d(J3D);
        end
 
@@ -84,3 +81,40 @@ for tt=1:tpts % parallizable stuff but the classification runs very fast
 end
 
 end % classify_singularities()
+
+function boundary_vec = detect_boundary_points(point, grid_size)
+    xdim=1;
+    ydim=2;
+    zdim=3;
+    boundary_vec = [intersect(point, 1), ...
+                    intersect(point(xdim), grid_size(xdim)), ...
+                    intersect(point(ydim), grid_size(ydim)), ...
+                    intersect(point(zdim), grid_size(zdim))];
+
+end % function detect_boundary_points
+
+
+function rectified_point = rectify_boundary_points(point, grid_size)
+    xdim=1;
+    ydim=2;
+    zdim=3;
+    % This function just moves the location of the point to the next
+    % nearest neighbour along the offending dimension
+    
+    point(point == 1) = 2;
+    if point(xdim) == grid_size(xdim)
+        point(xdim) = grid_size(xdim) - 1; % This assumes our spatial sampling is not terrible
+    end
+    
+    if point(ydim) == grid_size(ydim)
+        point(ydim) = grid_size(ydim) - 1; % This assumes our spatial sampling is not terrible
+    end
+    
+        
+    if point(zdim) == grid_size(zdim)
+        point(zdim) = grid_size(zdim) - 1; % This assumes our spatial sampling is not terrible
+    end
+        
+    rectified_point = point;
+
+end % function rectify_boundary_points()

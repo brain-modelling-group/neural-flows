@@ -20,7 +20,9 @@ toc;
 X = mfile_vel.X;
 index_mode = 'subscript';
 
-for tt=1:size(xyz_idx, 2); xyz_idx(tt).xyz_sub = xyz_idx(tt).xyz_idx; end
+for tt=1:size(xyz_idx, 2)
+    xyz_idx(tt).xyz_sub = xyz_idx(tt).xyz_idx; 
+end
 
 for tt=1:size(mfile_surf, 'isosurfs', 2)
     xyz_sidx(tt).xyz_sub = switch_index_mode(xyz_idx(tt).xyz_sub, index_mode, X);
@@ -28,10 +30,11 @@ end
 
 % Do some dodgy stuff
 xyz_idx = xyz_sidx;
-xyz_idx = rmfield(xyz_idx, 'xyz_sub');
 for ii=1:200
 xyz_idx(ii).xyz_idx = xyz_sidx(ii).xyz_sub;
 end
+xyz_idx = rmfield(xyz_idx, 'xyz_sub');
+
 
 % Singularity classification works with subindices rather than linear
 % indices
