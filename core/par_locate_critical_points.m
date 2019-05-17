@@ -66,7 +66,7 @@ function [xyz_lidx_ux, xyz_lidx_uy, xyz_lidx_uz] = vertex_to_linear_index(vertic
     xyz_lidx_uz(size(vertices_uz, 1), 1) = 0;
 
     % Note: this should be a parameter
-    distance_threshold = 0.1;
+    distance_threshold = 0.2;
     
     parfor idx=1:length(X) % 500,000 points
         min_temp_ux(idx) =   min(sqrt((X(idx)-vertices_ux(:, xdim)).^2 + ...
@@ -122,7 +122,7 @@ end
 
 function xyz_idx = use_velocity_fields(mfile_vel_obj, index_mode)
 
-tpts = size(mfile_vel_obj, 'isosurfs', 4); %#ok<GTARG>
+tpts = size(mfile_vel_obj, 'ux', 4); %#ok<GTARG>
 X = mfile_vel_obj.X;
 xyz_idx = struct([]); 
 
