@@ -39,7 +39,7 @@ singularity_type = 'nan'; % This may be overwritten
 [V, D] = eig(J3D);
 
 % Return only eigenvalues
-E = diag(D)
+E = diag(D);
 
 tolerance = 1e-8; % arbitrary tolerance to determine the rank of V
 % Check if the matrix is degenerate
