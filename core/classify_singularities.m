@@ -101,17 +101,17 @@ function rectified_point = rectify_boundary_points(point, grid_size)
     % This function just moves the location of the point to the next
     % nearest neighbour along the offending dimension
     
-    point(point == 1) = 2;
-    if point(xdim) == grid_size(xdim)
-        point(xdim) = grid_size(xdim) - 1; % This assumes our spatial sampling is not terrible
+    point(point == 1) = 4;
+    if point(xdim) >= grid_size(xdim)-3
+        point(xdim) = grid_size(xdim)-4; % This assumes our spatial sampling is not terrible
     end
     
-    if point(ydim) == grid_size(ydim)
-        point(ydim) = grid_size(ydim) - 1; % This assumes our spatial sampling is not terrible
+    if point(ydim) >= grid_size(ydim)-3
+        point(ydim) = grid_size(ydim)-4; % This assumes our spatial sampling is not terrible
     end
     
-    if point(zdim) == grid_size(zdim)
-        point(zdim) = grid_size(zdim) - 1; % This assumes our spatial sampling is not terrible
+    if point(zdim) >= grid_size(zdim)-3
+        point(zdim) = grid_size(zdim)-4; % This assumes our spatial sampling is not terrible
     end
         
     rectified_point = point;
