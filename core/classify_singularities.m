@@ -110,7 +110,6 @@ function rectified_point = rectify_boundary_points(point, grid_size)
         point(ydim) = grid_size(ydim) - 1; % This assumes our spatial sampling is not terrible
     end
     
-        
     if point(zdim) == grid_size(zdim)
         point(zdim) = grid_size(zdim) - 1; % This assumes our spatial sampling is not terrible
     end
