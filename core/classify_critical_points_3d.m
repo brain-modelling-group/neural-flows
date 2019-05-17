@@ -39,7 +39,7 @@ singularity_type = 'nan'; % This may be overwritten
 [V, D] = eig(J3D);
 
 % Return only eigenvalues
-E = diag(D);
+E = diag(D)
 
 tolerance = 1e-8; % arbitrary tolerance to determine the rank of V
 % Check if the matrix is degenerate
@@ -47,7 +47,6 @@ if rank(V, tolerance) < 3
     singularity_type = classify_orbits_3d(E);
     return
 end
-
 
 
 % Check if we have complex numbers -- if there is at least one complex
@@ -89,6 +88,8 @@ function singularity_type = classify_all_real(E)
         
     elseif sum(E) == 0
         singularity_type = 'zero';
+    elseif sum(sign(E)) == 0
+        singularity_type = '1-1-0-saddle';
     end
     
 end % function classify_all_real()
