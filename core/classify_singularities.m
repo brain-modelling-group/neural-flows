@@ -40,6 +40,12 @@ hx = mfile_vel_obj.hx; % NOTE: to updated once I figure out the dimensionality o
 hy = mfile_vel_obj.hy; % NOTE: to updated once I figure out the dimensionality of stuff
 hz = mfile_vel_obj.hz; % NOTE: to updated once I figure out the dimensionality of stuff
 
+xdim=1;
+ydim=2;
+zdim=3;
+grid_size =  size(mfile_vel_obj.X);
+
+
 for tt=1:tpts % parallizable stuff but the classification runs very fast
 
       
@@ -54,9 +60,17 @@ for tt=1:tpts % parallizable stuff but the classification runs very fast
        singularity_labels  = cell(num_critical_points, 1);
 
        for ss=1:num_critical_points
-           % Check if any subscript == 1. This will cause a problem in the
-           % jacobian calculation
-           if intersect(xyz_idx(tt).xyz_idx(ss, :), 1)
+           % Check if any subscript is on the boundary of the grid. 
+           % This will cause a problem in the jacobian calculation. 
+           % Also, that should not a
+           
+           boundary_vec = [intersect(xyz_idx(tt).xyz_idx(ss, :), 1), ...
+                           intersect(xyz_idx(tt).xyz_idx(ss, xdim), grid_size(xdim)), ...
+                           intersect(xyz_idx(tt).xyz_idx(ss, ydim), grid_size(ydim)), ...
+                           intersect(xyz_idx(tt).xyz_idx(ss, zdim), grid_size(zdim))];
+                          
+                            
+           if ~isempty(boundary_vec)
                 singularity_labels{ss} = 'boundary';
             continue
            end
