@@ -27,10 +27,14 @@ function singularity_type = classify_critical_points_3d(J3D)
 % Calculate matrix with eigenvalues of Jacobian
 
 % Check if anything went wrong with the Jacobian calculation
-if any(isnan(J3D(:)))
-    singularity_type = 'nan';
-    return
-end
+
+% if any(isnan(J3D(:)))
+%     singularity_type = 'nan';
+%     return
+% end
+% Hackery: 
+J3D(isnan(J3D)) = 0;
+singularity_type = 'nan'; % This may be overwritten
 
 [V, D] = eig(J3D);
 
@@ -83,6 +87,8 @@ function singularity_type = classify_all_real(E)
         % Two positive: One negative: 2:1 saddle node
         singularity_type = '2-1-saddle';
         
+    elseif sum(E) == 0
+        singularity_type = 'zero';
     end
     
 end % function classify_all_real()
