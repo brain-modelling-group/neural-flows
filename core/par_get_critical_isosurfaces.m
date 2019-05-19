@@ -26,9 +26,8 @@ function [mfile_surf_obj,  mfile_surf_sentinel] = par_get_critical_isosurfaces(m
 
     critical_isovalue = 0; % this isovalue could be greather than 0
 
-    tpts = size(mfile_vel.ux, 4);
-
-
+    tpts = size(mfile_vel,  'ux', 4); %#ok<GTARG>
+    
     % Create file for the isosurface data
     root_fname = 'temp_isosurf';
     keep_surf_data = true;
