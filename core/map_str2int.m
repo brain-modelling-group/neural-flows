@@ -33,28 +33,28 @@ switch str_label
     % FIXED POINTS
     case 'source' % done
         label = 1;
-        color = [215, 48, 39, 1];
+        color = [165, 0, 38, 1];
     case 'sink'   % done
         label = 2;
-        color = [69, 117, 180, 1];
+        color = [49, 54, 149, 1];
     case '2-1-saddle' % done - more source (red) than sink
         label = 3;
-        color = [254, 224, 144, 1];
-    case '1-2-saddle' % done - more sink (blue) than source
+        color = [244, 109, 67, 1];
+    case '1-2-saddle'   % done - more sink (blue) than source
         label = 4;
-        color = [224, 243, 248, 1];
+        color = [69, 117, 180, 1];
     case 'spiral-source' % done
-        label = 5;
-        color = [219, 191, 145, 1];
+        label = 5;  
+        color = [253, 174, 97, 1];
     case 'spiral-sink' % done
         label = 6;
-        color = [69, 117, 180, 1];
+        color = [116, 173, 209, 1];
     case '2-1-spiral-saddle' % done - more source (red) than sink
         label = 7;
-        color = [254, 224, 144, 1];
+        color = [254 224,144, 1];
     case '1-2-spiral-saddle' % done - more sink (blue) than source
         label = 8;
-        color = [224, 243, 248, 1];        
+        color = [171, 217, 233, 1];        
     % ORBITS
     case 'source-po'% done
         label = 9;
