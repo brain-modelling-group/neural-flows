@@ -31,52 +31,58 @@ function [label, color] = map_str2int(str_label)
 
 switch str_label
     % FIXED POINTS
-    case 'source'
+    case 'source' % done
         label = 1;
         color = [215, 48, 39, 1];
-    case 'sink'
+    case 'sink'   % done
         label = 2;
         color = [69, 117, 180, 1];
-    case '1-2-saddle'
+    case '1-2-saddle' % done - more sink (blue) than source
         label = 3;
-        color = [254, 224, 144, 1];
-    case '2-1-saddle'
-        label = 4;
         color = [224, 243, 248, 1];
-    case 'spiral-source'
+    case '2-1-saddle' % done - more source (red) than sink
+        label = 4;
+        color = [254, 224, 144, 1];
+    case 'spiral-source' % done
         label = 5;
         color = [145, 191, 219, 1];
-    case 'spiral-sink'
+    case 'spiral-sink' % done
         label = 6;
         color = [69, 117, 180, 1];
-    % ORBITS
-    case 'source-po'
+    case '1-2-spiral_saddle' % done - more sink (blue) than source
         label = 7;
-        color = [197, 27, 125, 1];
-    case 'sink-po'
+        color = [254, 224, 144, 1];
+    case '2-1-spiral_saddle' % done - more source (red) than sink
         label = 8;
+        color = [224, 243, 248, 1];        
+    % ORBITS
+    case 'source-po'% done
+        label = 9;
+        color = [197, 27, 125, 1];
+    case 'sink-po' % done
+        label = 10;
         color = [77, 146, 33, 1];
     case 'saddle-po'
-        label = 9;
+        label = 11;
         color = [253, 224, 239, 1];
     case 'twisted-po'
-        label = 10;
+        label = 12;
         color = [230, 245, 208, 1];
-    case 'spiral-source-po'
+    case 'spiral-source-po' % done
         label = 11;
         color = [233, 163, 201, 1];
-    case 'spiral-sink-po'
-        label = 12;
-        color = [161, 215, 106, 1];
-    case {'1-1-0-saddle'}
+    case 'spiral-sink-po'% done
         label = 13;
+        color = [161, 215, 106, 1];
+    case {'1-1-0-saddle'} 
+        label = 14;
         color = [0 255 0 0];   % These ones may be artificial  
     case {'nan', 'orbit?', 'boundary', 'zero'}
-        label = 14;
+        label = 15;
         color = [0, 0, 0, 0];
     otherwise
         error(['neuralflows:' mfilename ':BadInput'], ...
-           'The input xyz_idx must be a N x 3 array');
+           'Unrecognised singularity type');
 end
 color = color./255;
 end
