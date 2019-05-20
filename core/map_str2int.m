@@ -68,12 +68,12 @@ switch str_label
     case 'spiral-sink-po'
         label = 12;
         color = [161, 215, 106, 1];
-    case {'nan', 'orbit?', 'boundary', 'zero'}
-        label = 0;
-        color = [0, 0, 0, 0];
     case {'1-1-0-saddle'}
         label = 13;
-        color = [0 255 0 0];
+        color = [0 255 0 0];   % These ones may be artificial  
+    case {'nan', 'orbit?', 'boundary', 'zero'}
+        label = 14;
+        color = [0, 0, 0, 0];
     otherwise
         error(['neuralflows:' mfilename ':BadInput'], ...
            'The input xyz_idx must be a N x 3 array');
