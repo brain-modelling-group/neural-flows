@@ -7,7 +7,7 @@ for tt=1:size(mfile_vel, 'ux', 4)
   %max_norm_u(tt) = nanmax(norm_u(:));
   ux = mfile_vel.ux(:, :, :, tt);
   uy = mfile_vel.uy(:, :, :, tt);
-  uz = mfile_vel.uz(:, :, :, tt);
+  uz = mfile_vel.uz(:, :, :, tt);   
 
   %min_ux(tt) = nanmin(abs(ux(:)));
   %max_ux(tt) = nanmax(abs(ux(:)));

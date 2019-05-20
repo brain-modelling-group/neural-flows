@@ -1,6 +1,5 @@
 [singularity_classification] =   classify_singularities(xyz_idx, mfile_vel);
 
-
 num_sing = cellfun(@length, singularity_classification);
 
 % get colors
