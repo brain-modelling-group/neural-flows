@@ -106,12 +106,12 @@ if real(E(real_eigenvalue)) > 0
        singularity_type = 'spiral-source';
    else 
        % 1 positive(out), two negatives (in)
-       singularity_type = '1-2-spiral_saddle';
+       singularity_type = '1-2-spiral-saddle';
    end
 elseif real(E(real_eigenvalue)) < 0
    if real(imag_eigenvalues(1)) > 0
        % 2 positives(in), one negative (in)
-       singularity_type = '2-1-spiral_saddle';
+       singularity_type = '2-1-spiral-saddle';
    else 
        singularity_type = 'spiral-sink';
    end

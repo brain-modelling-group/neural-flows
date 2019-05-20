@@ -49,10 +49,10 @@ switch str_label
     case 'spiral-sink' % done
         label = 6;
         color = [69, 117, 180, 1];
-    case '2-1-spiral_saddle' % done - more source (red) than sink
+    case '2-1-spiral-saddle' % done - more source (red) than sink
         label = 7;
         color = [254, 224, 144, 1];
-    case '1-2-spiral_saddle' % done - more sink (blue) than source
+    case '1-2-spiral-saddle' % done - more sink (blue) than source
         label = 8;
         color = [224, 243, 248, 1];        
     % ORBITS
