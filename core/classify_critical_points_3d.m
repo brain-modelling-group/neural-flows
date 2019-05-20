@@ -49,11 +49,11 @@ if rank(V, tolerance) < 3
 end
 
 
-% Check if we have complex numbers -- if there is at least one complex
+% Check if we have complex numbers. NOTE: If there is at least one complex
 % eigenvalue, then all the values in E are cast as complex 
-if sum(~isreal(E))    
+if ~isreal(E)    
    % Check if the imaginary parts are all larger than 0
-   if sum(imag(E)) ~= 0
+   if sum(abs(imag(E))) ~= 0
       singularity_type = classify_some_imaginary(E);      
    else 
        % cast complex numbers with zero imaginary part into real
