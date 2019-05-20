@@ -28,13 +28,10 @@ function singularity_type = classify_critical_points_3d(J3D)
 
 % Check if anything went wrong with the Jacobian calculation
 
-% if any(isnan(J3D(:)))
-%     singularity_type = 'nan';
-%     return
-% end
-% Hackery: 
-J3D(isnan(J3D)) = 0;
-%singularity_type = 'nan'; % This may be overwritten
+if any(isnan(J3D(:)))
+    singularity_type = 'nan';
+    return
+end
 
 [~, D] = eig(J3D);
 
