@@ -42,10 +42,12 @@ hz = mfile_vel_obj.hz; % NOTE: to updated once I figure out the dimensionality o
 
 grid_size =  size(mfile_vel_obj.X);
 
-for tt=1:tpts % parallizable stuff but the classification runs very fast
+for tt=1:10 % parallizable stuff but the classification runs very fast
 
       
-       
+       ux = mfile_vel_obj.ux(:, :, :, tt);
+       uy = mfile_vel_obj.uy(:, :, :, tt);
+       uz = mfile_vel_obj.uz(:, :, :, tt);
        % Check if we have critical points. There are 'frames' for which
        % nothing was detected, we should not attempt to calculate jacobian.
        if isempty(xyz_idx(tt).xyz_idx)
@@ -62,7 +64,7 @@ for tt=1:tpts % parallizable stuff but the classification runs very fast
            
            point = xyz_idx(tt).xyz_idx(ss, :);
            % Move points a little
-           point = rectify_boundary_points(point, grid_size);
+           %point = rectify_boundary_points(point, grid_size);
            % Flag points at the boundary
            boundary_vec = detect_boundary_points(point, grid_size);               
                             
@@ -73,7 +75,7 @@ for tt=1:tpts % parallizable stuff but the classification runs very fast
            
            
            % Calculate the Jacobian at each critical point 
-           [J3D] = jacobian3d(point, mfile_vel_obj.ux(:, :, :, tt), mfile_vel_obj.uy(:, :, :, tt), mfile_vel_obj.uz(:, :, :, tt), hx, hy, hz);
+           [J3D] = jacobian3d(point, ux, uy, uz, hx, hy, hz);
            singularity_labels{ss} = classify_critical_points_3d(J3D);
        end
 
