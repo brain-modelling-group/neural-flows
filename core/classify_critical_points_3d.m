@@ -34,7 +34,7 @@ function singularity_type = classify_critical_points_3d(J3D)
 % end
 % Hackery: 
 J3D(isnan(J3D)) = 0;
-singularity_type = 'nan'; % This may be overwritten
+%singularity_type = 'nan'; % This may be overwritten
 
 [~, D] = eig(J3D);
 
@@ -43,6 +43,12 @@ E = diag(D);
 
 tolerance = 1e-8; % arbitrary tolerance to determine the rank of V
 % Check if the matrix is degenerate
+
+% If the Jacobian is all zero
+if sum(E) == 0
+        singularity_type = 'zero';
+        return
+end       
 if rank(J3D, tolerance) < 3
     singularity_type = classify_orbits_3d(E);
     return
@@ -85,9 +91,6 @@ function singularity_type = classify_all_real(E)
     elseif sum(sign(E)) > 0
         % Two positive: One negative: 2:1 saddle node
         singularity_type = '2-1-saddle';
-        
-    elseif sum(E) == 0
-        singularity_type = 'zero';
         
     elseif sum(sign(E)) == 0
         singularity_type = '1-1-0-saddle';
