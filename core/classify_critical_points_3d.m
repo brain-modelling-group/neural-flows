@@ -1,7 +1,7 @@
 function singularity_type = classify_critical_points_3d(J3D)
 
-% 3D classification of hyperbolic stationary points based on the jacobian
-% matrix of the vector field around one point
+% 3D classification of hyperbolic stationary points based on the eigenvalues
+% the jacobian matrix of the vector field around one critical point
 % Assumes nondegenerate jacobian
 % J3D: 3 x 3 -- jacobian matrix around a point
 % 
@@ -36,14 +36,14 @@ function singularity_type = classify_critical_points_3d(J3D)
 J3D(isnan(J3D)) = 0;
 singularity_type = 'nan'; % This may be overwritten
 
-[V, D] = eig(J3D);
+[~, D] = eig(J3D);
 
 % Return only eigenvalues
 E = diag(D);
 
 tolerance = 1e-8; % arbitrary tolerance to determine the rank of V
 % Check if the matrix is degenerate
-if rank(V, tolerance) < 3
+if rank(J3D, tolerance) < 3
     singularity_type = classify_orbits_3d(E);
     return
 end
@@ -56,7 +56,7 @@ if ~isreal(E)
    if sum(abs(imag(E))) ~= 0
       singularity_type = classify_some_imaginary(E);      
    else 
-       % cast complex numbers with zero imaginary part into real
+       % Cast complex numbers with zero imaginary part into real
        % eigenvalues
        E = real(E);
        singularity_type = classify_all_real(E);
@@ -88,6 +88,7 @@ function singularity_type = classify_all_real(E)
         
     elseif sum(E) == 0
         singularity_type = 'zero';
+        
     elseif sum(sign(E)) == 0
         singularity_type = '1-1-0-saddle';
     end
@@ -104,12 +105,12 @@ if real(E(real_eigenvalue)) > 0
    if real(imag_eigenvalues(1)) > 0
        singularity_type = 'spiral_source';
    else 
-       % 1 positive, two negatives
+       % 1 positive(out), two negatives (in)
        singularity_type = '1-2-spiral_saddle';
    end
 elseif real(E(real_eigenvalue)) < 0
    if real(imag_eigenvalues(1)) > 0
-       % 2 positives, one negative
+       % 2 positives(in), one negative (in)
        singularity_type = '2-1-spiral_saddle';
    else 
        singularity_type = 'spiral_sink';
