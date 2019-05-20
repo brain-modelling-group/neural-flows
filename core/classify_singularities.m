@@ -40,7 +40,7 @@ hy = mfile_vel_obj.hy; % NOTE: to updated once I figure out the dimensionality o
 hz = mfile_vel_obj.hz; % NOTE: to updated once I figure out the dimensionality of stuff
 
 
-grid_size =  size(mfile_vel_obj.X);
+grid_size =  size(mfile_vel_obj, 'X');
 
 for tt=1:10 % parallizable stuff but the classification runs very fast
 
