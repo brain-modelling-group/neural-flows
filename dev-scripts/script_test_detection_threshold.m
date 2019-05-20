@@ -1,6 +1,6 @@
 
-
-for tt=1:200
+tic;
+for tt=1:size(mfile_vel, 'ux', 4)
     
   %norm_u = sqrt(mfile_vel.ux(:, :, :, tt).^2 + mfile_vel.uy(:, :, :, tt).^2 + mfile_vel.uz(:, :, :, tt).^2); 
   %min_norm_u(tt) = nanmin(norm_u(:));
@@ -23,7 +23,7 @@ for tt=1:200
   xyz_idx(tt).xyz_idx = find(uu < 4*eps);
   
 end
-
+toc;
 
 %% 
 
