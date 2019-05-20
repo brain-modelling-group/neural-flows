@@ -73,7 +73,7 @@ switch str_label
         color = [0, 0, 0, 0];
     case {'1-1-0-saddle'}
         label = 13;
-        color = [0 1 0 0];
+        color = [0 255 0 0];
     otherwise
         error(['neuralflows:' mfilename ':BadInput'], ...
            'The input xyz_idx must be a N x 3 array');
