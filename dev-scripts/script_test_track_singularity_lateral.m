@@ -1,11 +1,12 @@
-[singularity_classification] =   classify_singularities(xyz_idx, mfile_vel);
+
+[singularity_classification] =   classify_singularities(xyz_cell{cc}, mfile_vel);
+
 
 num_sing = cellfun(@length, singularity_classification);
 
 % get colors
-for tt=1:200
+for tt=1:size(mfile_vel, 'ux', 4)
     for ss=1:num_sing(tt)
-        singularity_classification{tt}{ss}
      [label(tt).label(ss), color_map(tt).colormap(ss, :)] = map_str2int(singularity_classification{tt}{ss});
     end
 end
@@ -28,7 +29,7 @@ end
 
 
 for ii=1:size(out, 2)
-stairs(ax(ii), log(out(:, ii)), 'color', cmap(ii, 1:3), 'linewidth', 2)
+stairs(ax(ii), log10(out(:, ii)), 'color', cmap(ii, 1:3), 'linewidth', 2)
 ax(ii).Title.String = singularity_list{ii};
 end
 
