@@ -29,6 +29,9 @@ function [label, color] = map_str2int(str_label)
 % complex eigenvalues outside the unit circle : spiral source p.o
 % complex eigenvalues inside the unit circle  : spiral sink p.o
 
+if isempty(str_label)
+    str_label = 'empty';
+end
 switch str_label
     % FIXED POINTS
     case 'source' % done
@@ -77,7 +80,7 @@ switch str_label
     case {'1-1-0-saddle'} 
         label = 15;
         color = [0 255 0 0];   % These ones may be artificial  
-    case {'nan', 'orbit?', 'boundary', 'zero'}
+    case {'nan', 'orbit?', 'boundary', 'zero', 'empty'}
         label = 16;
         color = [0, 0, 0, 0];
     otherwise
