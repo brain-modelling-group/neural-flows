@@ -58,7 +58,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     % step takes about 24 seconds.
     % downsampling to 8mm^3 - side 2mm it takes 3s.
     
-    int_locs = floor(locs);
+    int_locs = ceil(locs);
     
     % Human-readable labels for indexing dimensions of 4D arrays
     x_dim = 1;
