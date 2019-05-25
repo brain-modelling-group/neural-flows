@@ -51,10 +51,10 @@ for tt=1:999
 
        end
    end
- ax.XLim = [min(X(:)) max(X(:))];
- ax.YLim = [min(Y(:)) max(Y(:))];
- ax.ZLim = [min(Z(:)) max(Z(:))];
+ %ax.XLim = [min(X(:)) max(X(:))];
+ %ax.YLim = [min(Y(:)) max(Y(:))];
+ %ax.ZLim = [min(Z(:)) max(Z(:))];
  drawnow
- pause(0.01)
+ %pause(0.01)
  %export_fig(sprintf( './frame_%03d.png', tt ), '-r150', '-nocrop', figure_handle)
 end
