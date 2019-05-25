@@ -1,3 +1,4 @@
+
 function [intersection_matrix, intSurface] = find_surface_intersection(surface1, surface2, varargin)
 %SURFACEINTERSECTION intersection of 2 surfaces
 % [intersection_matrix, intSurface] = SurfaceIntersection(surface1, surface2)
