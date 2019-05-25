@@ -4,8 +4,8 @@
 % Author: Paula Sanz-Leon QIMR 2019
 
 %% 00. Detect critical points using the velocity fields
-num_values = 10;
-values = linspace(0.1, 1, num_values);
+num_values = 3;
+values = [0.01, 0.1, 1];
 %values = linspace(1, 10, num_values);
 
 xyz_cell = cell(num_values, 1);
@@ -18,7 +18,7 @@ for cc=1:num_values
         uy = mfile_vel.uy(:, :, :, tt);
         uz = mfile_vel.uz(:, :, :, tt);
         uu = abs(ux(:) .* uy(:) .* uz(:));
-        xyz_idx(tt).xyz_idx = find(uu < cc*eps);
+        xyz_idx(tt).xyz_idx = find(uu < values(cc)*eps);
   
     end
    % Save results
@@ -39,16 +39,16 @@ ax_numsing = subplot(1,1,1);
 hold(ax_numsing, 'on')
 
 cmap = linspace(0, 0.85, length(xyz_cell));
-for cc=1:2:length(xyz_cell)
+for cc=1:length(xyz_cell)
     num_sing = cellfun(@length, singularity_classification{cc});
-    plot(ax_numsing, log10(num_sing), 'color', [cmap(cc) cmap(cc) cmap(cc)], 'displayname', strcat(num2str(values(cc)), '*eps'))
+    plot(ax_numsing, num_sing, 'color', [cmap(cc) cmap(cc) cmap(cc)], 'displayname', strcat(num2str(values(cc)), '*eps'))
 end
 
 leg = legend('show');
 title(leg,'threshold')
 ylabel('log_{10} # critical points')
 xlabel('time [ms]')
-ylim([1.5 3.5])
+%ylim([1.5 3.5])
 
 %% 03. Plot total number of singularities divided up in clases. 
 label_cell = cell(num_values, 1);
