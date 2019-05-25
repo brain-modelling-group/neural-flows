@@ -88,8 +88,6 @@ axes2(8).XLabel.String = '# singularity / frame';
 axes2(1).YLabel.String = {'counts',  '(#frames)'};
 
 % Adjust ylims: todo something better
-
-%
 axes2(1).YLim = [0 45];
 axes2(2).YLim = [0 45];
 axes2(3).YLim = [0 300];
