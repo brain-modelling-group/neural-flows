@@ -191,14 +191,18 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
                
                % Save some other useful information
                
-               mfile_vel.min_ux(1,this_tpt) = min(uxo(:));
-               mfile_vel.max_ux(1,this_tpt) = max(uxo(:));
+               mfile_vel.min_ux(1,this_tpt) = nanmin(uxo(:));
+               mfile_vel.max_ux(1,this_tpt) = nanmax(uxo(:));
                               
-               mfile_vel.min_uy(1,this_tpt) = min(uyo(:));
-               mfile_vel.max_uy(1,this_tpt) = max(uyo(:));
+               mfile_vel.min_uy(1,this_tpt) = nanmin(uyo(:));
+               mfile_vel.max_uy(1,this_tpt) = nanmax(uyo(:));
                
-               mfile_vel.min_uz(1,this_tpt) = min(uzo(:));
-               mfile_vel.max_uz(1,this_tpt) = max(uzo(:));
+               mfile_vel.min_uz(1,this_tpt) = nanmin(uzo(:));
+               mfile_vel.max_uz(1,this_tpt) = nanmax(uzo(:));
+               
+               mfile_vel.sum_ux(1, this_tpt) = nansum(uxo(:));
+               mfile_vel.sum_uy(1, this_tpt) = nansum(uyo(:));
+               mfile_vel.sum_uz(1, this_tpt) = nansum(uzo(:));
                
                uu = abs(uxo(:) .* uyo(:) .* uzo(:));
                xyz_idx(1,this_tpt).xyz_idx = find(uu < detection_th*eps);
