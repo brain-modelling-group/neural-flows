@@ -45,7 +45,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     tpts      = size(data, t_dim);
     %num_nodes = size(data, n_dim);
     
-    down_factor_t = 10; % Downsampling factor for t-axis
+    down_factor_t = 1; % Downsampling factor for t-axis
     time_vec      = 1:down_factor_t:tpts; % in milliseconds
     ht            = time_vec(2) - time_vec(1);
     data          = data(time_vec, :);
@@ -137,9 +137,10 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     mfile_vel.uy(size(uyo, x_dim), size(uyo, y_dim), size(uyo, z_dim), dtpts-1) = 0;
     mfile_vel.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
     
-   %
+    %
     % This function runs the loop over timepoints and saves the velocity
     % fields into a file
+    detection_th = 0.1;
     compute_flows_3d()
     
     % Save grid - needed for singularity tracking and visualisation
@@ -188,17 +189,28 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
                mfile_vel.uz(:, :, :, this_tpt) = uzo;
                
                % Save some other useful information
+               
+               mfile_vel.min_ux(1,this_tpt) = min(uxo(:));
+               mfile_vel.max_ux(1,this_tpt) = max(uxo(:));
+                              
+               mfile_vel.min_uy(1,this_tpt) = min(uyo(:));
+               mfile_vel.max_uy(1,this_tpt) = max(uyo(:));
+               
+               mfile_vel.min_uz(1,this_tpt) = min(uzo(:));
+               mfile_vel.max_uz(1,this_tpt) = max(uzo(:));
+               
+               uu = abs(uxo(:) .* uyo(:) .* uzo(:));
+               xyz_idx(1,this_tpt).xyz_idx = find(uu < detection_th*eps);
+
 
 
         end
     
     end
 
-
-
-   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Extracting isosurfaces'))
+   %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Extracting isosurfaces'))
    % Calculate critical isosurfaces
-   [mfile_surf, mfile_surf_sentinel] = par_get_critical_isosurfaces(mfile_vel);
+   %[mfile_surf, mfile_surf_sentinel] = par_get_critical_isosurfaces(mfile_vel);
    
    %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Locating critical points'))
    % Detect intersection of critical isosurfaces
@@ -206,19 +218,19 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
    %index_mode = 'linear';
    %[xyz_idx]  = par_locate_critical_points(mfile_surf, mfile_vel, data_mode, index_mode);
    
-   %root_fname_sings = 'temp_snglrty';
-   %keep_sings_file = true; 
-   %[mfile_sings, mfile_sings_sentinel] = create_temp_file(root_fname_sings, keep_sings_file);
-   %mfile_sings.xyz_idx = xyz_idx;
-   %delete(mfile_sings_sentinel)
+   root_fname_sings = 'temp_snglrty';
+   keep_sings_file = true; 
+   [mfile_sings, mfile_sings_sentinel] = create_temp_file(root_fname_sings, keep_sings_file);
+   mfile_sings.xyz_idx = xyz_idx;
+   delete(mfile_sings_sentinel)
    
    % Delete isosurface sentinel, if it's oncleanup ibject, the file will be
    % deleted
    %delete(mfile_surf_sentinel)
-   %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Classifying singularities'))
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Classifying singularities'))
    % Calculate jacobian and classify singularities
-   %singularity_classification = classify_singularities(xyz_idx, mfile_vel);
-   %mfile_sings.singularity_classification = singularity_classification;
+   singularity_classification = classify_singularities(xyz_idx, mfile_vel);
+   mfile_sings.singularity_classification = singularity_classification;
 
 
 end % function compute_neural_flows_3d_ug()
