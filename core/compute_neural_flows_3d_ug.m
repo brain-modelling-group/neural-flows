@@ -141,6 +141,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     % This function runs the loop over timepoints and saves the velocity
     % fields into a file
     detection_th = 0.1;
+    mfile_vel.detection_threshold = detection_th;
     compute_flows_3d()
     
     % Save grid - needed for singularity tracking and visualisation
