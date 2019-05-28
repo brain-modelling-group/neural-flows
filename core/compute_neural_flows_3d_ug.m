@@ -209,22 +209,21 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
                mfile_vel.min_uu(1, this_tpt) = nanmin(uu(:));
                mfile_vel.max_uu(1, this_tpt) = nanmax(uu(:));
                
-               xyz_idx(1,this_tpt).xyz_idx = find(uu < detection_th*eps);
-
-
-
         end
     
     end
 
-   %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Extracting isosurfaces'))
+   detection_threshold = guesstimate_detection_threshold(mfile_vel.min_uu);
+   mfile_vel.detection_threshold = detection_threshold;
+
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Extracting isosurfaces'))
    % Calculate critical isosurfaces
-   %[mfile_surf, mfile_surf_sentinel] = par_get_critical_isosurfaces(mfile_vel);
+   [mfile_surf, mfile_surf_sentinel] = par_get_critical_isosurfaces(mfile_vel);
    
-   %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Locating critical points'))
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Locating critical points'))
    % Detect intersection of critical isosurfaces
-   %data_mode  = 'surf';
-   %index_mode = 'linear';
+   data_mode  = 'vel';
+   index_mode = 'linear';
    [xyz_idx]  = par_locate_critical_points(mfile_surf, mfile_vel, data_mode, index_mode);
    
    root_fname_sings = 'temp_snglrty';
