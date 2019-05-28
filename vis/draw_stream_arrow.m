@@ -49,8 +49,8 @@ n_col = size(cmap, 1);
 n_col = n_col -1;
 
 % Graphics options
-dx = abs(X0(1,1)-X0(1,2)); 
-dy = abs(Y0(1,1)-Y0(2,1)); 
+dx = abs(Y0(1,1)-Y0(1,2)); 
+dy = abs(X0(1,1)-X0(2,1)); 
 dd = min([dx dy]);
 
 % Arrow/Dot options
@@ -114,6 +114,9 @@ for kk=1:length(long_streams)
     
     % Get the index for the colormap
     vcol = floor(Vmag(long_streams(kk))*n_col)+1;
+    if isnan(vcol)
+        vcol = 1;
+    end
     this_colour = cmap(vcol,:);
     
     % Plot this streamline
