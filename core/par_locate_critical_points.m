@@ -95,11 +95,13 @@ end
 function xyz_idx = locate_null_velocity_coordinates(ux, uy, uz, size_grid, index_mode, detection_threshold)
         
         % Find linear indices
-        null_ux = find(ux < detection_threshold);
-        null_uy = find(uy < detection_threshold);
-        null_uz = find(uz < detection_threshold);
+        uu = abs(ux(:) .* uy(:) .* uz(:));
+        xyz_lidx = find(uu >= detection_threshold(1) & uu < detection_threshold(2));
+        %null_ux = find(ux < detection_threshold);
+        %null_uy = find(uy < detection_threshold);
+        %null_uz = find(uz < detection_threshold);
 
-        xyz_lidx = intersect(intersect(null_ux, null_uy), null_uz);
+        %xyz_lidx = intersect(intersect(null_ux, null_uy), null_uz);
         xyz_idx = switch_index_mode(xyz_lidx, index_mode, size_grid);
 end
 
@@ -126,7 +128,7 @@ tpts = size(mfile_vel_obj, 'ux', 4); %#ok<GTARG>
 size_grid  = size(mfile_vel_obj, 'X');
 
 xyz_idx = struct([]); 
-detection_threshold = mfile_vel_obj.detection_threshold * eps;
+detection_threshold = mfile_vel_obj.detection_threshold;
 
     parfor tt=1:tpts
          xyz_idx(tt).xyz_idx = locate_null_velocity_coordinates(mfile_vel_obj.ux(:, :, :, tt), ...
