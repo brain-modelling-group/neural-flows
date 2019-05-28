@@ -1,0 +1,18 @@
+# stubs directory 
+dir_to_ignore/
+
+# output data
+output_data/
+
+# temp files 
+*.m~
+*.mat
+
+# graphic files
+*.jpeg
+*.jpg
+*.png
+*.tiff
+*.pdf
+*.svg
+*.fig
