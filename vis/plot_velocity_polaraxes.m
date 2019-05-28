@@ -10,8 +10,6 @@ x_angle = 0;
 y_angle = 30;
 z_angle = 90;
 
-scaling_factor = 1004186;
-
 % Build angle vectors
 %x
 theta_x = zeros(1, length(vx));
