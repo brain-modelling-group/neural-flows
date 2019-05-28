@@ -205,6 +205,10 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
                mfile_vel.sum_uz(1, this_tpt) = nansum(uzo(:));
                
                uu = abs(uxo(:) .* uyo(:) .* uzo(:));
+               
+               mfile_vel.min_uu(1, this_tpt) = nanmin(uu(:));
+               mfile_vel.max_uu(1, this_tpt) = nanmax(uu(:));
+               
                xyz_idx(1,this_tpt).xyz_idx = find(uu < detection_th*eps);
 
 
@@ -221,7 +225,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
    % Detect intersection of critical isosurfaces
    %data_mode  = 'surf';
    %index_mode = 'linear';
-   %[xyz_idx]  = par_locate_critical_points(mfile_surf, mfile_vel, data_mode, index_mode);
+   [xyz_idx]  = par_locate_critical_points(mfile_surf, mfile_vel, data_mode, index_mode);
    
    root_fname_sings = 'temp_snglrty';
    keep_sings_file = true; 
