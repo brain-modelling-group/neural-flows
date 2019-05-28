@@ -135,41 +135,7 @@ if curved_arrow
    head_marker = @plot_arrow;  
 else
    head_marker = @plot_dot; 
-end%% Identifies open figures from handles in graphics object array.
-%
-% ARGUMENTS: 
-%    X0 -- 
-%    Y0 -- 
-%    U  --
-%    V  --
-%    options
-%           .stream_length_steps  -- an integer number of 'time' steps to
-%                                    display. It determines the length of
-%                                    the streamlines.
-%           .curved_arrows        -- true or false, 0 or 1. Draws arrows at
-%                                    the head of the streamline
-%
-% OUTPUT:
-%    stream_handle -- streamline objects handle
-%
-% AUTHOR:
-%    Paula Sanz-Leon, (2018), QIMR Berghofer
-%
-% USAGE:
-%{ 
-
-load wind
-options.stream_length_steps=42;
-options.curved_arrow = 1;
-options.start_points_mode = 'grid';
-
-draw_stream_arrow(x(:, :, 1), y(:, :, 1), u(:, :, 1), v(:, :, 1), options)
-
-%}
-%
-% REQUIRES:
-%         standardise_range()
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+end
 
 for kk=1:length(long_streams)
     
