@@ -4,6 +4,10 @@ dir_to_ignore/
 # output data
 output_data/
 
+# graohic output
+image_frames/
+
+
 # temp files 
 *.m~
 *.mat
