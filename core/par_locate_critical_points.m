@@ -92,15 +92,15 @@ end
 
 
 % Uses the vector fields to locate singularities
-function xyz_idx = locate_null_velocity_coordinates(ux, uy, uz, X, index_mode)
+function xyz_idx = locate_null_velocity_coordinates(ux, uy, uz, size_grid, index_mode, detection_threshold)
         
         % Find linear indices
-        null_ux = find(ux < eps);
-        null_uy = find(uy < eps);
-        null_uz = find(uz < eps);
+        null_ux = find(ux < detection_threshold);
+        null_uy = find(uy < detection_threshold);
+        null_uz = find(uz < detection_threshold);
 
         xyz_lidx = intersect(intersect(null_ux, null_uy), null_uz);
-        xyz_idx = switch_index_mode(xyz_lidx, index_mode, X);
+        xyz_idx = switch_index_mode(xyz_lidx, index_mode, size_grid);
 end
 
 % Uses surfaces to locate singularities
@@ -123,13 +123,17 @@ end
 function xyz_idx = use_velocity_fields(mfile_vel_obj, index_mode)
 
 tpts = size(mfile_vel_obj, 'ux', 4); %#ok<GTARG>
-X = mfile_vel_obj.X;
+size_grid  = size(mfile_vel_obj, 'X');
+
 xyz_idx = struct([]); 
+detection_threshold = mfile_vel_obj.detection_threshold * eps;
 
     parfor tt=1:tpts
          xyz_idx(tt).xyz_idx = locate_null_velocity_coordinates(mfile_vel_obj.ux(:, :, :, tt), ...
                                                                 mfile_vel_obj.uy(:, :, :, tt), ...
-                                                                mfile_vel_obj.uz(:, :, :, tt), X, index_mode);        %#ok<PFBNS>
+                                                                mfile_vel_obj.uz(:, :, :, tt), size_grid, ...
+                                                                index_mode, ...
+                                                                detection_threshold);        %#ok<PFBNS>
     end 
 
 end
@@ -158,13 +162,13 @@ in_bdy_mask = mfile_vel_obj.in_bdy_mask;
 end
 
 
-function xyz_idx = switch_index_mode(xyz_lidx, index_mode, X)
+function xyz_idx = switch_index_mode(xyz_lidx, index_mode, size_grid)
 
         switch index_mode
             case 'linear'
                 xyz_idx = xyz_lidx;
             case 'subscript' % NOTE: I vaguely remember this part not working properly.
-                [x_idx, y_idx, z_idx] = ind2sub(size(X),xyz_lidx); 
+                [x_idx, y_idx, z_idx] = ind2sub(size_grid, xyz_lidx); 
                 xyz_idx = [x_idx, y_idx, z_idx];
         end
 end
