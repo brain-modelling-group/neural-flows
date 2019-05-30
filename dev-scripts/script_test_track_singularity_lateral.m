@@ -1,4 +1,4 @@
-
+% This plot type of singularity as timeseries
 [singularity_classification] =   classify_singularities(xyz_cell{cc}, mfile_vel);
 
 
@@ -29,7 +29,7 @@ end
 
 
 for ii=1:size(out, 2)
-stairs(ax(ii), log10(out(:, ii)), 'color', cmap(ii, 1:3), 'linewidth', 2)
+stairs(ax(ii), out(:, ii), 'color', cmap(ii, 1:3), 'linewidth', 2)
 ax(ii).Title.String = singularity_list{ii};
 end
 
