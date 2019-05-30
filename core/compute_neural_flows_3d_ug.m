@@ -167,6 +167,8 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     delete(mfile_vel_sentinel)
     
     % No way around a sequential for loop for optical flows
+    % NOTE: TODO: consider running the algo for longer for the first 3-5
+    % frames. Random initial conditions are horrible.
     function compute_flows_3d()
         
         for this_tpt = 1:dtpts-1
@@ -197,9 +199,13 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     
     end
 
-   detection_threshold = guesstimate_detection_threshold(mfile_vel.min_uu);
+   % NOTE: TODO: which criterion to use for the detection therhesold should  be a
+   % parameter it can be rerun with different types
+   detection_threshold = guesstimate_detection_threshold(mfile_vel.min_nu);
    mfile_vel.detection_threshold = detection_threshold;
 
+   % NOTE: TODO: This step shpuld be optional when the surface-based
+   % detection is working properly
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Extracting isosurfaces'))
    % Calculate critical isosurfaces
    [mfile_surf, mfile_surf_sentinel] = par_get_critical_isosurfaces(mfile_vel);
