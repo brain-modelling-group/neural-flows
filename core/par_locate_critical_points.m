@@ -95,7 +95,8 @@ end
 function xyz_idx = locate_null_velocity_coordinates(ux, uy, uz, size_grid, index_mode, detection_threshold)
         
         % Find linear indices
-        uu = abs(ux(:) .* uy(:) .* uz(:));
+        %uu = abs(ux(:) .* uy(:) .* uz(:)); % based on magnitude
+        [~, uu] = normalise_vector_field([ux(:) uy(:) uz(:)], 2); % based on the norm
         xyz_lidx = find(uu >= detection_threshold(1) & uu < detection_threshold(2));
         %null_ux = find(ux < detection_threshold);
         %null_uy = find(uy < detection_threshold);
