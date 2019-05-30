@@ -201,9 +201,10 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
    % NOTE: TODO: which criterion to use for the detection therhesold should  be a
    % parameter it can be rerun with different types
    % Close the file to avoid corruption
-   mfile_vel.Properties.Writable = false;
    detection_threshold = guesstimate_detection_threshold(mfile_vel.min_nu);
    mfile_vel.detection_threshold = detection_threshold;
+   mfile_vel.Properties.Writable = false;
+
 
    % NOTE: TODO: This step shpuld be optional when the surface-based
    % detection is working properly
