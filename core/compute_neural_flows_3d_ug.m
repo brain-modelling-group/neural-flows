@@ -157,8 +157,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     mfile_vel.hz = hz; % mm
     mfile_vel.ht = ht; % ms
     
-   % Close the file to avoid corruption
-    mfile_vel.Properties.Writable = false;
+
 
     % Delete sentinels. If these varibales are OnCleanup objects, then the 
     % files will be deleted.
@@ -201,6 +200,8 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
 
    % NOTE: TODO: which criterion to use for the detection therhesold should  be a
    % parameter it can be rerun with different types
+   % Close the file to avoid corruption
+   mfile_vel.Properties.Writable = false;
    detection_threshold = guesstimate_detection_threshold(mfile_vel.min_nu);
    mfile_vel.detection_threshold = detection_threshold;
 
