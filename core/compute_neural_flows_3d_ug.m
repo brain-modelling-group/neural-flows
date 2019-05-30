@@ -193,7 +193,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
                
                % Save some other useful information
                
-               mfile_vel = get_vfield_info(mfile_vel, [uxo(:) uyo(:) uzo(:)], this_tpt);
+               mfile_vel = get_vfield_info(mfile_vel, uxo(:), uyo(:), uzo(:), this_tpt);
                               
         end
     
