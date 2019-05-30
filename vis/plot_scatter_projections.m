@@ -81,8 +81,7 @@ plot3(xcoord.*ones(size(fb_rh.zy)), y(fb_rh.zy), z(fb_rh.zy), 'color', [0.65 0.6
                    
 grid(ax, 'on')
 ax.GridAlpha = 0.15;
-ax.GridLineStyle = '--';x(fb_rh.zy)
-
+ax.GridLineStyle = '--';
 view(ax, [50, 37])
 ax.XLabel.String = 'X [mm]';
 ax.YLabel.String = 'Y [mm]';
@@ -101,7 +100,8 @@ end
 load('convex_hull_lh_513parc.mat')
 patch(ax, 'Faces', boundary_lh.faces, 'Vertices', boundary_lh.vertices, 'FaceAlpha', 0.1, 'FaceColor', [0.9 0.9 0.9], 'EdgeColor', 'k', 'EdgeAlpha', 0.1)
 
-% Get colours                
+% Get colours              hold(ax, 'on')
+  
 for ii=1:length(singularity_list)
   [~, cmap(ii, :)] = map_str2int(singularity_list{ii});
 end
@@ -109,9 +109,9 @@ end
 
 
 dot_radius = 142;
-alpha_value = 0.25;
-this_singularity = 2;
-for tt=1:999
+alpha_value = 0.5;
+this_singularity = 6;
+for tt=1:200
    if ~isempty(xyz_idx(tt).xyz_idx)
        %cidx = sum(color_map(tt).colormap(:, 1:3),2); 
        %idx = find(cidx == 1);
@@ -148,7 +148,7 @@ for tt=1:999
 end
 
 % Build legend
-h(this_singularity) = plot(NaN,NaN,'o', ... 
+ h(this_singularity) = plot(NaN,NaN,'o', ... 
                           'markerfacecolor', cmap(this_singularity, 1:3), ...
                           'markeredgecolor', cmap(this_singularity, 1:3), ...
                           'markersize', 14);

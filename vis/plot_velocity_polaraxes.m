@@ -81,7 +81,7 @@ for tt=1:size(vx, 2)
     hz.RData      = data_z(:, tt);
     hz.ThetaData  = theta_z(:, tt)*pi/180;
     drawnow
-    pause(0.1)
+    export_fig(sprintf( './frame_%03d.png', tt ), '-r150', '-nocrop', figure_handle)
 end
 
 end % plot_velocity_polaraxes()
