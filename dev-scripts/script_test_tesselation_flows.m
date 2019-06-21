@@ -3,53 +3,79 @@
 % Author: Paula Sanz-Leon, QIMR June 2019
 
 % Load surface
-load('/home/paula/Work/Code/Networks/patchflow/demo-data/Cortex_reg13_to_513parc.mat')
+load('neural_flows_cortex_mesh')
 
 % Load data
-save('neural_flows_surf_wave_data', 'smooth_wave_data')
+load('neural_flows_surf_wave_data', 'smooth_wave_data')
 
 % Generate timevec -- not really used at the moment
-time_data = 1:1:size(wave_data{1}, 1);
-
-
+time_data = 1:1:size(smooth_wave_data{1}, 1);
 
 %% Estimate neural flows
-this_dataset = 3;
+this_dataset = 1; % NOTE: change this index to access 1 of 4 datasets availble
 hs_smoothness = 1;
-idx_start = 2; % Should always start with 2 or larger
+idx_start = 1;   
 idx_end   = 201;
-tic;
-[flowField, int_dF, errorData, errorReg, poincare_idx, time_flow] = estimate_flow_tess(weighted_signal{this_dataset}.', cortex, time_data, idx_start, idx_end, hs_smoothness);
-toc;
 
-% benchmarks --> 50 seconds for flow calculation for data of size 16384 x 201 
+% NOTE: the calculation takes about 50s for input data of size [v: 16384 x t: 201] 
+[flow_fields, ~, ~, ~, poincare_index, time_flow] = estimate_flow_tess(smooth_wave_data{this_dataset}.', ...
+                                                                     cortex, time_data, ...
+                                                                     idx_start, idx_end, ...
+                                                                     hs_smoothness);
 %%
 tt=1;
-surf_handle = figure_surf(cortex, weighted_signal{this_dataset}(1, :), 'rwb');
-view(2)
-fig_handle = gcf;
-ax_handle  = gca;
-hold on
-h = quiver3(ax_handle, cortex.vertices(:, 1), cortex.vertices(:, 2), cortex.vertices(:, 3), flowField(:, 1, tt), flowField(:, 2, tt), flowField(:, 3, tt), 5, 'color', [0.5 0.5 0.5 0.1], 'linewidth', 0.5);
+[surf_handle, fax] = plot_surf(cortex, smooth_wave_data{this_dataset}(1, :), 'rywb');
+hold(fax.axes, 'on')
+quiv_handle = quiver3(fax.axes, cortex.vertices(:, 1), ...
+                      cortex.vertices(:, 2), ...
+                      cortex.vertices(:, 3), ...
+                      flow_fields(:, 1, tt), ...
+                      flow_fields(:, 2, tt), ...
+                      flow_fields(:, 3, tt), ...
+                      5, 'color', [0.5 0.5 0.5 0.1], 'linewidth', 0.5);
+                  
+% Find critical points
+cp_idx = find(poincare_index(:, tt)==1);
+
+cp_handle = scatter3(fax.axes, cortex.face_barycentres(cp_idx, 1), ....
+                               cortex.face_barycentres(cp_idx, 2), ...
+                               cortex.face_barycentres(cp_idx, 3), 'k', 'filled');
+
+xlims = fax.axes.XLim;
+ylims = fax.axes.YLim;
+zlims = fax.axes.ZLim;
 
 %%
-max_val = max(abs(weighted_signal{this_dataset}(:)));
+max_pos_val = max( smooth_wave_data{this_dataset}(:));
+max_neg_val = max(-smooth_wave_data{this_dataset}(:));
+max_val = min([max_pos_val, max_neg_val]);
 caxis([-max_val max_val])
 
-%%
+%% Make a movie out of the data
 for tt=1:idx_end-1
-    set(h, 'UData', flowField(:, 1, tt), 'VData', flowField(:, 2, tt), 'WData', flowField(:, 3, tt))
-    %set(surf_handle, 'FaceVertexCData', weighted_signal{this_dataset}(tt, :).')
-    set(surf_handle, 'FaceVertexCData', poincare_idx(:, tt))
+    set(quiv_handle, 'UData', flow_fields(:, 1, tt), ...
+           'VData', flow_fields(:, 2, tt), ...
+           'WData', flow_fields(:, 3, tt))
+    
+    cp_idx = find(poincare_index(:, tt) ==1 );
+    set(cp_handle, 'XData', cortex.face_barycentres(cp_idx, 1), ...
+                   'YData', cortex.face_barycentres(cp_idx, 2), ...
+                   'ZData', cortex.face_barycentres(cp_idx, 3))
+               
+    set(surf_handle, 'FaceVertexCData', smooth_wave_data{this_dataset}(tt, :).')
+    
+    % Avoid jitter from frame to frame
+    fax.axes.XLim = xlims;
+    fax.axes.YLim = ylims;
+    fax.axes.ZLim = zlims;
 
-    %caxis([-max_val max_val])
-    pause(0.1)
-    TheMovie(1,tt) = getframe(fig_handle);
+    caxis([-max_val max_val])
+    pause(1)
+    TheMovie(1,tt) = getframe(fax.figure);
 end
 
 %% Write movie to file
 videoname = 'neural_flows_dataset_03';
-
 v = VideoWriter([ videoname '.avi']);
 v.FrameRate = 10;
 
@@ -58,14 +84,3 @@ for kk=1:size(TheMovie,2)
    writeVideo(v,TheMovie(1, kk)) 
 end
 close(v)
-
-%% Plot distribution of speed
-figure
-subplot(121)
-histogram(sqrt((1000*flowField(:, 1, :)).^2+(1000*flowField(:, 2, :)).^2+(1000*flowField(:, 3, :)).^2))
-subplot(122)
-histogram(log10(sqrt(flowField(:, 1, :).^2+flowField(:, 2, :).^2+flowField(:, 3, :).^2)))
-
-
-
-
