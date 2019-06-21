@@ -61,7 +61,7 @@ end
 num_vertices = size(vertices, 1);
 num_faces    = size(faces, 1);
 time_flow = (time_data(idx_start:idx_end-1) + time_data(idx_start+1:idx_end))/2;
-interval_length = idx_end - idx_start+1; % Number of timepoints used in flow calculations
+interval_length = idx_end - idx_start; % Number of timepoints used in flow calculations
 
 % Get data we're going to use, dismiss the rest
 data    = data(:, idx_start:idx_end);
@@ -72,15 +72,16 @@ data = data/max_val;
 
 % Preallocate output arrays
 flow_fields(num_vertices, embedding_dimension, interval_length) = 0;
-error_data(interval_length) = 0;
-error_reg(interval_length) = 0;
-int_dflow(interval_length) = 0;
+error_data(1, interval_length) = 0;
+error_reg(1, interval_length) = 0;
+int_dflow(1, interval_length) = 0;
 poincare_idx(num_faces, interval_length) = 0;
 
-[regularizer_matrix, gradient_basis, tangent_plane_basis_cell, tangent_plane_basis, ...
- triangle_areas, face_normals, sparse_idx1, sparse_idx2] =  regularizing_matrix_hs(faces, ...
-                                                                                   vertices, vertex_normals, ...
-                                                                                   embedding_dimension);
+[regularizer_matrix, gradient_basis, ...
+ tangent_plane_basis_cell, tangent_plane_basis, ...
+ triangle_areas, face_normals, ...
+ sparse_idx1, sparse_idx2] =  regularizing_matrix_hs(faces, vertices, vertex_normals, embedding_dimension);
+
 % Scale regularising term by the smoothness parameter.
 regularizer = hs_smoothness * regularizer_matrix;
 
@@ -88,18 +89,16 @@ regularizer = hs_smoothness * regularizer_matrix;
 flow_projection = zeros(3, 3, num_faces);
 
 for face_idx = 1:num_faces
-    flow_projection(:, :, face_idx) = eye(3) - (face_normals(face_idx,:)'*face_normals(face_idx, :));
+    flow_projection(:, :, face_idx) = eye(3) - (face_normals(face_idx, :)'*face_normals(face_idx, :));
 end
 
 % Start estimation of flows
 for tt_idx  = 2:interval_length 
-
-    % Solve for flow
-    % NOTE: I think this term should be scaled by the time step.
-    delta_activity = data(:,tt_idx) - data(:, tt_idx-1);
+    % TODO: I think this term should be scaled by the time step.
+    delta_activity = data(:, tt_idx) - data(:, tt_idx-1);
     [data_fit, B]  = data_fit_matrix(faces, num_vertices, ...
                                     gradient_basis, triangle_areas, tangent_plane_basis_cell, ...
-                                    data(:, tt_idx-1), delta_activity, embedding_dimension, ...
+                                    data(:, tt_idx), delta_activity, embedding_dimension, ...
                                     sparse_idx1, sparse_idx2);
   
   % NOTE: Solve system of equations -- this may be the worst offender in terms of runtime
@@ -110,14 +109,13 @@ for tt_idx  = 2:interval_length
       % TODO: avoid using repmat: try to use smart inexing here
       % TODO: idiomatic indexing. Also dividing by two is begging for an indexing
       %       error to happen.
-      flow_fields(:, :, tt_idx-1) = repmat(X(1:end/2), [1, 3]) .* tangent_plane_basis(:, :, 1) + ...
-                                    repmat(X(end/2+1:end), [1,3]) .* tangent_plane_basis(:,:,2);
+      flow_fields(:, :, tt_idx-1) = repmat(X(1:end/2), [1, 3]) .* tangent_plane_basis(:, :, 1) + repmat(X(end/2+1:end), [1,3]) .* tangent_plane_basis(:,:,2);
   else % 
       flow_fields(:, :, tt_idx-1) = [X zeros(num_vertices, 1)];
   end
   
-  error_data(tt_idx)= X'*data_fit*X - 2*B'*X; % Data fit error
-  error_reg(tt_idx) = X'*regularizer*X;      % Regularization error
+  error_data(1, tt_idx-1)= X'*data_fit*X - 2*B'*X; % Data fit error
+  error_reg(1, tt_idx-1) = X'*regularizer*X;      % Regularization error
 
   % Variational formulation constant
   vertex_0 = 1;
@@ -130,7 +128,7 @@ for tt_idx  = 2:interval_length
   int_dflow(tt_idx) = sum(triangle_areas.*(dF01 + dF12 + dF02))/24;
   
   % Precompute flow_fields with faces to save time in the loop.
-  faces_flow_fields = reshape(flow_fields(faces', :, tt_idx)', [3, 3, num_faces]);
+  faces_flow_fields = reshape(flow_fields(faces', :, tt_idx-1)', [3, 3, num_faces]);
   
   % Calculate Poincare index of each triangle
   for face_idx=1:num_faces
@@ -255,7 +253,7 @@ tangent_plane_basis(:, :, 1) = diff(vertex_normals(:, [ydim zdim xdim ydim]).').
 bad = abs(dot(vertex_normals, ones(number_of_vertices,3)/sqrt(3), 2)) > 0.97;
 tangent_plane_basis(bad, :, basis_vec_1) = [ vertex_normals(bad, ydim), ...
                                             -vertex_normals(bad, xdim), ...
-                                             zeros(sum(bad), xdim)];
+                                                 zeros(sum(bad), xdim)];
 
 % Second vector in basis found by cross product with the vertex normals
 tangent_plane_basis(:, :, basis_vec_2) = cross(vertex_normals, tangent_plane_basis(:, : , basis_vec_1));
