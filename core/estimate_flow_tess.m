@@ -133,7 +133,7 @@ for tt_idx  = 2:interval_length
   % Calculate Poincare index of each triangle
   for face_idx=1:num_faces
       % projection of flow_fields(this_face, : ,t) on triangle f
-      poincare_idx(face_idx, tt_idx) = poincare_index(flow_projection(:, :, face_idx) * faces_flow_fields(:, :, face_idx));  
+      poincare_idx(face_idx, tt_idx-1) = poincare_index(flow_projection(:, :, face_idx) * faces_flow_fields(:, :, face_idx));  
           
   end
 
@@ -461,6 +461,9 @@ end
 
 
 function index = poincare_index(flow_fields)
+%  0: not a critical point:
+% -1: saddle
+% +1: critical point
 % Compute the Poincare index of a vector field along a closed curve (eg, a cricle) 
 % INPUT: 
 % flow_fields --- projected flow fields onto tangent space. Has dimensions [2, number_of_vectors]
