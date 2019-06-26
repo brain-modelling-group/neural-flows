@@ -41,9 +41,15 @@ function [flow_fields, int_dflow, error_data, error_reg, poincare_idx, time_flow
 
 
 if nargin < 7
-    embedding_dimension = 3; 
+    embedding_dimension = 3;
+    flow_components = 3;
 end
 
+% NOTE: not sure this is correct?
+if embedding_dimension == 2
+    flow_components = 2;
+end
+    
 % Get some info and local variables
 faces    = cortex.faces; 
 vertices = cortex.vertices; 
@@ -85,8 +91,11 @@ poincare_idx(num_faces, interval_length) = 0;
 % Scale regularising term by the smoothness parameter.
 regularizer = hs_smoothness * regularizer_matrix;
 
-% Projection of flow onto triangles (for Poincare index)
-flow_projection = zeros(3, 3, num_faces);
+% Some constants
+vx_per_face = 3;
+
+% Projection of flow onto triangles/triangle edges (for Poincare index)
+flow_projection = zeros(vx_per_face, vx_per_face, num_faces);
 
 for face_idx = 1:num_faces
     flow_projection(:, :, face_idx) = eye(3) - (face_normals(face_idx, :)'*face_normals(face_idx, :));
@@ -127,8 +136,8 @@ for tt_idx  = 2:interval_length
   dF02 = (delta_activity(faces(:,vertex_0),:) + delta_activity(faces(:,vertex_2))).^2;
   int_dflow(tt_idx) = sum(triangle_areas.*(dF01 + dF12 + dF02))/24;
   
-  % Precompute flow_fields with faces to save time in the loop.
-  faces_flow_fields = reshape(flow_fields(faces', :, tt_idx-1)', [3, 3, num_faces]);
+  % Precompute flow_fields on faces to save time in the loop.
+  faces_flow_fields = reshape(flow_fields(faces', :, tt_idx-1)', [flow_components, vx_per_face, num_faces]);
   
   % Calculate Poincare index of each triangle
   for face_idx=1:num_faces
@@ -478,7 +487,7 @@ end
 function theta = myangle(flow_fields) 
 % Calculates the good angle of a vector (between 0 and 2pi)
 % INPUTS: 
-% OUTPUTS: 
+% OUTPUTS: a 1 x 3 vector with the angle of the flow for each vertex of a triangle 
   x1dim = 1;
   x2dim = 2;
   normv = sqrt(sum(flow_fields.^2, 1));
@@ -486,12 +495,12 @@ function theta = myangle(flow_fields)
   s = flow_fields(x2dim,:)./normv;
   theta = acos(c);
   % Vectorised version
-  % theta(s < 0) = -theta(s < 0) + 2*pi;
-  for ii=1:size(flow_fields, 2)
-    if s(ii) < 0
-      theta(ii)= -theta(ii) + 2*pi;
-    end
-  end
+  theta(s < 0) = -theta(s < 0) + 2*pi;
+  %for ii=1:size(flow_fields, 2)
+  %  if s(ii) < 0
+  %    theta(ii)= -theta(ii) + 2*pi;
+  %  end
+  %end
 end
 
 
@@ -502,14 +511,14 @@ function theta = diffangle(theta2, theta1)
 
   theta = theta2 - theta1;
   % Vectorized version
-  % theta(theta < -pi) = theta(theta < -pi) + 2*pi;
-  % theta(theta > pi) = theta(theta > pi) - 2*pi;
+  theta(theta < -pi) = theta(theta < -pi) + 2*pi;
+  theta(theta > pi) = theta(theta > pi) - 2*pi;
 
-  for ii=1:length(theta)
-    if theta(ii) < -pi
-      theta(ii) = theta(ii) + 2*pi;
-    elseif theta(ii) > pi
-        theta(ii) = theta(ii) - 2*pi;
-    end
-  end
+  %for ii=1:length(theta)
+  %  if theta(ii) < -pi
+  %    theta(ii) = theta(ii) + 2*pi;
+  %  elseif theta(ii) > pi
+  %      theta(ii) = theta(ii) - 2*pi;
+  %  end
+  %end
 end
