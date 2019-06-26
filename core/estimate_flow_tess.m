@@ -495,12 +495,12 @@ function theta = myangle(flow_fields)
   s = flow_fields(x2dim,:)./normv;
   theta = acos(c);
   % Vectorised version
-  theta(s < 0) = -theta(s < 0) + 2*pi;
-  %for ii=1:size(flow_fields, 2)
-  %  if s(ii) < 0
-  %    theta(ii)= -theta(ii) + 2*pi;
-  %  end
-  %end
+  % theta(s < 0) = -theta(s < 0) + 2*pi;
+  for ii=1:size(flow_fields, 2)
+    if s(ii) < 0
+      theta(ii)= -theta(ii) + 2*pi;
+    end
+  end
 end
 
 
@@ -511,14 +511,14 @@ function theta = diffangle(theta2, theta1)
 
   theta = theta2 - theta1;
   % Vectorized version
-  theta(theta < -pi) = theta(theta < -pi) + 2*pi;
-  theta(theta > pi) = theta(theta > pi) - 2*pi;
+  % theta(theta < -pi) = theta(theta < -pi) + 2*pi;
+  % theta(theta > pi) = theta(theta > pi) - 2*pi;
 
-  %for ii=1:length(theta)
-  %  if theta(ii) < -pi
-  %    theta(ii) = theta(ii) + 2*pi;
-  %  elseif theta(ii) > pi
-  %      theta(ii) = theta(ii) - 2*pi;
-  %  end
-  %end
+  for ii=1:length(theta)
+    if theta(ii) < -pi
+      theta(ii) = theta(ii) + 2*pi;
+    elseif theta(ii) > pi
+        theta(ii) = theta(ii) - 2*pi;
+    end
+  end
 end
