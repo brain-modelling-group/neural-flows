@@ -11,7 +11,7 @@
 %         LocalTriangles -- <description>
 %
 % REQUIRES: 
-%         none
+%         Matlab's triangulation function
 %         
 % USAGE:
 %{
