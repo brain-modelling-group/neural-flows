@@ -15,9 +15,13 @@
 %         
 % USAGE:
 %{
-      load('Cortex_213.mat', 'Vertices', 'Triangles', 'VertexNormals'); % Contains: 'Vertices', 'Triangles', 'VertexNormals', 'TriangleNormals' 
-      tr = TriRep(Triangles, Vertices); % Convert to TriRep object
-      [LocalVertices LocalTriangles GlobalVertexIndices GlobalTriangleIndices nRing] = GetLocalSurface(tr, 42, 3);    
+      triobj = triangulation(Triangles, Vertices);  
+      % or
+      triobj.vertices = Vertices;
+      triobj.faces = Triangles.
+      focal_vertex = 42;
+      nth_ring = 3;
+      [loc_vertices, loc_triangles, glob_vertex_indices, glob_triangle_indices, nth_ring = get_local_surface(triobj, focal_vertex, nth_ring);    
 %}
 %
 % MODIFICATION HISTORY:
@@ -26,7 +30,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-function [loc_vertices, loc_triangles, glob_vertex_indices, glob_triangle_indices, nth_ring] = GetLocalSurface(triobj, focal_vertex, Neighbourhood)
+function [loc_vertices, loc_triangles, glob_vertex_indices, glob_triangle_indices, nth_ring] = get_local_surface(triobj, focal_vertex, neighbourhood)
 %% Set any argument that weren't specified
  if nargin<3,
    Neighbourhood = 1;
@@ -34,12 +38,12 @@ function [loc_vertices, loc_triangles, glob_vertex_indices, glob_triangle_indice
  % Get indices of local vertices and triangles 
  loc_vertices = focal_vertex;
  loc_triangles = [];
- new_vertices = FocalVertex;
- nth_ring = zeros(1,Neighbourhood);
+ new_vertices = focal_vertex;
+ nth_ring = zeros(1, neighbourhood);
  for k = 1:Neighbourhood,
-   TrIndices = vertexAttachments(tr, newVertices); 
+   TrIndices = vertexAttachments(triobj, newVertices); 
    newTriangles = setdiff(unique([TrIndices{:}].'),                 loc_triangles);   %
-   newVertices  = setdiff(unique(tr.Triangulation(newTriangles,:)), loc_vertices);    %find vertices that make up that set of triangles
+   newVertices  = setdiff(unique(triobj.Triangulation(newTriangles,:)), loc_vertices);    %find vertices that make up that set of triangles
    nth_ring(1,k) = length(newVertices);
    
    loc_triangles = [loc_triangles ; newTriangles];

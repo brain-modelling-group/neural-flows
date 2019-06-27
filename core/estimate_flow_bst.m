@@ -7,7 +7,7 @@ function [flowField, int_dF, errorData, errorReg, poincare_idx, time_flow] = est
 
 % INPUTS
 %   F                 - Reconstructed sources timseries - 2D array of size number_of_vertices x timepoints
-%   FV                - Triangular mesh with Faces, Vertices and VertexNormals - Tesselation for calculating spatial derivatives
+%   FV                - Triangular mesh with faces, vertices and vertex_normals - Tesselation for calculating spatial derivatives
 %   t                 - Time vector 
 %   idx_start         - Index of first time point for optical flow analysis  
 %   idx_end           - Index of last time point for optical flow analysis    
@@ -26,11 +26,11 @@ function [flowField, int_dF, errorData, errorReg, poincare_idx, time_flow] = est
 if nargin < 7
     embedding_dimension = 3; % 2 for projected maps
 end
-Faces    = FV.faces; 
-Vertices = FV.vertices; 
-VertexNormals = FV.VertexNormals;
-nVertices = size(Vertices, 1);
-nFaces    = size(Faces, 1);
+faces    = FV.faces; 
+vertices = FV.vertices; 
+vertex_normals = FV.vertex_normals;
+nvertices = size(vertices, 1);
+nfaces    = size(faces, 1);
 
 % Time parameters
 % tStartIndex = find(Time < tStart-eps, 1, 'last')+1; % Index of first time point for flow calculation
@@ -65,30 +65,30 @@ intervalLength = tEndIndex-tStartIndex+1;   % Length of time interval for calcul
 M = max(max(abs(F(:,tStartIndex-1:tEndIndex)))); 
 F = F/M; % Scale values to avoid precision error, % TODO: maybe standardize the range on [-1 1]
 
-flowField = zeros(nVertices, embedding_dimension, intervalLength);
+flowField = zeros(nvertices, embedding_dimension, intervalLength);
 dEnergy   = zeros(1, intervalLength);
 errorData = zeros(1, intervalLength);
 errorReg  = zeros(1, intervalLength);
 int_dF    = zeros(1, intervalLength);
 
 [regularizerOld, gradientBasis, tangentPlaneBasisCell, tangentPlaneBasis, ...
-  triangleAreas, FaceNormals, sparseIndex1, sparseIndex2] =  regularizing_matrix(Faces, Vertices, VertexNormals, embedding_dimension); % 2 for projected maps
+  triangleAreas, FaceNormals, sparseIndex1, sparseIndex2] =  regularizing_matrix(faces, vertices, vertex_normals, embedding_dimension); % 2 for projected maps
 
 regularizer = hs_smoothness * regularizerOld;
 
 % Projection of flow on triangle (for Poincare index)
-Pn = zeros(3,3,nFaces);
-for facesIdx = 1:nFaces
+Pn = zeros(3,3,nfaces);
+for facesIdx = 1:nfaces
     Pn(:,:,facesIdx) = eye(3) - (FaceNormals(facesIdx,:)'*FaceNormals(facesIdx,:));
 end
-poincare_idx = zeros(nFaces, intervalLength);
+poincare_idx = zeros(nfaces, intervalLength);
 
 for timePoint = tStartIndex:tEndIndex
     timeIdx = timePoint-tStartIndex+1;
   
     % Solve for flow
     dF = F(:,timePoint)-F(:,timePoint-1);
-    [dataFit, B] = data_fit_matrix(Faces, nVertices, ...
+    [dataFit, B] = data_fit_matrix(faces, nvertices, ...
                                    gradientBasis, triangleAreas, tangentPlaneBasisCell, ...
                                    F(:,timePoint), dF, embedding_dimension, sparseIndex1, sparseIndex2);
   
@@ -100,24 +100,24 @@ for timePoint = tStartIndex:tEndIndex
       % TODO: avoid using repmat: try to use smart inexing here
       flowField(:,:,timeIdx) = repmat(X(1:end/2), [1,3]) .* tangentPlaneBasis(:,:,1) + repmat(X(end/2+1:end), [1,3]) .* tangentPlaneBasis(:,:,2);
   else % X coordinates are in R^2
-      flowField(:,:,timeIdx) = [X zeros(nVertices,1)];
+      flowField(:,:,timeIdx) = [X zeros(nvertices,1)];
   end
   
   errorData(timeIdx)= X'*dataFit*X - 2*B'*X; % Data fit error
   errorReg(timeIdx) = X'*regularizer*X;      % Regularization error
 
   % Variational formulation constant
-  dF12=(dF(Faces(:,1),:)+dF(Faces(:,2))).^2;
-  dF23=(dF(Faces(:,2),:)+dF(Faces(:,3))).^2;
-  dF13=(dF(Faces(:,1),:)+dF(Faces(:,3))).^2;
+  dF12=(dF(faces(:,1),:)+dF(faces(:,2))).^2;
+  dF23=(dF(faces(:,2),:)+dF(faces(:,3))).^2;
+  dF13=(dF(faces(:,1),:)+dF(faces(:,3))).^2;
   int_dF(timeIdx) = sum(triangleAreas.*(dF12+dF23+dF13)) / 24;
   
   % Precompute flowfield with faces to save time in the loop.
-  FacesFlowField = reshape(flowField(Faces', :, timeIdx)', [3,3,nFaces]);
+  facesFlowField = reshape(flowField(faces', :, timeIdx)', [3,3,nfaces]);
   
   % Poincare Index of each triangle
-  for facesIdx=1:nFaces
-      poincare_idx(facesIdx,timeIdx) = poincare_index(Pn(:,:,facesIdx) * FacesFlowField(:,:,facesIdx));  % projection of flowField(f,:,t) on triangle f
+  for facesIdx=1:nfaces
+      poincare_idx(facesIdx,timeIdx) = poincare_index(Pn(:,:,facesIdx) * facesFlowField(:,:,facesIdx));  % projection of flowField(f,:,t) on triangle f
           
   end
 
@@ -129,12 +129,12 @@ end % function calculate_flow_bst()
 
 
 %% ===== TESSELATION NORMALS =====
-function [gradientBasis, triangleAreas, FaceNormals] =   geometry_tesselation(Faces, Vertices, dimension)
+function [gradientBasis, triangleAreas, FaceNormals] =   geometry_tesselation(faces, vertices, dimension)
 % GEOMETRY_TESSELATION    Computes some geometric quantities from a surface
 % 
 % INPUTS:
-%   Faces           - triangles of tesselation
-%   Vertices        - coordinates of nodes
+%   faces           - triangles of tesselation
+%   vertices        - coordinates of nodes
 %   dimension       - 3 for scalp or cortical surface (default)
 %                     2 for plane (channel cap, etc)
 % OUTPUTS:
@@ -143,9 +143,9 @@ function [gradientBasis, triangleAreas, FaceNormals] =   geometry_tesselation(Fa
 %   FaceNormals    -  normal of each triangle 
 
 % Edges of each triangles
-u = Vertices(Faces(:,2),:)-Vertices(Faces(:,1),:);
-v = Vertices(Faces(:,3),:)-Vertices(Faces(:,2),:);
-w = Vertices(Faces(:,1),:)-Vertices(Faces(:,3),:);
+u = vertices(faces(:,2),:)-vertices(faces(:,1),:);
+v = vertices(faces(:,3),:)-vertices(faces(:,2),:);
+w = vertices(faces(:,1),:)-vertices(faces(:,3),:);
 
 % Length of each edges and angles bewteen edges
 uu = sum(u.^2,2);
@@ -197,12 +197,12 @@ else
 end
 
 % % Calculate normals to surface at each vertex (from normals at each face)
-% VertNormals = zeros(size(Vertices,1),3);
+% VertNormals = zeros(size(vertices,1),3);
 % bst_progress('start', 'Optical Flow', ...
-%   'Computing normals to surface at every vertex ...', 1, size(Faces,1));
-% for facesIdx=1:size(Faces,1); 
-%   VertNormals(Faces(facesIdx,:),:) = ...
-%     VertNormals(Faces(facesIdx,:),:) + ...
+%   'Computing normals to surface at every vertex ...', 1, size(faces,1));
+% for facesIdx=1:size(faces,1); 
+%   VertNormals(faces(facesIdx,:),:) = ...
+%     VertNormals(faces(facesIdx,:),:) + ...
 %     repmat(FaceNormals(facesIdx,:), [3 1]);
 %   
 %   if mod(facesIdx,20) == 0
@@ -220,7 +220,7 @@ end
 
 %% ===================== TESSELATION TANGENT BUNDLE =======================
 function tangent_plane_basis = basis_vertices(vertex_normals)
-% BASIS_VERTICES  Gives an orthonormal basis orthogonal to several vectors
+% BASIS_vertices  Gives an orthonormal basis orthogonal to several vectors
 %
 % INPUTS:
 %   vertex_normals    - array of size [number_of_vertices x 3] 
@@ -261,7 +261,7 @@ end
 function [regularizer, gradientBasis, tangentPlaneBasisCell, ...
   tangentPlaneBasis, triangleAreas, FaceNormals, ...
   sparseIndex1,sparseIndex2] = ...
-  regularizing_matrix(Faces, Vertices, VertNormals, dimension)
+  regularizing_matrix(faces, vertices, VertNormals, dimension)
 % REGULARIZING_MATRIX: Computation of the regularizing part in the
 %                      variationnal approach (SS grad(v_k)grad(v_k')) and
 %                      other geometrical quantities.
@@ -272,8 +272,8 @@ function [regularizer, gradientBasis, tangentPlaneBasisCell, ...
 %        regularizing_matrix(tri, coord, dim)
 %
 % INPUTS
-%   Faces                   - triangles of the tesselation
-%   Vertices                - vertices of the tesselation
+%   faces                   - triangles of the tesselation
+%   vertices                - vertices of the tesselation
 %   VertNormals             - normals to surface at each vertex
 %   dimension               - 3 for scalp or cortical surface
 %                             2 for flat surface
@@ -295,29 +295,29 @@ function [regularizer, gradientBasis, tangentPlaneBasisCell, ...
 %|                                      | 
 %\--------------------------------------/
 
-nVertices = size(Vertices,1); % Number of nodes
+nvertices = size(vertices,1); % Number of nodes
 [gradientBasis, triangleAreas, FaceNormals] = ...
-  geometry_tesselation(Faces, Vertices, dimension);
+  geometry_tesselation(faces, vertices, dimension);
 
 % Basis of the tangent plane at each vertex
 tangentPlaneBasis = basis_vertices(VertNormals);
 tangentPlaneBasisCell = cell(2,3); % similar structure to gradientBasis
 % 2 = # of basis vectors, 3 = # of nodes in each element (triangle)
 
-tangentPlaneBasisCell{1,1} = tangentPlaneBasis(Faces(:,1),:,1);
-tangentPlaneBasisCell{1,2} = tangentPlaneBasis(Faces(:,2),:,1);
-tangentPlaneBasisCell{1,3} = tangentPlaneBasis(Faces(:,3),:,1);
+tangentPlaneBasisCell{1,1} = tangentPlaneBasis(faces(:,1),:,1);
+tangentPlaneBasisCell{1,2} = tangentPlaneBasis(faces(:,2),:,1);
+tangentPlaneBasisCell{1,3} = tangentPlaneBasis(faces(:,3),:,1);
 
-tangentPlaneBasisCell{2,1} = tangentPlaneBasis(Faces(:,1),:,2);
-tangentPlaneBasisCell{2,2} = tangentPlaneBasis(Faces(:,2),:,2);
-tangentPlaneBasisCell{2,3} = tangentPlaneBasis(Faces(:,3),:,2);
+tangentPlaneBasisCell{2,1} = tangentPlaneBasis(faces(:,1),:,2);
+tangentPlaneBasisCell{2,2} = tangentPlaneBasis(faces(:,2),:,2);
+tangentPlaneBasisCell{2,3} = tangentPlaneBasis(faces(:,3),:,2);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% Regularizing matrix SS grad(v_k)grad(v_k') %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   
-sparseIndex1 = [Faces(:,1) Faces(:,1) Faces(:,2)];
-sparseIndex2 = [Faces(:,2) Faces(:,3) Faces(:,3)];
+sparseIndex1 = [faces(:,1) faces(:,1) faces(:,2)];
+sparseIndex2 = [faces(:,2) faces(:,3) faces(:,3)];
 gradientBasisSum = [sum(gradientBasis{1}.*gradientBasis{2},2) ...
   sum(gradientBasis{1}.*gradientBasis{3},2) ...
   sum(gradientBasis{2}.*gradientBasis{3},2)];
@@ -348,13 +348,13 @@ termes_diag = repmat(triangleAreas, [1 3]) .* [ ...
   sum(gradientBasis{2}.^2,2) ...
   sum(gradientBasis{3}.^2,2) ]; 
 
-D = sparse(Faces, Faces, termes_diag, nVertices, nVertices);
-E11=sparse(sparseIndex1, sparseIndex2, tang_scal_11, nVertices, nVertices);
+D = sparse(faces, faces, termes_diag, nvertices, nvertices);
+E11=sparse(sparseIndex1, sparseIndex2, tang_scal_11, nvertices, nvertices);
 E11=E11+E11'+D;
-E22=sparse(sparseIndex1,sparseIndex2,tang_scal_22,nVertices,nVertices);
+E22=sparse(sparseIndex1,sparseIndex2,tang_scal_22,nvertices,nvertices);
 E22=E22+E22'+D;
-E12=sparse(sparseIndex1,sparseIndex2,tang_scal_12,nVertices,nVertices);
-E21=sparse(sparseIndex1,sparseIndex2,tang_scal_21,nVertices,nVertices);
+E12=sparse(sparseIndex1,sparseIndex2,tang_scal_12,nvertices,nvertices);
+E21=sparse(sparseIndex1,sparseIndex2,tang_scal_21,nvertices,nvertices);
 
 regularizer = [E11 E12+E21'; ...
                E12'+E21 E22];
@@ -362,14 +362,14 @@ regularizer = [E11 E12+E21'; ...
 end
 
 %% ===== HORN-SCHUNCK DATA FIT MATRIX (FOR MANIFOLD) =====
-function [dataFit, B] = data_fit_matrix(Faces, nVertices, ...
+function [dataFit, B] = data_fit_matrix(faces, nvertices, ...
   gradientBasis, triangleAreas, tangentPlaneBasisCell, F, dF, ...
   dimension, sparseIndex1, sparseIndex2)
 % DATA_FIT_MATRIX   Computation of data-fit matrices of the variational 
 %                   formulation
 % INPUTS:
-%   Faces                   - triangles
-%   nVertices               - number of nodes
+%   faces                   - triangles
+%   nvertices               - number of nodes
 %   gradientBasis           - gradient of the basis functions
 %   triangleAreas           - area of each triangle
 %   tangentPlaneBasisCell 	- basis of each tangent plane
@@ -386,12 +386,12 @@ function [dataFit, B] = data_fit_matrix(Faces, nVertices, ...
 %                             -2SS(dF/dt)(grad(F).v_k)
 
 % Gradient of intensity obtained through interpolation
-grad_F = repmat(F(Faces(:,1)), 1, dimension) .* gradientBasis{1} ...
-  + repmat(F(Faces(:,2)), 1, dimension) .* gradientBasis{2} ...
-  + repmat(F(Faces(:,3)), 1, dimension) .* gradientBasis{3};
+grad_F = repmat(F(faces(:,1)), 1, dimension) .* gradientBasis{1} ...
+  + repmat(F(faces(:,2)), 1, dimension) .* gradientBasis{2} ...
+  + repmat(F(faces(:,3)), 1, dimension) .* gradientBasis{3};
 
 % Projection of the gradient of F on the tangent space
-P_grad_F=cell(1,3); % same structure as gradientBasis : size = nFaces,3 ;
+P_grad_F=cell(1,3); % same structure as gradientBasis : size = nfaces,3 ;
 for s=1:3
     for k=1:2
        P_grad_F{s}(:,k)=sum(grad_F.*tangentPlaneBasisCell{k,s},2);
@@ -404,12 +404,12 @@ end
 
 % m�thode Guillaume Obosinski
 
-B = zeros(2*nVertices, 1);
+B = zeros(2*nvertices, 1);
 for k = 1:2
    for s = 1:3
-     B(Faces(:,s)+(k-1)*nVertices) = ...
-       B(Faces(:,s)+(k-1)*nVertices) + ...
-       (-1/12 * triangleAreas .* (P_grad_F{s}(:,k)) .* (dF(Faces(:,s))+sum(dF(Faces),2)));
+     B(faces(:,s)+(k-1)*nvertices) = ...
+       B(faces(:,s)+(k-1)*nvertices) + ...
+       (-1/12 * triangleAreas .* (P_grad_F{s}(:,k)) .* (dF(faces(:,s))+sum(dF(faces),2)));
    end
 end
 
@@ -462,14 +462,14 @@ scal_F_diag_12 = [ ...
   P_grad_F{3}(:,1).*P_grad_F{3}(:,2) ...
   ] .* repmat(triangleAreas, [1 3])/6;
 
-S11=sparse(sparseIndex1, sparseIndex2, scal_F_11, nVertices, nVertices);
-S22=sparse(sparseIndex1, sparseIndex2, scal_F_22, nVertices, nVertices);
-S12=sparse(sparseIndex1, sparseIndex2, scal_F_12, nVertices, nVertices);
-S21=sparse(sparseIndex1, sparseIndex2, scal_F_21, nVertices, nVertices);
+S11=sparse(sparseIndex1, sparseIndex2, scal_F_11, nvertices, nvertices);
+S22=sparse(sparseIndex1, sparseIndex2, scal_F_22, nvertices, nvertices);
+S12=sparse(sparseIndex1, sparseIndex2, scal_F_12, nvertices, nvertices);
+S21=sparse(sparseIndex1, sparseIndex2, scal_F_21, nvertices, nvertices);
 
-D11=sparse(Faces, Faces, scal_F_diag_11, nVertices, nVertices); 
-D22=sparse(Faces, Faces, scal_F_diag_22, nVertices, nVertices);
-D12=sparse(Faces, Faces, scal_F_diag_12, nVertices, nVertices);
+D11=sparse(faces, faces, scal_F_diag_11, nvertices, nvertices); 
+D22=sparse(faces, faces, scal_F_diag_22, nvertices, nvertices);
+D12=sparse(faces, faces, scal_F_diag_12, nvertices, nvertices);
 
 dataFit = [S11+S11'+D11 S12+S21'+D12; ...
   S12'+S21+D12 S22+S22'+D22];

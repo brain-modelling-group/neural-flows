@@ -23,4 +23,5 @@ function mfile_vel = get_vfield_info(mfile_vel, ux, uy, uz, this_tpt)
 
     mfile_vel.min_nu(1, this_tpt) = nanmin(norm_vf(:));
     mfile_vel.max_nu(1, this_tpt) = nanmax(norm_vf(:));
+    
 end % function get_vfield_info()

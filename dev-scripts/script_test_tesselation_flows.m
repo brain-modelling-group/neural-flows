@@ -15,17 +15,19 @@ load('neural_flows_surf_wave_data', 'smooth_wave_data')
 time_data = 1:1:size(smooth_wave_data{1}, 1);
 
 %% Estimate neural flows
-this_dataset = 1; % NOTE: change this index to access 1 of 4 datasets availble
+this_dataset = 3; % NOTE: change this index to access 1 of 4 datasets availble
 hs_smoothness = 1;
 idx_start = 1;   
 idx_end   = 201;
 
 % NOTE: the calculation takes about 50s for input data of size [v: 16384 x t: 201] 
-[flow_fields, ~, ~, ~, poincare_index, time_flow] = estimate_flow_tess(smooth_wave_data{this_dataset}.', ...
-                                                                     cortex, time_data, ...
-                                                                     idx_start, idx_end, ...
-                                                                     hs_smoothness);
+tic;[flow_fields, ~, ~, ~, poincare_index, time_flow] = estimate_flow_tess(smooth_wave_data{this_dataset}.', ...
+                                                                           cortex, time_data, ...
+                                                                           idx_start, idx_end, ...
+                                                                           hs_smoothness);toc;
 %% Set up graphics objects
+lh = 1:8192;
+
 tt=1;
 [surf_handle, fax] = plot_surf(cortex, smooth_wave_data{this_dataset}(tt, :), 'bgr');
 hold(fax.axes, 'on')
@@ -40,9 +42,9 @@ quiv_handle = quiver3(fax.axes, cortex.vertices(:, 1), ...
 % Find indices of critical points
 cp_idx = find(poincare_index(:, tt)==1);
 
-cp_handle = scatter3(fax.axes, cortex.face_barycentres(cp_idx, 1), ....
-                               cortex.face_barycentres(cp_idx, 2), ...
-                               cortex.face_barycentres(cp_idx, 3), 'k', 'filled');
+%cp_handle = scatter3(fax.axes, cortex.face_barycentres(cp_idx, 1), ....
+%                               cortex.face_barycentres(cp_idx, 2), ...
+%                               cortex.face_barycentres(cp_idx, 3), 'k', 'filled');
 
 xlims = fax.axes.XLim;
 ylims = fax.axes.YLim;
@@ -60,10 +62,10 @@ for tt=1:idx_end-1
                      'VData', flow_fields(:, 2, tt), ...
                      'WData', flow_fields(:, 3, tt))
     
-    cp_idx = find(poincare_index(:, tt) ==1 );
-    set(cp_handle, 'XData', cortex.face_barycentres(cp_idx, 1), ...
-                   'YData', cortex.face_barycentres(cp_idx, 2), ...
-                   'ZData', cortex.face_barycentres(cp_idx, 3))
+    %cp_idx = find(poincare_index(:, tt) ==1 );
+    %set(cp_handle, 'XData', cortex.face_barycentres(cp_idx, 1), ...
+    %               'YData', cortex.face_barycentres(cp_idx, 2), ...
+    %               'ZData', cortex.face_barycentres(cp_idx, 3))
                
     set(surf_handle, 'FaceVertexCData', smooth_wave_data{this_dataset}(tt, :).')
     
@@ -71,14 +73,13 @@ for tt=1:idx_end-1
     fax.axes.XLim = xlims;
     fax.axes.YLim = ylims;
     fax.axes.ZLim = zlims;
-
     caxis([-max_val max_val])
-    pause(1)
+    pause(0.1)
     TheMovie(1,tt) = getframe(fax.figure);
 end
 
 %% Write movie to file
-videoname = 'neural_flows_dataset_03';
+videoname = strcat('neural_flows_dataset_', num2str(this_dataset, '%02d'));
 v = VideoWriter([ videoname '.avi']);
 v.FrameRate = 10;
 

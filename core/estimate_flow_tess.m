@@ -124,7 +124,7 @@ for tt_idx  = 2:interval_length
   end
   
   error_data(1, tt_idx-1)= X'*data_fit*X - 2*B'*X; % Data fit error
-  error_reg(1, tt_idx-1) = X'*regularizer*X;      % Regularization error
+  error_reg(1, tt_idx-1) = X'*regularizer*X;       % Regularization error
 
   % Variational formulation constant
   vertex_0 = 1;
@@ -405,7 +405,7 @@ grad_data = repmat(data(faces(:,1)), 1, embedding_dimension) .* gradient_basis{1
           + repmat(data(faces(:,2)), 1, embedding_dimension) .* gradient_basis{2} ...
           + repmat(data(faces(:,3)), 1, embedding_dimension) .* gradient_basis{3};
 
-% Projection of the gradient of F on the tangent space
+% Projection of the gradient of 'activity' on the tangent space
 proj_grad_data = cell(1, 3); % same structure as gradient_basis : size = num_faces, 3;
 for vx_idx=1:3
     for basis_idx=1:2

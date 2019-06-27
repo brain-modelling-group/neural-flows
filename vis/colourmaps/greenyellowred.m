@@ -45,6 +45,7 @@ function [c] = greenyellowred(m, order)
            102,189,99; ...
            26,152,80; ...
            0,104,55] ./ 255.0;
+     bcm = flipud(bcm);
 
     %% Number of colours in basis colormap.
     nc = size(bcm, 1);
