@@ -41,7 +41,7 @@ function [loc_vertices, loc_triangles, glob_vertex_indices, glob_triangle_indice
  end
  
  if isstruct(surfobj)
-     surfobj = traingulation(surfobj.faces, surfobj.vertices);
+     surfobj = triangulation(surfobj.faces, surfobj.vertices);
  end
  
  % Get indices of local vertices and triangles 
