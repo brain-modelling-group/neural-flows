@@ -13,8 +13,10 @@ function [datafiltered] = bandpass_filter(data, flo, fhi, filter_order, fs)
 
 % Build Butterworth filter
 cutoff_freqs = [flo fhi];
+% Normalised frequency 
 wn = cutoff_freqs / (fs/2);
 [b, a] = butter(filter_order, wn); 
+
 % Filter data
 datafiltered = filtfilt(b, a, data);
-end
+end % function bandpass_filter()
