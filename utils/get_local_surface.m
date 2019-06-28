@@ -1,71 +1,78 @@
 %% Return a local patch of surface of the neighbourhood around a vertex.
 %
 % ARGUMENTS:
-%           triobj -- a triangulation object for the whole triangulated surface
-%                     or a struct with fields .vertices and .faces
-%           focal_vertex -- <description>
-%           Neighbourhood -- <description>
+%           surfobj      -- a triangulation object for the whole triangulated surface
+%                           or a struct with fields .vertices and .faces
+%           focal_vertex -- an integer, with the central index whose nth-neighbourhood we're extracting 
+%           nth-ring     -- an integer, indicating the maximum to be extracted
 %
 % OUTPUT: 
-%         LocalVertices  -- <description>
-%         LocalTriangles -- <description>
+%         loc_vertices  -- an array of size [n x 3] with the cooordinates of the vertices 
+%         loc_triangles -- an array of size [n x 3] with the local indices
+%                          of vertices making up the local traingles of the patch 
 %
 % REQUIRES: 
 %         Matlab's triangulation function
 %         
 % USAGE:
 %{
-      triobj = triangulation(Triangles, Vertices);  
+      surfobj = triangulation(Triangles, Vertices);  
       % or
-      triobj.vertices = Vertices;
-      triobj.faces = Triangles.
+      surfobj.vertices = Vertices;
+      surfobj.faces = Triangles.
       focal_vertex = 42;
       nth_ring = 3;
-      [loc_vertices, loc_triangles, glob_vertex_indices, glob_triangle_indices, nth_ring = get_local_surface(triobj, focal_vertex, nth_ring);    
+      [loc_vertices, loc_triangles, ...
+       glob_vertex_indices, glob_triangle_indices, ...
+       nth_ring = get_local_surface(surfobj, focal_vertex, nth_ring);    
 %}
 %
 % MODIFICATION HISTORY:
 %     SAK(22-07-2010) -- Original.
-%     PSL(21-12-2018) -- Updated to use Matlab's triangulation or a struct
+%     PSL(21-12-2018) -- Updated to use Matlab's triangulation or a struct,
+%                        document
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-function [loc_vertices, loc_triangles, glob_vertex_indices, glob_triangle_indices, nth_ring] = get_local_surface(triobj, focal_vertex, neighbourhood)
+function [loc_vertices, loc_triangles, glob_vertex_indices, glob_triangle_indices, nth_ring_size] = get_local_surface(surfobj, focal_vertex, nth_ring)
 %% Set any argument that weren't specified
- if nargin<3,
-   Neighbourhood = 1;
+ if nargin < 3
+   nth_ring = 1;
  end
+ 
+ if isstruct(surfobj)
+     surfobj = traingulation(surfobj.faces, surfobj.vertices);
+ end
+ 
  % Get indices of local vertices and triangles 
  loc_vertices = focal_vertex;
  loc_triangles = [];
  new_vertices = focal_vertex;
- nth_ring = zeros(1, neighbourhood);
- for k = 1:Neighbourhood,
-   TrIndices = vertexAttachments(triobj, newVertices); 
-   newTriangles = setdiff(unique([TrIndices{:}].'),                 loc_triangles);   %
-   newVertices  = setdiff(unique(triobj.Triangulation(newTriangles,:)), loc_vertices);    %find vertices that make up that set of triangles
-   nth_ring(1,k) = length(newVertices);
-   
-   loc_triangles = [loc_triangles ; newTriangles];
-   loc_vertices  = [loc_vertices  ; newVertices];
+ nth_ring_size = zeros(1, nth_ring);
+ 
+ for k = 1:nth_ring
+   tri_indices   = vertexAttachments(surfobj, new_vertices); 
+   new_triangles = setdiff(unique([tri_indices{:}].'), loc_triangles);   %
+   %find vertices that make up that set of triangles
+   new_vertices  = setdiff(unique(surfobj.ConnectivityList(new_triangles,:)), loc_vertices);    
+   nth_ring_size(1, k) = length(new_vertices);
+   loc_triangles = [loc_triangles; new_triangles]; %#ok<AGROW>
+   loc_vertices  = [loc_vertices; new_vertices];   %#ok<AGROW>
  end
  
-  if nargout>2,
-    glob_vertex_indices   = loc_vertices;
-  end
-  if nargout>3,
-    GlobalTriangleIndices = loc_triangles;
-  end
+ % Save indices of vertices and triangles wrt to whole surface object
+ glob_vertex_indices   = loc_vertices;
+ glob_triangle_indices = loc_triangles;
+
  
- loc_triangles = tr.Triangulation(loc_triangles,:);
- % Map triangles from "vertices" indices to "LocalVertices" indices 
+ loc_triangles = surfobj.ConnectivityList(loc_triangles,:);
+ % Map triangle indices from global to local, and 
+ % map their vertices from global to local "local_vertices" indices 
  temp = zeros(size(loc_triangles));
- for j = 1:length(loc_vertices) 
-   temp(loc_triangles==loc_vertices(j)) = j;
+ for jj = 1:length(loc_vertices) 
+   temp(loc_triangles == loc_vertices(jj)) = jj;
  end
  loc_triangles = temp;
- loc_vertices = tr.X(loc_vertices,:);
+ loc_vertices  = surfobj.Points(loc_vertices,:);
   
-%% 
-
-end %function GetLocalSurface()
+end %function get_local_surface()
