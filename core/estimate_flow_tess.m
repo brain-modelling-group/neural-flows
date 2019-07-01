@@ -74,7 +74,7 @@ data    = data(:, idx_start:idx_end);
 max_val = max(abs(data(:)));
 % Scale values to avoid precision error, 
 % NOTE: maybe try with standardised ranges (eg, [-1 1],[0, 1]).
-data = data/max_val; 
+%data = data/max_val; 
 
 % Preallocate output arrays
 flow_fields(num_vertices, embedding_dimension, interval_length) = 0;
@@ -101,10 +101,11 @@ for face_idx = 1:num_faces
     flow_projection(:, :, face_idx) = eye(3) - (face_normals(face_idx, :)'*face_normals(face_idx, :));
 end
 
+dt = time_data(2) - time_data(1);
 % Start estimation of flows
 for tt_idx  = 2:interval_length 
     % TODO: I think this term should be scaled by the time step.
-    delta_activity = data(:, tt_idx) - data(:, tt_idx-1);
+    delta_activity = (data(:, tt_idx) - data(:, tt_idx-1));
     [data_fit, B]  = data_fit_matrix(faces, num_vertices, ...
                                     gradient_basis, triangle_areas, tangent_plane_basis_cell, ...
                                     data(:, tt_idx), delta_activity, embedding_dimension, ...
