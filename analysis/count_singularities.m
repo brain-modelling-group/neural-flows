@@ -1,10 +1,30 @@
 function out = count_singularities(numeric_labels)
+% <ShortDescription>
+%
+%
+% ARGUMENTS:
+%        <arg1> -- <description>
+%        <arg2> -- <description>
+%
+% OUTPUT: 
+%        <output1> -- <description>
+%        <output2> -- <description>
+%
+% REQUIRES: 
+%        get_singularity_list()
+%        map_str2int()
+%
+% USAGE:
+%{
+    <example-commands-to-make-this-function-run>
+%}
+%
 
 % NOTE: Hardcoded ==> we may end up with more types
-
 singularity_list = get_singularity_list();
 
 types_of_singularity(length(singularity_list)) = 0;
+
 for ss=1:length(singularity_list)
     types_of_singularity(ss) = map_str2int(singularity_list{ss});
 end
