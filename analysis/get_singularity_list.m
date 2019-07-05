@@ -1,8 +1,24 @@
 function singularity_list = get_singularity_list()
-% This is a dummy functiont that returns the list with available types of
-% singularities in the classification functions. 
-
-% Check with mapp_str2int
+% This is kind of a dummy function that returns the list with available 
+% types of singularities in the classification functions. 
+%
+%
+% ARGUMENTS:
+%        None
+%       
+%
+% OUTPUT: 
+%        singularity_list -- a cell array with human readbale string, with 
+%                            the names of 3D hyperbolic singularities. 
+%
+% REQUIRES: 
+%       None
+% USAGE:
+%{
+    
+%}
+%
+% NOTE TO SELF: Check with function map_str2int()
 
 singularity_list = {'source', ...
                     'sink', ...
