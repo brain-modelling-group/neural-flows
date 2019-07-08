@@ -1,22 +1,22 @@
-%% This function calculates the spatial dependence of temporal autocorrelation.
-%  Strictly speaking, this function IS NOT spatial correlation, although
-%  the name suggests that. 
+%% This function can be used to calculate the spatial dependence of 
+%  temporal cross-correlation. It wraps Matlab's xcorr, with an additional
+%  argument that passes a subset of neighbour points. Strictly speaking, 
+%  this function IS NOT spatial correlation, although the name suggests that. 
 %  What this function does: 
 %                          Wraps Matlab's xcorr function to get auto and
 %                          cross-correlation between two sets of (spatial) 
 %                          points (specified in 'seed' and 'neighbours').
 %                          If max_lag = 0, then returns the
 %                          autocorrelation. If it is longer, it also
-%                          returns an array of size
+%                          returns an array of size [num_neighbours+1 x 2*max_lag+1].
 % 
-%                          
-%                          
+%                                                    
 % ARGUMENTS:
 %        data        -- array of size [tpts x num_nodes/channels];
 %        seed_region -- integer with the index of region that will be taken 
 %                       as the reference point.
-%        max_lag     -- integer maximum lag [in samples] used to calculate
-%                       cross-correlation.
+%        max_lag     -- Integer. Maximum lag [in samples] used to calculate
+%                       tmporal cross-correlation.
 % 
 %        neighbours  -- vector with the neighbouring node indices. This
 %                       vector is used to calculate xcorr between seed_region 
