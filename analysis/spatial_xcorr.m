@@ -1,10 +1,20 @@
-%% <ShortDescription>
-%
-%
+%% This function calculates the spatial dependence of temporal autocorrelation.
+%  Strictly speaking, this function IS NOT spatial correlation, although
+%  the name suggests that. 
+%  What this function does: 
+%                          Wraps Matlab's xcorr function to get auto and
+%                          cross-correlation between two sets of (spatial) 
+%                          points (specified in 'seed' and 'neighbours').
+%                          If max_lag = 0, then returns the
+%                          autocorrelation. If it is longer, it also
+%                          returns an array of size
+% 
+%                          
+%                          
 % ARGUMENTS:
 %        data        -- array of size [tpts x num_nodes/channels];
 %        seed_region -- integer with the index of region that will be taken 
-%                       as the refrence.
+%                       as the reference point.
 %        max_lag     -- integer maximum lag [in samples] used to calculate
 %                       cross-correlation.
 % 
@@ -17,7 +27,8 @@
 %        
 %        sp_acorr -- array of size [num_nodes x 1]. Autocorrelation at
 %                    lag=0.
-%        sp_xcorr -- 
+%        sp_xcorr -- array of size [num_neighbours+1 x 2*max_lag+1].
+%                    Cross-correlation up to lag +/- max_lag.
 %
 % REQUIRES: 
 %        None
@@ -42,13 +53,16 @@ if nargin < 4
     neighbours = 1:size(data, 2);
 end
  
-num_nodes = length(neighbours);
-sp_acorr(num_nodes, 1) = 0;
+num_neighbours = length(neighbours);
+sp_acorr(num_neighbours+1, 1) = 0;
+
+% Prepend the reference region
+neighbours = [seed neighbours];
 
 if max_lag > 0
-    sp_xcorr(num_nodes, 2*max_lag+1) = 0;
+    sp_xcorr(num_neighbours, 2*max_lag+1) = 0;
 
-    for nn=1:num_nodes
+    for nn=1:num_neighbours
         [temp, ~] = xcorr(data(:, seed_region), data(:, neighbours(nn)), max_lag);
         idx = floor(max_lag/2)+1;
         sp_acorr(nn) = temp(idx);
@@ -56,7 +70,7 @@ if max_lag > 0
     end
         varargout{1} = sp_xcorr;
 else
-    for nn=1:num_nodes
+    for nn=1:num_neighbours
         [temp, ~] = xcorr(data(:, seed_region), data(:, neighbours(nn)), max_lag);
         idx = floor(max_lag/2)+1;
         sp_acorr(nn) = temp(idx);
