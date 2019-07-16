@@ -22,8 +22,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function phi = calculate_insta_phase(data)
 
-
-disp('Calculating node phases...')
+disp('Calculating instantaneous phases ...')
 
 if length(data) < 100000 % arbitrary biggish number
     % short but inefficient with memory
@@ -32,15 +31,15 @@ if length(data) < 100000 % arbitrary biggish number
     phi = unwrap(angle(hilbert((data - mean(data))))); % faster than bsxfun
     
 else
-    % Memory efficient ~ takes about 40s for a yp in 400001 x 513 @dracarys
+    % Memory efficient ~ takes about 40s for a data of size [400001 x 513]
+    % on a Dell Precision Tower 5820 circa 2017.
     phi(size(data)) = 0;
-    nn      = size(data,2);
+    nn = size(data, 2);
     for jj=1:nn
-        y=data(:,jj);
-        phi(:,jj)=unwrap(angle(hilbert(y-mean(y))));
+        y = data(:, jj);
+        phi(:, jj) = unwrap(angle(hilbert(y - mean(y))));
     end
     fprintf('Done. \n')
-    toc
     
 end
 end % function calculate_insta_phase()
