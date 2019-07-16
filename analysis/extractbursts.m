@@ -4,7 +4,7 @@ function out = extractbursts(data, thr, nburstsflag)
 % decreasing at the value specified at input 'thr'
 % 
 % ARGUMENTS:
-%          data    --  a 2D array of size [time x nodes/locs/channels/vertices]
+%          data    --  a 1D array of size [time x 1] with the bursty data.
 %          thr     --  a float with the threshold to detect bursts
 %          nburstflag -- an boolean flag to determine if the output are the
 %                        bursts (out is a cell) or the number of bursts (out is a number). 
@@ -20,7 +20,14 @@ function out = extractbursts(data, thr, nburstsflag)
 %
 % USAGE:
 %{     
-    
+    x   = abs(randn(1024, 1));
+    thr = mean(x);
+    out = extractbursts(x, thr, 0); 
+    fig_handle = figure('Name', 'nflows_bursts')
+    ax = axes('Parent', fig_handle);
+    hold(ax, 'on')
+    cellfun(@(x) plot(x), out)
+    xlabel('burst length [samples]')
 
 %}
 % MODIFICATION HISTORY:
