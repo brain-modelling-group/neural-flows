@@ -6,7 +6,7 @@ function [stable, transient, stablePoints, transientPoints, dEnergy, dEnergyF, d
 %   surf_tess           -- structure with the tesselation of the spatial
 %                          domain.
 %          .vertices    -- an array of size (vertices, 3) or (vertices, 2)
-%          .triangles   -- an array of size (2-v+e, 3) for triangular
+%          .faces   -- an array of size (2-v+e, 3) for triangular
 %                          meshes/surfaces with genus=0
 %          
 %   embedding_dimension -- dimension of the embedding space 
@@ -70,16 +70,16 @@ end
 % The mass is m=1. This step calculates the averagsamplingIntervale kinetic energy per edge
 % adds them all and multiply it by the area of the triangle.
 
-[~, triangleAreas] = geometry_tesselation(surf_tess.triangles, surf_tess.vertices, embedding_dimension);
+[~, triangleAreas] = geometry_tesselation(surf_tess.faces, surf_tess.vertices, embedding_dimension);
 
 % Preallocate memory
 dEnergy  = zeros(1, size(flow_field,3));
-dEnergyF = zeros(size(surf_tess.triangles, 1), size(flow_field,3));
+dEnergyF = zeros(size(surf_tess.faces, 1), size(flow_field,3));
 
 for tpt = 1:size(flow_field,3)
-  v12 = sum((flow_field(surf_tess.triangles(:,1),:,tpt)+flow_field(surf_tess.triangles(:,2),:,tpt)).^2,2) / 4;
-  v23 = sum((flow_field(surf_tess.triangles(:,2),:,tpt)+flow_field(surf_tess.triangles(:,3),:,tpt)).^2,2) / 4;
-  v13 = sum((flow_field(surf_tess.triangles(:,1),:,tpt)+flow_field(surf_tess.triangles(:,3),:,tpt)).^2,2) / 4;
+  v12 = sum((flow_field(surf_tess.faces(:,1),:,tpt)+flow_field(surf_tess.faces(:,2),:,tpt)).^2,2) / 4;
+  v23 = sum((flow_field(surf_tess.faces(:,2),:,tpt)+flow_field(surf_tess.faces(:,3),:,tpt)).^2,2) / 4;
+  v13 = sum((flow_field(surf_tess.faces(:,1),:,tpt)+flow_field(surf_tess.faces(:,3),:,tpt)).^2,2) / 4;
   dEnergy(tpt) = sum(triangleAreas.*(v12+v23+v13));
   dEnergyF(:, tpt) = triangleAreas.*(v12+v23+v13);
 end
@@ -503,11 +503,11 @@ extrema = unique(extrema);
 end % function find_local_extrema_valleys()
 
 % =================== TESSELATION NORMALS =================================
-function [gradientBasis, triangleAreas, FaceNormals] = geometry_tesselation(Faces, Vertices, embedding_dimension)
+function [gradientBasis, triangleAreas, FaceNormals] = geometry_tesselation(faces, Vertices, embedding_dimension)
     % GEOMETRY_TESSELATION    Computes some geometric quantities from a triangluated surface
     % 
     % INPUTS:
-    %   Faces           - triangles of tesselation
+    %   faces           - faces of tesselation
     %   Vertices        - coordinates of nodes
     %   embedding_dimension       - 3 for scalp or cortical surface (default)
     %                     2 for plane (channel cap topo, etc)
@@ -516,10 +516,10 @@ function [gradientBasis, triangleAreas, FaceNormals] = geometry_tesselation(Face
     %   triangleAreas 	- area of each triangle
     %   FaceNormals    - normal of each triangle 
 
-    % Edges of each triangles
-    u = Vertices(Faces(:,2),:)-Vertices(Faces(:,1),:);
-    v = Vertices(Faces(:,3),:)-Vertices(Faces(:,2),:);
-    w = Vertices(Faces(:,1),:)-Vertices(Faces(:,3),:);
+    % Edges of each faces
+    u = Vertices(faces(:,2),:)-Vertices(faces(:,1),:);
+    v = Vertices(faces(:,3),:)-Vertices(faces(:,2),:);
+    w = Vertices(faces(:,1),:)-Vertices(faces(:,3),:);
 
     % Edge length
     uu = sum(u.^2,2);
