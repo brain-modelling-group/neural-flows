@@ -39,7 +39,8 @@ else
         y = data(:, jj);
         phi(:, jj) = unwrap(angle(hilbert(y - mean(y))));
     end
-    fprintf('Done. \n')
+   
     
 end
+fprintf('Finished calculating phases. \n')
 end % function calculate_insta_phase()
