@@ -150,3 +150,5 @@ function Y = normalize(X)
     Y = X - repmat(mean(X), size(X,1), 1);
     s = sqrt( sum(conj(Y) .* Y) / (size(Y,1) - 1) );
     Y = Y ./ repmat(s, size(Y,1), 1);
+end
+end % function corrgram()
