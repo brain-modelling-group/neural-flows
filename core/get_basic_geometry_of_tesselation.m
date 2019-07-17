@@ -14,9 +14,9 @@ function [gradient_basis, triangle_areas, face_normals] = get_basic_geometry_of_
 %                        gradient of basis function (FEM) on each triangle. 
 %                        Each element of the cell contains a [num_faces x
 %                        embedding_dimension].
-%   triangle_areas 	 -- a vector of size [num_faces x 1] with the areas of each triangle
-%   face_normals     -- a 2D array of size [num_faces x 3] and  normal of each triangle.
-%                       The array is empty if the embedding dimension is 2.
+%   triangle_areas 	 --  a vector of size [num_faces x 1] with the areas of each triangle
+%   face_normals     --  a 2D array of size [num_faces x 3] and  normal of each triangle.
+%                        The array is empty if the embedding dimension is 2.
 %                       
 % REQUIRES: 
 %         None()
