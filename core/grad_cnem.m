@@ -1,10 +1,12 @@
 function nabla_V = grad_cnem(XYZ, V, IN_Tri_Ini)
-% Calculates the gradient \nabla V evaluated at 3-D scattered points in matrix XYZ
+% Calculates the gradient of V (\nabla V) evaluated at 3-D scattered points in array XYZ
 %
 % ARGUMENTS:
 %          XYZ -- a 2D array of size n x 3 with coodinates of points in 3D space.
 %          V   --  the matrix (??) of (???) of size ??? x ????
-%          IN_Tri_Ini -- is the triangulation of the boundary nodes (????)
+%          IN_Tri_Ini -- a 2D array of size [num_faces x 3] with the 
+%                        triangulation of the boundary that contains
+%                        XYZ
 %
 % OUTPUT: 
 %          nabla_V      -- gradient of V
@@ -57,3 +59,5 @@ Grad_V = B*V;
 
 Grad_V_mat = reshape(Grad_V,4,[]).';
 nabla_V = Grad_V_mat(:,1:3); % 4th column is V
+
+end % funcion grad_cnem()
