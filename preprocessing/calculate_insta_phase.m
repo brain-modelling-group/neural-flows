@@ -6,7 +6,7 @@
 %
 % OUTPUT: 
 %          phi     --  a 2D array of size [time x nodes/locs/channels/vertices] 
-%                      with instantaneous unwrapped phases.
+%                      with instantaneous unwrapped phases (of the signal's envelope).
 %
 % REQUIRES: 
 %
