@@ -1,4 +1,4 @@
-function B = grad_B_cnem(XYZ, IN_Tri_Ini)
+function B = cnem_get_B_mat(XYZ, IN_Tri_Ini)
 %% Calculate the matrix B for calculating the gradient \nabla V evaluated at
 % 3-D scattered points in matrix XYZ
 %
@@ -38,12 +38,13 @@ Sup_NN_GS = 0;
 % Type of face interpolation
 Type_FF   = 0;% 0 -> Sibson, 1 -> Laplace, 2 -> Linear fem
 
-[GS, XYZ, ...
- IN_Tri_Ini,IN_Tri,IN_Tet,INV_NN,PNV_NN,...
- IN_New_Old,IN_Old_New] = m_cnem3d_scni(XYZ, IN_Tri_Ini, Type_FF, Sup_NN_GS);
+% Signature of function call
+%[GS, XYZ, ...
+% IN_Tri_Ini,IN_Tri,IN_Tet,INV_NN,PNV_NN,...
+% IN_New_Old,IN_Old_New] = m_cnem3d_scni(XYZ, IN_Tri_Ini, Type_FF, Sup_NN_GS);
+[GS, ~, ~, ~, ~, ~, ~, ~, ~, ~] = m_cnem3d_scni(XYZ, IN_Tri_Ini, Type_FF, Sup_NN_GS);
 
 nb_var = 1;
 
 B = cal_B_Mat(GS, nb_var);
-% end function grad_B_cnem()
-
+% end function cnem_get_B_mat()
