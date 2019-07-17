@@ -1,6 +1,6 @@
 function [energy_sum, energy_face, energy_vertex] = calculate_kinetic_energy(flow_field, surf_tess, embedding_dimension)
 % compute_energy_states  Computation of low and high energy states based on optical flow estimates 
-% INPUT ARGUMENTS:
+% ARGUMENTS:
 %   flow_field          -- an array with optical flow field of size
 %                          [vertices, 3, timepoints], or [vertices, 2, timepoints]
 %   surf_tess           -- structure with the tesselation of the spatial
@@ -15,18 +15,18 @@ function [energy_sum, energy_face, energy_vertex] = calculate_kinetic_energy(flo
 %
 %   energy_mode         -- string with the mode we should use to
 %                          calculate energy. {'vertex', 'face'}
-% OUTPUT ARGUMENTS:
+% OUTPUT:
 %
-%   energy_sum             -- sqrt of displacement energy in the flow field,
-%                             summed over space, depends if 
-%   energy_face            -- displacement energy in the flow field,
+%   energy_sum             -- Displacement energy in the flow,
+%                             summed over space. 
+%   energy_face            -- Displacement energy in the flow field,
 %                             returns energy for every face area of the mesh
 %                             array of size [num_faces, interval(2)-interval(1)]
 % 
 %   energy_vertex          -- displacement energy  in the flow field,
 %                             returns energy for every vertex area in the domain
 % REQUIRES: 
-%         geometry_tesselation()
+%         get_basic_geometry_of_tesselation()
 %
 % USAGE:
 %{     
@@ -36,18 +36,25 @@ function [energy_sum, energy_face, energy_vertex] = calculate_kinetic_energy(flo
 %
 % MODIFICATION HISTORY:
 %     Paula Sanz-Leon, QIMR Berghofer 2018
-% REFERENCE: ADD PAPER
+%
+% REFERENCE:
+% Julien Lefèvre and Sylvain Baillet
+% Estimation of Velocity Fields and Propagation on Non-Euclidian Domains: Application
+% to the Exploration of Cortical Spatiotemporal Dynamics
+% Lecture Notes in Mathematics 1983, DOI 10.1007/978-3-642-03444-2 5,
+% c Springer-Verlag Berlin Heidelberg 2009
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 vx0 = 1;
 vx1 = 2;
 vx2 = 3;
-% Setup: get displacement energy, this is a kinectic energy-like expression: 1/2 m v^2
+
+% NOTE: Displacement energy, this is a kinectic energy-like expression: 1/2 m v^2
 % The mass is m=1, although vertices could have different masses/weigths (eg, hubs/nonhubs)
 % This step calculates the kinetic energy per edge (between vertex pairs)
 % adds them all and multiply it by the area of the triangle.
 
-[~, triangle_areas] = geometry_tesselation(surf_tess.faces, surf_tess.vertices, embedding_dimension);
+[~, triangle_areas, ~] = get_basic_geometry_of_tesselation(surf_tess.faces, surf_tess.vertices, embedding_dimension);
 
 % Preallocate memory
 energy_sum  = zeros(1, size(flow_field, 3)); % Energy at each vertex 
