@@ -503,7 +503,7 @@ extrema = unique(extrema);
 end % function find_local_extrema_valleys()
 
 % =================== TESSELATION NORMALS =================================
-function [gradientBasis, triangleAreas, FaceNormals] = geometry_tesselation(faces, Vertices, embedding_dimension)
+function [gradientBasis, triangleAreas, FaceNormals] = geometry_tesselation(faces, vertices, embedding_dimension)
     % GEOMETRY_TESSELATION    Computes some geometric quantities from a triangluated surface
     % 
     % INPUTS:
@@ -517,9 +517,9 @@ function [gradientBasis, triangleAreas, FaceNormals] = geometry_tesselation(face
     %   FaceNormals    - normal of each triangle 
 
     % Edges of each faces
-    u = Vertices(faces(:,2),:)-Vertices(faces(:,1),:);
-    v = Vertices(faces(:,3),:)-Vertices(faces(:,2),:);
-    w = Vertices(faces(:,1),:)-Vertices(faces(:,3),:);
+    u = vertices(faces(:,2),:)-vertices(faces(:,1),:);
+    v = vertices(faces(:,3),:)-vertices(faces(:,2),:);
+    w = vertices(faces(:,1),:)-vertices(faces(:,3),:);
 
     % Edge length
     uu = sum(u.^2,2);
