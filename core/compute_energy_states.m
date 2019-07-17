@@ -1,18 +1,7 @@
-function [stable, transient, stablePoints, transientPoints, dEnergy, dEnergyF, dEnergyV] = compute_energy_states(flow_field, surf_tess, embedding_dimension, time_vec, sampling_period, min_duration, extrema_detection, energy_mode, display_flag)
+function [stable, transient, stablePoints, transientPoints] = compute_energy_states(energy, time_vec, sampling_period, min_duration, extrema_detection, energy_mode, display_flag)
 % compute_energy_states  Computation of low and high energy states based on optical flow estimates 
 % INPUT ARGUMENTS:
-%   flow_field          -- an array with optical flow field of size
-%                          [vertices, 3, timepoints], or [vertices, 2, timepoints]
-%   surf_tess           -- structure with the tesselation of the spatial
-%                          domain.
-%          .vertices    -- an array of size (vertices, 3) or (vertices, 2)
-%          .faces   -- an array of size (2-v+e, 3) for triangular
-%                          meshes/surfaces with genus=0
-%          
-%   embedding_dimension -- dimension of the embedding space 
-%                          3: for mesh surfaces  (eg, sphere)
-%                          2: for projections on 2D (eg, disk)
-%
+%   energy              -- a vector with the kinetic energy estimates
 %   time_vec            -- a vector with the time of the flow field (time_flow) vector 
 %                          between which the energy states will be calculated and classified
 %
@@ -38,14 +27,8 @@ function [stable, transient, stablePoints, transientPoints, dEnergy, dEnergyF, d
 %
 %   transientPoints     -- All times during which flow is "high kinetic energy"
 %
-%   dEnergy             -- sqrt of displacement energy in the flow field,
-%                          summed over space, depends if 
-%   dEnergyF            -- displacement energy in the flow field,
-%                          returns energy for every face area of the mesh
-%                          array of size [num_faces, interval(2)-interval(1)]
-% 
-%   dEnergyV            -- displacement energy  in the flow field,
-%                          returns energy for every vertex area in the domain
+%   energy               -- displacement energy in the flow field,
+%                           summed over space, 
 % REQUIRES: 
 %         None
 %
@@ -56,7 +39,6 @@ function [stable, transient, stablePoints, transientPoints, dEnergy, dEnergyF, d
 %}
 %
 % MODIFICATION HISTORY:
-%     Original, Julien Lefevre -- brainstorm
 %     Modified, PSL, QIMR Berghofer 2018
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -70,35 +52,12 @@ end
 % The mass is m=1. This step calculates the averagsamplingIntervale kinetic energy per edge
 % adds them all and multiply it by the area of the triangle.
 
-[~, triangleAreas] = geometry_tesselation(surf_tess.faces, surf_tess.vertices, embedding_dimension);
-
-% Preallocate memory
-dEnergy  = zeros(1, size(flow_field,3));
-dEnergyF = zeros(size(surf_tess.faces, 1), size(flow_field,3));
-
-for tpt = 1:size(flow_field,3)
-  v12 = sum((flow_field(surf_tess.faces(:,1),:,tpt)+flow_field(surf_tess.faces(:,2),:,tpt)).^2,2) / 4;
-  v23 = sum((flow_field(surf_tess.faces(:,2),:,tpt)+flow_field(surf_tess.faces(:,3),:,tpt)).^2,2) / 4;
-  v13 = sum((flow_field(surf_tess.faces(:,1),:,tpt)+flow_field(surf_tess.faces(:,3),:,tpt)).^2,2) / 4;
-  dEnergy(tpt) = sum(triangleAreas.*(v12+v23+v13));
-  dEnergyF(:, tpt) = triangleAreas.*(v12+v23+v13);
-end
-
-% Energy per triangular area
-dEnergy  = sqrt(dEnergy);
-
-%Energy per vertex area NOTE: this quantity needs to be scaled by the voronoi area
-dEnergyV = squeeze((((flow_field(:, 1, :).^2 + flow_field(:, 2, :).^2 + flow_field(:, 3, :).^2)/2)));
-
-if strcmp(energy_mode, 'vertex')
-  % replace original vector with vertex-based energy
-  dEnergy = sqrt(sum(dEnergyV));
-end
+% NOTE: use extractbursts to do this, seems to be more efficient.
 
 
 % Find local extrema
 start_idx = 1;
-end_idx = length(dEnergy);
+end_idx   = length(energy);
 
 if strcmp(extrema_detection, 'peaks')
     find_local_extrema = @find_local_extrema_peaks;
@@ -108,27 +67,27 @@ end
 
 % Minima
 find_max = false;
-minima = find_local_extrema(dEnergy, find_max, start_idx, end_idx);
-minima = sortrows([dEnergy(minima); minima]').'; 
+minima = find_local_extrema(energy, find_max, start_idx, end_idx);
+minima = sortrows([energy(minima); minima]').'; 
 minima = minima(2,:);
 
 % Maxima
 find_max = true;
-maxima = find_local_extrema(dEnergy, find_max, start_idx, end_idx);
-maxima = sortrows([-dEnergy(maxima); maxima]').'; 
+maxima = find_local_extrema(energy, find_max, start_idx, end_idx);
+maxima = sortrows([-energy(maxima); maxima]').'; 
 maxima = maxima(2,:);
 
 % Display displacement energy and locations of maxima/minima
 if display_flag
   hold(ax_handles(1), 'on')
-  plot(ax_handles(1), time_vec, dEnergy, 'color', [0.8 0.8 0.8])
+  plot(ax_handles(1), time_vec, energy, 'color', [0.8 0.8 0.8])
   xlabel('Time [ms]')
   ylabel('\partial Energy')
   ax_handles(1).XLim = [time_vec(1) time_vec(end)];
-  ax_handles(1).YLim = [0.95*min(dEnergy) 1.05*max(dEnergy)];
-  plot(ax_handles(1), time_vec(minima), dEnergy(minima), 'linestyle', 'none', ...
+  ax_handles(1).YLim = [0.95*min(energy) 1.05*max(energy)];
+  plot(ax_handles(1), time_vec(minima), energy(minima), 'linestyle', 'none', ...
       'marker', 'v', 'markerfacecolor', [111,203,159]/255, 'markeredgecolor', 'none') 
-  plot(ax_handles(1), time_vec(maxima), dEnergy(maxima), 'linestyle', 'none', ...
+  plot(ax_handles(1), time_vec(maxima), energy(maxima), 'linestyle', 'none', ...
       'marker', '^', 'markerfacecolor', [255,111,105]/255, 'markeredgecolor', 'none');
   
   ax_handles(1).XLabel.String = 'time [ms]';
@@ -138,11 +97,11 @@ end
 
 
 % Find transient states
-transient = find_transient_states(dEnergy, maxima, minima);
+transient = find_transient_states(energy, maxima, minima);
 transient = sortrows(transient);
 
 % Find nontransient states
-stable = find_nontransient_states(dEnergy, maxima, minima, transient);
+stable = find_nontransient_states(energy, maxima, minima, transient);
 stable = sortrows(stable);
 
 % Get list of transient and stable state intervals
@@ -163,17 +122,17 @@ end
 % Display microstate interval on displaced energy curve
 if display_flag
   hold(ax_handles(2), 'on')
-  plot(ax_handles(2), time_vec, dEnergy, 'color', 'k', 'linewdith', 0.5) 
+  plot(ax_handles(2), time_vec, energy, 'color', 'k', 'linewdith', 0.5) 
   for m = 1:size(extrema,1)
     if abs(extrema(m,3)) < eps % Stable states
       color = [111,203,159]/255;
     elseif extrema(m,3) > 1-eps % Transient states
       color = [255,111,105]/255;
     end
-    area(ax_handles(2), time_vec(extrema(m,1):extrema(m,2)), dEnergy(extrema(m,1):extrema(m,2)), 'FaceColor', color, 'EdgeColor', 'None');
+    area(ax_handles(2), time_vec(extrema(m,1):extrema(m,2)), energy(extrema(m,1):extrema(m,2)), 'FaceColor', color, 'EdgeColor', 'None');
   end
     ax_handles(2).XLim = [time_vec(1) time_vec(end)];
-    ax_handles(2).YLim = [0.95*min(dEnergy) 1.05*max(dEnergy)];
+    ax_handles(2).YLim = [0.95*min(energy) 1.05*max(energy)];
     ax_handles(2).XLabel.String ='time [ms]';
     ax_handles(2).YLabel.String ='\partial Energy';
     ax_handles(2).Box = 'on';
@@ -208,7 +167,8 @@ for m = 2:size(extrema,1)
         tag = extrema(m-1,3);
       end
       extrema(m-1,2) = extrema(m,2);   % 2nd interval's beginning is 1st interval
-      extrema(m,1)   = extrema(m-1,1); % 1st interval's end is 2nd interval
+      extrema(m,1)   = extrema(m-1,1); % 1st interval's end is 2nd inte%     Original, Julien Lefevre -- brainstorm
+rval
       extrema(m-1,3) = tag; % Both get same label ...
       extrema(m,3)   = tag; % ... of the bigger interval
     elseif m < size(extrema,1) && extrema(m,2) > extrema(m+1,1) - min_duration_samples
@@ -246,14 +206,14 @@ extrema([false; diff(extrema(:,1)) < eps], :) = [];
 end % function clean_flow_states()
 
 % ======================= INTERVALS OF TRANSIENT STATES ===================
-function transient = find_transient_states(dEnergy, maxima, minima)
+function transient = find_transient_states(energy, maxima, minima)
 % TRANSIENT_STATES    Determine intervals of transient/high-energy activity, starting
 %                     from peak of displacement energy to **sufficiently close to valleys** 
 %                     of displacement activity
 % INPUTS:
-%   dEnergy       - displacement energy in flow
-%   maxima        - indices of time points of maximal flow
-%   minima        - indices of time points of minimal flow
+%   energy       - displacement energy in flow
+%   maxima       - indices of time points of maximal flow
+%   minima       - indices of time points of minimal flow
 %
 % OUTPUTS:
 %   transient     - List where each row is a 2-element pair of an interval
@@ -264,31 +224,31 @@ minima = sort(minima);
 
 for m = 1:length(maxima)
     loc   = maxima(m); 
-    value = dEnergy(loc);
+    value = energy(loc);
   
     % Threshold between states is halfway between max and min of displacement
     prev_min = minima(find(minima < loc, 1, 'last')); % Last minima point before the current maximum
     if isempty(prev_min)
         prev_min = 0;
-        b = 0; % If no min point before max, set value of 0 as dEnergy at prev_min
+        b = 0; % If no min point before max, set value of 0 as energy at prev_min
     else
-        b = dEnergy(prev_min); % Otherwise, set value of dEnergy at prev_min
+        b = energy(prev_min); % Otherwise, set value of energy at prev_min
     end
   
   next_min = minima(find(minima > loc, 1, 'first')); % First minima after current maximum
   if isempty(next_min)
-    next_min = length(dEnergy)+1;
-    a = 0; % If no stable point after max, set value of dEnergy as 0 at next_min
+    next_min = length(energy)+1;
+    a = 0; % If no stable point after max, set value of energy as 0 at next_min
   else
-    a = dEnergy(next_min); % Otherwise, set value of dEnergy at next_min
+    a = energy(next_min); % Otherwise, set value of energy at next_min
   end
   
   % NOTE: the threshold value is arbitrary
   threshold = value - (value - max(b, a)) * (1/sqrt(2)); % Threshold of transient activity
   
   % Find beginning and end of interval of displacement above threshold
-  start_idx = find(dEnergy(1:(loc-1)) <= threshold, 1, 'last'); % Last time before
-  stop_idx  = find(dEnergy((loc+1):end) <= threshold, 1, 'first') + loc; % First time after
+  start_idx = find(energy(1:(loc-1)) <= threshold, 1, 'last'); % Last time before
+  stop_idx  = find(energy((loc+1):end) <= threshold, 1, 'first') + loc; % First time after
 
   % Current interval cannot include minima locations
   if isempty(start_idx) || start_idx <= prev_min
@@ -305,14 +265,14 @@ end
 end
 
 % =================== INTERVALS OF NONTRANSIENT STATES ==========================
-function stable = find_nontransient_states(dEnergy, maxima, minima, transient)
+function stable = find_nontransient_states(energy, maxima, minima, transient)
 % STABLE_STATES    Determine intervals of slow activity, starting
 %                  from valleys of displacement energy to sufficiently
 %                  close to peaks of displacement activity. This is run
 %                  after TRANSIENT_STATES, so as to ensure a stable state
 %                  is disjoint from all transient states
 % INPUTS:
-%   dEnergy       - displacement energy in flow
+%   energy       - displacement energy in flow
 %   maxima        - time points of max
 %   minima        - time points of minimal flow
 %   transient     - List where each row is a 2-element pair of an interval
@@ -322,38 +282,38 @@ function stable = find_nontransient_states(dEnergy, maxima, minima, transient)
 %   stable              - List where each row is a 2-element pair
 %                         containing the start and stop of a stable state
 
-dEnergy = -dEnergy; 
+energy = -energy; 
 stable = []; 
 maxima = sort(maxima);
 
 for mm = 1:length(minima)
     
     loc = minima(mm); 
-    value = dEnergy(loc);
+    value = energy(loc);
   
     % Threshold between states is halfway between min and max of displacement
     prev_max = maxima(find(maxima < loc, 1, 'last')); % Last transient/maximum 
     if isempty(prev_max)
         prev_max = 0;
-        b = 0; % If no transient point prev_max, use 0 as last transient dEnergy
+        b = 0; % If no transient point prev_max, use 0 as last transient energy
     else
-        b = dEnergy(prev_max); % Otherwise, get last transient dEnergy
+        b = energy(prev_max); % Otherwise, get last transient energy
     end
   
     next_max = maxima(find(maxima > loc, 1, 'first')); % First maximum after 
     if isempty(next_max)
-        next_max = length(dEnergy) + 1;
-        a = 0; % If no transient point after max, use 0 as next transient dEnergy
+        next_max = length(energy) + 1;
+        a = 0; % If no transient point after max, use 0 as next transient energy
     else
-        a = dEnergy(next_max); % Otherwise, get next transient dEnergy
+        a = energy(next_max); % Otherwise, get next transient energy
     end
   
       % Sorta adaptive threshold based on local value of energy
       threshold = value - (value - max(b, a)) * (1/sqrt(2));
   
       % Find beginning and end of interval of displacement above threshold
-      start_idx = find(dEnergy(1:(loc-1))  <= threshold, 1, 'last');  % Last time prev_max
-      stop_idx  = find(dEnergy((loc+1):end)<= threshold, 1, 'first') + loc; % First time next_max
+      start_idx = find(energy(1:(loc-1))  <= threshold, 1, 'last');  % Last time prev_max
+      stop_idx  = find(energy((loc+1):end)<= threshold, 1, 'first') + loc; % First time next_max
 
   % Current interval cannot start earlier than end of last interval
   if isempty(start_idx) || start_idx <= prev_max 

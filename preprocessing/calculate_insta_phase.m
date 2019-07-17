@@ -17,30 +17,45 @@
 %}
 %
 % MODIFICATION HISTORY:
-%     JA Roberts, QIMR Berghofer, 2018
-%     Paula Sanz-Leon, QIMR Berghofer 2019 - use explicit expansion
+%     James A Roberts, QIMR Berghofer, 2018
+%     Paula Sanz-Leon, QIMR Berghofer, 2019 - use explicit expansion and
+%                                             parfor if available
+% PERFORMANCE:
+% Memory efficient version with:
+% -> FOR loop ~ takes about 40s for data of size 400001 x 513 @dracarys
+% -> PARFOR loop ~ takes about 11s for data of size 400001 x 513 @dracarys -
+%    (12 workers)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function phi = calculate_insta_phase(data)
 
 disp('Calculating instantaneous phases ...')
 
 if length(data) < 100000 % arbitrary biggish number
-    % short but inefficient with memory
-    % calculate phase
-    % If using matlab 2016b or older this can be done directly as:
-    phi = unwrap(angle(hilbert((data - mean(data))))); % faster than bsxfun
+    this_version = version('-release');
+   
+    if str2double(this_version(1:4)) > 2016  
+        % If using matlab 2016b or older this can be done directly as:
+        phi = unwrap(angle(hilbert((data - mean(data))))); % faser than bsxfun
+    else
+        phi = unwrap(angle(hilbert(bsxfun(@minus,data,mean(data)))));
+          
+    end
     
 else
     % Memory efficient ~ takes about 40s for a data of size [400001 x 513]
     % on a Dell Precision Tower 5820 circa 2017.
     phi(size(data)) = 0;
     nn = size(data, 2);
-    for jj=1:nn
-        y = data(:, jj);
-        phi(:, jj) = unwrap(angle(hilbert(y - mean(y))));
-    end
-   
-    
+    try
+        parfor jj=1:nn
+            phi(:, jj) = unwrap(angle(hilbert(data(:, jj) - mean(data(:, jj)))));
+        end
+    catch
+        for jj=1:nn
+            phi(:, jj) = unwrap(angle(hilbert(data(:, jj) - mean(data(:, jj)))));
+        end
+        
+    end  
 end
 fprintf('Finished calculating phases. \n')
 end % function calculate_insta_phase()
