@@ -1,12 +1,9 @@
-function nabla_V = grad_cnem(XYZ, V, IN_Tri_Ini)
+function nabla_V = cnem_grad_V(B, V)
 % Calculates the gradient of V (\nabla V) evaluated at 3-D scattered points in array XYZ
 %
 % ARGUMENTS:
-%          XYZ -- a 2D array of size n x 3 with coodinates of points in 3D space.
 %          V   --  the matrix (??) of (???) of size ??? x ????
-%          IN_Tri_Ini -- a 2D array of size [num_faces x 3] with the 
-%                        triangulation of the boundary that contains
-%                        XYZ
+%          B   -- assembled matrix
 %
 % OUTPUT: 
 %          nabla_V      -- gradient of V
@@ -18,13 +15,7 @@ function nabla_V = grad_cnem(XYZ, V, IN_Tri_Ini)
 % USAGE:
 %{     
 
-gradV = grad_cnem(XYZ, V);
-
-% or, if we precalculated B, then
-
 gradV = grad_cnem(B, V);
-
-
 
 %}
 %
@@ -40,24 +31,12 @@ gradV = grad_cnem(B, V);
 % to use a precalculated B matrix
 %
 % Uses CNEM.
-%
-%
+
 % JA Roberts, QIMR Berghofer, 2018
-
-if nargin < 3
-    IN_Tri_Ini=[];
-end
-
-% Check if we got the locations in 3D space of the matrix Bs
-if size(XYZ,2) == 3 % if loc matrix, calculate the B matrix
-    B = grad_B_cnem(XYZ,IN_Tri_Ini);
-else % already given the B matrix
-    B = XYZ;
-end
 
 Grad_V = B*V;
 
 Grad_V_mat = reshape(Grad_V,4,[]).';
-nabla_V = Grad_V_mat(:,1:3); % 4th column is V
+nabla_V = Grad_V_mat(:,1:3); % 4th column is Gradient Operator
 
-end % funcion grad_cnem()
+end % funcion cnem_grad_V()
