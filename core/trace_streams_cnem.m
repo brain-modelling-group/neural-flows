@@ -1,26 +1,30 @@
-function streams = trace_streams_cnem(XYZ, IN_Tri_Ini, UVW, SXYZ, step, maxVert)
+function streams = trace_streams_cnem(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length)
 %% Traces streamlines using a velocity field defined on scattered points in space
 %  based on traceStreamXYZUVW from matlab's stream3c.c, using CNEM
 %  functions.
 %
 % ARGUMENTS:
-%          phi     -- a 2D array of size [time x nodes/locs] matrix of (signal's envelope) phases 
-%                     (assumed unwrapped).
 %          locs     -- a 2D array of size [nodes x 3] with the x,y,z
-%                     coordinates of the nodes/regions centroids.
-%          dt      -- time step or sampling interval of the timseries in
-%                     yphasep
-%          opts    --  a struct with options, whose fields are:
-%                      .is_phase -- boolean flag to define is the input data phi is 
-%                                    an (unwrapped) angle value. Default:true.
-%                      .alpha_radius -- radius of alpha shape to calculate
-%                                       the convex hull encompassing all
-%                                       points in `locs`. This parameter
-%                                       may need tweaking depending on 
-%                                       geometry and number of scattered points. 
+%                      coordinates of the nodes/regions centroids.
+%          boundary_faces -- a 2D array of size [num_faces x 3] with the
+%                            triangulation of the brain's convex hull.
+%          flow_field -- a 2D array of size [nodes x 3] with the 
+%                        velocity components u, v, w at each point in locs.
+%                        
+%          seed_locs  -- a 2D array of size [num_seeds x 3] with the x, y,z 
+%                        coordinates of the streamlines starting points. 
+%          time_step  -- a float with the time step used to trace the
+%                        streamlines.
+%          max_streamline_length -- an integer with the maximum length acceptable 
+%                                  for a streamlines (in points/samples).
+%                                  Matlab's streamline functions call this number  
+%                                  'max number of vertices'. In a way, this
+%                                  is the maximum number of timesteps tht
+%                                  we will integrate.
+%                                  
 %
 % OUTPUT: 
-%          v -- velocity struct, with fields:
+%          streams -- velocity struct, with fields:
 %            -- vnormp - magnitude of velocity (speed) [time x nodes]
 %            -- vxp - x component of the vector field of size [time x nodes]
 %            -- vyp - y component of the vector field of size [time x nodes]
@@ -40,48 +44,47 @@ function streams = trace_streams_cnem(XYZ, IN_Tri_Ini, UVW, SXYZ, step, maxVert)
 %     Paula Sanz-Leon, QIMR Berghofer, 2019
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Assume phases unwrapped in time already
-% Calculate temporal gradient
-
-numVerts = 0;
 
 if nargin<6
-    maxVert=200; % What's max vert? Maximum vertices/length of streamlines
+    max_stream_length = 200;
 end
 
-Type_FF=0;
+% CNEM parameter
+Type_FF = 0;
 
 % Number of streamlines
-ns=size(SXYZ,1);
-% 
-live=true(ns,1); % streamlines that are still going
+num_streams = size(seed_locs, 1);
 
-%streams=cell(1,ns);
-streams=zeros(ns, 3, maxVert); % preallocate, will prune later
+% Streamlines that are still growing
+live = true(num_streams, 1); 
 
+embedding_dimension = 3;
+% Preallocate, will prune later
+streams(num_streams, embedding_dimension, max_stream_length) = 0; 
 
-for j=1:maxVert
-    %fprintf('%d ',j)
+disp([mfilename ':: Tracing streamlines ...'])
+    
+for j=1:max_stream_length
     
     % stop if all streamlines are done
     if ~live
         break
     end
     
-    % make interpolation object
-    Interpol=m_cnem3d_interpol(XYZ,IN_Tri_Ini,SXYZ(live,:),Type_FF);
+    % Make interpolation object
+    FInterpol = m_cnem3d_interpol(locs, boundary_faces, seed_locs(live,:), Type_FF);
     
     % terminate any streamlines that have left the interior
     livej=live(live); % live streamlines this iteration (has same length as number of live points)
-    livej=livej&Interpol.In_Out;
+    livej=livej&FInterpol.In_Out;
     
-    streams(live,:,j)=SXYZ(live,:);
+    streams(live,:,j)=seed_locs(live,:);
     
     %if already been here, done
     % % how likely is this though!?
     
     % interpolate the vector data
-    UVWinterp=Interpol.interpolate(UVW); % has same length as number of live points
+    UVWinterp=FInterpol.interpolate(UVW); % has same length as number of live points
     
     % check if step length has hit zero
     validsteps=~all(~UVWinterp,2);
@@ -96,11 +99,12 @@ for j=1:maxVert
     live(live)=livej;
     
     % update the current position
-    SXYZ(live,:)=SXYZ(live,:)+UVWstep(livej,:);
+    SXYZ(live,:) = seed_locs(live,:) + UVWstep(livej,:);
     
     
 end
 
+disp([mfilename ':: Done.'])
 
 if 0
 %%
