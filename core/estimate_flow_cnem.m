@@ -1,4 +1,4 @@
-function v = estimate_flow_cnem(phi, locs, dt, is_phase)
+function v = estimate_flow_cnem(phi, locs, dt, opts)
 %% Calculate instantaneous phase flow at every time point
 %
 % ARGUMENTS:
@@ -8,8 +8,14 @@ function v = estimate_flow_cnem(phi, locs, dt, is_phase)
 %                     coordinates of the nodes/regions centroids.
 %          dt      -- time step or sampling interval of the timseries in
 %                     yphasep
-%          is_phase -- boolean flag to define is the input data phi is 
-%                      an (unwrapped) angle value.
+%          opts    --  a struct with options, whose fields are:
+%                      .is_phase -- boolean flag to define is the input data phi is 
+%                                    an (unwrapped) angle value. Default:true.
+%                      .alpha_radius -- radius of alpha shape to calculate
+%                                       the convex hull encompassing all
+%                                       points in `locs`. This parameter
+%                                       may need tweaking depending on 
+%                                       geometry and number of scattered points. 
 %
 % OUTPUT: 
 %          v -- velocity struct, with fields:
@@ -35,14 +41,20 @@ function v = estimate_flow_cnem(phi, locs, dt, is_phase)
 
 % Assume phases unwrapped in time already
 % Calculate temporal gradient
+
+if nargin < 4
+    opts.is_phase = true;
+    opts.alpha_radius = 30;
+end
+
 disp('Calculating temporal gradient dphi/dt ...')
 
-[~,dphidtp] = gradient(phi, dt);
+[~, dphidtp] = gradient(phi, dt);
 
 disp('Done.')
 
 % Create alpha shapes 
-shpalpha = 30; % alpha radius; may need tweaking depending on geometry and number of scattered points. 
+shpalpha = opts.alpha_radius; % alpha radius; may need tweaking depending on geometry and number of scattered points. 
 shp      = alphaShape(locs, shpalpha);
 
 % The boundary of the centroids is an approximation of the cortex
@@ -59,12 +71,13 @@ dphidxp = zeros(size(phi));
 dphidyp = zeros(size(phi));
 dphidzp = zeros(size(phi));
 
-fprintf('Calculating phase-based flos ...')
+fprintf([mfilename ':: Calculating phase-based flows ...'])
 
 xdim = 1;
 ydim = 2;
 zdim = 3;
-% Chec if the values in phi are a phase value (angle) or not
+
+% Check if the values in phi are a phase value (angle) or not
 if is_phase
     
     for tt=1:tpts
@@ -79,7 +92,8 @@ if is_phase
         dphidzp(tt,:)=real(-1i*gradphasor(:,zdim).*conj(yphasor));
     end
 else
-    % Not sure this is correct if phi is not the envelope's phase
+    % NOTE: This part is not strictly correct because Rubino's work is based on
+    %       the use of the signal envelope's phase.
     for tt=1:tpts
         instant_phi = phi(tt,:);
         instant_phi = instant_phi(:);
@@ -100,5 +114,5 @@ v.vnormp = vnormp;
 v.vxp=vnormp.*-dphidxp./normgradphip; % magnitude * unit vector component
 v.vyp=vnormp.*-dphidyp./normgradphip;
 v.vzp=vnormp.*-dphidzp./normgradphip;
-disp('Done. \n')
+disp([mfilename ':: Done. \n'])
 end % function estimate_flow_cnem()
