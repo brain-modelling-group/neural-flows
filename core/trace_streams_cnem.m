@@ -35,7 +35,20 @@ function streams = trace_streams_cnem(locs, boundary_faces, flow_field, seed_loc
 %          
 % USAGE:
 %{     
-    
+    load wind
+    rng(42);
+    loc_idx = randperm(length(x(:)), round(length(x(:))*0.01));
+    locs = [x(loc_idx); y(loc_idx); z(loc_idx)].';
+    flow_field = [u(loc_idx); v(loc_idx); w(loc_idx)].';
+    dt = 2^-4;
+    max_stream_length = 256;
+     
+    % Get boundary/convex hull
+    [~, bdy] = get_boundary_info(locs, locs(:, 1), locs(:, 2), locs(:, 3));
+
+ 
+    streams = trace_streams_cnem(locs, bdy, flow_field, locs, dt, max_stream_length)
+
 
 %}
 %
@@ -64,9 +77,9 @@ streams(num_streams, embedding_dimension, max_stream_length) = 0;
 
 disp([mfilename ':: Tracing streamlines ...'])
     
-for j=1:max_stream_length
+for it = 1:max_stream_length
     
-    % stop if all streamlines are done
+    % Stop if all streamlines are done
     if ~live
         break
     end
@@ -75,31 +88,31 @@ for j=1:max_stream_length
     FInterpol = m_cnem3d_interpol(locs, boundary_faces, seed_locs(live,:), Type_FF);
     
     % terminate any streamlines that have left the interior
-    livej=live(live); % live streamlines this iteration (has same length as number of live points)
-    livej=livej&FInterpol.In_Out;
+    livej = live(live); % live streamlines this iteration (has same length as number of live points)
+    livej = livej & FInterpol.In_Out;
     
-    streams(live,:,j)=seed_locs(live,:);
+    streams(live,:,it) = seed_locs(live,:);
     
     %if already been here, done
     % % how likely is this though!?
     
-    % interpolate the vector data
-    UVWinterp=FInterpol.interpolate(UVW); % has same length as number of live points
+    % Inteprolate velocity field 
+    flowfield_interp = FInterpol.interpolate(flow_field); % has same length as number of live points
     
     % check if step length has hit zero
-    validsteps=~all(~UVWinterp,2);
+    validsteps = ~all(~flowfield_interp,2);
     %if any(~validsteps), fprintf('%d steps hit zero\n',sum(~validsteps)), end
-    livej=livej&validsteps;
+    livej = livej&validsteps;
     
     % calculate step size
     % stream3c rescales the velocities by max(abs(vcomponent))
-    UVWstep=UVWinterp*step./max(abs(UVWinterp)); % uses singleton expanson
+    flowfield_step = flowfield_interp*time_step./max(abs(flowfield_interp)); % uses singleton expanson
     
     % update overall live list
-    live(live)=livej;
+    live(live) = livej;
     
     % update the current position
-    SXYZ(live,:) = seed_locs(live,:) + UVWstep(livej,:);
+    seed_locs(live,:) = seed_locs(live,:) + flowfield_step(livej,:);
     
     
 end
