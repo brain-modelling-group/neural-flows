@@ -47,13 +47,27 @@ function stream_cell = trace_streams_cnem(locs, boundary_faces, flow_field, seed
  
     streams = trace_streams_cnem(locs, bdy, flow_field, locs, dt, max_stream_length);
     % Visualize what we just did
+    fig_handle = figure('Name', 'nflow_traced_streams');
+    ax = axes('Parent', fig_handle);
+    hold(ax, 'on')
+
+    quiver3(locs(:, 1), locs(:, 2), locs(:, 3), ...
+            flow_field(:, 1), flow_field(:, 2), ...
+            flow_field(:, 3));
+    % Start locations
+    plot3(locs(:, 1), locs(:, 2), locs(:, 3), 'k.')
+    
     for ii=1:length(streams);
-        plot3(squeeze(scell{ii}(:, 1)), ...
-              squeeze(scell{ii}(:, 2)), ...
-              squeeze(scell{ii}(:, 3)), 'color', [0.5 0.5 0.5 0.1]);
+        plot3(squeeze(streams{ii}(:, 1)), ...
+              squeeze(streams{ii}(:, 2)), ...
+              squeeze(streams{ii}(:, 3)), 'color', [0.5 0.5 0.5 0.1]);
+       plot3(squeeze(streams{ii}(end, 1)), ...
+              squeeze(streams{ii}(end, 2)), ...
+              squeeze(streams{ii}(end, 3)), 'r.');
     end
 
-
+% TODO: prepare an example with brain data -- save one frame of phase flow.
+ from brain waves.
 
 %}
 %
