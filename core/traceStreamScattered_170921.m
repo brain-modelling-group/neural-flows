@@ -1,4 +1,4 @@
-function streams=traceStreamScattered(XYZ,IN_Tri_Ini,UVW,SXYZ,step,maxVert)
+function streams = trace_streams_scattered(XYZ, IN_Tri_Ini, UVW, SXYZ, step,maxVert)
 % streamlines for scattered velocity points
 % based on traceStreamXYZUVW from matlab's stream3c.c
 
