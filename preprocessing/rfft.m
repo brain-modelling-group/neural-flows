@@ -96,3 +96,4 @@ function [f, Y, P] = rfft(y, fs, NFFT, windowed, detrended, one_sided)
         P = P ./ freq_bin_width; % Divide by frequency bin size to get power spectral density
 
 end %function rfft()
+    

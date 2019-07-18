@@ -72,9 +72,9 @@ function cmap = compute_circular_jet_hue(u, v)
         col = (1-f).*col0 + f.*col1;   
 
         idx = rad <= 1;   
-        col(idx) = 1-rad(idx).*(1-col(idx));    % increase saturation with radius
+        col(idx) = 0.85-rad(idx).*(1-col(idx));    % increase saturation with radius
 
-        col(~idx) = col(~idx)*0.75;             % out of range
+        col(~idx) = col(~idx)*0.45;             % out of range
 
         cmap(:, :, i) = uint8(floor(255*col.*(1-nanIdx)));
     end

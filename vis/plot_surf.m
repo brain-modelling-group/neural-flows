@@ -13,7 +13,7 @@
 %
 % OUTPUT:
 %    surf_handle -- handle to trisurf graphics object
-%    fax         -- a structure with figure and axes handles.
+%    fax         -- a structure with fields .figure and .axes (handles).
 %
 % REQUIRES:
 %

@@ -1,6 +1,7 @@
-function streams = trace_streams_scattered(XYZ, IN_Tri_Ini, UVW, SXYZ, step, maxVert)
+function streams = trace_streams_cnem(XYZ, IN_Tri_Ini, UVW, SXYZ, step, maxVert)
 %% Traces streamlines using a velocity field defined on scattered points in space
-%  based on traceStreamXYZUVW from matlab's stream3c.c
+%  based on traceStreamXYZUVW from matlab's stream3c.c, using CNEM
+%  functions.
 %
 % ARGUMENTS:
 %          phi     -- a 2D array of size [time x nodes/locs] matrix of (signal's envelope) phases 

@@ -2,7 +2,7 @@ function [dwell_times, jump_times] = compute_cohcorrgram_dwelltimes(CC, opts)
 % Estimate metastable states dwelltimes, based on cohcorrgram.m
 % ARGUMENTS:
 %        CC   -- a struct obtained with crosscorrgram, with fields:
-%                .cc -- correlation coefficient.
+%                .cc -- correlation coefficients, a 2D array of size [lags x timecc];
 %                .ct -- correlation time vector.
 %
 %        opts -- a struct woth fields:
@@ -34,7 +34,7 @@ switch opts.metric
         if  ischar(opts.metric) % check that metric is not string
             error(['neural-flows:: ', mfilename, '::Unknown metric option.'])
         else
-            % pass the metric to be used as a vector
+            % pass the metric to be used as bursty data
             metric = opts.metric;
         end
 end 
@@ -56,7 +56,7 @@ upcrossings = find(diff(metric-transitionthr>=0)==1);
 % Pull out the suprathreshold segments
 avs = extractbursts(metric, transitionthr); 
 % Use the peak as the representative transition time
-jumpsi = cellfun(@(x) find(x==max(x)),avs) + upcrossings(1:length(avs))-1; 
+jumpsi = cellfun(@(x) find(x==max(x)), avs) + upcrossings(1:length(avs))-1; 
 % Estimate dwell times
 dwell_times = diff(jumpsi)*(CC.ct(2)-CC.ct(1)); % dwell times
 

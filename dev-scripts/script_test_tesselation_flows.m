@@ -25,6 +25,13 @@ tic;[flow_fields, ~, ~, ~, poincare_index, time_flow] = estimate_flow_tess(smoot
                                                                            cortex, time_data, ...
                                                                            idx_start, idx_end, ...
                                                                            hs_smoothness);toc;
+                                                                       
+                                                                       
+%% Energy detection
+time_ff = (time_data(1:end-1) + time_data(2:end))/2;
+[stable, transient, stablePoints, transientPoints, dEnergy, dEnergyF, dEnergyV] = compute_energy_states(flow_fields, ...
+    cortex, 3, time_ff, 1, 10, 'valleys', 'vertex', 0);
+
 %% Set up graphics objects
 lh = 1:8192;
 
