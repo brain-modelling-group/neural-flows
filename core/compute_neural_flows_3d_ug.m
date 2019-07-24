@@ -206,10 +206,10 @@ function compute_neural_flows_3d_ug(data, locs, options)
            % Use null-isosurface intersection
            % First calculate them
            % NOTE: at the moment this part is kind-of-deprecated
-           fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Extracting critical isosurfaces'))
+           fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started extraction of critical isosurfaces'))
            Calculate critical isosurfaces
            [mfile_surf, mfile_surf_sentinel] = par_get_critical_isosurfaces(mfile_vel);
-           
+           fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished extraction of critical isosurfaces'))
        case 'vel'
            mfile_surf = [];
            mfile_surf_sentinel = [];
