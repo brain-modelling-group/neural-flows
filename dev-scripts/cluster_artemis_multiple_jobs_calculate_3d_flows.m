@@ -8,7 +8,7 @@ idx = 2048:2048:400001;
 
 if idx_chunk < 195
     idx_start = idx(idx_chunk);
-    idx_stop  = idx(idx_chunks+1);
+    idx_stop  = idx(idx_chunk+1);
 else
     idx_start = idx(idx_chunk);
     idx_stop = 400001;
