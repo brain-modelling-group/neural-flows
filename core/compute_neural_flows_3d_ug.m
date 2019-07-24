@@ -115,7 +115,7 @@ function compute_neural_flows_3d_ug(data, locs, options)
     % Perform interpolation on the data and save in a temp file -- asumme
     % OS is Linux
     if ~options.interp_data.file_exists % Or not necesary because it is fmri data
-        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Interpolating data'))
+        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started interpolating data.'))
         
         % Sequential interpolation
         %[mfile_interp, mfile_interp_sentinel] = interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file); 
@@ -140,13 +140,14 @@ function compute_neural_flows_3d_ug(data, locs, options)
         mfile_interp.options = options;
         % Make the file read-only file to avoid corruption
         mfile_interp.Properties.Writable = false;
+        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished interpolating data.'))
 
 %------------------------ FLOW CALCULATION -------------------------------%
     % Parameters for optical flow-- could be changed, could be parameters
     alpha_smooth   = 1;
     max_iterations = 16;
         
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Calculating velocity fields'))
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started calculating velocity fields.'))
     % We open a matfile to store output and avoid huge memory usage 
     root_fname_vel = 'temp_flows';
     
@@ -248,7 +249,7 @@ function compute_neural_flows_3d_ug(data, locs, options)
         FB = mfile_interp.data(:, :, :, this_tpt+1);
         
         burnin_len = 4; % for iterations, not much but better than one
-        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Start burn-in period for estimated initial velocity conditions.'))
+        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started burn-in period for estimated initial velocity conditions.'))
         for bb=1:burnin_len
             % Calculate the velocity components
             [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, ...
@@ -256,7 +257,8 @@ function compute_neural_flows_3d_ug(data, locs, options)
                                                         uxo, uyo, uzo, ...
                                                         hx, hy, hz, ht);       
         end
-        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Start estimation of flows.'))
+        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished burn-in period for estimated initial velocity conditions.'))
+        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started estimation of flows.'))
 
         for this_tpt = 1:dtpts-1
 
@@ -284,6 +286,8 @@ function compute_neural_flows_3d_ug(data, locs, options)
                               
         end
     
-    end
+    end % function compute_flows_3d()
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished estimation of flows.'))
+ 
 
 end % function compute_neural_flows_3d_ug()
