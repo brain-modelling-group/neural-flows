@@ -3,8 +3,8 @@
 #PBS -N FLOWS
 #PBS -m abe
 #PBS -M pmsl.academic@gmail.com
-#PBS -q defaultQ
-#PBS -l select=1:ncpus=32:mem=32GB
+#PBS -q small
+#PBS -l select=1:ncpus=24:mem=18GB
 #PBS -l walltime=0:30:00
 #PBS -j oe
 
