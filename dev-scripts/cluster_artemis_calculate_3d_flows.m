@@ -14,6 +14,7 @@ clear COG soln
 % Cluster properties
 local_cluster = parcluster('local');
 local_cluster.NumWorkers = 24; % This should match the requested number of cpus
+parpoool(local_cluster.NumWorkers);
 
 % Change directory to scratch, so temp files will be created there
 cd /scratch/CGMD
