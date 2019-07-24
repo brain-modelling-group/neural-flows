@@ -7,5 +7,8 @@ locs = COG;
 
 clear COG
 
-interpolated_data_options.exists = false;
-tic;compute_neural_flows_3d_ug(data, locs, interpolated_data_options);toc 
+options.interp_data.exist_file = false;
+options.sing_detection.datamode = 'vel';
+options.sing_detection.inexmode = 'linear';
+
+tic;compute_neural_flows_3d_ug(data, locs, options);toc 
