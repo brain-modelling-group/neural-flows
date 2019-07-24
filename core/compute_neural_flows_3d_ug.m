@@ -133,7 +133,6 @@ function compute_neural_flows_3d_ug(data, locs, options)
         mfile_interp = matfile(options.interp_data.file_name);
         mfile_interp_sentinel = [];
     end
-    interpolated_data_options   [xyz_idx]  = par_locate_critical_points([], mfile_vel, data_mode, index_mode);
 
 %------------------------ FLOW CALCULATION -------------------------------%
     % Parameters for optical flow-- could be changed, could be parameters
@@ -249,7 +248,8 @@ function compute_neural_flows_3d_ug(data, locs, options)
                                                         uxo, uyo, uzo, ...
                                                         hx, hy, hz, ht);       
         end
-        
+        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Start estimation of flows.'))
+
         for this_tpt = 1:dtpts-1
 
                 % Read data
