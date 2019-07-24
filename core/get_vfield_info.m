@@ -1,4 +1,24 @@
 function mfile_vel = get_vfield_info(mfile_vel, ux, uy, uz, this_tpt)
+% Get basic info of a velocity vector field
+% ARGUMENTS:
+%   mfile_vel  -- an mFile handle to the file where the data will be stored 
+%   ux, uy, yz -- arrays with the componentns of the velocity vector field
+%   this_tpt   -- index to store the info.
+% OUTPUT       
+%  mfile_vel  -- an mFile handle to the file where the data will be stored 
+% REQUIRES: 
+%        None
+%
+% USAGE:
+%{     
+
+
+%}
+%
+% MODIFICATION HISTORY:
+%     Paula Sanz-Leon, QIMR Berghofer 2018
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     mfile_vel.min_ux(1,this_tpt) = nanmin(ux(:));
     mfile_vel.max_ux(1,this_tpt) = nanmax(ux(:));
