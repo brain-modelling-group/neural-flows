@@ -166,7 +166,7 @@ function compute_neural_flows_3d_ug(data, locs, options)
     %
     % This function runs the loop over timepoints and saves the velocity
     % fields into a file
-    detection_th = 0.1;
+    detection_th = 0.1; % [in units of space/time]
     mfile_vel.detection_threshold = detection_th;
    
     % Calculate velocity fields
