@@ -54,9 +54,6 @@ function [mfile_interp_obj, mfile_interp_sentinel] = par_interpolate_3d_data(dat
     parfun = @interpolate_step;
     interpolation_3d_storage_expression = 'data(:, :, :, jdx)';
     [mfile_interp_obj] = spmd_parfor_with_matfiles(tpts, parfun, mfile_interp_obj, interpolation_3d_storage_expression);
-    
-    % Make the matfile read-only
-    mfile_interp_obj.Properties.Writable = false;
 
     
     % Child function with access to local scope variables from parent
