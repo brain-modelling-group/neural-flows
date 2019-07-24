@@ -5,11 +5,12 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     % locs: coordinates points in 3D Euclidean space for which data values are known. 
     %       these corresponds to the centres of gravity: ie, node locations 
     %       of brain network embedded in 3D dimensional space
-    % interpolated_data: a structure
-    %                    --  .exists  a boolean flag to determine if the 
+    % options
+    %        .interp_data: a structure
+    %                    --  .file_exists  a boolean flag to determine if the 
     %                               interpolated data had been precalculated or not
     %                               and skip that step. 
-    % interpolated_data: -- .interp_filename a string with the name of the
+    %        .interp_data: -- .file_name a string with the name of the
     %                        matfile where the interpolated data are stored
     % we need: dt
     % limits of XYZ space, presumably coming from fmri data
@@ -93,7 +94,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     
     % Perform interpolation on the data and save in temp file
     
-    if ~interpolated_data_options.exists % Or not necesary because it is fmri data
+    if ~options.interp_data.file_exists % Or not necesary because it is fmri data
         fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Interpolating data'))
         
         % Sequential interpolation
@@ -110,7 +111,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
          interpolated_data_options.interp_filename = mfile_interp.Properties.Source;
     else
         % Load the data if file already exists
-        mfile_interp = matfile(interpolated_data_options.interp_filename);
+        mfile_interp = matfile(options.interp_data.file_name);
         mfile_interp_sentinel = [];
     end
 
@@ -133,7 +134,6 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     [uxo, uyo, uzo] = get_initial_velocity_distribution(grid_size, ~in_bdy_mask, seed_init_vel);
     
     % The following lines will create the file on disk
-    
     mfile_vel.ux(size(uxo, x_dim), size(uxo, y_dim), size(uxo, z_dim), dtpts-1) = 0;    
     mfile_vel.uy(size(uyo, x_dim), size(uyo, y_dim), size(uyo, z_dim), dtpts-1) = 0;
     mfile_vel.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
@@ -147,7 +147,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     
     % Save grid - needed for singularity tracking and visualisation
     % TODO: save time; 
-    % Considet saving min max values and step, saves memory
+    % Consider saving min max values and step, saves memory
     mfile_vel.X = X;
     mfile_vel.Y = Y;
     mfile_vel.Z = Z;
@@ -161,15 +161,11 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
 
     % Delete sentinels. If these varibales are OnCleanup objects, then the 
     % files will be deleted.
-    
     delete(mfile_interp_sentinel) 
     delete(mfile_vel_sentinel)
     
     % No way around a sequential for loop for optical flows
-    % NOTE: TODO: consider running the algo for longer for the first 3-5
-    % frames. Random initial conditions are horrible.
     function compute_flows_3d()
-        
         % Do a burn-in period for the first frame (eg, two time points of data)
         % Random initial conditions are horrible.
         
@@ -244,7 +240,7 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
    
    % Delete isosurface sentinel, if it's oncleanup ibject, the file will be
    % deleted
-   %delete(mfile_surf_sentinel)
+   % delete(mfile_surf_sentinel)
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Classifying singularities'))
    % Calculate jacobian and classify singularities
    singularity_classification = classify_singularities(xyz_idx, mfile_vel);
