@@ -2,12 +2,12 @@
 load('/home/paula/Work/Code/Networks/brain-waves/data/simulations/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln')
 load('/home/paula/Work/Code/Networks/brain-waves/data/513COG.mat')
 
-data  = soln(:, end-25000:end)';
+data  = soln(:, end-256:end)';
 locs = COG;
 
-clear COG
+clear COG soln
 
-options.interp_data.exist_file = false;
+options.interp_data.file_exists = false;
 options.sing_detection.datamode = 'vel';
 options.sing_detection.inexmode = 'linear';
 
