@@ -1,17 +1,41 @@
 function singularity_type = classify_orbits_3d(E)
-% classification of hyperbolic periodi orbits (p. o) in 3D based on the 
+% Classifies hyperbolic periodi orbits (p. o.) in 3D space based on the 
 % eigenvalues of the jacobian matrix. 
+
 % E -- vector with eigenvalues, one of the eigenvalues is zero
-%Hyperbolic periodic orbits in 3D can be classified as follows:
-% Two real eigenvalues (one complex):
-%  If real eigenvalues inside the unit circle: source p.o 
-%                      both outside unit circle: sink p.o
-%                      one inside, two outside: 
-%                                             both positive: saddle p.o                    
-%                                             bith negative: twisted p.o
-% One real eigenvalue, two complex conjugate:
-% complex eigenvalues outside the unit circle : spiral source p.o
-% complex eigenvalues inside the unit circle  : spiral sink p.o
+
+% ARGUMENTS:
+%   E               -- eigenvalues of the 3D Jacobian matrix a vector with 3 elements. 
+%
+% OUTPUT       
+%  singularity_type -- string with a human readable description of the
+%                       singularity type.
+% NOTES: Hyperbolic periodic orbits in 3D can be classified as follows:
+%  --> Two real eigenvalues + one complex):
+%      If real eigenvalues both inside the unit circle: source p.o 
+%                          both outside unit circle:    sink p.o
+%                          one inside, two outside: 
+%                                                 both positive: saddle p.o                    
+%                                                 bith negative: twisted p.o
+% --> One real eigenvalue + two complex (complex conjugates)
+%     complex eigenvalues outside the unit circle : spiral source p.o
+%     complex eigenvalues inside the unit circle  : spiral sink p.o
+
+% REQUIRES: 
+%        None
+%
+% USAGE:
+%{     
+
+
+%}
+%
+% MODIFICATION HISTORY:
+%     Paula Sanz-Leon, QIMR Berghofer 2018
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
 if ~isreal(E) % If we have complex numbers   
    % Check if we have complex conjugates
@@ -43,5 +67,3 @@ else
     end
 end
 end % function calssify_orbits_3d()
-
-      
