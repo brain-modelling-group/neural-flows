@@ -1,5 +1,5 @@
 function [energy_sum, energy_face, energy_vertex] = calculate_kinetic_energy(flow_field, surf_tess, embedding_dimension)
-% compute_energy_states  Computation of low and high energy states based on optical flow estimates 
+% Csompute_energy_states  Computation of low and high energy states based on optical flow estimates 
 % ARGUMENTS:
 %   flow_field          -- an array with optical flow field of size
 %                          [vertices, 3, timepoints], or [vertices, 2, timepoints]
@@ -42,7 +42,7 @@ function [energy_sum, energy_face, energy_vertex] = calculate_kinetic_energy(flo
 % Estimation of Velocity Fields and Propagation on Non-Euclidian Domains: Application
 % to the Exploration of Cortical Spatiotemporal Dynamics
 % Lecture Notes in Mathematics 1983, DOI 10.1007/978-3-642-03444-2 5,
-% c Springer-Verlag Berlin Heidelberg 2009
+% Springer-Verlag Berlin Heidelberg 2009
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 vx0 = 1;
