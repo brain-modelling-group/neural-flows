@@ -129,7 +129,8 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     
     % Get some dummy initial conditions
     seed_init_vel = 42;
-    [uxo, uyo, uzo] = get_initial_velocity_distribution(X, ~in_bdy_mask, seed_init_vel);
+    grid_size = size(X);
+    [uxo, uyo, uzo] = get_initial_velocity_distribution(grid_size, ~in_bdy_mask, seed_init_vel);
     
     % The following lines will create the file on disk
     
