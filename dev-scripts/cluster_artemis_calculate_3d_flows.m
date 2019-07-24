@@ -13,7 +13,7 @@ clear COG soln
 
 % Cluster properties
 local_cluster = parcluster('local');
-local_cluster.NumWorkers = 24; % This should match the requested number of cpus
+local_cluster.NumWorkers = 64; % This should match the requested number of cpus
 parpool(local_cluster.NumWorkers);
 
 % Change directory to scratch, so temp files will be created there
