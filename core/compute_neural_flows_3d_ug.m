@@ -133,6 +133,7 @@ function compute_neural_flows_3d_ug(data, locs, options)
         mfile_interp = matfile(options.interp_data.file_name);
         mfile_interp_sentinel = [];
     end
+        mfile_interp.options = options;
 
 %------------------------ FLOW CALCULATION -------------------------------%
     % Parameters for optical flow-- could be changed, could be parameters
@@ -178,7 +179,7 @@ function compute_neural_flows_3d_ug(data, locs, options)
     mfile_vel.hz = hz; % mm
     mfile_vel.ht = ht; % ms
     
-
+    mfile_vel.options = options;
     % Delete sentinels. If these varibales are OnCleanup objects, then the 
     % files will be deleted.
     delete(mfile_interp_sentinel)    
@@ -211,6 +212,7 @@ function compute_neural_flows_3d_ug(data, locs, options)
           error(['neural-flows:: ', mfilename, '::UnknownOption. Invalid datamode for detecting singularities.'])
    end
    
+   
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Locating critical points'))
    % Detect intersection of critical isosurfaces
    [xyz_idx]  = par_locate_critical_points(mfile_surf, mfile_vel, options.sing_detection.datamode, options.sing_detection.indexmode);
@@ -228,7 +230,7 @@ function compute_neural_flows_3d_ug(data, locs, options)
    % Calculate jacobian and classify singularities
    singularity_classification = classify_singularities(xyz_idx, mfile_vel);
    mfile_sings.singularity_classification = singularity_classification;
-   
+   mfile_sings.options = options;
 % ---------------------- CHILD FUNCTION ----------------------------------%   
     % No way around a sequential for loop for optical flows
     function compute_flows_3d()
