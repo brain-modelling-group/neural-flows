@@ -159,7 +159,6 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     mfile_vel.ht = ht; % ms
     
 
-
     % Delete sentinels. If these varibales are OnCleanup objects, then the 
     % files will be deleted.
     
@@ -171,10 +170,28 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     % frames. Random initial conditions are horrible.
     function compute_flows_3d()
         
+        % Do a burn-in period for the first frame (eg, two time points of data)
+        % Random initial conditions are horrible.
+        
+        this_tpt = 1;
+        FA = mfile_interp.data(:, :, :, this_tpt);
+        FB = mfile_interp.data(:, :, :, this_tpt+1);
+        
+        burnin_len = 4; % for iterations, not much but better than one
+        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Burn-in period for estimated initial velocity conditions.'))
+        for bb=1:burnin_len
+            % Calculate the velocity components
+            [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, ...
+                                                        max_iterations, ...
+                                                        uxo, uyo, uzo, ...
+                                                        hx, hy, hz, ht);       
+        end
+        
         for this_tpt = 1:dtpts-1
 
                 % Read data
                 % Save grid - needed for singularity tracking
+                
                FA = mfile_interp.data(:, :, :, this_tpt);
                FB = mfile_interp.data(:, :, :, this_tpt+1);
 
