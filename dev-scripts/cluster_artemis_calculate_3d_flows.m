@@ -5,7 +5,7 @@ load('long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln')
 load('513COG.mat', 'COG')
 
 idx_start = 1;
-idx_stop  = 10;
+idx_stop  = 2048;
 data  = soln(:, idx_start:idx_stop)';
 locs = COG;
 
