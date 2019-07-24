@@ -220,7 +220,7 @@ function compute_neural_flows_3d_ug(data, locs, options)
    end
    
    
-   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Locating critical points'))
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started detection of critical points.'))
    % Detect intersection of critical isosurfaces
    [xyz_idx]  = par_locate_critical_points(mfile_surf, mfile_vel, options.sing_detection.datamode, options.sing_detection.indexmode);
    delete(mfile_surf_sentinel)
@@ -231,13 +231,16 @@ function compute_neural_flows_3d_ug(data, locs, options)
    [mfile_sings, mfile_sings_sentinel] = create_temp_file(root_fname_sings, keep_sings_file);
    mfile_sings.xyz_idx = xyz_idx;
    delete(mfile_sings_sentinel)
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started detection of critical points.'))
    
 %------------------------ CLASSIFY SINGULARITIES -------------------------%    
-   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Classifying singularities'))
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished classification of singularities.'))
    % Calculate jacobian and classify singularities
    singularity_classification = classify_singularities(xyz_idx, mfile_vel);
    mfile_sings.singularity_classification = singularity_classification;
    mfile_sings.options = options;
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished classification of singularities.'))
+
 % ---------------------- CHILD FUNCTION ----------------------------------%   
     % No way around a sequential for loop for optical flows
     function compute_flows_3d()
