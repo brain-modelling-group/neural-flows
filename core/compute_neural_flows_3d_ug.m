@@ -46,15 +46,14 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     tpts      = size(data, t_dim);
     %num_nodes = size(data, n_dim);
     
-    down_factor_t = 1; % Downsampling factor for t-axis
+    down_factor_t = 1; % NOTE: should be input. Downsampling factor for t-axis
     time_vec      = 1:down_factor_t:tpts; % in milliseconds
-    ht            = time_vec(2) - time_vec(1);
+    ht            = time_vec(2) - time_vec(1); % NOTE: should be input
     data          = data(time_vec, :);
     
     % Recalculate timepoints
     dtpts = size(data, t_dim);
   
-    
     % NOTE: full resolution (eg, approx dxyz=1mm^3), each interpolation
     % step takes about 24 seconds.
     % downsampling to 8mm^3 - side 2mm it takes 3s.
@@ -65,7 +64,6 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     x_dim = 1;
     y_dim = 2;
     z_dim = 3;
-    %t_dim = 4;
     down_factor_xyz = 1; % Not allowed to get different downsampling for space
     
     % Get limits for the structured grid if people did not give those
@@ -82,18 +80,23 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     yy = min_y:down_factor_xyz:max_y;
     zz = min_z:down_factor_xyz:max_z;
     [X, Y, Z] = meshgrid(xx, yy, zz);
+    grid_size = size(X);
    
     hx = xx(2)-xx(1);
     hy = yy(2)-yy(1);
     hz = zz(2)-zz(1);
     
+    % Clean up unused vectors
+    clear xx yy zz
     
+    % Get a mask with the points that are inside and outside the convex
+    % hull
     [in_bdy_mask, ~] = get_boundary_info(locs, X(:), Y(:), Z(:));
-    in_bdy_mask = reshape(in_bdy_mask, size(X));
+    in_bdy_mask = reshape(in_bdy_mask, grid_size);
     
-    
-    % Perform interpolation on the data and save in temp file
-    
+%--------------------- INTERPOLATION OF DATA -----------------------------%    
+    % Perform interpolation on the data and save in a temp file -- asumme
+    % OS is Linux
     if ~options.interp_data.file_exists % Or not necesary because it is fmri data
         fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Interpolating data'))
         
@@ -101,25 +104,27 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
         %[mfile_interp, mfile_interp_sentinel] = interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file); 
         
         % Parallel interpolation with the parallel toolbox
-        [mfile_interp, mfile_interp_sentinel] = par_interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file);
+        [mfile_interp, mfile_interp_sentinel] = par_interpolate_3d_data(data, ...
+                                                                        locs, X, Y, Z, ...
+                                                                        in_bdy_mask, ...
+                                                                        keep_interp_file);
          
         % Clean up parallel pool
         % delete(gcp);
-         interpolated_data_options.exists = true;
+         options.interp_data.file_exists = true;
         
          % Saves full path to file
-         interpolated_data_options.interp_filename = mfile_interp.Properties.Source;
+         options.interp_data.file_name = mfile_interp.Properties.Source;
     else
         % Load the data if file already exists
         mfile_interp = matfile(options.interp_data.file_name);
         mfile_interp_sentinel = [];
     end
-
+%-------------------------FLOW CALCULATION--------------------------------%
     % Parameters for optical flow-- could be changed, could be parameters
     alpha_smooth   = 1;
     max_iterations = 16;
         
-    
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Calculating velocity fields'))
     % We open a matfile to store output and avoid huge memory usage 
     root_fname_vel = 'temp_flows';
@@ -130,7 +135,6 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     
     % Get some dummy initial conditions
     seed_init_vel = 42;
-    grid_size = size(X);
     [uxo, uyo, uzo] = get_initial_velocity_distribution(grid_size, ~in_bdy_mask, seed_init_vel);
     
     % The following lines will create the file on disk
@@ -143,6 +147,8 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     % fields into a file
     detection_th = 0.1;
     mfile_vel.detection_threshold = detection_th;
+   
+    % Calculate velocity fields
     compute_flows_3d()
     
     % Save grid - needed for singularity tracking and visualisation
@@ -164,6 +170,41 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
     delete(mfile_interp_sentinel) 
     delete(mfile_vel_sentinel)
     
+%------------------------DETECT SINGULARITIES-----------------------------%    
+   
+   % NOTE: TODO: which criterion to use for the detection therhesold should  be a
+   % parameter it can be rerun with different types
+   % Close the file to avoid corruption
+   detection_threshold = guesstimate_detection_threshold(mfile_vel.min_nu);
+   mfile_vel.detection_threshold = detection_threshold;
+   mfile_vel.Properties.Writable = false;
+   
+  
+   %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Extracting isosurfaces'))
+   % Calculate critical isosurfaces
+   %[mfile_surf, mfile_surf_sentinel] = par_get_critical_isosurfaces(mfile_vel);
+   
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Locating critical points'))
+   % Detect intersection of critical isosurfaces
+   data_mode  = 'vel';
+   index_mode = 'linear';
+   [xyz_idx]  = par_locate_critical_points([], mfile_vel, data_mode, index_mode);
+   
+   root_fname_sings = 'temp_snglrty';
+   keep_sings_file = true; 
+   [mfile_sings, mfile_sings_sentinel] = create_temp_file(root_fname_sings, keep_sings_file);
+   mfile_sings.xyz_idx = xyz_idx;
+   delete(mfile_sings_sentinel)
+   
+   % Delete isosurface sentinel, if it's oncleanup ibject, the file will be
+   % deleted
+   % delete(mfile_surf_sentinel)
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Classifying singularities'))
+   % Calculate jacobian and classify singularities
+   singularity_classification = classify_singularities(xyz_idx, mfile_vel);
+   mfile_sings.singularity_classification = singularity_classification;
+   
+% ----------------------CHILD FUNCTION ------------------------------------%   
     % No way around a sequential for loop for optical flows
     function compute_flows_3d()
         % Do a burn-in period for the first frame (eg, two time points of data)
@@ -211,40 +252,5 @@ function compute_neural_flows_3d_ug(data, locs, interpolated_data_options)
         end
     
     end
-
-   % NOTE: TODO: which criterion to use for the detection therhesold should  be a
-   % parameter it can be rerun with different types
-   % Close the file to avoid corruption
-   detection_threshold = guesstimate_detection_threshold(mfile_vel.min_nu);
-   mfile_vel.detection_threshold = detection_threshold;
-   mfile_vel.Properties.Writable = false;
-
-
-   % NOTE: TODO: This step shpuld be optional when the surface-based
-   % detection is working properly
-   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Extracting isosurfaces'))
-   % Calculate critical isosurfaces
-   [mfile_surf, mfile_surf_sentinel] = par_get_critical_isosurfaces(mfile_vel);
-   
-   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Locating critical points'))
-   % Detect intersection of critical isosurfaces
-   data_mode  = 'vel';
-   index_mode = 'linear';
-   [xyz_idx]  = par_locate_critical_points(mfile_surf, mfile_vel, data_mode, index_mode);
-   
-   root_fname_sings = 'temp_snglrty';
-   keep_sings_file = true; 
-   [mfile_sings, mfile_sings_sentinel] = create_temp_file(root_fname_sings, keep_sings_file);
-   mfile_sings.xyz_idx = xyz_idx;
-   delete(mfile_sings_sentinel)
-   
-   % Delete isosurface sentinel, if it's oncleanup ibject, the file will be
-   % deleted
-   % delete(mfile_surf_sentinel)
-   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Classifying singularities'))
-   % Calculate jacobian and classify singularities
-   singularity_classification = classify_singularities(xyz_idx, mfile_vel);
-   mfile_sings.singularity_classification = singularity_classification;
-
 
 end % function compute_neural_flows_3d_ug()
