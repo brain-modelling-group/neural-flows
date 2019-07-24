@@ -1,5 +1,6 @@
 function compute_neural_flows_3d_ug(data, locs, options) 
     % Compute neural flows from (u)nstructured (g)rids/scattered datapoints
+    % This function interpolates the data onto a regular grid.
     % data: a 2D array of size [timepoints x nodes/points] or 
     %         4D array of size [timepoints x xcoord x ycoord x zcoord]
     % locs: coordinates points in 3D Euclidean space for which data values are known. 
@@ -132,7 +133,8 @@ function compute_neural_flows_3d_ug(data, locs, options)
         mfile_interp = matfile(options.interp_data.file_name);
         mfile_interp_sentinel = [];
     end
-    interpolated_data_options
+    interpolated_data_options   [xyz_idx]  = par_locate_critical_points([], mfile_vel, data_mode, index_mode);
+
 %------------------------ FLOW CALCULATION -------------------------------%
     % Parameters for optical flow-- could be changed, could be parameters
     alpha_smooth   = 1;
@@ -265,9 +267,9 @@ function compute_neural_flows_3d_ug(data, locs, options)
                % Save the velocity components
                % TODO: do it every 5-10 samples perhaps - spinning disks may be a
                % problem for execution times
-               mfile_vel.ux(:, :, :, this_tpt) = uxo;
-               mfile_vel.uy(:, :, :, this_tpt) = uyo;
-               mfile_vel.uz(:, :, :, this_tpt) = uzo;
+               mfile_vel.ux(:, :, :, this_tpt) = single(uxo);
+               mfile_vel.uy(:, :, :, this_tpt) = single(uyo);
+               mfile_vel.uz(:, :, :, this_tpt) = single(uzo);
                
                % Save some other useful information
                
