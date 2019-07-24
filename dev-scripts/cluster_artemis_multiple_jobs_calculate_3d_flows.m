@@ -30,7 +30,7 @@ cd /scratch/CGMD
 options.interp_data.file_exists = false;
 options.sing_detection.datamode = 'vel';
 options.sing_detection.indexmode = 'linear';
-
+options.chunk = idx_chunk;
 tic;compute_neural_flows_3d_ug(data, locs, options);toc 
 
 end % 
