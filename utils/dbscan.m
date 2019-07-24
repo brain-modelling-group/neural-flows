@@ -23,8 +23,8 @@
 % Discovery and Data Mining (KDD-96). AAAI Press. pp. 226-231.  
 % Also see: http://en.wikipedia.org/wiki/DBSCAN
 % MODIFICATION HISTORY:
-%     Original, Peter Kovesi: check  his awesome webpage: peterkovesi.com
-%     Modified, PSL, QIMR Berghofer 2018
+%     Original, Peter Kovesi: check his awesome webpage: peterkovesi.com
+%     Modified, PSL, QIMR Berghofer 2018, runs faster
 
 function [C, labels, centres] = dbscan(P, E, min_pts)
     
@@ -104,20 +104,3 @@ function neighbours = find_neighbours(P, n, E)
     neighbours = find(dist2 < E2);
         
 end % function find_neighbours
-
-% % Copyright (c) 2013 Peter Kovesi
-% Centre for Exploration Targeting
-% The University of Western Australia
-% peter.kovesi at uwa edu au
-% 
-% Permission is hereby granted, free of charge, to any person obtaining a copy
-% of this software and associated documentation files (the "Software"), to deal
-% in the Software without restriction, subject to the following conditions:
-% 
-% The above copyright notice and this permission notice shall be included in 
-% all copies or substantial portions of the Software.
-%
-% The Software is provided "as is", without warranty of any kind.
-
-% PK January 2013
-
