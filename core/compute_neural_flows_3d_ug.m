@@ -23,7 +23,7 @@ function compute_neural_flows_3d_ug(data, locs, options)
     %options.sing_detection.inexmode = 'linear';
     
   
-    
+    % NOTES TO CLEAN UP
     % we need: dt
     % limits of XYZ space, presumably coming from fmri data
     % TODO: estimate timepoints of interest using the second order temporal
