@@ -1,6 +1,10 @@
 function compute_neural_flows_3d_ug(data, locs, options) 
     % Compute neural flows from (u)nstructured (g)rids/scattered datapoints
-    % This function interpolates the data onto a regular grid.
+    % This function: 
+    %              1) interpolates the data onto a regular grid.
+    %              2) calculates velocity fields
+    %              3) detects singularities
+    %              4) classifies singularities
     % data: a 2D array of size [timepoints x nodes/points] or 
     %         4D array of size [timepoints x xcoord x ycoord x zcoord]
     % locs: coordinates points in 3D Euclidean space for which data values are known. 
@@ -25,7 +29,7 @@ function compute_neural_flows_3d_ug(data, locs, options)
     
   
     % NOTES TO CLEAN UP
-    % we need: dt
+    % we need to include: dt
     % limits of XYZ space, presumably coming from fmri data
     % TODO: estimate timepoints of interest using the second order temporal
     % derivative
@@ -134,6 +138,8 @@ function compute_neural_flows_3d_ug(data, locs, options)
         mfile_interp_sentinel = [];
     end
         mfile_interp.options = options;
+        % Make the file read-only file to avoid corruption
+        mfile_interp.Properties.Writable = false;
 
 %------------------------ FLOW CALCULATION -------------------------------%
     % Parameters for optical flow-- could be changed, could be parameters
@@ -242,7 +248,7 @@ function compute_neural_flows_3d_ug(data, locs, options)
         FB = mfile_interp.data(:, :, :, this_tpt+1);
         
         burnin_len = 4; % for iterations, not much but better than one
-        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Burn-in period for estimated initial velocity conditions.'))
+        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Start burn-in period for estimated initial velocity conditions.'))
         for bb=1:burnin_len
             % Calculate the velocity components
             [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, ...
@@ -274,7 +280,6 @@ function compute_neural_flows_3d_ug(data, locs, options)
                mfile_vel.uz(:, :, :, this_tpt) = single(uzo);
                
                % Save some other useful information
-               
                mfile_vel = get_vfield_info(mfile_vel, uxo(:), uyo(:), uzo(:), this_tpt);
                               
         end
