@@ -16,7 +16,7 @@ local_cluster = parcluster('local');
 local_cluster.NumWorkers = 24; % This should match the requested number of cpus
 
 % Change directory to scratch, so temp files will be created there
-cd /scratch/GCMD
+cd /scratch/CGMD
 
 % Options for the flow computation
 options.interp_data.file_exists = false;
