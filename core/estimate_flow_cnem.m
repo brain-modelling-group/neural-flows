@@ -47,11 +47,11 @@ if nargin < 4
     opts.alpha_radius = 30;
 end
 
-disp('Calculating temporal gradient dphi/dt ...')
+disp([mfilename ':: Calculating temporal gradient dphi/dt ...'])
 
 [~, dphidtp] = gradient(phi, dt);
 
-disp('Done.')
+disp([mfilename ':: Done.'])
 
 % Create alpha shapes 
 shpalpha = opts.alpha_radius; % alpha radius; may need tweaking depending on geometry and number of scattered points. 
