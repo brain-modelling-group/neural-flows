@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CHUNKS=$(seq 1 195) # This variable will be used to index the chunk
+CHUNKS=$(seq 1 196) # This variable will be used to index the chunk
     for IDX_CHUNK in ${CHUNKS}
     do
         export IDX_CHUNK
