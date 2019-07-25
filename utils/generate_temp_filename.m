@@ -30,7 +30,7 @@ if nargin < 2
     seq_len = 4; 
 end
   
-timestamp_str = datestr(now, 'yyyy-mm-dd_HH-MM-SS');
+timestamp_str = datestr(now, 'yyyy-mm-dd_HH-MM-SS-FFF');
 random_str    = random_char_seq(seq_len);
 temp_fname    = strcat(root_fname, '_', timestamp_str, '_', random_str);
 
