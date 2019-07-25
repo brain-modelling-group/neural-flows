@@ -44,7 +44,7 @@ if length(data) < 100000 % arbitrary biggish number
 else
     % Memory efficient ~ takes about 40s for a data of size [400001 x 513]
     % on a Dell Precision Tower 5820 circa 2017.
-    phi(size(data)) = 0;
+    phi(size(data, 1), size(data, 2)) = 0;
     nn = size(data, 2);
     try
         parfor jj=1:nn
