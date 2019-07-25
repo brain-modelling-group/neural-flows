@@ -4,9 +4,9 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
 load('long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln')
 load('513COG.mat', 'COG')
 
-idx = 2048:2048:400001;
+idx = 1:2048:400001;
 
-if idx_chunk < 195
+if idx_chunk < 196
     idx_start = idx(idx_chunk);
     idx_stop  = idx(idx_chunk+1);
 else
@@ -31,6 +31,18 @@ options.interp_data.file_exists = false;
 options.sing_detection.datamode = 'vel';
 options.sing_detection.indexmode = 'linear';
 options.chunk = idx_chunk;
-tic;compute_neural_flows_3d_ug(data, locs, options);toc 
+
+% Tic
+tstart = string(datetime('now'));
+fprintf('%s%s\n', ['Started: ' tstart])
+
+% Do the stuff
+compute_neural_flows_3d_ug(data, locs, options)
+
+% Toc
+tend = string(datetime('now'));
+fprintf('%s%s\n', ['Finished: ' tend])
+tictoc = etime(datevec(tend), datevec(tstart)) / 3600;
+fprintf('%s%s%s\n', ['Elapsed time: ' string(tictoc) ' hours'])
 
 end % 
