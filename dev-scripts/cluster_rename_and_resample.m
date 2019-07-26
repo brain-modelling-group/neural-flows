@@ -25,9 +25,9 @@ else
 
     end
     % Create new file name
-    newfilename = ['flows_act_d1ms_c0-6_chunkidx_' numstr(idx_chunk, '%03d') '.mat'];
+    newfilename = ['flows_act_d1ms_c0-6_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
     % Open new filename
-    newfile_obj = matfile([path_on_artemis newfilename]); 
+    newfile_obj = matfile([path_on_artemis newfilename], 'Writable', true); 
 
     downsample_factor_space = 4;
 
