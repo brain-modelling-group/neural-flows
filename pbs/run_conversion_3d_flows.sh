@@ -1,7 +1,7 @@
 #!/bin/bash
 # Author: Paula Sanz-Leon, QIMR / Sydney Uni
 
-CHUNKS=(1 {5..11} {13..28} {180..191}) # This variable will be used to index the chunk
+CHUNKS=({20..28} {180..191}) # This variable will be used to index the chunk
 for IDX_CHUNK in ${CHUNKS[@]}
 do
     export IDX_CHUNK
