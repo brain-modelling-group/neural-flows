@@ -55,9 +55,14 @@ else
     disp('Saving flows ...')
     tpts = size(mfile_obj, 'ux', 4); %#ok<GTARG>
     for tt=1:tpts
-        newfile_obj.ux(:, :, :, tt) = mfile_obj.ux(1:downsample_factor_space:end, 1:downsample_factor_space:end, 1:downsample_factor_space:end, tt);
-        newfile_obj.uy(:, :, :, tt) = mfile_obj.uy(1:downsample_factor_space:end, 1:downsample_factor_space:end, 1:downsample_factor_space:end, tt);
-        newfile_obj.uz(:, :, :, tt) = mfile_obj.uz(1:downsample_factor_space:end, 1:downsample_factor_space:end, 1:downsample_factor_space:end, tt);
+        % make local variables
+        ux = mfile_obj.ux(:, :, :, tt);
+        uy = mfile_obj.uy(:, :, :, tt);
+        uz = mfile_obj.uz(:, :, :, tt);
+
+        newfile_obj.ux(:, :, :, tt) = ux(1:downsample_factor_space:end, 1:downsample_factor_space:end, 1:downsample_factor_space:end);
+        newfile_obj.uy(:, :, :, tt) = uy(1:downsample_factor_space:end, 1:downsample_factor_space:end, 1:downsample_factor_space:end);
+        newfile_obj.uz(:, :, :, tt) = uz(1:downsample_factor_space:end, 1:downsample_factor_space:end, 1:downsample_factor_space:end);
 
     end
 
