@@ -54,6 +54,21 @@ else
 
     disp('Saving flows ...')
     tpts = size(mfile_obj, 'ux', 4); %#ok<GTARG>
+
+    x_size = size(mfile_obj, 'ux', 1); %#ok<GTARG>
+    y_size = size(mfile_obj, 'ux', 2); %#ok<GTARG>
+    z_size = size(mfile_obj, 'ux', 3); %#ok<GTARG>
+
+    x_size_down = length(1:downsample_factor_space:x_size);
+    y_size_down = length(1:downsample_factor_space:y_size);
+    z_size_down = length(1:downsample_factor_space:z_size);
+
+    % Preallocate variable sapace
+    newfile_obj.ux(x_size_down, y_size_down, z_size_down, tpts) = 0;
+    newfile_obj.uy(x_size_down, y_size_down, z_size_down, tpts) = 0;
+    newfile_obj.uz(x_size_down, y_size_down, z_size_down, tpts) = 0;
+
+
     for tt=1:tpts
         % make local variables
         ux = mfile_obj.ux(:, :, :, tt);
