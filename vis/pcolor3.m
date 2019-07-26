@@ -95,9 +95,6 @@ function h = pcolor3(varargin)
 assert(nargin>0,'pcolor3 requires at least one input.') 
 assert(isnumeric(varargin{1})==1,'First argument of pcolor3 must be numeric.') 
 
-if ~verLessThan('matlab','8.4.0')
-    warning('The pcolor3 function does not work quite right on Matlab R2014b.') 
-end
 
 %% Set defaults: 
 

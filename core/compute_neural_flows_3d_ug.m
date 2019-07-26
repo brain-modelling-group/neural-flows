@@ -50,7 +50,10 @@ function compute_neural_flows_3d_ug(data, locs, options)
     % takes about 35s to calculate vector fields.
     % hs = 1mm
     % takes 214 s - 240
-    
+
+    if isfield(options, 'chunk')
+      rng(options.chunk) % for the cluster environment.
+    end
     
     % flags to decide what to do with temp intermediate files
     keep_interp_file = true;
@@ -156,7 +159,11 @@ function compute_neural_flows_3d_ug(data, locs, options)
     mfile_vel.in_bdy_mask = in_bdy_mask;
     
     % Get some dummy initial conditions
-    seed_init_vel = 42;
+    if isfield(options, 'chunk')
+        seed_init_vel = options.chunk; % for cluster environments
+    else   
+        seed_init_vel = 42;
+    end
     [uxo, uyo, uzo] = get_initial_velocity_distribution(grid_size, ~in_bdy_mask, seed_init_vel);
     
     % The following lines will create the file on disk
