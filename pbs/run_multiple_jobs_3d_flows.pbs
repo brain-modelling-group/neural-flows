@@ -4,8 +4,8 @@
 #PBS -m abe
 #PBS -M pmsl.academic@gmail.com
 #PBS -q scavenger
-#PBS -l select=1:ncpus=24:mem=20GB
-#PBS -l walltime=23:00:00
+#PBS -l select=1:ncpus=24:mem=22GB
+#PBS -l walltime=15:00:00
 #PBS -j oe
 
 cd $PBS_O_WORKDIR
