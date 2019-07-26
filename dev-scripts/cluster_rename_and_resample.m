@@ -7,6 +7,7 @@ function cluster_rename_and_resample(idx_chunk)
 filename  =  get_flowfile_name(idx_chunk);
 
 if strcmp(filename, 'none')
+    disp('chunk not available yet')
     return
 else
     path_on_artemis = '/scratch/CGMD/';
@@ -40,6 +41,8 @@ else
     newfile_obj.in_bdy_mask = mfile_obj.in_bdy_mask(1:downsample_factor_space:end, 1:downsample_factor_space:end, 1:downsample_factor_space:end);
     newfile_obj.downsample_factor_space = downsample_factor_space;
 
+
+    disp('Saving grids...')
     % Save new grids
     X = mfile_obj.X;
     Y = mfile_obj.Y;
@@ -49,6 +52,7 @@ else
     newfile_obj.Z = Z(1:downsample_factor_space:end, 1:downsample_factor_space:end, 1:downsample_factor_space:end); 
     clear X Y Z
 
+    disp('Saving flows ...')
     tpts = size(mfile_obj, 'ux', 4); %#ok<GTARG>
     for tt=1:tpts
         newfile_obj.ux(:, :, :, tt) = mfile_obj.ux(1:downsample_factor_space:end, 1:downsample_factor_space:end, 1:downsample_factor_space:end, tt);
@@ -56,6 +60,8 @@ else
         newfile_obj.uz(:, :, :, tt) = mfile_obj.uz(1:downsample_factor_space:end, 1:downsample_factor_space:end, 1:downsample_factor_space:end, tt);
 
     end
+
+    disp('Saving flow info')
     newfile_obj.max_nu = mfile_obj.max_nu;
     newfile_obj.max_uu = mfile_obj.max_uu;
     newfile_obj.max_ux = mfile_obj.max_ux;
