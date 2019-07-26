@@ -10,7 +10,7 @@ if strcmp(filename, 'none')
     return
 else
     path_on_artemis = '/scratch/CGMD/';
-    mfile_obj = matfile([path_on_artemis filename], 'Writable', 'true');
+    mfile_obj = matfile([path_on_artemis filename], 'Writable', false);
     options = mfile_obj.options;
 
     % Just in case we didn't save this before
