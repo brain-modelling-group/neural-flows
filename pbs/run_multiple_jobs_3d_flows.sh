@@ -1,7 +1,7 @@
 #!/bin/bash
 # Author: Paula Sanz-Leon, QIMR / Sydney Uni
 
-CHUNKS=$(seq 2 4) # This variable will be used to index the chunk
+CHUNKS=$(seq 160 179) # This variable will be used to index the chunk
 for IDX_CHUNK in ${CHUNKS}
 do
     export IDX_CHUNK
