@@ -1,12 +1,12 @@
 #!/bin/bash 
 #PBS -P CGMD
 #PBS -N DOWNSAMPLEINTERP
-#PBS -J 1-50
+#PBS -J 51-90
 #PBS -m abe
 #PBS -M pmsl.academic@gmail.com
 #PBS -q small-express
-#PBS -l select=1:ncpus=4:mem=22GB
-#PBS -l walltime=12:00:00
+#PBS -l select=1:ncpus=2:mem=12GB
+#PBS -l walltime=00:01:00
 #PBS -j oe
 
 cd $PBS_O_WORKDIR
