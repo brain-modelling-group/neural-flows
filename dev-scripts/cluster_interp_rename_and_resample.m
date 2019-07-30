@@ -4,7 +4,7 @@ function cluster_interp_rename_and_resample(idx_chunk)
 % Map weird
 
 
-filename  =  get_flowfile_name(idx_chunk);
+filename  =  get_interpfile_name(idx_chunk);
 
 if strcmp(filename, 'none')
     disp('chunk not available yet')
