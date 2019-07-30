@@ -19,6 +19,6 @@ echo "----------------"
 #touch output.$PBS_NUM_SEED.$PBS_ARRAY_INDEX
 module load matlab/R2018a
 
-MATLAB_CMD="addpath(genpath('/home/psan7097/neural-dlows')); chunk_idx=$PBS_ARRAY_INDEX; cluster_interp_rename_and_resample(chunk_idx); exit"
+MATLAB_CMD="addpath(genpath('/home/psan7097/neural-flows')); chunk_idx=$PBS_ARRAY_INDEX; cluster_interp_rename_and_resample(chunk_idx); exit"
 echo "$MATLAB_CMD"
 matlab -nodesktop -nosplash -nodisplay -r "$MATLAB_CMD"
