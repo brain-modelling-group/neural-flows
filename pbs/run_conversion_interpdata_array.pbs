@@ -1,0 +1,24 @@
+#!/bin/bash 
+#PBS -P CGMD
+#PBS -N DOWNSAMPLEINTERP
+#PBS -J 1-50
+#PBS -m abe
+#PBS -M pmsl.academic@gmail.com
+#PBS -q small-express
+#PBS -l select=1:ncpus=4:mem=22GB
+#PBS -l walltime=12:00:00
+#PBS -j oe
+
+cd $PBS_O_WORKDIR
+
+echo "----------------"
+echo "PBS job running on: `hostname`"
+echo "in directory:       `pwd`"
+echo "----------------"
+
+#touch output.$PBS_NUM_SEED.$PBS_ARRAY_INDEX
+module load matlab/R2018a
+
+MATLAB_CMD="addpath(genpath('/home/psan7097/neural-dlows')); chunk_idx=$PBS_ARRAY_INDEX; cluster_interp_rename_and_resample(chunk_idx); exit"
+echo "$MATLAB_CMD"
+matlab -nodesktop -nosplash -nodisplay -r "$MATLAB_CMD"
