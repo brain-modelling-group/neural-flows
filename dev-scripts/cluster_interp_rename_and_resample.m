@@ -59,6 +59,9 @@ else
 
     newfile_obj.options = options;
 
+    % now that everything is saved, delete file
+    delete([path_on_artemis filename])
+
 end
     
 
