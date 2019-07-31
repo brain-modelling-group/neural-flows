@@ -100,6 +100,10 @@ else
 
     newfile_obj.options = options;
 
+    % Delete original file once everything is saved
+    delete([path_on_artemis filename])
+
+
 end
     
 
