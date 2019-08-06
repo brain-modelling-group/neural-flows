@@ -1,9 +1,10 @@
 function out = count_singularities(sing_numeric_labels)
-% <ShortDescription>
+% A wrapper function to count how many singularities of each type
+% we have in the input structure.
 %
 %
 % ARGUMENTS:
-%        numeric_labels -- <description>
+%        sing_numeric_labels -- <description>
 %        <arg2> -- <description>
 %
 % OUTPUT: 
@@ -21,19 +22,19 @@ function out = count_singularities(sing_numeric_labels)
 %
 
 % NOTE: Hardcoded ==> we may end up with more types
-singularity_list = get_singularity_list();
+base_singularity_list_str = get_singularity_list();
 
-types_of_singularity(length(singularity_list)) = 0;
+base_singularity_list_numeric(length(base_singularity_list_str)) = 0;
 
 % Get singularity numeric label assigned to each singularity string label 
-for ss=1:length(singularity_list)
-    types_of_singularity(ss) = get_singularity_numlabel(singularity_list{ss});
+for ss=1:length(base_singularity_list_str)
+    base_singularity_list_numeric(ss) = get_singularity_numlabel(base_singularity_list_str{ss});
 end
 
-out = zeros(length(numeric_labels), length(types_of_singularity));
+out = zeros(length(sing_numeric_labels), length(base_singularity_list_numeric));
 
 for tt=1:length(sing_numeric_labels)
-    [counts,~] = hist(sing_numeric_labels(tt).label, types_of_singularity);
+    [counts,~] = hist(sing_numeric_labels(tt).label, base_singularity_list_numeric);
     out(tt, :) = counts;
 end
 
