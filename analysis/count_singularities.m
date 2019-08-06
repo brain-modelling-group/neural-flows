@@ -3,7 +3,7 @@ function out = count_singularities(numeric_labels)
 %
 %
 % ARGUMENTS:
-%        <arg1> -- <description>
+%        numeric_labels -- <description>
 %        <arg2> -- <description>
 %
 % OUTPUT: 
@@ -31,9 +31,9 @@ end
 
 out = zeros(length(numeric_labels), length(types_of_singularity));
 
-for tt=1:length(numeric_labels)
-    [counts,~] = hist(numeric_labels(tt).label, types_of_singularity);
-    out(tt, :) = counts;
+for ll=1:length(numeric_labels)
+    [counts,~] = hist(numeric_labels(ll).label, types_of_singularity);
+    out(ll, :) = counts;
 end
 
 end % function count_singularities()
