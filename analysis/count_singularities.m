@@ -4,7 +4,8 @@ function out = count_singularities(sing_numeric_labels)
 %
 %
 % ARGUMENTS:
-%        sing_numeric_labels -- <description>
+%        sing_numeric_labels -- a struct of length num_frames/timepoints
+%                            .
 %        <arg2> -- <description>
 %
 % OUTPUT: 
@@ -34,7 +35,7 @@ end
 out = zeros(length(sing_numeric_labels), length(base_singularity_list_numeric));
 
 for tt=1:length(sing_numeric_labels)
-    [counts,~] = hist(sing_numeric_labels(tt).label, base_singularity_list_numeric);
+    [counts,~] = hist(sing_numeric_labels(tt).numlabel, base_singularity_list_numeric);
     out(tt, :) = counts;
 end
 
