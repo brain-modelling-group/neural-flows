@@ -5,7 +5,8 @@ function out = count_singularities(sing_numeric_labels)
 %
 % ARGUMENTS:
 %        sing_numeric_labels -- a struct of length num_frames/timepoints
-%                            .
+%                           .numlabels
+%                           .color
 %        <arg2> -- <description>
 %
 % OUTPUT: 
@@ -14,7 +15,7 @@ function out = count_singularities(sing_numeric_labels)
 %
 % REQUIRES: 
 %        get_singularity_list()
-%        map_str2int()
+%        get_singularity_numlabel()
 %
 % USAGE:
 %{
