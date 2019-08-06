@@ -1,4 +1,4 @@
-function labels = analyse_singularities(singularity_output, XYZ)
+function sing_labels = analyse_singularities(singularity_output, XYZ)
 % This function takes as an input a matfile with the list of
 % singularities, or the cell array with the singularities.
 %
@@ -8,7 +8,9 @@ function labels = analyse_singularities(singularity_output, XYZ)
 %        XYZ                -- the original XYZ grid as a 2D array of size [numpoints x 3] array  
 %
 % OUTPUT: 
-%        <output1> -- <description>
+%        sing_numeric_labels -- a struct of length num_frames/timepoints
+%                           .numlabels
+%                           .color
 %        <output2> -- <description>
 %
 % REQUIRES: 
@@ -33,11 +35,11 @@ num_frames = length(singularity_cell);
 num_sing_per_frame = cellfun(@length, singularity_cell);
 
 % Get numeric_labels and colours
-labels = struct([]);
+sing_labels = struct([]);
 for tt=1:num_frames
     for ss=1:num_sing_per_frame(tt)
-     [labels(tt).numlabel(ss), ...
-      labels(tt).color(ss, :)] = get_singularity_numlabel(singularity_cell{tt}{ss});
+     [sing_labels(tt).numlabel(ss), ...
+      sing_labels(tt).color(ss, :)] = get_singularity_numlabel(singularity_cell{tt}{ss});
     end
 end
 
