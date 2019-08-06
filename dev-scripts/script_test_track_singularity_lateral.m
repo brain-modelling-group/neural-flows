@@ -1,4 +1,4 @@
-function analyse_singularities(singularity_output, XYZ, )
+function labels = analyse_singularities(singularity_output, XYZ)
 % This function takes as an input a matfile with the list of
 % singularities, or the cell array with the singularities.
 %
@@ -13,52 +13,55 @@ function analyse_singularities(singularity_output, XYZ, )
 %
 % REQUIRES: 
 %        get_singularity_list()
-%        map_str2int()
+%        get_singularity_numlabel()
 %
 % USAGE:
 %{
     <example-commands-to-make-this-function-run>
 %}
 %
-% This plot type of singularity as timeseries
 
+if ~iscell(singularity_output)
+    singularity_cell = singularity_output.singularity_classification;
+else
+    singularity_cell = singularity_output;
+    clear singularity_output
+end
 
+% Get basic info
+num_frames = length(singularity_cell);
+num_sing_per_frame = cellfun(@length, singularity_cell);
 
-
-num_sing = cellfun(@length, singularity_classification);
-
-% get colors
-for tt=1:size(mfile_vel, 'ux', 4)
-    for ss=1:num_sing(tt)
-     [label(tt).label(ss), color_map(tt).colormap(ss, :)] = map_str2int(singularity_classification{tt}{ss});
+% Get numeric_labels and colours
+labels = struct([]);
+for tt=1:num_frames
+    for ss=1:num_sing_per_frame(tt)
+     [labels(tt).numlabel(ss), ...
+      labels(tt).color(ss, :)] = get_singularity_numlabel(singularity_cell{tt}{ss});
     end
 end
 
-out = count_singularities(label);
+% Count how many singularities of each type we have
+out = count_singularities(num_label);
 
-% Get text labels
+% Get string labels and singularity colourmap
 singularity_list = get_singularity_list();
-
-% Get colours                
+cmap(length(singularity_list), 4) = 0;             
 for ii=1:length(singularity_list)
-  [~, cmap(ii, :)] = map_str2int(singularity_list{ii});
+  [~, cmap(ii, :)] = get_singularity_numlabel(singularity_list{ii});
 end
 
-figure_handle = figure;
-for ii=1:size(out, 2)
-    ax(ii) = subplot(8,2,ii);
-    hold(ax(ii), 'on')
-end
+% figure_handle = figure;
+% for ii=1:size(out, 2)
+%     ax(ii) = subplot(8, 2, ii);
+%     hold(ax(ii), 'on')
+% end
+% 
+% 
+% for ii=1:size(out, 2)
+% stairs(ax(ii), out(:, ii), 'color', cmap(ii, 1:3), 'linewidth', 2)
+% ax(ii).Title.String = singularity_list{ii};
+% end
 
 
-for ii=1:size(out, 2)
-stairs(ax(ii), out(:, ii), 'color', cmap(ii, 1:3), 'linewidth', 2)
-ax(ii).Title.String = singularity_list{ii};
-end
-
-end
-
-end
-
-
-
+end % function analyse_singularities()
