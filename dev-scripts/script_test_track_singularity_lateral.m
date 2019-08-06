@@ -1,5 +1,28 @@
+function analyse_singularities(singularity_output, XYZ, )
+% This function takes as an input a matfile with the list of
+% singularities, or the cell array with the singularities.
+%
+%
+% ARGUMENTS:
+%        singularity_output -- a matfile with the classified singularities
+%        XYZ                -- the original XYZ grid as a 2D array of size [numpoints x 3] array  
+%
+% OUTPUT: 
+%        <output1> -- <description>
+%        <output2> -- <description>
+%
+% REQUIRES: 
+%        get_singularity_list()
+%        map_str2int()
+%
+% USAGE:
+%{
+    <example-commands-to-make-this-function-run>
+%}
+%
 % This plot type of singularity as timeseries
-[singularity_classification] =   classify_singularities(xyz_cell{cc}, mfile_vel);
+
+
 
 
 num_sing = cellfun(@length, singularity_classification);
@@ -31,6 +54,10 @@ end
 for ii=1:size(out, 2)
 stairs(ax(ii), out(:, ii), 'color', cmap(ii, 1:3), 'linewidth', 2)
 ax(ii).Title.String = singularity_list{ii};
+end
+
+end
+
 end
 
 
