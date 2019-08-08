@@ -5,8 +5,8 @@ function run_neural_flows3d_loop(mfile_interp, mfile_vel, options)
 % Read kind of input paramters, options is a bad name for a structure
 % with parameters that are not actually mandatory 
 
-dtpts        = options.flow_calculation.dtpts;
-alpha_smooth = options.flow_calculation.alpha_smooth;
+dtpts          = options.flow_calculation.dtpts;
+alpha_smooth   = options.flow_calculation.alpha_smooth;
 max_iterations = options.flow_calculation.max_iterations;
 grid_size      = options.flow_calculation.grid_size;
 
@@ -71,4 +71,4 @@ for this_tpt = 1:dtpts-1
        mfile_vel = get_vfield_info(mfile_vel, uxo(:), uyo(:), uzo(:), this_tpt);
                               
 end
-end % function compute_3d_flows()
+end % function run_neural_flows3d_loop()
