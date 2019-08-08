@@ -1,11 +1,12 @@
 #!/bin/bash 
-#PBS -P CGMD
-#PBS -N FLOWS
+#PBS -P BLN
+#PBS -N FLOWSOV
+#PBS -J 1-100
 #PBS -m abe
 #PBS -M pmsl.academic@gmail.com
 #PBS -q scavenger
-#PBS -l select=1:ncpus=24:mem=22GB
-#PBS -l walltime=15:00:00
+#PBS -l select=1:ncpus=24:mem=24GB
+#PBS -l walltime=24:00:00
 #PBS -j oe
 
 cd $PBS_O_WORKDIR
@@ -17,6 +18,6 @@ echo "----------------"
 
 module load matlab/R2018a
 
-MATLAB_CMD="addpath(genpath('/home/psan7097/neural-flows'));idx_chunk=$IDX_CHUNK;cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk); exit"
+MATLAB_CMD="addpath(genpath('/home/psan7097/neural-flows'));idx_chunk=$PBS_ARRAY_INDEX;cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk); exit"
 echo "$MATLAB_CMD"
 matlab -nodesktop -nosplash -nodisplay -r "$MATLAB_CMD"
