@@ -1,4 +1,4 @@
-function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp)
+function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp, mfile_sings)
 
     % NOTE: newfilename for flows and interp should be passed as an
     % argument
@@ -7,6 +7,19 @@ function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp)
     
     newinterpfilename = ['interp_act_d1ms_c0-6_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
     resample_interp(newinterpfilename)
+        
+    newsingfilename = ['sngs_act_d1ms_c0-6_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
+    resample_sings(newsingfilename)
+
+    
+    function resample_sings(newfilename)
+        options = mfile_sings.options;
+        newfile_obj = matfile(newfilename, 'Writable', true); 
+        newfile_obj.singularity_classification = mfile_sings.singularity_classification;
+        newfile_obj.xyz_idx = mfile_sings.xyz_idx;
+        newfile_obj.options = options;
+    end
+
 
 
     function resample_flows(newfilename)
@@ -28,7 +41,7 @@ function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp)
         newfile_obj.downsample_factor_space = downsample_factor_space;
 
 
-        disp('Resampling and saving grids...')
+        disp('Resampling and saving grids ...')
         % Save new grids
         X = mfile_vel.X;
         Y = mfile_vel.Y;
@@ -44,7 +57,6 @@ function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp)
                           1:downsample_factor_space:end); 
         clear X Y Z
 
-        disp('Resampling and saving flows ...')
         tpts = size(mfile_vel, 'ux', 4); %#ok<GTARG>
 
         x_size = size(mfile_vel, 'ux', 1); %#ok<GTARG>
@@ -77,9 +89,9 @@ function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp)
                                              1:downsample_factor_space:end, ...
                                              1:downsample_factor_space:end);
 
-        end
+        end       
 
-        disp('Saving flow info')
+        disp('Resampling and saving flows ...')
         newfile_obj.max_nu = mfile_vel.max_nu;
         newfile_obj.max_uu = mfile_vel.max_uu;
         newfile_obj.max_ux = mfile_vel.max_ux;
@@ -99,7 +111,7 @@ function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp)
         newfile_obj.options = options;
 
         % Delete original file once everything is saved
-        delete(mfile_vel)
+        delete(mfile_vel.Properties.Source)
 
 
     end
@@ -141,7 +153,7 @@ function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp)
         newfile_obj.options = options;
 
         % now that everything is saved, delete file
-        delete(mfile_interp)
+        delete(mfile_interp.Properties.Source)
 
     end
   
