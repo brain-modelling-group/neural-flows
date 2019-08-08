@@ -1,4 +1,4 @@
-function compute_neural_flows_3d_ug(data, locs, options) 
+function varargout = compute_neural_flows_3d_ug(data, locs, options) 
     % Compute neural flows from (u)nstructured (g)rids/scattered datapoints
     % This function: 
     %              1) interpolates the data onto a regular grid.
@@ -130,7 +130,7 @@ function compute_neural_flows_3d_ug(data, locs, options)
                                                                         keep_interp_file);
          
         % Clean up parallel pool
-        % delete(gcp);
+        % delete(gcp); % commented because it adds 30s-1min of overhead
          options.interp_data.file_exists = true;
         
          % Saves full path to file
@@ -195,7 +195,7 @@ function compute_neural_flows_3d_ug(data, locs, options)
     mfile_vel.Y = Y;
     mfile_vel.Z = Z;
     
-    % Save time and space step sizes
+    % Save time and space step deletesizes
     mfile_vel.hx = hx; % mm
     mfile_vel.hy = hy; % mm
     mfile_vel.hz = hz; % mm
@@ -256,6 +256,16 @@ function compute_neural_flows_3d_ug(data, locs, options)
    mfile_sings.options = options;
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished classification of singularities.'))
 
+%-------------------------------------------------------------------------%
+minnout = 0;
+maxnout = 2;
+nargoutchk(minnout, maxnout);
+
+if nargout > 1
+    varargout{1} = mfile_vel;
+    varargout{2} = mfile_interp;
+end
+             
 % ---------------------- CHILD FUNCTION ----------------------------------%   
     % No way around a sequential for loop for optical flows
     function compute_flows_3d()
