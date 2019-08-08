@@ -1,7 +1,10 @@
 function run_neural_flows3d_loop(mfile_interp, mfile_vel, options)
+% TODO: Future self: Document this function. 
 % Make standalone function to peform the optical flow loop
 
-% Read input paramters
+% Read kind of input paramters, options is a bad name for a structure
+% with parameters that are not actually mandatory 
+
 dtpts        = options.flow_calculation.dtpts;
 alpha_smooth = options.flow_calculation.alpha_smooth;
 max_iterations = options.flow_calculation.max_iterations;
@@ -11,7 +14,6 @@ hx = mfile_vel.hx;
 hy = mfile_vel.hy;
 hz = mfile_vel.hz;
 ht = mfile_vel.ht;
-
 
 if strcmp(options.flow_calculation.init_conditions, 'random')
     seed_init_vel = options.flow_calculation.seed_init_vel;
