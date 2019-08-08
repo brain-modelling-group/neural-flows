@@ -26,7 +26,7 @@ if strcmp(options.flow_calculation.init_conditions, 'random')
 
 
     burnin_len = 4; % for iterations, not much but better than one
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started burn-in period for estimated initial velocity conditions.'))
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started burn-in period for random initial velocity conditions.'))
 
     for bb=1:burnin_len
         % Calculate the velocity components
@@ -37,14 +37,14 @@ if strcmp(options.flow_calculation.init_conditions, 'random')
     end
 
 else
-    % I'm going to assume that somehow we passed the uxo, uyo, uzo arrays
-    % in options
+    % NOTE: I'm going to assume that somehow we passed the uxo, uyo, uzo arrays
+    % in 'options' structure
     uxo = options.flow_calculation.uxo;
     uyo = options.flow_calculation.uyo;
     uzo = options.flow_calculation.uzo;   
 end
     
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished burn-in period for estimated initial velocity conditions.'))
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished burn-in period for random initial velocity conditions.'))
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started estimation of flows.'))
 
 for this_tpt = 1:dtpts-1
@@ -60,8 +60,6 @@ for this_tpt = 1:dtpts-1
                                                     hx, hy, hz, ht);                                
 
        % Save the velocity components
-       % TODO: do it every 5-10 samples perhaps - spinning disks may be a
-       % problem for execution times
        mfile_vel.ux(:, :, :, this_tpt) = single(uxo);
        mfile_vel.uy(:, :, :, this_tpt) = single(uyo);
        mfile_vel.uz(:, :, :, this_tpt) = single(uzo);
