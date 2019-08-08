@@ -257,6 +257,7 @@ function varargout = compute_neural_flows_3d_ug(data, locs, options)
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished classification of singularities.'))
 
 %-------------------------------------------------------------------------%
+% Check if we actually want to get the handles to the matfiles 
 minnout = 0;
 maxnout = 2;
 nargoutchk(minnout, maxnout);
@@ -266,7 +267,10 @@ if nargout > 1
     varargout{2} = mfile_interp;
 end
              
-% ---------------------- CHILD FUNCTION ----------------------------------%   
+% ---------------------- CHILD FUNCTION ----------------------------------%
+% This child function is now a standalone function called 
+% run_neural_flows_3d_ug.m
+% 
     % No way around a sequential for loop for optical flows
     function compute_flows_3d()
         % Do a burn-in period for the first frame (eg, two time points of data)
