@@ -1,13 +1,13 @@
 function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
-% Script to process data on Artemis
+% Script to process data on Sydney's Artemis
 
     load('long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln')
     load('513COG.mat', 'COG')
 
     % window size
-    ws = 3072;
+    ws = 4097;
     % shift step
-    shift_step = ws - 128;
+    shift_step = ws - 64;
     datalen  = size(soln, 2);
     idx = ws:shift_step:datalen;
     if idx_chunk < length(idx)+1
@@ -24,8 +24,8 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
 
     % Cluster properties
     local_cluster = parcluster('local');
-    %local_cluster.NumWorkers = 24;   % This should match the requested number of cpus
-    %local_cluster.IdleTimeout = 900; % Set idel timeout to 15h
+    local_cluster.NumWorkers = 24;   % This should match the requested number of cpus
+    local_cluster.IdleTimeout = 900; % Set idel timeout to 15h
     parpool(local_cluster.NumWorkers);
 
     % Change directory to scratch, so temp files will be created there
@@ -33,7 +33,7 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
 
     % Options for the flow computation
     options.interp_data.file_exists = false;
-    options.sing_detection.datamode = 'vel';
+    options.sing_detection.datamode  = 'vel';
     options.sing_detection.indexmode = 'linear';
     options.chunk = idx_chunk;
     options.chunk_start = idx_start;
