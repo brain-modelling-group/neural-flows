@@ -35,8 +35,10 @@ if strcmp(options.flow_calculation.init_conditions, 'random')
                                                     uxo, uyo, uzo, ...
                                                     hx, hy, hz, ht);       
     end
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished burn-in period for random initial velocity conditions.'))
 
 else
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Using pre-calculated initial velocity conditions.'))
     % NOTE: I'm going to assume that somehow we passed the uxo, uyo, uzo arrays
     % in 'options' structure
     uxo = options.flow_calculation.uxo;
@@ -44,7 +46,6 @@ else
     uzo = options.flow_calculation.uzo;   
 end
     
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished burn-in period for random initial velocity conditions.'))
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started estimation of flows.'))
 
 for this_tpt = 1:dtpts-1
