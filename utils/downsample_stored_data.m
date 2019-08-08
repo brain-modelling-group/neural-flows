@@ -35,7 +35,7 @@ function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp)
         clear X Y Z
 
         disp('Resampling and saving flows ...')
-        tpts = size(mfile_obj, 'ux', 4); %#ok<GTARG>
+        tpts = size(mfile_vel, 'ux', 4); %#ok<GTARG>
 
         x_size = size(mfile_vel, 'ux', 1); %#ok<GTARG>
         y_size = size(mfile_vel, 'ux', 2); %#ok<GTARG>
