@@ -259,12 +259,13 @@ function varargout = compute_neural_flows_3d_ug(data, locs, options)
 %-------------------------------------------------------------------------%
 % Check if we actually want to get the handles to the matfiles 
 minnout = 0;
-maxnout = 2;
+maxnout = 3;
 nargoutchk(minnout, maxnout);
 
 if nargout > 1
     varargout{1} = mfile_vel;
     varargout{2} = mfile_interp;
+    varargout{3} = mfile_sings;
 end
              
 % ---------------------- CHILD FUNCTION ----------------------------------%
