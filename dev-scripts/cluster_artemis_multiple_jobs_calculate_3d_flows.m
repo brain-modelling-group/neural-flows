@@ -4,14 +4,22 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
 load('long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln')
 load('513COG.mat', 'COG')
 
-idx = 1:2048:400001;
 
-if idx_chunk < 196
-    idx_start = idx(idx_chunk);
-    idx_stop  = idx(idx_chunk+1);
+
+% window size
+ws = 4097;
+% shift step
+shift_step = ws - 128;
+datalen  = size(soln, 2);
+
+idx = ws:shift_step:datalen;
+
+if idx_chunk < 101
+    idx_start = idx(idx_chunk)-ws+1; 
+    idx_stop =  idx(idx_chunk);
 else
-    idx_start = idx(idx_chunk);
-    idx_stop = 400001;
+    idx_start = idx(end);
+    idx_stop = datalen;
 end
 data = soln(:, idx_start:idx_stop)';
 locs = COG;
@@ -32,6 +40,8 @@ options.interp_data.file_exists = false;
 options.sing_detection.datamode = 'vel';
 options.sing_detection.indexmode = 'linear';
 options.chunk = idx_chunk;
+options.chunk_start = idx_start;
+options.chunk_stop  = idx_stop;
 
 % Tic
 tstart = string(datetime('now'));
