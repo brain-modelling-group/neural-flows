@@ -1,4 +1,4 @@
-function compute_neural_flows_3d_ug(data, locs, options) 
+function varargout = compute_neural_flows_3d_ug(data, locs, options) 
     % Compute neural flows from (u)nstructured (g)rids/scattered datapoints
     % This function: 
     %              1) interpolates the data onto a regular grid.
@@ -130,7 +130,7 @@ function compute_neural_flows_3d_ug(data, locs, options)
                                                                         keep_interp_file);
          
         % Clean up parallel pool
-        % delete(gcp);
+        % delete(gcp); % commented because it adds 30s-1min of overhead
          options.interp_data.file_exists = true;
         
          % Saves full path to file
@@ -149,6 +149,12 @@ function compute_neural_flows_3d_ug(data, locs, options)
     % Parameters for optical flow-- could be changed, could be parameters
     alpha_smooth   = 1;
     max_iterations = 16;
+    
+    % Save flow calculation parameters parameters 
+    options.flow_calculation.alpha_smooth = alpha_smooth;
+    options.flow_calculation.max_iterations = max_iterations;
+    options.flow_calculation.dtpts  = dtpts;
+    options.flow_calculation.grid_size = grid_size;
         
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started calculating velocity fields.'))
     % We open a matfile to store output and avoid huge memory usage 
@@ -164,6 +170,8 @@ function compute_neural_flows_3d_ug(data, locs, options)
     else   
         seed_init_vel = 42;
     end
+    options.flow_calculation.seed_init_vel = seed_init_vel;
+    
     [uxo, uyo, uzo] = get_initial_velocity_distribution(grid_size, ~in_bdy_mask, seed_init_vel);
     
     % The following lines will create the file on disk
@@ -187,7 +195,7 @@ function compute_neural_flows_3d_ug(data, locs, options)
     mfile_vel.Y = Y;
     mfile_vel.Z = Z;
     
-    % Save time and space step sizes
+    % Save time and space step deletesizes
     mfile_vel.hx = hx; % mm
     mfile_vel.hy = hy; % mm
     mfile_vel.hz = hz; % mm
@@ -248,7 +256,22 @@ function compute_neural_flows_3d_ug(data, locs, options)
    mfile_sings.options = options;
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished classification of singularities.'))
 
-% ---------------------- CHILD FUNCTION ----------------------------------%   
+%-------------------------------------------------------------------------%
+% Check if we actually want to get the handles to the matfiles 
+minnout = 0;
+maxnout = 3;
+nargoutchk(minnout, maxnout);
+
+if nargout > 1
+    varargout{1} = mfile_vel;
+    varargout{2} = mfile_interp;
+    varargout{3} = mfile_sings;
+end
+             
+% ---------------------- CHILD FUNCTION ----------------------------------%
+% This child function is now a standalone function called 
+% run_neural_flows_3d_ug.m
+% 
     % No way around a sequential for loop for optical flows
     function compute_flows_3d()
         % Do a burn-in period for the first frame (eg, two time points of data)
