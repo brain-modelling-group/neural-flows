@@ -149,6 +149,12 @@ function compute_neural_flows_3d_ug(data, locs, options)
     % Parameters for optical flow-- could be changed, could be parameters
     alpha_smooth   = 1;
     max_iterations = 16;
+    
+    % Save flow calculation parameters parameters 
+    options.flow_calculation.alpha_smooth = alpha_smooth;
+    options.flow_calculation.max_iterations = max_iterations;
+    options.flow_calculation.dtpts  = dtpts;
+    options.flow_calculation.grid_size = grid_size;
         
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started calculating velocity fields.'))
     % We open a matfile to store output and avoid huge memory usage 
@@ -164,6 +170,8 @@ function compute_neural_flows_3d_ug(data, locs, options)
     else   
         seed_init_vel = 42;
     end
+    options.flow_calculation.seed_init_vel = seed_init_vel;
+    
     [uxo, uyo, uzo] = get_initial_velocity_distribution(grid_size, ~in_bdy_mask, seed_init_vel);
     
     % The following lines will create the file on disk
