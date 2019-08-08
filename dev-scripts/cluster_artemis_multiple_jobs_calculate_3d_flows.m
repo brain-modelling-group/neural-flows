@@ -44,7 +44,7 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
     fprintf('%s%s\n', ['Started: ' tstart])
 
     % Do the stuff
-    [mfile_vel, mfile_interp] = compute_neural_flows_3d_ug(data, locs, options);
+    [mfile_vel, mfile_interp, mfile_sings] = compute_neural_flows_3d_ug(data, locs, options);
 
     % Toc
     tend = string(datetime('now'));
@@ -56,7 +56,7 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
     tstart = string(datetime('now'));
     fprintf('%s%s\n', ['Started downsampling: ' tstart])
     
-    downsample_stored_data(idx_chunk, mfile_vel, mfile_interp)
+    downsample_stored_data(idx_chunk, mfile_vel, mfile_interp, mfile_sings)
     
     tend = string(datetime('now'));
     fprintf('%s%s\n', ['Finished downsampling: ' tend])
