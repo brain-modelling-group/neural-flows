@@ -1,7 +1,8 @@
 function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp)
 
-
-    newflowfilename = ['flows_act_d1ms_c0-6_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
+    % NOTE: newfilename for flows and interp should be passed as an
+    % argument
+    newflowfilename  = ['flows_act_d1ms_c0-6_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
     resample_flows(newflowfilename)
     
     newinterpfilename = ['interp_act_d1ms_c0-6_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
