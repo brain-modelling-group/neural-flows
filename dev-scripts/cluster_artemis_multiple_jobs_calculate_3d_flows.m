@@ -5,9 +5,9 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
     load('513COG.mat', 'COG')
 
     % window size
-    ws = 10;
+    ws = 3072;
     % shift step
-    shift_step = ws - 5;
+    shift_step = ws - 128;
     datalen  = size(soln, 2);
     idx = ws:shift_step:datalen;
     if idx_chunk < length(idx)+1
