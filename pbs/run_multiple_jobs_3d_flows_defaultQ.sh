@@ -1,7 +1,7 @@
 #!/bin/bash
 # Author: Paula Sanz-Leon, QIMR / Sydney Uni
 # Call pbs script using defaultQ
-CHUNKS=$(seq 19 196) # This variable will be used to index the chunk
+CHUNKS=$(seq 78 78) # This variable will be used to index the chunk
 for IDX_CHUNK in ${CHUNKS}
 do
     export IDX_CHUNK
