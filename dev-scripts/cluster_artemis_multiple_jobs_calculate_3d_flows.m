@@ -29,7 +29,7 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
     parpool(local_cluster.NumWorkers);
 
     % Change directory to scratch, so temp files will be created there
-    %cd /scratch/CGMD
+    cd /scratch/CGMD
 
     % Options for the flow computation
     options.interp_data.file_exists = false;
