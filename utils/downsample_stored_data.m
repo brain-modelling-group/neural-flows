@@ -18,8 +18,8 @@ function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp, mfile_sings)
         newfile_obj.singularity_classification = mfile_sings.singularity_classification;
         newfile_obj.xyz_idx = mfile_sings.xyz_idx;
         newfile_obj.options = options;
+        delete(mfile_sings.Properties.Source)
     end
-
 
 
     function resample_flows(newfilename)
