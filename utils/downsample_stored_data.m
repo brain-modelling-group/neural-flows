@@ -6,6 +6,7 @@ function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp)
 
 
     function resample_flows()
+        options = mfile_vel.options;
     
         % Create new file name
         newfilename = ['flows_act_d1ms_c0-6_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
