@@ -1,15 +1,17 @@
 function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp)
 
 
-    resample_interp()
-    resample_flows()
+    newflowfilename = ['flows_act_d1ms_c0-6_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
+    resample_flows(newflowfilename)
+    
+    newinterpfilename = ['interp_act_d1ms_c0-6_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
+    resample_interp(newinterpfilename)
 
 
-    function resample_flows()
+    function resample_flows(newfilename)
         options = mfile_vel.options;
     
         % Create new file name
-        newfilename = ['flows_act_d1ms_c0-6_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
         % Open new filename
         newfile_obj = matfile(newfilename, 'Writable', true); 
 
@@ -102,10 +104,9 @@ function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp)
     end
 
 
-    function resample_interp()
+    function resample_interp(newfilename)
         options = mfile_interp.options;
         % Create new file name
-        newfilename = ['interp_act_d1ms_c0-6_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
         % Open new filename
         newfile_obj = matfile(newfilename, 'Writable', true); 
 
