@@ -55,7 +55,7 @@ plot_singularity_traces(sing_count)
 % NOTE: use sing_labels, rather than the file, so we can 
 % pass directly the output of this function and save ourselves a bit of
 % time.
-plot_singularty_scatter(mfile_sing, XYZ, num_frames)
+plot_singularty_scatter(mfile_sing, sing_labels, XYZ, num_frames)
 
 
 end % function analyse_singularities()
@@ -63,13 +63,7 @@ end % function analyse_singularities()
 
 function plot_singularity_traces(sing_count)
 
-        % Get string labels and singularity colourmap
-        singularity_list = get_singularity_list();
-        cmap(length(singularity_list), 4) = 0;    
-
-        for jj=1:length(singularity_list)
-          [~, cmap(jj, :)] = get_singularity_numlabel(singularity_list{jj});
-        end
+        [singularity_list, cmap] = get_singularity_list_cmap();
 
         figure_handle = figure('Name', 'nflows-singularities-over-time');
         numsubplots = 8;
@@ -90,7 +84,9 @@ function plot_singularity_traces(sing_count)
 
 end
 
-function plot_singularty_scatter(mfile_sing, XYZ, num_frames)
+function plot_singularty_scatter(mfile_sing, sing_labels, XYZ, num_frames)
+    
+    [~, cmap] = get_singularity_list_cmap();
 
     figure_handle_xyz = figure('Name', 'nflows-singularities-over-spacetime');
     numsubplot = 3; % One for each spatial dimension
@@ -151,4 +147,15 @@ function plot_singularty_scatter(mfile_sing, XYZ, num_frames)
 
         end
     end
+end
+
+function [singularity_list, cmap] = get_singularity_list_cmap()
+
+% Get string labels and singularity colourmap
+        singularity_list = get_singularity_list();
+        cmap(length(singularity_list), 4) = 0;    
+
+        for jj=1:length(singularity_list)
+          [~, cmap(jj, :)] = get_singularity_numlabel(singularity_list{jj});
+        end
 end
