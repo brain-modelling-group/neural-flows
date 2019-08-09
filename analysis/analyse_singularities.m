@@ -1,6 +1,7 @@
 function sing_labels = analyse_singularities(mfile_sing, XYZ)
 % This function takes as an input a matfile with the list of
-% singularities, or the cell array with the singularities.
+% singularities, and generates plots to give an idea of their
+% beahviour over time
 %
 %
 % ARGUMENTS:
@@ -51,6 +52,9 @@ sing_count = count_singularities(sing_labels);
 % Plot traces of each singularity
 plot_singularity_traces(sing_count)
 
+% NOTE: use sing_labels, rather than the file, so we can 
+% pass directly the output of this function and save ourselves a bit of
+% time.
 plot_singularty_scatter(mfile_sing, XYZ, num_frames)
 
 
