@@ -81,6 +81,8 @@ function plot_singularity_traces(sing_count)
             ax(jj).XLabel.String = 'time';
             ax(jj).YLabel.String = 'count';
         end
+        
+        linkaxes(ax, 'x')
 
 end
 
@@ -108,10 +110,12 @@ function plot_singularty_scatter(mfile_sing, sing_labels, XYZ, num_frames)
     saddle_sink_ = 8; 
 
     xyz_idx = mfile_sing.xyz_idx;
+    
+    y_labels = {'X', 'Y', 'Z'};
 
-    for tt=1:num_frames
-        xyz = xyz_idx(1, tt).xyz_idx;  
-        for ii=1:numsubplot
+    for ii=1:numsubplot     
+        for tt=1:num_frames
+            xyz = xyz_idx(1, tt).xyz_idx;  
             idx_source = find(sing_labels(tt).numlabel == source_);
             idx_spiral_source = find(sing_labels(tt).numlabel == spiral_source_);
             idx_saddle_source = find(sing_labels(tt).numlabel == saddle_source);
@@ -134,19 +138,25 @@ function plot_singularty_scatter(mfile_sing, sing_labels, XYZ, num_frames)
                  '.', 'markeredgecolor', 'b')
 
             plot(ax_xyz(ii), tt*ones(length(idx_saddle_sink), 1), XYZ(xyz(idx_saddle_sink), ii), ...
-                 '.', 'markeredgecolor', cmap(saddle_sink, 1:3))
+                 'v', 'markeredgecolor', cmap(saddle_sink_, 1:3), 'markersize', 4 )
             plot(ax_xyz(ii), tt*ones(length(idx_saddle_sink_), 1), XYZ(xyz(idx_saddle_sink_), ii), ...
-                 '.', 'markeredgecolor', cmap(saddle_sink, 1:3)) 
+                 'v', 'markeredgecolor', cmap(saddle_sink_, 1:3), 'markersize', 4) 
 
             plot(ax_xyz(ii), tt*ones(length(idx_saddle_source), 1), XYZ(xyz(idx_saddle_source), ii), ...
-                 '.', 'markeredgecolor', cmap(saddle_source, 1:3))
+                 '^', 'markeredgecolor', cmap(saddle_source_, 1:3), 'markersize', 4)
             plot(ax_xyz(ii), tt*ones(length(idx_saddle_source_), 1), XYZ(xyz(idx_saddle_source_), ii), ...
-                 '.', 'markeredgecolor', cmap(saddle_source, 1:3)) 
+                 '^', 'markeredgecolor', cmap(saddle_source_, 1:3), 'markersize', 4) 
 
-            ax_xyz(ii).YLim = [-max(abs(XYZ(:, ii))) max(abs(XYZ(:, ii)))];
+            
 
         end
+        ax_xyz(ii).YLim = [-max(abs(XYZ(:, ii))) max(abs(XYZ(:, ii)))];
+        ax_xyz(ii).XLim = [1 num_frames];
+        ax_xyz(ii).YLabel.String = y_labels{ii}; 
     end
+    
+    ax_xyz(3).XLabel.String = 'time';
+    linkaxes(ax_xyz, 'x')
 end
 
 function [singularity_list, cmap] = get_singularity_list_cmap()
