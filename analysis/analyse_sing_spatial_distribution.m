@@ -109,6 +109,8 @@ Zsaddle_source = [];
      figure_handle = figure('Name', 'neural-flows-marginal-distributions');
      figure_handle.Color = [1,1,1];
      
+     % NOTE: there is a smarter way of doing this using scatterhist. 
+     % TODO: do it for the other two combinations of axes. XZ, YZ.
      scatterhist([Xsource; Xsink; Xsaddle_sink; Xsaddle_source], ...
                      [Ysource; Ysink; Ysaddle_sink; Ysaddle_source], ...
                 'Group', label, 'Kernel','on','Location','SouthEast',...
@@ -124,12 +126,6 @@ Zsaddle_source = [];
 
      ax.Children(1).Color = cmap(saddle_source_, 1:3);
      ax.Children(1).MarkerFaceColor = cmap(saddle_source_, 1:3);
-
-
-
-    
-   
-
 end
 
 function [singularity_list, cmap] = get_singularity_list_cmap()
