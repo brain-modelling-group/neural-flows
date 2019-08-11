@@ -48,27 +48,27 @@ else
     uzo = options.flow_calculation.uzo;   
 end
     
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started estimation of flows.'))
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started estimation of flows.'))
 
-for this_tpt = 1:dtpts-1
+    for this_tpt = 1:dtpts-1
 
-       % Read activity data                
-       FA = mfile_interp.data(:, :, :, this_tpt);
-       FB = mfile_interp.data(:, :, :, this_tpt+1);
+           % Read activity data                
+           FA = mfile_interp.data(:, :, :, this_tpt);
+           FB = mfile_interp.data(:, :, :, this_tpt+1);
 
-       % Calculate the velocity components
-        [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, ...
-                                                    max_iterations, ...
-                                                    uxo, uyo, uzo, ...
-                                                    hx, hy, hz, ht);                                
+           % Calculate the velocity components
+            [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, ...
+                                                        max_iterations, ...
+                                                        uxo, uyo, uzo, ...
+                                                        hx, hy, hz, ht);                                
 
-       % Save the velocity components
-       mfile_vel.ux(:, :, :, this_tpt) = single(uxo);
-       mfile_vel.uy(:, :, :, this_tpt) = single(uyo);
-       mfile_vel.uz(:, :, :, this_tpt) = single(uzo);
-               
-       % Save some other useful information
-       mfile_vel = get_vfield_info(mfile_vel, uxo(:), uyo(:), uzo(:), this_tpt);
-                              
-end
+           % Save the velocity components
+           mfile_vel.ux(:, :, :, this_tpt) = single(uxo);
+           mfile_vel.uy(:, :, :, this_tpt) = single(uyo);
+           mfile_vel.uz(:, :, :, this_tpt) = single(uzo);
+
+           % Save some other useful information
+           mfile_vel = get_vfield_info(mfile_vel, uxo(:), uyo(:), uzo(:), this_tpt);
+
+    end
 end % function run_neural_flows3d_loop()

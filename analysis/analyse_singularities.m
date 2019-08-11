@@ -1,10 +1,11 @@
-function sing_labels = analyse_singularities(singularity_output, XYZ)
+function sing_labels = analyse_singularities(mfile_sing, XYZ)
 % This function takes as an input a matfile with the list of
-% singularities, or the cell array with the singularities.
+% singularities, and generates plots to give an idea of their
+% beahviour over time
 %
 %
 % ARGUMENTS:
-%        singularity_output -- a matfile with the classified singularities
+%        mfile_sing -- a matfile with the classified singularities
 %        XYZ                -- the original XYZ grid as a 2D array of size [numpoints x 3] array  
 %
 % OUTPUT: 
@@ -15,6 +16,7 @@ function sing_labels = analyse_singularities(singularity_output, XYZ)
 % REQUIRES: 
 %        get_singularity_list()
 %        get_singularity_numlabel()
+%        count_singularities()
 %
 % USAGE:
 %{
@@ -22,7 +24,7 @@ function sing_labels = analyse_singularities(singularity_output, XYZ)
 %}
 % PSL, QIMR 2019
 
-singularity_cell = singularity_output.singularity_classification;
+singularity_cell = mfile_sing.singularity_classification;
 
 
 % Get basic info
@@ -45,90 +47,125 @@ for tt=1:num_frames
 end
 
 % Count how many singularities of each type we have
-out = count_singularities(sing_labels);
+sing_count = count_singularities(sing_labels);
 
-% Get string labels and singularity colourmap
-singularity_list = get_singularity_list();
-cmap(length(singularity_list), 4) = 0;    
+% Plot traces of each singularity
+plot_singularity_traces(sing_count)
 
-for ii=1:length(singularity_list)
-  [~, cmap(ii, :)] = get_singularity_numlabel(singularity_list{ii});
-end
+% NOTE: use sing_labels, rather than the file, so we can 
+% pass directly the output of this function and save ourselves a bit of
+% time.
+plot_singularty_scatter(mfile_sing, sing_labels, XYZ, num_frames)
 
-figure_handle = figure('Name', 'nflows-singularities-over-time');
-for ii=1:8     
-    ax(ii) = subplot(4, 2, ii, 'Parent', figure_handle);
-    hold(ax(ii), 'on')
-end
-
-for ii=1:8
-    stairs(ax(ii), out(:, ii), 'color', cmap(ii, 1:3), 'linewidth', 2)
-    ax(ii).Title.String = singularity_list{ii};
-    ax(ii).XLabel.String = 'time';
-    ax(ii).YLabel.String = 'count';
-end
-
-figure_handle_xyz = figure('Name', 'nflows-singularities-over-spacetime');
-for ii=1:3     
-    ax_xyz(ii) = subplot(3, 1, ii, 'Parent', figure_handle_xyz);
-    hold(ax_xyz(ii), 'on')
-end
-
-%linkaxes([ax_xyz(1), ax_xyz(2), ax_xyz(3)], 'x')
-
-% Kindda hardcoded values, but at least make it idiomatic
-source_ = 1;
-spiral_source_ = 5;
-saddle_source = 3;
-saddle_source_ = 7;
-
-sink_ = 2;
-spiral_sink_ = 6;
-saddle_sink = 4;
-saddle_sink_ = 8; 
-
-% 
-xyz_idx = singularity_output.xyz_idx;
-
-for tt=1:num_frames
-    xyz = xyz_idx(1, tt).xyz_idx;  
-    for ii=1:3
-        idx_source = find(sing_labels(tt).numlabel == source_);
-        idx_spiral_source = find(sing_labels(tt).numlabel == spiral_source_);
-        idx_saddle_source = find(sing_labels(tt).numlabel == saddle_source);
-        idx_saddle_source_ = find(sing_labels(tt).numlabel == saddle_source_);
-        
-        idx_sink = find(sing_labels(tt).numlabel == sink_);
-        idx_spiral_sink = find(sing_labels(tt).numlabel == spiral_sink_);
-        idx_saddle_sink = find(sing_labels(tt).numlabel == saddle_sink);
-        idx_saddle_sink_ = find(sing_labels(tt).numlabel == saddle_sink_);
-
-        
-        plot(ax_xyz(ii), tt*ones(length(idx_source), 1), XYZ(xyz(idx_source), ii), ...
-             '.', 'markeredgecolor', 'r')
-        plot(ax_xyz(ii), tt*ones(length(idx_spiral_source), 1), XYZ(xyz(idx_spiral_source), ii), ...
-             '.', 'markeredgecolor', 'r')
-        % 
-        plot(ax_xyz(ii), tt*ones(length(idx_sink), 1), XYZ(xyz(idx_sink), ii), ...
-             '.', 'markeredgecolor', 'b')
-        plot(ax_xyz(ii), tt*ones(length(idx_spiral_sink), 1), XYZ(xyz(idx_spiral_sink), ii), ...
-             '.', 'markeredgecolor', 'b')
-         
-        plot(ax_xyz(ii), tt*ones(length(idx_saddle_sink), 1), XYZ(xyz(idx_saddle_sink), ii), ...
-             '.', 'markeredgecolor', cmap(saddle_sink, 1:3))
-        plot(ax_xyz(ii), tt*ones(length(idx_saddle_sink_), 1), XYZ(xyz(idx_saddle_sink_), ii), ...
-             '.', 'markeredgecolor', cmap(saddle_sink, 1:3)) 
-        
-        plot(ax_xyz(ii), tt*ones(length(idx_saddle_source), 1), XYZ(xyz(idx_saddle_source), ii), ...
-             '.', 'markeredgecolor', cmap(saddle_source, 1:3))
-        plot(ax_xyz(ii), tt*ones(length(idx_saddle_source_), 1), XYZ(xyz(idx_saddle_source_), ii), ...
-             '.', 'markeredgecolor', cmap(saddle_source, 1:3)) 
-       
-         
-        ax_xyz(ii).YLim = [-max(abs(XYZ(:, ii))) max(abs(XYZ(:, ii)))];
-
-    end
-        
-end
 
 end % function analyse_singularities()
+
+
+function plot_singularity_traces(sing_count)
+
+        [singularity_list, cmap] = get_singularity_list_cmap();
+
+        figure_handle = figure('Name', 'nflows-singularities-over-time');
+        numsubplots = 8;
+        
+        % Preallocate array of graphic objects
+        ax = gobjects(numsubplots, 1);
+        for jj=1:numsubplots     
+            ax(jj) = subplot(4, 2, jj, 'Parent', figure_handle);
+            hold(ax(jj), 'on')
+        end
+
+        for jj=1:numsubplots
+            stairs(ax(jj), sing_count(:, jj), 'color', cmap(jj, 1:3), 'linewidth', 2)
+            ax(jj).Title.String = singularity_list{jj};
+            ax(jj).XLabel.String = 'time';
+            ax(jj).YLabel.String = 'count';
+        end
+        
+        linkaxes(ax, 'x')
+
+end
+
+function plot_singularty_scatter(mfile_sing, sing_labels, XYZ, num_frames)
+    
+    [~, cmap] = get_singularity_list_cmap();
+
+    figure_handle_xyz = figure('Name', 'nflows-singularities-over-spacetime');
+    numsubplot = 3; % One for each spatial dimension
+    ax_xyz = gobjects(numsubplot);
+    for jj=1:numsubplot
+        ax_xyz(jj) = subplot(numsubplot, 1, jj, 'Parent', figure_handle_xyz);
+        hold(ax_xyz(jj), 'on')
+    end
+    
+    % Kindda hardcoded values, but at least make it idiomatic
+    source_ = 1;
+    spiral_source_ = 5;
+    saddle_source = 3;
+    saddle_source_ = 7;
+
+    sink_ = 2;
+    spiral_sink_ = 6;
+    saddle_sink = 4;
+    saddle_sink_ = 8; 
+
+    xyz_idx = mfile_sing.xyz_idx;
+    
+    y_labels = {'X', 'Y', 'Z'};
+
+    for ii=1:numsubplot     
+        for tt=1:num_frames
+            xyz = xyz_idx(1, tt).xyz_idx;  
+            idx_source = find(sing_labels(tt).numlabel == source_);
+            idx_spiral_source = find(sing_labels(tt).numlabel == spiral_source_);
+            idx_saddle_source = find(sing_labels(tt).numlabel == saddle_source);
+            idx_saddle_source_ = find(sing_labels(tt).numlabel == saddle_source_);
+
+            idx_sink = find(sing_labels(tt).numlabel == sink_);
+            idx_spiral_sink = find(sing_labels(tt).numlabel == spiral_sink_);
+            idx_saddle_sink = find(sing_labels(tt).numlabel == saddle_sink);
+            idx_saddle_sink_ = find(sing_labels(tt).numlabel == saddle_sink_);
+
+
+            plot(ax_xyz(ii), tt*ones(length(idx_source), 1), XYZ(xyz(idx_source), ii), ...
+                 '.', 'markeredgecolor', 'r')
+            plot(ax_xyz(ii), tt*ones(length(idx_spiral_source), 1), XYZ(xyz(idx_spiral_source), ii), ...
+                 '.', 'markeredgecolor', 'r')
+            % 
+            plot(ax_xyz(ii), tt*ones(length(idx_sink), 1), XYZ(xyz(idx_sink), ii), ...
+                 '.', 'markeredgecolor', 'b')
+            plot(ax_xyz(ii), tt*ones(length(idx_spiral_sink), 1), XYZ(xyz(idx_spiral_sink), ii), ...
+                 '.', 'markeredgecolor', 'b')
+
+            plot(ax_xyz(ii), tt*ones(length(idx_saddle_sink), 1), XYZ(xyz(idx_saddle_sink), ii), ...
+                 'v', 'markeredgecolor', cmap(saddle_sink_, 1:3), 'markersize', 4 )
+            plot(ax_xyz(ii), tt*ones(length(idx_saddle_sink_), 1), XYZ(xyz(idx_saddle_sink_), ii), ...
+                 'v', 'markeredgecolor', cmap(saddle_sink_, 1:3), 'markersize', 4) 
+
+            plot(ax_xyz(ii), tt*ones(length(idx_saddle_source), 1), XYZ(xyz(idx_saddle_source), ii), ...
+                 '^', 'markeredgecolor', cmap(saddle_source_, 1:3), 'markersize', 4)
+            plot(ax_xyz(ii), tt*ones(length(idx_saddle_source_), 1), XYZ(xyz(idx_saddle_source_), ii), ...
+                 '^', 'markeredgecolor', cmap(saddle_source_, 1:3), 'markersize', 4) 
+
+            
+
+        end
+        ax_xyz(ii).YLim = [-max(abs(XYZ(:, ii))) max(abs(XYZ(:, ii)))];
+        ax_xyz(ii).XLim = [1 num_frames];
+        ax_xyz(ii).YLabel.String = y_labels{ii}; 
+    end
+    
+    ax_xyz(3).XLabel.String = 'time';
+    linkaxes(ax_xyz, 'x')
+end
+
+function [singularity_list, cmap] = get_singularity_list_cmap()
+
+% Get string labels and singularity colourmap
+        singularity_list = get_singularity_list();
+        cmap(length(singularity_list), 4) = 0;    
+
+        for jj=1:length(singularity_list)
+          [~, cmap(jj, :)] = get_singularity_numlabel(singularity_list{jj});
+        end
+end
