@@ -1,8 +1,9 @@
 #!/bin/bash
 # Author: Paula Sanz-Leon, QIMR / Sydney Uni
 # Call pbs script using defaultQ
-CHUNKS=$(seq 78 78) # This variable will be used to index the chunk
-for IDX_CHUNK in ${CHUNKS}
+
+CHUNKS=({3..3} {5..5} {8..8} {11..12}) # This variable will be used to index the chunk
+for IDX_CHUNK in ${CHUNKS[@]}
 do
     export IDX_CHUNK
     NAME=job_${IDX_CHUNK}
