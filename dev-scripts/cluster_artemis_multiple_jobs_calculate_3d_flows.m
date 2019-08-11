@@ -24,8 +24,8 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
 
     % Cluster properties
     local_cluster = parcluster('local');
-    local_cluster.NumWorkers = 24;   % This should match the requested number of cpus
-    parpool(local_cluster.NumWorkers, 'IdleTimeout', 900);
+    local_cluster.NumWorkers = 32;   % This should match the requested number of cpus
+    parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
 
     % Change directory to scratch, so temp files will be created there
     cd /scratch/CGMD
