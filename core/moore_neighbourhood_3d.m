@@ -25,7 +25,7 @@ function [Mx, My, Mz] = moore_neighbourhood_3d(ii, jj, kk)
 %}
 %
 % AUTHOR: 
-%       Paula Sanz-Leon, QIMR Berghifer, 2019-02
+%       Paula Sanz-Leon, QIMR Berghofer, 2019-02
 % 
 % TODO: warn for negative subscripts, if this was written in python that 
 %       wouldn't be a problem. The user may want to use negative subscripts
