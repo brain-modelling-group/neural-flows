@@ -95,11 +95,14 @@ for tt=1:length(time)
     wave3d(tt, :, :, :) = A.* exp(1i.*(kx.*X + ky.*Y + kz.*Z + kr.*R - omega.*time(tt)));
 end
 
+% Save only the real part
+wave3d = real(wave3d);
+
 % Visual debugging of the first time point
 % TODO: generate a movie, perhaps of projections onto a 2d plane.
 figure('Name', 'nflows-planewave3d');
 tt = 1;
-pcolor3(X, Y, Z, squeeze(real(wave3d(tt, :, :, :))));
+pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)));
 xlabel('X')
 ylabel('Y')
 zlabel('Z')
