@@ -49,9 +49,12 @@ avg_filter = vonneumann_neighbourhood_3d();
 % penalty/tolerance as in Neuropatt
 
     for tt=1:max_iterations
-        ux_avg = nanconvn(ux, avg_filter,'same', edge_corrected_image);
-        uy_avg = nanconvn(uy, avg_filter,'same', edge_corrected_image);
-        uz_avg = nanconvn(uz, avg_filter,'same', edge_corrected_image);
+        % NOTE: averaging may be useful if interpolation is not peformed, 
+        % or if the data are noisy. For narrowband signals, the
+        % averaging introduces artifacts.
+        ux_avg = ux; %nanconvn(ux, avg_filter,'same', edge_corrected_image);
+        uy_avg = uy; %nanconvn(uy, avg_filter,'same', edge_corrected_image);
+        uz_avg = uz; %nanconvn(uz, avg_filter,'same', edge_corrected_image);
 
         ux = ux_avg - ( Ix.*((Ix.*ux_avg) + (Iy.*uy_avg) + (Iz.*uz_avg) + It))...
             ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
