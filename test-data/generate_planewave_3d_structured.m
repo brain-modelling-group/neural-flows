@@ -34,7 +34,7 @@ R = sqrt(X.^2+Y.^2+Z.^2);
 
 % NOTE: hardcoded size 
 time = 0:50; % in seconds
-omega = 2*pi*0.05; % in rad sec^-1
+omega = 2*pi*0.025; % in rad sec^-1
 
 % NOTE: Hardocoded frequencies
 kx = 0.25; % in m^-1
@@ -92,7 +92,7 @@ end
 for tt=1:length(time)
     % The - sign of omega * t means the direction of propagation will be
     % along the + direction of the corresponding axes.
-    wave3d(tt, :, :, :) = A.* exp(1i.*(kx.*X+ky.*Y+kz.*Z + kr.*R - omega.*time(tt)));
+    wave3d(tt, :, :, :) = A.* exp(1i.*(kx.*X + ky.*Y + kz.*Z + kr.*R - omega.*time(tt)));
 end
 
 % Visual debugging of the first time point
