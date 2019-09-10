@@ -1,6 +1,29 @@
-function [wave3d] = generate_planewave_3d_structured(direction)
-% This function produces a plane harmonic waves in 3D physical space +
-% time.
+function wave3d = generate_planewave_3d_structured(direction)
+% Generates plane harmonic waves in 3D physical space +
+% time. The size of space and time vector are hardcoded as these waves are
+% intended for fast debugging and testing purposes. 
+% The wave numbers and frequency are also hardcoded and the 
+% propagation velocity should be approximately 16 m/s.
+%
+% ARGUMENTS:
+%           direction -- a string with the desired wave propagation direction.
+%                        Available: {'x', 'y', 'z', 'radial', 'any', 'all'}.
+%                        Default: {'x'}.
+% OUTPUT:
+%           wave3d   -- a 4D array of size [21, 21, 21, 1000]. The first 
+%                       three dimensions are space and the last one is time.
+% REQUIRES: 
+%         pcolor3() for visual debugging
+%
+% AUTHOR:
+%     Paula Sanz-Leon, QIMR Berghofer 2019, June 2019
+%
+% USAGE:
+%{
+    generate_planewave_3d_structured('all');
+
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 % NOTE: hardcoded stuff size
 x = -10:10;
@@ -9,15 +32,18 @@ len_x = length(x);
 [X, Y, Z] = meshgrid(x, x, x); % in metres
 R = sqrt(X.^2+Y.^2+Z.^2);
 
+% NOTE: hardcoded size 
 time = linspace(0, 1, 1000);   % in seconds
-omega = 2*pi*2;
+omega = 2*pi*2; % in rad sec^-1
 
-kx = 0.25;
-ky = 0.25;
-kz = 0.25;
+% NOTE: Hardocoded frequencies
+kx = 0.25; % in m^-1
+ky = 0.25; % in m^-1
+kz = 0.25; % in m^-1
 kr = sqrt(kx.^2 + ky.^2 + kz.*2);
 
-% estimation of wave propagation speed
+%NOTE: estimation of wave propagation speed, should be output parameter if
+% we allow for input temp and pstial freqs.
 %c = omega ./ kr;
 
 % Amplitude of the wave.
