@@ -8,9 +8,6 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht, o
 %       F1, F2      --    two subsequent 3D arrays or 3D image frames
 %       operator_3d --   a function handle with the operator to use. 
 %                        Default is @get_sobel_3d_operator
-%   TODO: hx, hy, hz -  assumed to be 1 mm
-%   TODO: ht         -  assumed to be 1 ms
-%    
 % OUTPUT:
 %   Ix, Iy, Iz, It  --  derivatives along X, Y, Z and T axes respectively
 %
@@ -49,6 +46,7 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht, o
 end % function calculate_derivatives_hsd3()
 
 function [Gx, Gy, Gz] = get_sobel_3d_operator()
+ %TODO: move to standalone function
 % Returns the 3D Normalized Sobel kernels
         
     norm_factor = 44; % sum(abs(G_i(:))); I just happen to know it's 44
@@ -70,6 +68,7 @@ function [Gx, Gy, Gz] = get_sobel_3d_operator()
 end % function get_sobel_3d_operator()
 
 function [Gx, Gy, Gz] = get_laplacian_3d_operator()
+    %TODO: move to standalone function
     Gx = zeros(3,3,3); 
     Gy = Gx; 
     Gz = Gx;
