@@ -9,7 +9,7 @@ function [data, X, Y, Z, time] = generate_movingbar_3d_structured()
 %           wave3d   -- a 4D array of size [21, 21, 21, 50]. The first 
 %                       three dimensions are space and the last one is time.
 % REQUIRES: 
-%         pcolor3() for visual debugging
+%          pcolor3() for visual debugging
 %
 % AUTHOR:
 %     Paula Sanz-Leon, QIMR Berghofer 2019, June 2019
@@ -23,69 +23,32 @@ function [data, X, Y, Z, time] = generate_movingbar_3d_structured()
 % NOTE: hardcoded stuff size
 x = -10:10;
 len_x = length(x);
+x1 = -40:40;
 
-[X, Y, Z] = meshgrid(x, x, x); % in metres
 
-R = sqrt(X.^2+Y.^2+Z.^2);
+[X, ~, ~] = meshgrid(x1, x, x); % in metres
+
 
 % NOTE: hardcoded size 
 time = 0:len_x; % in seconds
 
 % Amplitude of the wave.
 % NOTE: can be turned into a parameter
-A = 1;
+A = exp(-abs(X)/50);
 % Preallocate memory
 data(length(time), len_x, len_x, len_x) = 0;
 
-if nargin < 1
-    direction = 'x';
-end
 
-switch direction
-    case 'x'
-        ky = 0;
-        kz = 0;
-        kr = 0;
-        
-    case 'y'
-        kx = 0;
-        kz = 0;
-        kr = 0;
-    case 'z'
-        kx = 0;
-        ky = 0;
-        kr = 0;
-    case 'xy'
-        kz = 0;
-        kr = 0;
-    case 'radial'
-        kx = 0;
-        ky = 0;
-        kz = 0;
-        
-    case 'all'
-        % I wonder about my sanity and state of mind when I find myself doing
-        % recursive function calls in matlab.
-        generate_planewave_3d_structured('x');
-        generate_planewave_3d_structured('y');
-        generate_planewave_3d_structured('z');
-        generate_planewave_3d_structured('radial');
-        generate_planewave_3d_structured('blah');
-        return
-        
-    otherwise
-        kr = 0;
-end
-
-% Generate the wave
 
 for tt=0:length(time)-1
     % The - sign of omega * t means the direction of propagation will be
     % along the + direction of the corresponding axes.
     %data(tt, tt, :, 9) = 1;
-    data(tt+1, :, :, :) = circshift(exp(-abs(X)/50), tt, 2);
+    B = circshift(A, tt, 2);
+    data(tt+1, :, :, :) = B(:, 31:51, :);
 end
 
+[X, Y, Z] = meshgrid(x, x, x); % in metres
 
 % Visual debugging of the first time point
 % TODO: generate a movie, perhaps of projections onto a 2d plane.
