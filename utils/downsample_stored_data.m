@@ -107,7 +107,7 @@ function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp, mfile_sings)
         newfile_obj.sum_ux = mfile_vel.sum_ux;
         newfile_obj.sum_uy = mfile_vel.sum_uy;
         newfile_obj.sum_uz = mfile_vel.sum_uz;
-
+        newfile_obj.detection_threshold = mfile_vel.detection_threshold;
         newfile_obj.options = options;
 
         % Delete original file once everything is saved

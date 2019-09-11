@@ -2,8 +2,7 @@ function [wave3d, X, Y, Z, time] = generate_planewave_3d_structured(direction)
 % Generates plane harmonic waves in 3D physical space +
 % time. The size of space and time vector are hardcoded as these waves are
 % intended for fast debugging and testing purposes. 
-% The wave numbers and frequency are also hardcoded and the 
-% propagation velocity should be approximately 0.4 m/s.
+% The wave numbers and frequency are also hardcoded.
 %
 % ARGUMENTS:
 %           direction -- a string with the desired wave propagation direction.
@@ -26,20 +25,20 @@ function [wave3d, X, Y, Z, time] = generate_planewave_3d_structured(direction)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 % NOTE: hardcoded stuff size
-x = -10:10;
+x = -8:8;
 len_x = length(x);
 
 [X, Y, Z] = meshgrid(x, x, x); % in metres
 R = sqrt(X.^2+Y.^2+Z.^2);
 
 % NOTE: hardcoded size 
-time = 0:50; % in seconds
-omega = 2*pi*0.025; % in rad sec^-1
+time = 0:200; % in seconds
+omega = 2*pi*0.005; % in rad sec^-1
 
 % NOTE: Hardocoded frequencies
-kx = 0.25; % in m^-1
-ky = 0.25; % in m^-1
-kz = 0.25; % in m^-1
+kx = 0.1; % in m^-1
+ky = 0.1; % in m^-1
+kz = 0.1; % in m^-1
 kr = sqrt(kx.^2 + ky.^2 + kz.*2);
 
 %NOTE: estimation of wave propagation speed, should be output parameter if
@@ -48,7 +47,7 @@ kr = sqrt(kx.^2 + ky.^2 + kz.*2);
 
 % Amplitude of the wave.
 % NOTE: can be turned into a parameter
-A = 1.0;
+A = 1;
 % Preallocate memory
 wave3d(length(time), len_x, len_x, len_x) = 0;
 
@@ -61,6 +60,7 @@ switch direction
         ky = 0;
         kz = 0;
         kr = 0;
+        
     case 'y'
         kx = 0;
         kz = 0;
@@ -68,6 +68,9 @@ switch direction
     case 'z'
         kx = 0;
         ky = 0;
+        kr = 0;
+    case 'xy'
+        kz = 0;
         kr = 0;
     case 'radial'
         kx = 0;
@@ -96,16 +99,21 @@ for tt=1:length(time)
 end
 
 % Save only the real part
-wave3d = real(wave3d);
+wave3d = real(wave3d)+A;
 
 % Visual debugging of the first time point
 % TODO: generate a movie, perhaps of projections onto a 2d plane.
-figure('Name', 'nflows-planewave3d');
+figure('Name', 'nflows-planewave3d-space');
 tt = 1;
 pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)));
 xlabel('X')
 ylabel('Y')
 zlabel('Z')
+
+figure('Name', 'nflows-planewave3d-time')
+plot(time, squeeze(wave3d(:, 11,12, 12)));
+xlabel('time')
+ylabel('p(x, y, z)')
 
 end % function generate_planewave3d_structured()
 

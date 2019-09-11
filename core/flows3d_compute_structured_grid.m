@@ -47,8 +47,8 @@ function varargout = flows3d_compute_structured_grid(data, X, Y, Z, time_vec, op
     
 %------------------------ FLOW CALCULATION -------------------------------%
     % Parameters for optical flow-- could be changed, could be parameters
-    alpha_smooth   = 1;
-    max_iterations = 16;
+    alpha_smooth   = 0;
+    max_iterations = 64;
     
     % Save flow calculation parameters parameters 
     options.flow_calculation.alpha_smooth   = alpha_smooth;

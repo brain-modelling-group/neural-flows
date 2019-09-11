@@ -28,7 +28,19 @@ function [sing_numeric_label, color] = get_singularity_numlabel(sing_str_label)
 % One real eigenvalue, two complex conjugate:
 % complex eigenvalues outside the unit circle : spiral source p.o
 % complex eigenvalues inside the unit circle  : spiral sink p.o
-
+% if iscell(sing_str_label)
+%     num_frames = length(sing_str_label);
+%     for tt=1:num_frames
+%        for ll=1:length(sing_str_label{tt})
+%            
+%            if length(sing_str_label{tt}) == 0
+%                sing_str_label{tt}{ll} = 'empty';
+%            end
+%            sing_numeric_label(tt).numlabel(ll) = get_singularity_numlabel(sing_str_label{tt}{ll});
+%        end
+%     
+%     end
+% end
 if isempty(sing_str_label)
     sing_str_label = 'empty';
 end

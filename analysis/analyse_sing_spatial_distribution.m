@@ -2,7 +2,9 @@ function analyse_sing_spatial_distribution(mfile_sing, sing_labels, XYZ, num_fra
 
 % Dummy function to analyse the distribution of type of singularity with
 % respect to one of the main orthogonal axes. 
-
+% XYZ have to be the original grids -- not donwsampled grids
+% XYZ size - npoints x 3
+% sing_labels -- > struct not cell with the numeric labels
 
 [~, cmap] = get_singularity_list_cmap();
 % figure_handle_xyz = figure('Name', 'nflows-singularities-over-spacetime');
@@ -45,8 +47,8 @@ Zsink = [];
 Zsaddle_sink = [];
 Zsaddle_source = [];
 
-
-        for tt=1:num_frames
+start_tt = 256;
+        for tt=start_tt:num_frames
             xyz = xyz_idx(1, tt).xyz_idx;  
             idx_source = find(sing_labels(tt).numlabel == source_);
             idx_spiral_source = find(sing_labels(tt).numlabel == spiral_source_);

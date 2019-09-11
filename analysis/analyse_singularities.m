@@ -114,7 +114,7 @@ function plot_singularty_scatter(mfile_sing, sing_labels, XYZ, num_frames)
     y_labels = {'X', 'Y', 'Z'};
 
     for ii=1:numsubplot     
-        for tt=1:num_frames
+        for tt=256:num_frames
             xyz = xyz_idx(1, tt).xyz_idx;  
             idx_source = find(sing_labels(tt).numlabel == source_);
             idx_spiral_source = find(sing_labels(tt).numlabel == spiral_source_);

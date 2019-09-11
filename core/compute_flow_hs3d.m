@@ -1,4 +1,5 @@
 function [ux, uy, uz] = compute_flow_hs3d(F1, F2, alpha_smooth, max_iterations, uxo, uyo, uzo, hx, hy, hz, ht)
+% New name: flows3d_hornschunk()
 % This function estimates the velocity components between two subsequent 3D 
 % images using the Horn-Schunck optical flow method. 
 %
@@ -37,13 +38,17 @@ uz = uzo;
 % Calculate derivatives
 [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht);
 
-avg_filter = vonneumann_neighbourhood_3d();
+%
+avg_filter = fspecial3('gaussian');
+
+%avg_filter = vonneumann_neighbourhood_3d();
 
 % Call nanconvn with the parametes we're going to use to get the edge 
 % correction image, and avoid further calls in the iterations.
 % TODO: Probably a good idea to do this before calling the optical flow
 % routine
-[~, edge_corrected_image] = nanconvn(F1, avg_filter, 'same');                
+%[~, edge_corrected_image] = nanconvn(F1, avg_filter, 'same');
+%edge_corrected_image = ones(size(F1));
                  
 % TODO: replace FOR by WHILE after introducing the Charbonnier
 % penalty/tolerance as in Neuropatt
@@ -52,9 +57,14 @@ avg_filter = vonneumann_neighbourhood_3d();
         % NOTE: averaging may be useful if interpolation is not peformed, 
         % or if the data are noisy. For narrowband signals, the
         % averaging introduces artifacts.
-        ux_avg = ux; %nanconvn(ux, avg_filter,'same', edge_corrected_image);
-        uy_avg = uy; %nanconvn(uy, avg_filter,'same', edge_corrected_image);
-        uz_avg = uz; %nanconvn(uz, avg_filter,'same', edge_corrected_image);
+        %ux_avg = nanconvn(ux, avg_filter,'same', edge_corrected_image);
+        %uy_avg = nanconvn(uy, avg_filter,'same', edge_corrected_image);
+        %uz_avg = nanconvn(uz, avg_filter,'same', edge_corrected_image);
+        
+        ux_avg = imfilter(ux, avg_filter, 'circular', 'conv');
+        uy_avg = imfilter(uy, avg_filter, 'circular', 'conv');
+        uz_avg = imfilter(uz, avg_filter, 'circular', 'conv');
+
 
         ux = ux_avg - ( Ix.*((Ix.*ux_avg) + (Iy.*uy_avg) + (Iz.*uz_avg) + It))...
             ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
@@ -65,7 +75,7 @@ avg_filter = vonneumann_neighbourhood_3d();
         uz = uz_avg - ( Iz.*( (Ix.*ux_avg) + (Iy.*uy_avg) + (Iz.*uz_avg) + It))...
             ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
     end
-
+  
 
 end % function compute_flow_hsd3()
 
@@ -77,17 +87,17 @@ function avg_filter = vonneumann_neighbourhood_3d()
     kk=2; 
 
     % Averaging filter over space
-    avg_filter(:,:,kk-1) = [0 0 0; 
-                            0 1 0; 
-                            0 0 0]/6;
+    avg_filter(:, :, kk-1) = [0.5 1 0; 
+                              1 1 1; 
+                            0 1 0];
 
-    avg_filter(:,:,kk)   = [0 1 0; 
-                            1 0 1; 
-                            0 1 0]/6;
+    avg_filter(:, :, kk)   = [0  1 0; 
+                            1  1 1; 
+                            0  1 0];
 
-    avg_filter(:,:,kk+1) = [0 0 0; 
-                            0 1 0; 
-                            0 0 0]/6;
+    avg_filter(:, :, kk+1) = [0 1 0; 
+                            1 1 1; 
+                            0 1 0];
 
 end
 

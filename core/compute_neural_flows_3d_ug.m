@@ -180,7 +180,8 @@ function varargout = compute_neural_flows_3d_ug(data, locs, options)
     mfile_vel.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
     
     %
-    % This function runs the loop over timepoints and saves the velocity
+    % This function runs the loop over timeace/time]
+    % This parameter should perhaps be sapoints and saves the velocity
     % fields into a file
     detection_th = 0.1; % [in units of space/time]
     mfile_vel.detection_threshold = detection_th;
@@ -220,7 +221,8 @@ function varargout = compute_neural_flows_3d_ug(data, locs, options)
        case 'surf'
            % Use null-isosurface intersection
            % First calculate them
-           % NOTE: at the moment this part is kind-of-deprecated
+           % NOTE: at the moment this partace/time]
+    % This parameter should perhaps be sa is kind-of-deprecated
            fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started extraction of critical isosurfaces'))
            Calculate critical isosurfaces
            [mfile_surf, mfile_surf_sentinel] = par_get_critical_isosurfaces(mfile_vel);
