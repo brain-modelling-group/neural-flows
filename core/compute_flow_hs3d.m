@@ -39,7 +39,9 @@ uz = uzo;
 [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht);
 
 %
-avg_filter = fspecial3('gaussian');
+avg_filter = fspecial3('average', 5);
+% The average should not include the central point
+avg_filter(3, 3, 3) = 0;
 
 %avg_filter = vonneumann_neighbourhood_3d();
 
