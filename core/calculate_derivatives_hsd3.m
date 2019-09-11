@@ -28,12 +28,7 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht, o
     [Gx, Gy, Gz] = operator_3d();
 
     Gt = ones(3, 3, 3)./9;    
-    % Make these parameters optional inputs
-    %hx = 1; % 1 mm
-    %hy = 1; % 1 mm
-    %hz = 1; % 1 mm
-    %ht = 1; % 1 ms
-
+   
     % Spatial derivatives are computed as the average of 
     % the two image/frame gradients along each direction
     
