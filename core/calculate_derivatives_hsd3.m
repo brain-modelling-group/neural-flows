@@ -13,7 +13,7 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht, o
 %   Ix, Iy, Iz, It  --  derivatives along X, Y, Z and T axes respectively
 %
 % AUTHOR:
-%     Paula Sanz-Leon
+%     Paula Sanz-Leon, QIMR Berghofer 2018
 % USAGE:
 %{
     
@@ -32,7 +32,6 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht, o
     % Spatial derivatives are computed as the average of 
     % the two image/frame gradients along each direction
     
-
     Ix = ((convn(F1, Gx, 'same') + convn(F2,  Gx, 'same')))/hx;
     Iy = ((convn(F1, Gy, 'same') + convn(F2,  Gy, 'same')))/hy;
     Iz = ((convn(F1, Gz, 'same') + convn(F2,  Gz, 'same')))/hz;
