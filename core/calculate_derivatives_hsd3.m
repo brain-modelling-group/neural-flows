@@ -31,11 +31,12 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht, o
    
     % Spatial derivatives are computed as the average of 
     % the two image/frame gradients along each direction
+    magic_factor = 1;
     
-    Ix = ((convn(F1, Gx, 'same') + convn(F2,  Gx, 'same')))/hx;
-    Iy = ((convn(F1, Gy, 'same') + convn(F2,  Gy, 'same')))/hy;
-    Iz = ((convn(F1, Gz, 'same') + convn(F2,  Gz, 'same')))/hz;
-    It = ((convn(F1, Gt, 'same') - convn(F2,  Gt, 'same')))/ht;
+    Ix = ((convn(F1, magic_factor*Gx, 'same') + convn(F2,  magic_factor*Gx, 'same')))/hx;
+    Iy = ((convn(F1, magic_factor*Gy, 'same') + convn(F2,  magic_factor*Gy, 'same')))/hy;
+    Iz = ((convn(F1, magic_factor*Gz, 'same') + convn(F2,  magic_factor*Gz, 'same')))/hz;
+    It = ((convn(F1, magic_factor*Gt, 'same') - convn(F2,  magic_factor*Gt, 'same')))/ht;
 
 end % function calculate_derivatives_hsd3()
 

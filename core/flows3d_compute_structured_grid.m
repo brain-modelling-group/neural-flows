@@ -1,4 +1,5 @@
 function varargout = flows3d_compute_structured_grid(data, X, Y, Z, time_vec, options) 
+ % New function name flows3d_compute_neuralflows_structured_grid() 
  % This function is mainly for testing purposes of flow calculations
  % Compute neural flows from data defined on a structured grid.
  %  [wave3d, X, Y, Z, time] = generate_planewave_3d_structured('x');
@@ -47,11 +48,11 @@ function varargout = flows3d_compute_structured_grid(data, X, Y, Z, time_vec, op
     
 %------------------------ FLOW CALCULATION -------------------------------%
     % Parameters for optical flow-- could be changed, could be parameters
-    alpha_smooth   = 0;
-    max_iterations = 64;
+    %alpha_smooth   = 0.05;
+    max_iterations = 128;
     
     % Save flow calculation parameters parameters 
-    options.flow_calculation.alpha_smooth   = alpha_smooth;
+    %options.flow_calculation.alpha_smooth   = alpha_smooth;
     options.flow_calculation.max_iterations = max_iterations;
     options.flow_calculation.dtpts          = dtpts;
     options.flow_calculation.grid_size      = grid_size;
