@@ -23,7 +23,7 @@ function [data, X, Y, Z, time] = generate_movingbar_3d_structured()
 % NOTE: hardcoded stuff size
 x = -10:10;
 len_x = length(x);
-x1 = -40:40;
+x1 = -100:100;
 
 
 [X, ~, ~] = meshgrid(x1, x, x); % in metres
@@ -34,18 +34,18 @@ time = 0:len_x; % in seconds
 
 % Amplitude of the wave.
 % NOTE: can be turned into a parameter
-A = exp(-abs(X)/50);
+A = X;
 % Preallocate memory
 data(length(time), len_x, len_x, len_x) = 0;
 
 
 
-for tt=0:length(time)-1
+for tt=1:length(time)
     % The - sign of omega * t means the direction of propagation will be
     % along the + direction of the corresponding axes.
     %data(tt, tt, :, 9) = 1;
-    B = circshift(A, tt, 2);
-    data(tt+1, :, :, :) = B(:, 31:51, :);
+    B = circshift(A, 4*tt, 2);
+    data(tt, :, :, :) = B(:, 101:121, :);
 end
 
 [X, Y, Z] = meshgrid(x, x, x); % in metres
@@ -59,6 +59,15 @@ xlabel('X')
 ylabel('Y')
 zlabel('Z')
 
+figure('Name', 'nflows-planewave3d-time')
+plot(time, squeeze(data(:, 11, 12, 12)));
+xlabel('time')
+ylabel('p(x, y, z)')
 
-end % function generate_planewave3d_structured()
+figure('Name', 'nflows-planewave3d-space-time-1d')
+plot(time, squeeze(data(:, 11, :, 12)), 'color', [0.65 0.65 0.65]);
+xlabel('time')
+ylabel('space: x-axis')
+
+end % function generate_movingfront_3d_structured()
 
