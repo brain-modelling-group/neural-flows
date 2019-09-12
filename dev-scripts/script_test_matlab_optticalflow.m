@@ -9,6 +9,24 @@ for kk=1:4000
 %     hold off; 
 end
 
+%%
+
+h = figure;
+movegui(h);
+hViewPanel = uipanel(h,'Position',[0 0 1 1],'Title','Plot of Optical Flow Vectors');
+hPlot = axes(hViewPanel);
+kk=1;
+while kk< 23 
+    frameGray = data(:, :, kk);
+    
+     OF(kk) = estimateFlow(opticFlow,frameGray); 
+     imagesc(frameGray)
+     hold on
+     plot(OF(kk),'ScaleFactor',2,'Parent',hPlot);
+     hold off
+     pause(1)
+     kk = kk+1;
+end
 %% 
 
 ax1 = subplot(1,2,1);
