@@ -26,23 +26,27 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht, o
 
     % Sobel 3D Kernel along X, Y and Z direction
     [Gx, Gy, Gz] = operator_3d();
-
-    Gt = ones(3, 3, 3)./9;    
+    
+    % Temporal kernel size
+    kt_size = 3;
+    Gt = ones(kt_size, kt_size, kt_size);
+    Gt = Gt./sum(abs(Gt));
    
     % Spatial derivatives are computed as the average of 
-    % the two image/frame gradients along each direction
-    magic_factor = 1;
-    
-    Ix = ((convn(F1, magic_factor*Gx, 'same') + convn(F2,  magic_factor*Gx, 'same')))/hx;
-    Iy = ((convn(F1, magic_factor*Gy, 'same') + convn(F2,  magic_factor*Gy, 'same')))/hy;
-    Iz = ((convn(F1, magic_factor*Gz, 'same') + convn(F2,  magic_factor*Gz, 'same')))/hz;
-    It = ((convn(F1, magic_factor*Gt, 'same') - convn(F2,  magic_factor*Gt, 'same')))/ht;
+    % the two image/frame gradients along each direction,
+    % thus the magic number 0.5 in front of Ix, Iy, Iz
+    Ix = (0.5*(convn(F1, Gx, 'same') + convn(F2,  Gx, 'same')))/hx;
+    Iy = (0.5*(convn(F1, Gy, 'same') + convn(F2,  Gy, 'same')))/hy;
+    Iz = (0.5*(convn(F1, Gz, 'same') + convn(F2,  Gz, 'same')))/hz;
+    It = ((convn(F1, Gt, 'same') - convn(F2,  Gt, 'same')))/ht;
 
 end % function calculate_derivatives_hsd3()
 
 function [Gx, Gy, Gz] = get_sobel_3d_operator()
  %TODO: move to standalone function
 % Returns the 3D Normalized Sobel kernels
+% Matlab has a Sobel operator with slightly different weights,  
+% but I like these weights better
         
     norm_factor = 44; % sum(abs(G_i(:))); I just happen to know it's 44
     Gx(:,:,1) = [-1  0  1; -3  0  3; -1  0  1];
