@@ -30,7 +30,7 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht, o
     % Temporal kernel size
     kt_size = 3;
     Gt = ones(kt_size, kt_size, kt_size);
-    Gt = Gt./sum(abs(Gt));
+    Gt = Gt./sum(abs(Gt(:)));
    
     % Spatial derivatives are computed as the average of 
     % the two image/frame gradients along each direction,
@@ -77,9 +77,9 @@ function [Gx, Gy, Gz] = get_laplacian_3d_operator()
     Gx(:,:,3) = [-1 0 1; -2 0 2; -1 0 1]; 
     Gx = Gx./sum(abs(Gx(:)));
 
-    Gy(:,:,1) = Gx(:,:,1)';
-    Gy(:,:,2) = Gx(:,:,2)';
-    Gy(:,:,3) = Gx(:,:,3)';
+    Gy(:,:,1) = Gx(:, :, 1)';
+    Gy(:,:,2) = Gx(:, :, 2)';
+    Gy(:,:,3) = Gx(:, :, 3)';
     
     Gz(:,:,1) = [-1 -2 -1; -1 -2 -1; -1 -2 -1]; 
     Gz(:,:,2) = [ 0  0  0;  0  0  0;  0  0  0]; 
