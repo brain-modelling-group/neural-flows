@@ -39,9 +39,10 @@ uz = uzo;
 [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht);
 
 %
-avg_filter = fspecial3('average', 5);
+%avg_filter = fspecial3('average', 3);
+avg_filter = vonneumann_neighbourhood_3d();
 % The average should not include the central point
-avg_filter(3, 3, 3) = 0;
+%avg_filter(2, 2, 2) = 0;
 
 %avg_filter = vonneumann_neighbourhood_3d();
 
@@ -63,19 +64,19 @@ avg_filter(3, 3, 3) = 0;
         %uy_avg = nanconvn(uy, avg_filter,'same', edge_corrected_image);
         %uz_avg = nanconvn(uz, avg_filter,'same', edge_corrected_image);
         
-        ux_avg = imfilter(ux, avg_filter, 'circular', 'conv');
-        uy_avg = imfilter(uy, avg_filter, 'circular', 'conv');
-        uz_avg = imfilter(uz, avg_filter, 'circular', 'conv');
+        ux_avg = imfilter(ux, avg_filter, 'replicate', 'same', 'conv');
+        uy_avg = imfilter(uy, avg_filter, 'replicate', 'same', 'conv');
+        uz_avg = imfilter(uz, avg_filter, 'replicate', 'same', 'conv');
 
 
         ux = ux_avg - ( Ix.*((Ix.*ux_avg) + (Iy.*uy_avg) + (Iz.*uz_avg) + It))...
-            ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
+                       ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
 
         uy = uy_avg - ( Iy.*( (Ix.*ux_avg) + (Iy.*uy_avg) + (Iz.*uz_avg) + It))...
-            ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
+                       ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
 
         uz = uz_avg - ( Iz.*( (Ix.*ux_avg) + (Iy.*uy_avg) + (Iz.*uz_avg) + It))...
-            ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
+                       ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
     end
   
 
@@ -89,17 +90,18 @@ function avg_filter = vonneumann_neighbourhood_3d()
     kk=2; 
 
     % Averaging filter over space
-    avg_filter(:, :, kk-1) = [0.5 1 0; 
-                              1 1 1; 
-                            0 1 0];
+    avg_filter(:, :, kk-1) = [0  0  0; 
+                              0  1  0; 
+                              0  0  0];
 
-    avg_filter(:, :, kk)   = [0  1 0; 
-                            1  1 1; 
-                            0  1 0];
+    avg_filter(:, :, kk)   = [0  1  0; 
+                              1  0  1; 
+                              0  1  0];
 
-    avg_filter(:, :, kk+1) = [0 1 0; 
-                            1 1 1; 
-                            0 1 0];
+    avg_filter(:, :, kk+1) = [0  0  0; 
+                              0  1  0; 
+                              0  0  0];
+    avg_filter = avg_filter./sum(abs(avg_filter(:)));
 
 end
 
