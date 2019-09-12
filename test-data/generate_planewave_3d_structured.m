@@ -33,7 +33,7 @@ R = sqrt(X.^2+Y.^2+Z.^2);
 
 % NOTE: hardcoded size 
 time = 0:200; % in seconds
-omega = 2*pi*0.005; % in rad sec^-1
+omega = 0.1;%2*pi*0.05; % in rad sec^-1
 
 % NOTE: Hardocoded frequencies
 kx = 0.1; % in m^-1
