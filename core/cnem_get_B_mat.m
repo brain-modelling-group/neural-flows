@@ -15,8 +15,8 @@ function B = cnem_get_B_mat(XYZ, IN_Tri_Ini)
 % REQUIRES: 
 %        CNEM: https://ff-m2p.cnrs.fr/projects/cnem/, which itself depends on 
 %        TBB: http://www.threadingbuildingblocks.org/  
-%        m_cnem3d_scni()
-%        cal_B_Mat()
+%        m_cnem3d_scni() from cnem libary
+%        cal_B_Mat() from cnem library
 %
 % USAGE:
 %{     
