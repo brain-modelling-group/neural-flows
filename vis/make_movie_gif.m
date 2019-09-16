@@ -50,4 +50,4 @@ for cc =1:tpts
   pause(1)
 end
 
-end % make_gif_animation()
+end % make_movie_gif()
