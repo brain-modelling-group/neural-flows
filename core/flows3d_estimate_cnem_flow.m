@@ -49,7 +49,7 @@ end
 
 disp([mfilename ':: Calculating temporal gradient dphi/dt ...'])
 
-[~, dphidtp] = gradient(phi, dt);
+[~, dphidtp] = gradient(phi, dt); %--> NOTE: This should be normalised by the time step size
 
 disp([mfilename ':: Done.'])
 
