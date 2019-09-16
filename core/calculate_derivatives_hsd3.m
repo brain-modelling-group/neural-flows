@@ -1,6 +1,7 @@
-function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht, operator_3d)
-% New name: flows3d_calculate_derivatives()
-%%This fuction computes 3D+t partial derivatives between two 3D image frames. 
+function [Ix, Iy, Iz, It] = flows3d_calculate_partialderivatives_hsd3(F1, F2, hx, hy, hz, ht, operator_3d)
+% New name: flows3d_calculate_derivatives_hs3d()
+% This fuction computes 3D+t partial derivatives between two 3D image frames,
+% and is meant to be used by the Horn-Schunck algotithm
 % This function basically does the same as imgradientxyz, but it also
 % calculates the temporal derivative and returns correctly normalised
 % derivatives.
@@ -8,12 +9,14 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht, o
 % ARGUMENTS:
 %       F1, F2      --    two subsequent 3D arrays or 3D image frames
 %       operator_3d --   a function handle with the operator to use. 
-%                        Default is @get_sobel_3d_operator
+%                        Default is @get_sobel_kernel_3d, but could be 
+%                          @get_laplacian_kernel_3d or any other
+%                          differential kernel obtained via matlab's fspecial3
 % OUTPUT:
-%   Ix, Iy, Iz, It  --  derivatives along X, Y, Z and T axes respectively
+%   Ix, Iy, Iz, It  --  partial derivatives along X, Y, Z and T axes respectively
 %
 % AUTHOR:
-%     Paula Sanz-Leon, QIMR Berghofer 2018
+%     Paula Sanz-Leon, QIMR Berghofer, December 2018
 % USAGE:
 %{
     
@@ -21,7 +24,7 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht, o
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%             
     
     if nargin < 7 
-        operator_3d = @get_sobel_3d_operator;
+        operator_3d = @get_sobel_kernel_3d;
     end
 
     % Sobel 3D Kernel along X, Y and Z direction
@@ -40,4 +43,4 @@ function [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht, o
     Iz = (0.5*(convn(F1, Gz, 'same') + convn(F2,  Gz, 'same')))/hz;
     It = ((convn(F1, Gt, 'same') - convn(F2,  Gt, 'same')))/ht;
 
-end % function calculate_derivatives_hsd3()
+end % function flows3d_calculate_partialderivatives_hsd3()
