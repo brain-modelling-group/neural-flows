@@ -1,7 +1,6 @@
 function [Mx, My, Mz] = moore_neighbourhood_3d(ii, jj, kk)
-% Returns 3 matrices of size 3x3x3 with the subscripts 
-% of the neighbours of point located at ii, jj, kk in a 3D Moore neighbourhood. 
-%
+% Returns 3 matrices of size 3x3x3, each of which has the subscripts along
+% each dimensions of the neighbours of a point ii, jj, kk in a 3D Moore neighbourhood. 
 %
 % ARGUMENTS:
 %        ii -- subscript of the centre point along the +1st+ spatial dimension
