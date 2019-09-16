@@ -1,4 +1,4 @@
-function [Ix, Iy, Iz, It] = flows3d_calculate_partialderivatives_hsd3(F1, F2, hx, hy, hz, ht, operator_3d)
+function [Ix, Iy, Iz, It] = flows3d_hs3d_calculate_partial_derivatives(F1, F2, hx, hy, hz, ht, operator_3d)
 % New name: flows3d_calculate_derivatives_hs3d()
 % This fuction computes 3D+t partial derivatives between two 3D image frames,
 % and is meant to be used by the Horn-Schunck algotithm
