@@ -24,6 +24,9 @@ function [wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured(directi
 %{
 
 [wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured('x');
+[wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured('y');
+[wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured('z');
+
 
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
