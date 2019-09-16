@@ -1,11 +1,11 @@
 #!/bin/bash 
 #PBS -P BLN
 #PBS -N FLOWSOV
-#PBS -J 1-100
+#PBS -J 1-23
 #PBS -m abe
 #PBS -M pmsl.academic@gmail.com
-#PBS -q defaultQ
-#PBS -l select=1:ncpus=32:mem=24GB
+#PBS -q scavenger
+#PBS -l select=1:ncpus=24:mem=24GB
 #PBS -l walltime=36:00:00
 #PBS -j oe
 
