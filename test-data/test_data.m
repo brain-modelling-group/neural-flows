@@ -1,5 +1,5 @@
 %[wave3d, X, Y, Z, time] = generate_planewave_3d_structured('x');
-[wave3d, X, Y, Z, time] = generate_movingbar_3d_structured();
+[wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured();
  %%
  options.chunk = 42;  
  options.hx = 1;
