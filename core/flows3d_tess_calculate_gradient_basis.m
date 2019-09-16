@@ -1,4 +1,4 @@
-function [gradient_basis, triangle_areas, face_normals] = get_basic_geometry_of_tesselation(faces, vertices, embedding_dimension)
+function [gradient_basis, triangle_areas, face_normals] = flows3d_tess_calculate_gradient_basis(faces, vertices, embedding_dimension)
 % Computes some geometric quantities from a triangulated domain/tesselation.
 % 
 % ARGUMENTS:
