@@ -1,4 +1,4 @@
-function nabla_V = cnem_grad_V(B, V)
+function nabla_V = flows3d_cnem_grad_V(B, V)
 % Calculates the gradient of V (\nabla V) evaluated at 3-D scattered points in array XYZ
 %
 % ARGUMENTS:

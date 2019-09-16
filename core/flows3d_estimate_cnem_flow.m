@@ -61,7 +61,7 @@ shp      = alphaShape(locs, shpalpha);
 bdy = shp.boundaryFacets;
 
 % Calculate matrix B of cnem
-B = cnem_get_B_mat(locs, bdy);
+B = flows3d_cnem_get_B_mat(locs, bdy);
 
 % Timepoints
 tpts = size(phi, 1); 
@@ -85,7 +85,7 @@ if is_phase
 
         % wrap phases by differentiating exp(i*phi)
         yphasor   = exp(1i*instant_phi(:));
-        gradphasor= cnem_grad_V(B, yphasor);
+        gradphasor= flows3d_cnem_grad_V(B, yphasor);
 
         dphidxp(tt,:)=real(-1i*gradphasor(:,xdim).*conj(yphasor));
         dphidyp(tt,:)=real(-1i*gradphasor(:,ydim).*conj(yphasor));

@@ -1,4 +1,4 @@
-function B = cnem_get_B_mat(XYZ, IN_Tri_Ini)
+function B = flows3d_cnem_get_B_mat(XYZ, IN_Tri_Ini)
 %% Calculate the matrix B for calculating the gradient \nabla V evaluated at
 % 3-D scattered points in matrix XYZ
 %
