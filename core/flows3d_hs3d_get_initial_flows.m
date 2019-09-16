@@ -1,4 +1,4 @@
-function [uxo, uyo, uzo] = get_initial_velocity_distribution(grid_shape, NAN_MASK, seed)
+function [uxo, uyo, uzo] = flows3d_hs3d_get_initial_flows(grid_shape, NAN_MASK, seed)
 
 % X: domain shape
 % NAN_MASK: logical mask of the same size as FA
