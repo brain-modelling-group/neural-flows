@@ -14,7 +14,7 @@ function [ux, uy, uz] = compute_flow_hs3d(F1, F2, alpha_smooth, max_iterations, 
 %   B. K. Horn and B. G. Schunck, Determining optical flow, Cambridge, MA,
 %   USA, Tech. Rep., 1980.
 %
-%  Paula Sanz-Leon optimized
+%  Paula Sanz-Leon, QIMR, Dec 2018 
    
 
 if nargin < 3
