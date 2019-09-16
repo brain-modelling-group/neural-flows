@@ -1,4 +1,4 @@
-function trace_streams_3d(mfile_vel, singularity_classification, seed_locs)
+function streams3d_tracing_grid(mfile_vel, singularity_classification, seed_locs)
 
 % Trace streamlines for one frame 
 
