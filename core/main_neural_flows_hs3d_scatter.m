@@ -1,4 +1,4 @@
-function varargout = main_neural_flows_hsd3(data, locs, options) 
+function varargout = main_neural_flows_hs3d_scatter(data, locs, options) 
     % Compute neural flows from (u)nstructured (g)rids/scattered datapoints
     % This function: 
     %              1) interpolates the data onto a regular grid.
