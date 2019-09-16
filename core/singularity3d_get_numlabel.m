@@ -1,4 +1,4 @@
-function [sing_numeric_label, color] = get_singularity_numlabel(sing_str_label)
+function [sing_numeric_label, color] = singularity3d_get_numlabel(sing_str_label)
 % This function maps singularity human-readable labels into integer numbers
 % for quantitative classification.
 
