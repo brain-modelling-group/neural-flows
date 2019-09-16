@@ -25,8 +25,8 @@ function v = flows3d_estimate_cnem_flow(phi, locs, dt, opts)
 %            -- vzp - z component of the vector field of size [time x nodes]
 %
 % REQUIRES: 
-%          cnem_grad_V()
-%          cnem_get_B_mat()
+%          flows3d_cnem_grad_V()
+%          flows3d_cnem_get_B_mat()
 %
 % USAGE:
 %{     
