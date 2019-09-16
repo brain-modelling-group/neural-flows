@@ -1,4 +1,4 @@
-function [detection_threshold] = guesstimate_detection_threshold(data)
+function [detection_threshold] = flows3d_detect_nullflows_guesstimate_threshold(data)
 % Ad hoc way of guesstimating threshold for detecting singularities.
 
 %[~, edges] = histcounts(data);
