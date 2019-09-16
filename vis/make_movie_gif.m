@@ -1,6 +1,6 @@
 function make_movie_gif(data, save_anim)
 
-% data should be (space dim 1, space dim 2, time)
+% data should be (time, space dim 1, space dim 2)
 % save_anim  boolean, 0 - do not save, 1 save animation in gif
 
 % =====================================================================
@@ -27,7 +27,7 @@ set(gcf,'Position',pos);
 set(gcf,'color','w');
 
 for cc =1:tpts
-  xy = data(:, :, cc);
+  xy = squeeze(data(cc, :, :));
   pcolor(xy)
   shading interp
   axis off
