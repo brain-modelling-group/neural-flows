@@ -1,4 +1,4 @@
-function [mfile_interp_obj, mfile_interp_sentinel] = par_interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_data)
+function [mfile_interp_obj, mfile_interp_sentinel] = data3d_parallel_interpolate(data, locs, X, Y, Z, in_bdy_mask, keep_interp_data)
 % This is a wrapper function for Matlab's ScatteredInterpolant. We can interpolate
 % each frame of a 4D array independtly using parfor and save the interpolated data for 
 % later use with optical flow. Then, just delete the interpolated data
