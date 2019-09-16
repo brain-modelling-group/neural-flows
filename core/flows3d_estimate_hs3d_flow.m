@@ -1,4 +1,4 @@
-function run_neural_flows3d_loop(mfile_data, mfile_vel, options)
+function flows3d_estimate_hs3d_flow(mfile_data, mfile_vel, options)
 % alternative name: flows3d_compute_neural_flows()
 % TODO: Future self: Document this function. 
 % Make standalone function to peform the optical flow loop
@@ -48,7 +48,7 @@ if strcmp(options.flow_calculation.init_conditions, 'random')
 
     for bb=1:burnin_len
         % Calculate the velocity components
-        [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, ...
+        [uxo, uyo, uzo] = flows3d_hornschunck(FA, FB, alpha_smooth, ...
                                                     max_iterations, ...
                                                     uxo, uyo, uzo, ...
                                                     hx, hy, hz, ht);       
