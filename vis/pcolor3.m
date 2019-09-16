@@ -110,7 +110,7 @@ setAlphaLim = false;
     
 % Is input format pcolor3(X,Y,Z,V,...) or simply pcolor3(V,...)? 
 if nargin>1 && isnumeric(varargin{2})
-    assert(nargin>3,'Input error. If the second input to pcolor3 is numeric, inputs are assumed to be in the form pcolor3(X,Y,Z,V,...). You have either entered too few or too many inputs.')
+    assert(nargin > 3,'Input error. If the second input to pcolor3 is numeric, inputs are assumed to be in the form pcolor3(X,Y,Z,V,...). You have either entered too few or too many inputs.')
     X = varargin{1}; 
     Y = varargin{2}; 
     Z = varargin{3}; 
@@ -160,6 +160,14 @@ if any(tmp)
     nx = varargin{find(tmp)+1}; 
     assert(isscalar(nx)==1,'Invalid input after Nx declaration. Must be a scalar.') 
     assert(nx>=0,'Number of slices Nx must be greater than zero.')
+end
+
+tmp = strcmpi(varargin, 'axes');
+if any(tmp)
+    these_axes = varargin{find(tmp)+1}; 
+else
+    pcolor_fig = figure('Name', 'nflows-pcolor3');
+    these_axes = subplot(1,1,1, 'Parent', pcolor_fig); 
 end
 
 tmp = strcmpi(varargin,'ny'); 
@@ -219,19 +227,19 @@ switch InterpolationMethod
         
         % Plot x slices: 
         for k = 1:nx
-            h(k) = surface(squeeze(X(:,k,:)),squeeze(Y(:,k,:)),squeeze(Z(:,k,:)),squeeze(V(:,k,:))); 
+            h(k) = surface(these_axes, squeeze(X(:,k,:)),squeeze(Y(:,k,:)),squeeze(Z(:,k,:)),squeeze(V(:,k,:))); 
         end
         
         % Plot y slices: 
         for k2 = 1:ny
             k = k+1; 
-            h(k) = surface(squeeze(X(k2,:,:)),squeeze(Y(k2,:,:)),squeeze(Z(k2,:,:)),squeeze(V(k2,:,:))); 
+            h(k) = surface(these_axes, squeeze(X(k2,:,:)),squeeze(Y(k2,:,:)),squeeze(Z(k2,:,:)),squeeze(V(k2,:,:))); 
         end
         
         % Plot z slices: 
         for k3 = 1:nz
             k = k+1; 
-            h(k) = surface(squeeze(X(:,:,k3)),squeeze(Y(:,:,k3)),squeeze(Z(:,:,k3)),squeeze(V(:,:,k3))); 
+            h(k) = surface(these_axes, squeeze(X(:,:,k3)),squeeze(Y(:,:,k3)),squeeze(Z(:,:,k3)),squeeze(V(:,:,k3))); 
         end
         grid on
         
