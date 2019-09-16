@@ -1,4 +1,4 @@
-function [J3D] = singularity3d_jacobian(critical_xyz_idx, vx, vy, vz, hx, hy, hz)
+function [J3D] = singularity3d_calculate_jacobian(critical_xyz_idx, vx, vy, vz, hx, hy, hz)
 % Estimates the 3 x 3 Jacobian of ux, uy, uz around the estimated critical points
 % critical_xyz_idx are the indices of the estimated points
 
