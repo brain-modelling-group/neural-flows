@@ -16,6 +16,7 @@ function [wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured(directi
 %                       This wave moves at exaclty 1 m/s.
 % REQUIRES: 
 %          pcolor3() for visual debugging
+%          make_movie_gif() for visual debugging
 %
 % AUTHOR:
 %     Paula Sanz-Leon, QIMR Berghofer 2019, June 2019
@@ -32,6 +33,7 @@ function [wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured(directi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TODO: generalise so we can define grids of different sizes and set different
 %       propogation velocities.
+%       consider addding a flag to use visual debugging or not
 
 % NOTE: hardcoded stuff size
 
