@@ -1,4 +1,4 @@
-function [xyz_idx] = par_locate_critical_points(mfile_surf_obj, mfile_vel_obj, data_mode, index_mode)
+function [xyz_idx] = flows3d_hs3d_detect_nullflows_parallel(mfile_surf_obj, mfile_vel_obj, data_mode, index_mode)
 % Locates the critical points of the velocity fields. 
 % Returns the location of the singularities either as: 
 % linear indices xyz_lidx, or as 
