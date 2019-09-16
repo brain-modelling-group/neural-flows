@@ -16,4 +16,4 @@ end
   uyo(NAN_MASK) = NaN;
   uzo(NAN_MASK) = NaN;
   
-end
+end %get_initial_velocity_distribution()
