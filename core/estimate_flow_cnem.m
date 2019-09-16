@@ -1,5 +1,5 @@
 function v = estimate_flow_cnem(phi, locs, dt, opts)
-%% Calculate instantaneous phase flow at every time point
+%% Calculate instantaneous phase-based flow at every time point
 %
 % ARGUMENTS:
 %          phi     -- a 2D array of size [time x nodes/locs] matrix of (signal's envelope) phases 
