@@ -21,6 +21,7 @@ tpts = size(data, 3);
 
 fig_gif = figure('Name', 'nflows-gifanim');
 these_axes = subplot(1,1,1, 'Parent', fig_gif);
+these_axes.Visible = 'off';
 pos = [0.6 0.05 0.35 0.40];
 set(gcf,'Units','normalized');
 set(gcf,'Position',pos);
@@ -28,15 +29,16 @@ set(gcf,'color','w');
 
 for cc =1:tpts
   xy = squeeze(data(cc, :, :));
-  pcolor(these_axes, xy)
-  shading interp
-  axis off
+  h = pcolor(these_axes, xy);
+  h.FaceColor = 'interp';
+  h.EdgeColor = 'none';
   % NOTE: these parameters should be passed as options
   colormap(parula(1024))
   caxis([-40 10])
+  these_axes.Title.String = ['Time frame: ' num2str(cc, '%04d')];
   
   if save_anim == 1
-       frame = getframe(3);
+       frame = getframe(these_axes);
        im = frame2im(frame);
        [imind,cm] = rgb2ind(im, 256);
        %  On the first loop, create the file. In subsequent loops, append.
