@@ -1,22 +1,26 @@
-function varargout = main_neural_flows_hs3d_scatter(data, locs, options) 
-    % Compute neural flows from (u)nstructured (g)rids/scattered datapoints
+function varargout = main_neural_flows_hs3d_scatter(data, locs, time_vec, options) 
+    % This function takes as input neural activity recorded from scattered 
+    % points in space (aka an unstructured grid)
     % This function: 
-    %              1) interpolates the data onto a regular grid.
-    %              2) calculates velocity fields
-    %              3) detects singularities
-    %              4) classifies singularities
+    %              1) interpolates the data onto a regular grid (ie, meshgrid).
+    %              2) estimates neural flows (ie, velocity fields).
+    %              3) detects singularities (ie, detects null flows).
+    %              4) classifies singularities.
     % data: a 2D array of size [timepoints x nodes/points] or 
     %         4D array of size [timepoints x xcoord x ycoord x zcoord]
     % locs: coordinates points in 3D Euclidean space for which data values are known. 
-    %       these corresponds to the centres of gravity: ie, node locations 
-    %       of brain network embedded in 3D dimensional space
+    %       These corresponds to the centres of gravity: ie, node locations 
+    %       of brain network embedded in 3D dimensional space, or source
+    %       locations from MEG.
+    % time_vec: a vector with the timepoints. Not really used except for
+    % chechink the time step value.
     % options
     %        .interp_data: a structure
     %                    --  .file_exists  a boolean flag to determine if the 
     %                               interpolated data had been precalculated or not
     %                               and skip that step. 
     %        .interp_data: -- .file_name a string with the name of the
-    %                        matfile where the interpolated data are stored
+    %                          matfile where the interpolated data are stored
     %        .sing_detection -- .datamode = 'vel' % use velocity fields or
     %        surfaces to detect singularities
     %                           .indexmode = 'linear'; Use linear indices
@@ -26,10 +30,13 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     %options.interp_data.file_exists = false;
     %options.sing_detection.datamode = 'vel''
     %options.sing_detection.inexmode = 'linear';
+    %options.hz = 1;
+    %options.hy = 1;
+    %options.hx = 1;
+    %options.dt = 1;
     
   
     % NOTES TO CLEAN UP
-    % we need to include: dt
     % limits of XYZ space, presumably coming from fmri data
     % TODO: estimate timepoints of interest using the second order temporal
     % derivative
@@ -46,7 +53,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     % NOTEs on performance optical flow: 
     % max_iterations=16 
     % tpts ~ 200
-    % hs = 2mm
+    % hs = 2mmmain_neural_flows_hs3d_scatter
     % takes about 35s to calculate vector fields.
     % hs = 1mm
     % takes 214 s - 240
@@ -74,11 +81,10 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     % Recalculate timepoints
     dtpts = size(data, t_dim);
   
-    % NOTE: full resolution (eg, approx dxyz=1mm^3), each interpolation
-    % step takes about 24 seconds.
-    % downsampling to 8mm^3 - side 2mm it takes 3s.
+    % NOTE: full resolution (eg, approx hx*hy*hz=1mm^3), each interpolation
+    % step takes about 24 seconds. Downsampling to 8mm^3 - side 2mm it takes 3s.
     
-    int_locs = ceil(abs(locs)).*sign(locs);
+   
     
     % Human-readable labels for indexing dimensions of 4D arrays
     x_dim = 1;
@@ -86,29 +92,10 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     z_dim = 3;
     down_factor_xyz = 1; % Not allowed to get different downsampling for space
     
-    % Get limits for the structured grid if people did not give those
-    min_x = min(int_locs(:, x_dim));
-    min_y = min(int_locs(:, y_dim));
-    min_z = min(int_locs(:, z_dim));  
-
-    max_x = max(int_locs(:, x_dim));
-    max_y = max(int_locs(:, y_dim));
-    max_z = max(int_locs(:, z_dim));
     
-    % Create the grid -- THIS IS THE PROBLEM WITH SPACING
-    xx = min_x:down_factor_xyz:max_x;
-    yy = min_y:down_factor_xyz:max_y;
-    zz = min_z:down_factor_xyz:max_z;
-    [X, Y, Z] = meshgrid(xx, yy, zz);
-    grid_size = size(X);
+    [X, Y, Z, grid_size] = get_structured_grid(locs, options.hx, options.hy, options.hz);
+    
    
-    hx = xx(2)-xx(1);
-    hy = yy(2)-yy(1);
-    hz = zz(2)-zz(1);   
-    
-    % Clean up unused vectors
-    clear xx yy zz
-    
     % Get a mask with the points that are inside and outside the convex
     % hull
     [in_bdy_mask, ~] = get_boundary_info(locs, X(:), Y(:), Z(:));
@@ -325,4 +312,4 @@ end
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished estimation of flows.'))
  
 
-end % function compute_neural_flows_3d_ug()
+end % function main_neural_flows_hs3d_scatter()
