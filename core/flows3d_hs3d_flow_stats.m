@@ -1,4 +1,4 @@
-function mfile_vel = get_vfield_info(mfile_vel, ux, uy, uz, this_tpt)
+function mfile_vel = flows3d_hs3d_flow_stats(mfile_vel, ux, uy, uz, this_tpt)
 % Get basic info of a velocity vector field
 % ARGUMENTS:
 %   mfile_vel  -- an mFile handle to the file where the data will be stored 
