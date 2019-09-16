@@ -1,11 +1,29 @@
 function [X, Y, Z, grid_size] = get_structured_grid(points_xyz, hx, hy, hz)
 % This function sgenreates a structured grid using meshgrid, from a
 % collection of scatterd points/locationss in 3D space.
-
-% Get limits for the structured grid if people did not give those
-% Author: Paula Sanz-Leon, QIMR February 2019
-
-% Human-readable labels for indexing dimensions of 4D arrays
+% 
+% ARGUMENTS:
+%   points_xyz -- a 2D array of size [num_regions/nodes/locations x 3]
+%                               
+%   hx         -- a scalar, desired space step size of the regular grid along x
+%   hy         -- a scalar, desired space step size of the regular grid along y
+%   hz         -- a scalar, desired space step size of the regular grid along z
+%
+% OUTPUTS:
+%   X, Y, Z    -- 3D arrays of size [M, N, P] generated using meshgrid.
+%   grid_size  -- vector with the size of the grid (ie [M, N, P]) 
+%
+% REQUIRES: 
+%         None()
+%
+% USAGE:
+%{     
+  
+%}
+%
+% MODIFICATION HISTORY:
+%     Paula Sanz-Leon, QIMR Berghofer February 2019
+% Human-readable labels for indexing dimensions of 3D arrays
 x_dim = 1;
 y_dim = 2;
 z_dim = 3;
