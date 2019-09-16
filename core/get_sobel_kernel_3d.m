@@ -1,5 +1,5 @@
 function [Gx, Gy, Gz] = get_sobel_kernel_3d()
-% Returns the 3D normalized Sobel kernel
+% Returns the 3D normalized Sobel kernel of size [3, 3, 3]
 % Matlab has a Sobel operator with slightly different weights,  
 % but I like these weights better
         

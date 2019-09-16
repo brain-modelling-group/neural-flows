@@ -1,4 +1,5 @@
 function [Gx, Gy, Gz] = get_laplacian_kernel_3d()
+% Returns the 3D normalized Laplacian kernel of size [3, 3, 3]
     Gx = zeros(3,3,3); 
     Gy = Gx; 
     Gz = Gx;
