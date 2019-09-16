@@ -1,4 +1,4 @@
-function varargout = flows3d_compute_structured_grid(data, X, Y, Z, time_vec, options) 
+function varargout = main_neural_flows_hs3d_grid(data, X, Y, Z, time_vec, options) 
  % New function name flows3d_compute_neuralflows_structured_grid() 
  % This function is mainly for testing purposes of flow calculations
  % Compute neural flows from data defined on a structured grid.
