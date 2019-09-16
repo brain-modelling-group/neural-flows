@@ -93,7 +93,7 @@ if is_phase
     end
 else
     % NOTE: This part is not strictly correct because Rubino's work is based on
-    %       the use of the signal envelope's phase.
+    %       the use of the phase of the signal envelope's.
     for tt=1:tpts
         instant_phi = phi(tt,:);
         instant_phi = instant_phi(:);
