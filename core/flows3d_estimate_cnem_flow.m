@@ -1,4 +1,4 @@
-function v = estimate_flow_cnem(phi, locs, dt, opts)
+function v = flows3d_estimate_cnem_flow(phi, locs, dt, opts)
 %% Calculate instantaneous phase-based flow at every time point
 %
 % ARGUMENTS:
