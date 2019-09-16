@@ -1,4 +1,4 @@
-function  [singularity_classification] =   classify_singularities(xyz_idx, mfile_vel_obj)
+function  [singularity_classification] =   singularity3d_classify_singularities(xyz_idx, mfile_vel_obj)
 % 1) calculates jacobian for each critical point, and then 
 % 2) classify type of critical point. 
 % ARGUMENTS:
