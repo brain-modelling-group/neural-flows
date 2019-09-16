@@ -1,22 +1,28 @@
 function [ux, uy, uz] = flows3d_hornschunck(F1, F2, alpha_smooth, max_iterations, uxo, uyo, uzo, hx, hy, hz, ht)
-% New name: flows3d_hornschunk()
-% This function estimates the velocity components between two subsequent 3D 
+%% This function estimates the velocity components between two subsequent 3D 
 % images using the Horn-Schunck optical flow method. 
 %
-%   Description :  
+% ARGUMENTS:
+%      - F1, F2      --    two subsequent 3D arrays or 3D image frames
+%      - alpha_smooth :    HS smoothness parameter, default value is 1.
+%      - max_iterations : max_number of iterations for convergence, default value is 10.
+%      - uxo, uyo, uzo: initial estimates of velocity components
+%      - hx, hy, hz, ht - space step size and time step size.
+% OUTPUT:
+%   ux, uy, ux -- 3D arrays with the velocity components along each of the
+%                 3 orthogonal axes. 
 %
-%   -F1, F2 :   two subsequent 3D arrays/images or frames
-%   -alpha_smooth :    HS smoothness parameter, default value is 1.
-%   -max_iterations : max_number of iterations for convergence, default value is 10.
-%   -uxInitial, uyInitial, uzInitial : 
-%
-%   REFRENCES:
-%   B. K. Horn and B. G. Schunck, Determining optical flow, Cambridge, MA,
+% AUTHOR:
+%     Paula Sanz-Leon, QIMR Berghofer December 2018
+% USAGE:
+%{
+    
+%}
+%   REFERENCES:
+%   B. K. Horn and B. G. Schunck, Determining optical flow,
 %   USA, Tech. Rep., 1980.
-%
-%  Paula Sanz-Leon, QIMR, Dec 2018 
-   
-
+%   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%           
 if nargin < 3
     alpha_smooth  = 1; 
     max_iterations = 32;    
@@ -33,7 +39,6 @@ end
 ux = uxo; 
 uy = uyo; 
 uz = uzo;
-
 
 % Calculate derivatives
 [Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht);
@@ -103,5 +108,4 @@ function avg_filter = vonneumann_neighbourhood_3d()
                               0  0  0];
     avg_filter = avg_filter./sum(abs(avg_filter(:)));
 
-end
-
+end % function vonneuman_neighbourhood_3d()
