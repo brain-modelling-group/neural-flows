@@ -61,7 +61,7 @@ shp      = alphaShape(locs, shpalpha);
 bdy = shp.boundaryFacets;
 
 % Calculate matrix B of cnem
-B = grad_B_cnem(locs, bdy);
+B = cnem_get_B_mat(locs, bdy);
 
 % Timepoints
 tpts = size(phi, 1); 
