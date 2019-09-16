@@ -27,7 +27,7 @@ set(gcf,'Position',pos);
 set(gcf,'color','w');
 
 for cc =1:tpts
-  xy = data;
+  xy = data(:, :, cc);
   pcolor(xy)
   shading interp
   axis off
