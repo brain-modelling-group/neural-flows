@@ -1,4 +1,4 @@
-function singularity_type = classify_orbits_3d(E)
+function singularity_type = singularity3d_classify_orbits_3d(E)
 % Classifies hyperbolic periodi orbits (p. o.) in 3D space based on the 
 % eigenvalues of the jacobian matrix. 
 
