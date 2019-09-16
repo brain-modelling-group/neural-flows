@@ -1,12 +1,15 @@
 function [wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured(direction, velocity)
-% Generates a linear moving front across 3d space.
+% Generates a plane "travelling" wave moving along one of the three main 
+% orthogonal axes of Euclidean space. The data is generating as a linear 
+% function of space (x, Y, or Z), so in a sense is a like sinusoidal plane
+% wave of infinite (temporal) period.
 %
 % ARGUMENTS:
 %           direction -- a string with the desired wave propagation direction.
 %                        Available: {'x', 'y', 'z', 'radial', 'any', 'all'}.
 %                        Default: {'x'}.
-%           directions -- an integer number between 1-4. Will fail
-%                         otherwise.
+%           velocity -- an integer number between 1-4. Will fail
+%                       otherwise.
 % OUTPUT:
 %           wave3d   -- a 4D array of size [21, 21, 21, 22]. The first 
 %                       dimension is time, and the last three dimensions are space.
@@ -62,33 +65,40 @@ switch direction
     case 'y'
         wave3d = permute(wave3d, [1 3 2 4]);
         temp = squeeze(wave3d(:, :, 11, 12));
+        ylabel_str = 'y-axis';
+        
     case 'z'
         wave3d = permute(wave3d, [1 4 2 3]);
         temp = squeeze(wave3d(:, 11, 12, :));
+        ylabel_str = 'z-axis';
+        
     otherwise
         % assume x direction
         temp = squeeze(wave3d(:, 11, :, 12));
+        ylabel_str = 'x-axis';
 end
 
 
 % Visual debugging of the first time point
 % TODO: generate a movie, perhaps of projections onto a 2d plane.
-figure('Name', 'nflows-planewave3d-space');
+fig_pcolor3 = figure('Name', 'nflows-travellingwave3d-space');
+these_axes = subplot(1,1,1, 'Parent', fig_pcolor3);
 tt = 1;
-pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)));
+pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)), 'axes', these_axes);
 xlabel('X')
 ylabel('Y')
 zlabel('Z')
 
-figure('Name', 'nflows-planewave3d-time')
+figure('Name', 'nflows-travellingwave3d-time')
 plot(time, squeeze(wave3d(:, 11, 12, 12)));
+xlim([time(1) time(end)])
 xlabel('time')
 ylabel('p(x, y, z)')
 
-figure('Name', 'nflows-planewave3d-space-time-1d')
+figure('Name', 'nflows-travellingwave3d-space-time-1d')
 plot(time, temp, 'color', [0.65 0.65 0.65]);
+xlim([time(1) time(end)])
 xlabel('time')
-ylabel('space: x-axis')
+ylabel(['space: ' ylabel_str])
 
 end % function generate_movingfront_3d_structured()
-
