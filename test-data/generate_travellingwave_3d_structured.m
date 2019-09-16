@@ -70,16 +70,19 @@ switch direction
     case 'y'
         wave3d = permute(wave3d, [1 3 2 4]);
         temp = squeeze(wave3d(:, :, 11, 12));
+        temp2 = squeeze(wave3d(:, :, :, 12));
         ylabel_str = 'y-axis';
         
     case 'z'
         wave3d = permute(wave3d, [1 4 2 3]);
-        temp = squeeze(wave3d(:, 11, 12, :));
+        temp  = squeeze(wave3d(:, 11, 12, :)); % indices do not mean anything special -- just selecting a plane of 3d space
+        temp2 = squeeze(wave3d(:, 12, :, :)); 
         ylabel_str = 'z-axis';
         
     otherwise
         % assume x direction
         temp = squeeze(wave3d(:, 11, :, 12));
+        temp2 = wave3d(:, :, :, 12); 
         ylabel_str = 'x-axis';
 end
 
@@ -105,5 +108,7 @@ plot(time, temp, 'color', [0.65 0.65 0.65]);
 xlim([time(1) time(end)])
 xlabel('time')
 ylabel(['space: ' ylabel_str])
+
+make_movie_gif(temp2)
 
 end % function generate_movingfront_3d_structured()
