@@ -15,12 +15,13 @@ function nabla_V = cnem_grad_V(B, V)
 % USAGE:
 %{     
 
-gradV = grad_cnem(B, V);
+gradV = cnem_grad_V(B, V);
 
 %}
 %
 % MODIFICATION HISTORY:
 %     JA Roberts, QIMR Berghofer, 2018
+%     Updated, documented by Paula Sanz-Leon -- QIMR 2019
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %  gradV = grad_cnem(XYZ,V,[IN_Tri_Ini])
