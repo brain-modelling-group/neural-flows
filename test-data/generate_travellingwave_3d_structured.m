@@ -23,6 +23,8 @@ function [wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured(directi
 % USAGE:
 %{
 
+[wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured('x');
+
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TODO: generalise so we can define grids of different sizes and set different
