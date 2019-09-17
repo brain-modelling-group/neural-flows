@@ -32,7 +32,7 @@ elseif nargin < 4
 end
 
 if ~exist('uxo', 'var') % assume the other do not exist either
-  [uxo, uyo, uzo] = get_initial_velocity_distribution(F1, isnan(F1));
+  [uxo, uyo, uzo] = flows3d_hs3d_get_initial_flows(F1, isnan(F1));
 end
 
 % Intial conditions; 
@@ -41,7 +41,7 @@ uy = uyo;
 uz = uzo;
 
 % Calculate derivatives
-[Ix, Iy, Iz, It] = calculate_derivatives_hsd3(F1, F2, hx, hy, hz, ht);
+[Ix, Iy, Iz, It] = flows3d_hs3d_calculate_partial_derivatives(F1, F2, hx, hy, hz, ht);
 
 %
 %avg_filter = fspecial3('average', 3);
