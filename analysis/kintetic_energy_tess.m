@@ -1,4 +1,4 @@
-function [energy_sum, energy_face, energy_vertex] = kinetic_energy_tess(flow_field, surf_tess, embedding_dimension)
+function [energy_sum, energy_face, energy_vertex] = calculate_energy_tess(flow_field, surf_tess, embedding_dimension)
 % Csompute_energy_states  Computation of low and high energy states based on optical flow estimates 
 % ARGUMENTS:
 %   flow_field          -- an array with optical flow field of size
