@@ -45,12 +45,21 @@ else
     direction = 'x';
 end
 
-tmp = strcmpi(varargin,'step'); 
+tmp = strcmpi(varargin,'hxyz'); 
 if any(tmp)
-    h = varargin{find(tmp)+1}; 
+    hxyz = varargin{find(tmp)+1}; 
 else
-    h = 1;
+    hxyz = 1;
 end
+
+
+tmp = strcmpi(varargin,'ht'); 
+if any(tmp)
+    ht = varargin{find(tmp)+1}; 
+else
+    ht = 1;
+end
+
 
 tmp = strcmpi(varargin,'velocity'); % note really a velocity but an integer scaling for circshift
 if any(tmp)
@@ -69,7 +78,7 @@ end
 % 
 max_val_x = 10;
 max_val_x1 = 100;
-x = -max_val_x:h:max_val_x;
+x = -max_val_x:hxyz:max_val_x;
 len_x = length(x);
 x1 = -max_val_x1:h:max_val_x1;
 len_x1 = length(x1);
@@ -78,7 +87,7 @@ len_x1 = length(x1);
 [X, ~, ~] = meshgrid(x1, x, x); % in metres
 
 % NOTE: hardcoded size 
-time = 0:len_x; % in seconds
+time = 0:ht:len_x; % in seconds
 
 A = -X;
 % Preallocate memory
