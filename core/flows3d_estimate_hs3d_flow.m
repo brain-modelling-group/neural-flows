@@ -32,28 +32,13 @@ hy = mfile_vel.hy;
 hz = mfile_vel.hz;
 ht = mfile_vel.ht;
 
+x_dim = 1;
+y_dim = 2;
+z_dim = 3;
+
 if strcmp(options.flow_calculation.init_conditions, 'random')
     seed_init_vel = options.flow_calculation.seed_init_vel;
     [uxo, uyo, uzo] = get_initial_velocity_distribution(grid_size, ~mfile_vel.in_bdy_mask, seed_init_vel);
-
-    % Do a burn-in period for the first frame (eg, two time points of data)
-    % Random initial conditions are horrible.   
-
-    this_tpt = 1;
-    FA = mfile_data.data(:, :, :, this_tpt);
-    FB = mfile_data.data(:, :, :, this_tpt+1);
-
-    burnin_len = 4; % for iterations, not much but better than one
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started burn-in period for random initial velocity conditions.'))
-
-    for bb=1:burnin_len
-        % Calculate the velocity components
-        [uxo, uyo, uzo] = flows3d_hornschunck(FA, FB, alpha_smooth, ...
-                                                    max_iterations, ...
-                                                    uxo, uyo, uzo, ...
-                                                    hx, hy, hz, ht);       
-    end
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished burn-in period for random initial velocity conditions.'))
 
 else
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Using pre-calculated initial velocity conditions.'))
@@ -63,28 +48,52 @@ else
     uyo = options.flow_calculation.uyo;
     uzo = options.flow_calculation.uzo;   
 end
-    
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started estimation of flows.'))
 
-    for this_tpt = 1:dtpts-1
+% Create mfile_vel disk
+mfile_vel.ux(size(uxo, x_dim), size(uxo, y_dim), size(uxo, z_dim), dtpts-1) = 0;    
+mfile_vel.uy(size(uyo, x_dim), size(uyo, y_dim), size(uyo, z_dim), dtpts-1) = 0;
+mfile_vel.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
 
-           % Read activity data                
-           FA = mfile_data.data(:, :, :, this_tpt);
-           FB = mfile_data.data(:, :, :, this_tpt+1);
 
-           % Calculate the velocity components
-            [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, ...
-                                                        max_iterations, ...
-                                                        uxo, uyo, uzo, ...
-                                                        hx, hy, hz, ht);                                
+% Do a burn-in period for the first frame (eg, two time points of data)
 
-           % Save the velocity components
-           mfile_vel.ux(:, :, :, this_tpt) = single(uxo);
-           mfile_vel.uy(:, :, :, this_tpt) = single(uyo);
-           mfile_vel.uz(:, :, :, this_tpt) = single(uzo);
+this_tpt = 1;
+FA = mfile_data.data(:, :, :, this_tpt);
+FB = mfile_data.data(:, :, :, this_tpt+1);
 
-           % Save some other useful information
-           mfile_vel = get_vfield_info(mfile_vel, uxo(:), uyo(:), uzo(:), this_tpt);
+burnin_len = 4; % for iterations, not much but better than one
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started burn-in period for random initial velocity conditions.'))
 
-    end
+for bb=1:burnin_len
+    % Calculate the velocity components
+    [uxo, uyo, uzo] = flows3d_hornschunck(FA, FB, alpha_smooth, ...
+                                                    max_iterations, ...
+                                                    uxo, uyo, uzo, ...
+                                                    hx, hy, hz, ht);       
+end
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished burn-in period for random initial velocity conditions.'))
+
+
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started estimation of flows.'))
+for this_tpt = 1:dtpts-1
+
+    % Read activity data                
+    FA = mfile_data.data(:, :, :, this_tpt);
+    FB = mfile_data.data(:, :, :, this_tpt+1);
+
+    % Calculate the velocity components
+    [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, ...
+                                                max_iterations, ...
+                                                uxo, uyo, uzo, ...
+                                                hx, hy, hz, ht);                                
+
+    % Save the velocity components
+    mfile_vel.ux(:, :, :, this_tpt) = single(uxo);
+    mfile_vel.uy(:, :, :, this_tpt) = single(uyo);
+    mfile_vel.uz(:, :, :, this_tpt) = single(uzo);
+
+    % Save some other useful information to guesstimate the singularity detection threshold
+    mfile_vel = flows3d_hs3d_flow_stats(mfile_vel, uxo(:), uyo(:), uzo(:), this_tpt);
+
+end
 end % function run_neural_flows3d_loop()
