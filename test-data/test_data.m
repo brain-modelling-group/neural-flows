@@ -1,4 +1,5 @@
-%[wave3d, X, Y, Z, time] = generate_planewave_3d_structured('x');
+function test_travelling_wave3d_structured()
+
 [wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured();
  %%
  options.chunk = 42;  
@@ -22,3 +23,6 @@
  
  %%
  for tt=1:21; clf; pcolor3(ux(:, :, :, tt)); caxis([0 3.5]);colorbar;pause(0.5);end
+ 
+ 
+end
