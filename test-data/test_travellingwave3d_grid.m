@@ -1,8 +1,6 @@
 function test_travellingwave3d_grid()
 
 % Generate data
-
-
  options.hx = 1;
  options.hy = 1;
  options.hz = 1;
