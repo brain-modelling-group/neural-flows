@@ -38,8 +38,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     
   
     % NOTES TO CLEAN UP
-    % limits of XYZ space, presumably coming from fmri data
-    % TODO: estimate timepoints of interest using the second order temporal
+    % TODO:FUTURE: explore around timepoints of interest using the second order temporal
     % derivative
     % NOTES: on performance on interpolation sequential for loop with 201 tpts - 8.5 
     % mins. That means that for the full simulation of 400,000 tpts
@@ -234,60 +233,6 @@ if nargout > 1
     varargout{2} = mfile_interp;
     varargout{3} = mfile_sings;
 end
-             
-% ---------------------- CHILD FUNCTION ----------------------------------%
-% This child function is now a standalone function called 
-% run_neural_flows_3d_ug.m
-% 
-    % No way around a sequential for loop for optical flows
-    function compute_flows_3d()
-        % Do a burn-in period for the first frame (eg, two time points of data)
-        % Random initial conditions are horrible.
-        
-        this_tpt = 1;
-        FA = mfile_interp.data(:, :, :, this_tpt);
-        FB = mfile_interp.data(:, :, :, this_tpt+1);
-        
-        burnin_len = 4; % for iterations, not much but better than one
-        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started burn-in period for estimated initial velocity conditions.'))
-        for bb=1:burnin_len
-            % Calculate the velocity components
-            [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, ...
-                                                        max_iterations, ...
-                                                        uxo, uyo, uzo, ...
-                                                        hx, hy, hz, ht);       
-        end
-        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished burn-in period for estimated initial velocity conditions.'))
-        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started estimation of flows.'))
-
-        for this_tpt = 1:dtpts-1
-
-                % Read data
-                % Save grid - needed for singularity tracking
-                
-               FA = mfile_interp.data(:, :, :, this_tpt);
-               FB = mfile_interp.data(:, :, :, this_tpt+1);
-
-               % Calculate the velocity components
-               [uxo, uyo, uzo] = compute_flow_hs3d(FA, FB, alpha_smooth, ...
-                                                           max_iterations, ...
-                                                           uxo, uyo, uzo, ...
-                                                           hx, hy, hz, ht);                                
-
-               % Save the velocity components
-               % TODO: do it every 5-10 samples perhaps - spinning disks may be a
-               % problem for execution times
-               mfile_vel.ux(:, :, :, this_tpt) = single(uxo);
-               mfile_vel.uy(:, :, :, this_tpt) = single(uyo);
-               mfile_vel.uz(:, :, :, this_tpt) = single(uzo);
-               
-               % Save some other useful information
-               mfile_vel = get_vfield_info(mfile_vel, uxo(:), uyo(:), uzo(:), this_tpt);
-                              
-        end
-    
-    end % function compute_flows_3d()
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished estimation of flows.'))
- 
+              
 
 end % function main_neural_flows_hs3d_scatter()
