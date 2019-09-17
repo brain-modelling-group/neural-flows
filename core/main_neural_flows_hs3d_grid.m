@@ -76,16 +76,8 @@ function varargout = main_neural_flows_hs3d_grid(data, X, Y, Z, options)
     % Delete sentinels. If these varibales are OnCleanup objects, then the 
     % files will be deleted.
     delete(mfile_vel_sentinel)
-    
-    % Check if we actually want to get the handles to the matfiles 
-    minnout = 0;
-    maxnout = 3;
-    % NOTE: not sure this check is ok
-    nargoutchk(minnout, maxnout);
 
-if nargout > 1
+if nargout > 0
     varargout{1} = mfile_vel;
-    varargout{2} = mfile_interp;
-    varargout{3} = mfile_sings;
 end 
 end % function flows3d_compute_structured_grid()
