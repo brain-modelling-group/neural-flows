@@ -106,3 +106,4 @@ else
     out.n1 = n1;
     out.n2 = n2;
 end
+% end cohcorrgram()
