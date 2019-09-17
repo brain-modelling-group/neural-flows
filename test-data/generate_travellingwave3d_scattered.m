@@ -67,20 +67,27 @@ end
 
 [X, Y, Z, ~] = get_structured_grid(locs, hxyz, hxyz, hxyz);
 
-%x = min(X(:)):hxyz:max(X(:));
-%x1 = (min(X(:))-10):hxyz:(max(X(:))+10);
+x = min(X(:)):hxyz:max(X(:));
+y = min(Y(:)):hxyz:max(Y(:));
+z = min(Z(:)):hxyz:max(Z(:));
+
+x1 = (min(X(:))-10):hxyz:(max(X(:))+10);
 %len_x1 = length(x1);
+[X1, ~, ~] = meshgrid(x1, y, z);
 
 % NOTE: hardcoded size 
 time = 0:ht:10; % in seconds
 
-A = -X;
+A = -X1;
 % Preallocate memory
 wave3d(length(time), size(locs, 1)) = 0;
 
 
 for tt=1:length(time)
     B = circshift(A, velocity*tt, 2);
+    B = B(:, 11:end-10, :);
+    % This step is super slow -- so do not run this example for long
+    % timeseries.
     data_interpolant = scatteredInterpolant(X(:), Y(:), Z(:), B(:), 'linear', 'none');
     wave3d(tt, :) = data_interpolant(locs(:, 1), locs(:, 2), locs(:, 3));
 end
