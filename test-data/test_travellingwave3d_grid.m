@@ -12,7 +12,7 @@ function test_travellingwave3d_grid()
  options.flow_calculation.alpha_smooth   = 0.1;
  options.flow_calculation.max_iterations = 64;
 
- [mfile_flows, ~, ~] = main_neural_flows_hs3d_grid(wave3d, X, Y, Z, options);
+ mfile_flows = main_neural_flows_hs3d_grid(wave3d, X, Y, Z, options);
 
  fig_hist = figure('Name', 'nflows-test-histograms');
 
