@@ -1,4 +1,4 @@
-function [wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured(direction, velocity)
+function [wave3d, X, Y, Z, time] = generate_travellingwave_3d_grid(direction, velocity)
 % Generates a plane "travelling" wave moving along one of the three main 
 % orthogonal axes of Euclidean space. The data is generating as a linear 
 % function of space (x, Y, or Z), so in a sense is a like sinusoidal plane
