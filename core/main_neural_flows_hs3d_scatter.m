@@ -13,11 +13,11 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     %       of brain network embedded in 3D dimensional space, or source
     %       locations from MEG.
     % options
-    %        .interp_data: a structure
+    %        .data_interpolation: a structure
     %                    --  .file_exists  a boolean flag to determine if the 
     %                               interpolated data had been precalculated or not
     %                               and skip that step. 
-    %        .interp_data: -- .file_name a string with the name of the
+    %        .data_interpolation: -- .file_name a string with the name of the
     %                          matfile where the interpolated data are stored
     %        .sing_detection -- .datamode = 'vel' % use velocity fields or
     %        surfaces to detect singularities
@@ -140,20 +140,6 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     
     flows3d_estimate_hs3d_flow(mfile_interp, mfile_vel, options)
     
-    
-%---------------------- DETECT NULL FLOWS ---------------------------------%    
-    
-   
-    
-    % This function runs the loop over timeace/time]
-    % This parameter should perhaps be sapoints and saves the velocity
-    % fields into a file
-    detection_th = 0.1; % [in units of space/time] % conisder using z-scores?
-    mfile_vel.detection_threshold = detection_th;
-   
-    % Calculate velocity fields
-    compute_flows_3d()
-    
     % Save grid - needed for singularity tracking and visualisation
     % Consider saving min max values and step, saves memory
     mfile_vel.X = X;
@@ -172,7 +158,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     delete(mfile_interp_sentinel)    
     delete(mfile_vel_sentinel)
     
-%------------------------ DETECT SINGULARITIES ---------------------------%    
+%---------------------- DETECT NULL FLOWS ---------------------------------%    
    
    % NOTE: TODO: which criterion to use for the detection therhesold should  be a
    % parameter it can be rerun with different types
@@ -183,23 +169,18 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
    
    switch options.sing_detection.datamode
        case 'surf'
-           % Use null-isosurface intersection
-           % First calculate them
-           % NOTE: at the moment this partace/time]
-    % This parameter should perhaps be sa is kind-of-deprecated
-           fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started extraction of critical isosurfaces'))
-           Calculate critical isosurfaces
-           [mfile_surf, mfile_surf_sentinel] = par_get_critical_isosurfaces(mfile_vel);
-           fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished extraction of critical isosurfaces'))
+          error(['neural-flows:: ', mfilename, '::FutureOption. This singularity detection datamode is not fully implemented yet.'])
+           %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started extraction of critical isosurfaces'))
+           %Calculate critical isosurfaces
+           %[mfile_surf, mfile_surf_sentinel] = xperimental_extract_null_isosurfaces_parallel(mfile_vel);
+           %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished extraction of critical isosurfaces'))
        case 'vel'
            mfile_surf = [];
            mfile_surf_sentinel = [];
            % Use velocity vector fields
-           
        otherwise
           error(['neural-flows:: ', mfilename, '::UnknownOption. Invalid datamode for detecting singularities.'])
    end
-   
    
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started detection of critical points.'))
    % Detect intersection of critical isosurfaces
