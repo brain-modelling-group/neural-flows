@@ -1,4 +1,4 @@
-function test_travelling_wave3d_structured()
+function test_travelling_wave3d_grid()
 
 [wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured();
  %%
