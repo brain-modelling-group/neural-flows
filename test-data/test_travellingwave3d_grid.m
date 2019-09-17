@@ -6,8 +6,8 @@ function test_travellingwave3d_grid()
  options.hx = 0.5;
  options.hy = 0.5;
  options.hz = 0.5;
- options.ht = 1;
- [wave3d, X, Y, Z, ~] = generate_travellingwave3d_grid('visual_debugging', false, 'step', options.hx);
+ options.ht = 0.5;
+ [wave3d, X, Y, Z, ~] = generate_travellingwave3d_grid('visual_debugging', false, 'hxyz', options.hx, 'ht', options.ht);
  
  options.flow_calculation.init_conditions = 'random';
  options.flow_calculation.seed_init_vel = 42;
