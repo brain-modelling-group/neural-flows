@@ -34,11 +34,11 @@ switch data_mode
     case 'surf'
         % NOTE: Slow with full resolution surfaces (50k faces each) but seems to give precise-ish locations
         % and it's not fully functional
-        null_points_3d = flows3d_grid_detect_nullflows_velocities(mfile_obj, X, Y, Z, in_bdy_mask);
+        null_points_3d = xperimental_detect_nullflows_surfaces(mfile_obj, X, Y, Z, in_bdy_mask);
     case 'vel'
         % NOTE: Super fast, but gives lots of points that do not seem to be
         % intersecting
-        null_points_3d = xperimental_detect_nullflows_surfaces(mfile_obj, index_mode);   
+        null_points_3d = flows3d_grid_detect_nullflows_velocities(mfile_obj);   
 end
         
 end % function flows3d_hs3d_detect_nullflows_parallel()
