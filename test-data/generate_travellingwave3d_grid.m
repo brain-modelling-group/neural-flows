@@ -46,9 +46,14 @@ if nargin < 2
     velocity = 1;
 end
 
-x = -10:10;
+max_val_x = 10;
+max_val_x1 = 100;
+h=1;
+x = -max_val_x:h:max_val_x;
 len_x = length(x);
-x1 = -100:100;
+x1 = -max_val_x1:h:max_val_x1;
+len_x1 = length(x1);
+
 
 [X, ~, ~] = meshgrid(x1, x, x); % in metres
 
@@ -59,32 +64,34 @@ A = -X;
 % Preallocate memory
 wave3d(length(time), len_x, len_x, len_x) = 0;
 
-
-
+idx_start = ceil(len_x1/2);
+idx_end   = idx_start+len_x;
 for tt=1:length(time)
     B = circshift(A, velocity*tt, 2);
-    wave3d(tt, :, :, :) = B(:, 101:121, :);
+    wave3d(tt, :, :, :) = B(:, idx_start:idx_end, :);
 end
 
 [X, Y, Z] = meshgrid(x, x, x); % in metres
 
+idx_1 = ceil(len_x/2);
+idx_2 = idx_1 + 1;
 switch direction
     case 'y'
         wave3d = permute(wave3d, [1 3 2 4]);
-        temp = squeeze(wave3d(:, :, 11, 12));
+        temp = squeeze(wave3d(:, :, idx_1, idx_2));
         temp2 = squeeze(wave3d(:, :, :, 12));
         ylabel_str = 'y-axis';
         
     case 'z'
         wave3d = permute(wave3d, [1 4 2 3]);
-        temp  = squeeze(wave3d(:, 11, 12, :)); % indices do not mean anything special -- just selecting a plane of 3d space
-        temp2 = squeeze(wave3d(:, 12, :, :)); 
+        temp  = squeeze(wave3d(:, idx_1, idx_2, :)); % indices do not mean anything special -- just selecting a plane of 3d space
+        temp2 = squeeze(wave3d(:, idx_2, :, :)); 
         ylabel_str = 'z-axis';
         
     otherwise
         % assume x direction
-        temp = squeeze(wave3d(:, 11, :, 12));
-        temp2 = wave3d(:, :, :, 12); 
+        temp = squeeze(wave3d(:, idx_1, :, idx_2));
+        temp2 = wave3d(:, :, :, idx_2); 
         ylabel_str = 'x-axis';
 end
 
@@ -100,7 +107,7 @@ ylabel('Y')
 zlabel('Z')
 
 figure('Name', 'nflows-travellingwave3d-time')
-plot(time, squeeze(wave3d(:, 11, 12, 12)));
+plot(time, squeeze(wave3d(:, idx_1, idx_2, idx_2)));
 xlim([time(1) time(end)])
 xlabel('time')
 ylabel('p(x, y, z)')
