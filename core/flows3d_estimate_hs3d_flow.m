@@ -1,7 +1,5 @@
 function flows3d_estimate_hs3d_flow(mfile_data, mfile_vel, options)
-% alternative name: flows3d_compute_neural_flows()
-% TODO: Future self: Document this function. 
-% Make standalone function to peform the optical flow loop
+
 
 % Read kind of input paramters, options is a bad name for a structure
 % with parameters that are not actually mandatory 

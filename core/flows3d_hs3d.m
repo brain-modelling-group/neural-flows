@@ -44,12 +44,11 @@ uz = uzo;
 [Ix, Iy, Iz, It] = flows3d_hs3d_calculate_partial_derivatives(F1, F2, hx, hy, hz, ht);
 
 %
-%avg_filter = fspecial3('average', 3);
 avg_filter = vonneumann_neighbourhood_3d();
 % The average should not include the central point
+%avg_filter = fspecial3('average', 3);
 %avg_filter(2, 2, 2) = 0;
 
-%avg_filter = vonneumann_neighbourhood_3d();
 
 % Call nanconvn with the parametes we're going to use to get the edge 
 % correction image, and avoid further calls in the iterations.

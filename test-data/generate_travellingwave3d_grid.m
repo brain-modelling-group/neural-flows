@@ -84,7 +84,7 @@ len_x1 = length(x1);
 [X, ~, ~] = meshgrid(x1, x, x); % in metres
 
 % NOTE: hardcoded size 
-time = 0:ht:len_x; % in seconds
+time = 0:ht:21; % in seconds
 
 A = -X;
 % Preallocate memory

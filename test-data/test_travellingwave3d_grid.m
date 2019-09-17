@@ -14,7 +14,7 @@ function test_travellingwave3d_grid()
 
  mfile_flows = main_neural_flows_hs3d_grid(wave3d, X, Y, Z, options);
 
- fig_hist = figure('Name', 'nflows-test-histograms');
+ fig_hist = figure('Name', 'nflows-test-histograms-random-ic');
 
  subplot(1, 3, 1, 'Parent', fig_hist)
  histogram(mfile_flows.ux(2:end-1, 2:end-1, 2:end-1, :))
@@ -24,6 +24,7 @@ function test_travellingwave3d_grid()
  
  subplot(1, 3, 3, 'Parent', fig_hist)
  histogram(mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :))
+  
  %
  %for tt=1:22; pcolor3(squeeze(wave3d(tt, :, :, :))); caxis([-40 10]); pause(0.5); clf;end
  %
