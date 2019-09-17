@@ -1,7 +1,7 @@
 function out = count_singularities(sing_numeric_labels)
 % A wrapper function to count how many singularities of each type
 % we have in the input structure.
-%
+% s3d_count_singularities
 %
 % ARGUMENTS:
 %        sing_numeric_labels -- a struct of length num_frames/timepoints
