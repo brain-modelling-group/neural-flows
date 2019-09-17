@@ -1,7 +1,7 @@
 function test_travellingwave3d_grid()
 
 % Generate data
-[wave3d, X, Y, Z, ~] = generate_travellingwave_3d_structured();
+[wave3d, X, Y, Z, ~] = generate_travellingwave3d_grid('visual_debugging', false, 'step', 0.5);
 
  options.hx = 1;
  options.hy = 1;
