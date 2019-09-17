@@ -1,4 +1,4 @@
-function null_points_3d = flows3d_hs3d_detect_nullflows_parallel(mfile_obj, X, Y, Z, in_bdy_mask, data_mode)
+function null_points_3d = flows3d_grid_detect_nullflows_parallel(mfile_obj, X, Y, Z, in_bdy_mask, data_mode)
 % Locates null regions of velocity fields. These are good 'singularity' candidates. 
 % ARGUMENTS:
 %          mfile_obj -- a MatFile handle with the critical isosurfaces or
@@ -33,11 +33,11 @@ function null_points_3d = flows3d_hs3d_detect_nullflows_parallel(mfile_obj, X, Y
 switch data_mode
     case 'surf'
         % Slow with full resolution surfaces (50k faces each) but seems to give precise-ish locations
-        null_points_3d = use_isosurfaces(mfile_obj, X, Y, Z, index_mode, in_bdy_mask);
+        null_points_3d = flows3d_grid_detect_nullflows_velocities(mfile_obj, X, Y, Z, in_bdy_mask);
     case 'vel'
         % Super fast, but gives lots of points that do not seem to be
         % intersecting
-        null_points_3d = use_velocity_fields(mfile_obj, index_mode);   
+        null_points_3d = xperimental_detect_nullflows_surfaces(mfile_obj, index_mode);   
 end
         
 end % function flows3d_hs3d_detect_nullflows_parallel()
