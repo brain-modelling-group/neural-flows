@@ -36,10 +36,7 @@ function [wave3d, X, Y, Z, time] = generate_travellingwave3d_grid(varargin)
 
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TODO: generalise so we can define grids of different sizes and set different
-%       propogation velocities.
-%       consider addding a flag to use visual debugging or not
-
+% TODO: generalise set different propogation velocities.
 
 tmp = strcmpi(varargin,'direction'); 
 if any(tmp)
