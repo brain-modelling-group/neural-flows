@@ -21,12 +21,8 @@ function varargout = main_neural_flows_hs3d_grid(data, X, Y, Z, options)
       rng(options.chunk) % for the cluster environment.
     end
     
-    keep_vel_file    = true;
-
     t_dim = 1; % time
     dtpts  = size(data, t_dim);
-      
- 
     grid_size = size(X);
     hx = options.hx; 
     hy = options.hy;
@@ -49,14 +45,15 @@ function varargout = main_neural_flows_hs3d_grid(data, X, Y, Z, options)
     options.flow_calculation.grid_size      = grid_size;
         
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started estimation of neural flows.'))
+    
     % We open a matfile to store output and avoid huge memory usage 
     root_fname_vel = 'temp_flows';
-    
+    keep_vel_file    = true;
     [mfile_vel, mfile_vel_sentinel] = create_temp_file(root_fname_vel, keep_vel_file); 
     % Save mask with points inside the convex hull of the brain
     mfile_vel.in_bdy_mask = in_bdy_mask;
     
-    options.flow_calculation.seed_init_vel = seed_init_vel;
+    options.flow_calculation.seed_init_vel = 42;
     
     % This function runs the loop over timepoints and saves the velocity
     % fields into a file
@@ -85,17 +82,5 @@ function varargout = main_neural_flows_hs3d_grid(data, X, Y, Z, options)
     % files will be deleted.
     delete(mfile_vel_sentinel)
     
-
-%-------------------------------------------------------------------------%
-% Check if we actually want to get the handles to the matfiles 
-minnout = 0;
-maxnout = 3;
-nargoutchk(minnout, maxnout);
-
-if nargout > 1
-    varargout{1} = mfile_vel;
-    varargout{2} = mfile_interp;
-    varargout{3} = mfile_sings;
-end
-             
+     
 end % function flows3d_compute_structured_grid()
