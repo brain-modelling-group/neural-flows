@@ -113,4 +113,4 @@ ylabel(['space: ' ylabel_str])
 
 make_movie_gif(temp2)
 
-end % function generate_movingfront_3d_structured()
+end % function generate_travellingwave3d_grid()
