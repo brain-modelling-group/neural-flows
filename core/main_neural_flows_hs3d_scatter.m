@@ -1,4 +1,4 @@
-function varargout = main_neural_flows_hs3d_scatter(data, locs, time_vec, options) 
+function varargout = main_neural_flows_hs3d_scatter(data, locs, options) 
     % This function takes as input neural activity recorded from scattered 
     % points in space (aka an unstructured grid)
     % This function: 
@@ -12,8 +12,6 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, time_vec, option
     %       These corresponds to the centres of gravity: ie, node locations 
     %       of brain network embedded in 3D dimensional space, or source
     %       locations from MEG.
-    % time_vec: a vector with the timepoints. Not really used except for
-    % chechink the time step value.
     % options
     %        .interp_data: a structure
     %                    --  .file_exists  a boolean flag to determine if the 
@@ -27,13 +25,16 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, time_vec, option
     %                           or subscript to find singularities
     
     % basic options
-    %options.interp_data.file_exists = false;
+    %options.data_interpolation.file_exists = false;
     %options.sing_detection.datamode = 'vel''
     %options.sing_detection.inexmode = 'linear';
+    %options.flow_calculation.alpha_smooth = 0.125; 
+    %options.flow_calculation.max_iterations = 32;
+    %options.flow_calculation.init_conditions = 'random';
     %options.hz = 1;
     %options.hy = 1;
     %options.hx = 1;
-    %options.dt = 1;
+    %options.ht = 1;
     
   
     % NOTES TO CLEAN UP
@@ -46,6 +47,8 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, time_vec, option
     % resolution of 2mm.
     % Same dataset with a resolution of 1 mm -- matching fmri resolution
     % takes 430 s -- 
+     % NOTE: full resolution (eg, approx hx*hy*hz=1mm^3), each interpolation
+    % step takes about 24 seconds. Downsampling to 8mm^3 - side 2mm it takes 3s.
     
     
     % With the parallel interpolation this task takes under one 1h;
@@ -62,53 +65,33 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, time_vec, option
       rng(options.chunk) % for the cluster environment.
     end
     
-    % flags to decide what to do with temp intermediate files
-    keep_interp_file = true;
-    keep_vel_file    = true;
+   
 
     % Labels for 2D input arrays
-    %n_dim = 2; % time
-    t_dim = 1; % time
-    
-    tpts      = size(data, t_dim);
-    %num_nodes = size(data, n_dim);
-    
-    down_factor_t = 1; % NOTE: should be input. Downsampling factor for t-axis
-    time_vec      = 1:down_factor_t:tpts; % in milliseconds
-    ht            = time_vec(2) - time_vec(1); % NOTE: should be input
-    data          = data(time_vec, :);
-    
-    % Recalculate timepoints
+    t_dim = 1; % time    
     dtpts = size(data, t_dim);
   
-    % NOTE: full resolution (eg, approx hx*hy*hz=1mm^3), each interpolation
-    % step takes about 24 seconds. Downsampling to 8mm^3 - side 2mm it takes 3s.
-    
-   
-    
-    % Human-readable labels for indexing dimensions of 4D arrays
-    x_dim = 1;
-    y_dim = 2;
-    z_dim = 3;
-    down_factor_xyz = 1; % Not allowed to get different downsampling for space
-    
-    
+    ht = options.ht;
+    hx = options.hx; 
+    hy = options.hy;
+    hz = options.hz; 
+  
+    % Generate a structured grid    
     [X, Y, Z, grid_size] = get_structured_grid(locs, options.hx, options.hy, options.hz);
     
    
     % Get a mask with the points that are inside and outside the convex
     % hull
-    [in_bdy_mask, ~] = get_boundary_info(locs, X(:), Y(:), Z(:));
+    [in_bdy_mask, ~] = data3d_calculate_boundary(locs, X(:), Y(:), Z(:));
     in_bdy_mask = reshape(in_bdy_mask, grid_size);
     
 %--------------------- INTERPOLATION OF DATA -----------------------------%    
     % Perform interpolation on the data and save in a temp file -- asumme
     % OS is Linux
-    if ~options.interp_data.file_exists % Or not necesary because it is fmri data
+     % flags to decide what to do with temp intermediate files
+    keep_interp_file = true;
+    if ~options.data_interpolation.file_exists % Or not necesary because it is fmri data
         fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started interpolating data.'))
-        
-        % Sequential interpolation
-        %[mfile_interp, mfile_interp_sentinel] = interpolate_3d_data(data, locs, X, Y, Z, in_bdy_mask, keep_interp_file); 
         
         % Parallel interpolation with the parallel toolbox
         [mfile_interp, mfile_interp_sentinel] = par_interpolate_3d_data(data, ...
@@ -118,13 +101,13 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, time_vec, option
          
         % Clean up parallel pool
         % delete(gcp); % commented because it adds 30s-1min of overhead
-         options.interp_data.file_exists = true;
+         options.data_interpolation.file_exists = true;
         
          % Saves full path to file
-         options.interp_data.file_name = mfile_interp.Properties.Source;
+         options.data_interpolation.file_name = mfile_interp.Properties.Source;
     else
         % Load the data if file already exists
-        mfile_interp = matfile(options.interp_data.file_name);
+        mfile_interp = matfile(options.data_interpolation.file_name);
         mfile_interp_sentinel = [];
     end
         mfile_interp.options = options;
@@ -134,12 +117,9 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, time_vec, option
 
 %------------------------ FLOW CALCULATION -------------------------------%
     % Parameters for optical flow-- could be changed, could be parameters
-    alpha_smooth   = 1;
-    max_iterations = 16;
+    keep_vel_file    = true;
     
-    % Save flow calculation parameters parameters 
-    options.flow_calculation.alpha_smooth = alpha_smooth;
-    options.flow_calculation.max_iterations = max_iterations;
+    % Save flow calculation parameters
     options.flow_calculation.dtpts  = dtpts;
     options.flow_calculation.grid_size = grid_size;
         
@@ -159,25 +139,23 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, time_vec, option
     end
     options.flow_calculation.seed_init_vel = seed_init_vel;
     
-    [uxo, uyo, uzo] = get_initial_velocity_distribution(grid_size, ~in_bdy_mask, seed_init_vel);
+    flows3d_estimate_hs3d_flow(mfile_interp, mfile_vel, options)
     
-    % The following lines will create the file on disk
-    mfile_vel.ux(size(uxo, x_dim), size(uxo, y_dim), size(uxo, z_dim), dtpts-1) = 0;    
-    mfile_vel.uy(size(uyo, x_dim), size(uyo, y_dim), size(uyo, z_dim), dtpts-1) = 0;
-    mfile_vel.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
     
-    %
+%---------------------- DETECT NULL FLOWS ---------------------------------%    
+    
+   
+    
     % This function runs the loop over timeace/time]
     % This parameter should perhaps be sapoints and saves the velocity
     % fields into a file
-    detection_th = 0.1; % [in units of space/time]
+    detection_th = 0.1; % [in units of space/time] % conisder using z-scores?
     mfile_vel.detection_threshold = detection_th;
    
     % Calculate velocity fields
     compute_flows_3d()
     
     % Save grid - needed for singularity tracking and visualisation
-    % TODO: save time;  
     % Consider saving min max values and step, saves memory
     mfile_vel.X = X;
     mfile_vel.Y = Y;
@@ -200,7 +178,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, time_vec, option
    % NOTE: TODO: which criterion to use for the detection therhesold should  be a
    % parameter it can be rerun with different types
    % Close the file to avoid corruption
-   detection_threshold = guesstimate_detection_threshold(mfile_vel.min_nu);
+   detection_threshold = flows3d_hs3d_detect_nullflows_guesstimate_threshold(mfile_vel.min_nu);
    mfile_vel.detection_threshold = detection_threshold;
    mfile_vel.Properties.Writable = false;
    
