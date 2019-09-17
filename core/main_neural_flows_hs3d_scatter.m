@@ -113,13 +113,12 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
 
 %------------------------ FLOW CALCULATION -------------------------------%
     % Parameters for optical flow-- could be changed, could be parameters
-    keep_vel_file    = true;
+    keep_vel_file    = true; % TODO: probably turn into input parameter
     
     % Save flow calculation parameters
     options.flow_calculation.dtpts  = dtpts;
     options.flow_calculation.grid_size = grid_size;
         
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started calculating velocity fields.'))
     % We open a matfile to store output and avoid huge memory usage 
     root_fname_vel = 'temp_flows';
     
@@ -135,6 +134,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     end
     options.flow_calculation.seed_init_vel = seed_init_vel;
     
+    % Here is where the magic happens
     flows3d_estimate_hs3d_flow(mfile_interp, mfile_vel, options)
     
     % Save grid - needed for singularity tracking and visualisation
@@ -150,15 +150,16 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     mfile_vel.ht = ht; % ms
     
     mfile_vel.options = options;
-    % Delete sentinels. If these varibales are OnCleanup objects, then the 
+    % Delete sentinels. If these variablesales are OnCleanup objects, then the 
     % files will be deleted.
     delete(mfile_interp_sentinel)    
     delete(mfile_vel_sentinel)
     
 %---------------------- DETECT NULL FLOWS ---------------------------------%    
    
-   % NOTE: TODO: which criterion to use for the detection therhesold should  be a
-   % parameter it can be rerun with different types
+   % NOTE: TODO: The criterion/value for the detection therhesold should be a
+   % parameter it can be rerun with different types.
+   
    % Close the file to avoid corruption
    detection_threshold = flows3d_hs3d_detect_nullflows_guesstimate_threshold(mfile_vel.min_nu);
    mfile_vel.detection_threshold = detection_threshold;
@@ -172,9 +173,9 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
            %[mfile_surf, mfile_surf_sentinel] = xperimental_extract_null_isosurfaces_parallel(mfile_vel);
            %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished extraction of critical isosurfaces'))
        case 'vel'
+           % Use velocity vector fields
            mfile_surf = [];
            mfile_surf_sentinel = [];
-           % Use velocity vector fields
        otherwise
           error(['neural-flows:: ', mfilename, '::UnknownOption. Invalid datamode for detecting singularities.'])
    end
