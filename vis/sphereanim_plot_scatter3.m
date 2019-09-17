@@ -25,19 +25,19 @@ function sphereanim_plot_scatter3(yp, node_locs, cmap)
 if nargin < 3
     cmap='gray';
 end
-max_val = abs(max(yp(:)));
+max_val = max(abs(yp(:)));
 crange = [-max_val, max_val];
 
 try 
     crange = [-1, 1];
     yp= standardise_range(yp, crange);
-    cmap = bluered(256);
+    cmap = bluegred(256);
 catch
     disp('Could not rescale range or use diverging map.')
 end
 
-figure(200);
-sphereax = subplot(1,1,1);
+sph_fig = figure('Name', 'nflows-sphereanimation');
+sphereax = subplot(1,1,1, 'Parent', sph_fig);
 hold(sphereax, 'on')
 
 colormap(cmap)
