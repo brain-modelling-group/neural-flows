@@ -1,4 +1,4 @@
-function singularity_type = singularity3d_classify_critical_points_3d(J3D)
+function singularity_type = singularity3d_classify_critical_points(J3D)
 
 % 3D classification of hyperbolic stationary points based on the eigenvalues
 % the jacobian matrix of the vector field around one critical point
