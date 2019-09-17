@@ -161,7 +161,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
    % parameter it can be rerun with different types.
    
    % Close the file to avoid corruption
-   detection_threshold = flows3d_hs3d_detect_nullflows_guesstimate_threshold(mfile_vel.min_nu);
+   detection_threshold = guesstimate_nullflows_threshold(mfile_vel.min_nu);
    mfile_vel.detection_threshold = detection_threshold;
    mfile_vel.Properties.Writable = false;
    
