@@ -34,10 +34,6 @@ function null_points_3d = flows3d_hs3d_detect_nullflows_parallel(mfile_obj, X, Y
     
 %}
 
-if nargin < 4
-    index_mode = 'linear';
-end
-
 switch data_mode
     case 'surf'
         % Slow with full resolution surfaces (50k faces each) but seems to give precise-ish locations
