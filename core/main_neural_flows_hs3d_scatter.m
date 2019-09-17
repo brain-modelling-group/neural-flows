@@ -182,9 +182,9 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
           error(['neural-flows:: ', mfilename, '::UnknownOption. Invalid datamode for detecting singularities.'])
    end
    
-   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started detection of critical points.'))
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started detection of null flows.'))
    % Detect intersection of critical isosurfaces
-   [xyz_idx]  = par_locate_critical_points(mfile_surf, mfile_vel, options.sing_detection.datamode, options.sing_detection.indexmode);
+   [xyz_idx]  = flows3d_hs3d_detect_nullflows_parallel(mfile_surf, mfile_vel, options.sing_detection.datamode, options.sing_detection.indexmode);
    delete(mfile_surf_sentinel)
 
    % Save what we just found    
@@ -193,12 +193,12 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
    [mfile_sings, mfile_sings_sentinel] = create_temp_file(root_fname_sings, keep_sings_file);
    mfile_sings.xyz_idx = xyz_idx;
    delete(mfile_sings_sentinel)
-   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started detection of critical points.'))
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished detection of null flows.'))
    
 %------------------------ CLASSIFY SINGULARITIES -------------------------%    
-   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished classification of singularities.'))
+   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started classification of singularities.'))
    % Calculate jacobian and classify singularities
-   singularity_classification = classify_singularities(xyz_idx, mfile_vel);
+   singularity_classification = singularity3d_classify_singularities(xyz_idx, mfile_vel);
    mfile_sings.singularity_classification = singularity_classification;
    mfile_sings.options = options;
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished classification of singularities.'))
@@ -215,5 +215,4 @@ if nargout > 1
     varargout{3} = mfile_sings;
 end
               
-
 end % function main_neural_flows_hs3d_scatter()
