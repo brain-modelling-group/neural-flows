@@ -14,15 +14,16 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     %       locations from MEG.
     % options
     %        .data_interpolation: a structure
-    %                    --  .file_exists  a boolean flag to determine if the 
-    %                               interpolated data had been precalculated or not
-    %                               and skip that step. 
-    %        .data_interpolation: -- .file_name a string with the name of the
-    %                          matfile where the interpolated data are stored
-    %        .sing_detection -- .datamode = 'vel' % use velocity fields or
-    %        surfaces to detect singularities
-    %                           .indexmode = 'linear'; Use linear indices
-    %                           or subscript to find singularities
+    %                           .file_exists  -- a boolean flag to determine if the 
+    %                                            interpolated data had been precalculated or not
+    %                                            and skip that step. 
+    %        .data_interpolation:
+    %                           .file_name -- a string with the name of the
+    %                                         matfile where the interpolated data are stored
+    %        .sing_detection: a structure 
+    %                        .datamode = 'vel' % use velocity fields or surfaces to detect singularities
+    %                        .indexmode = 'linear'; Use linear indices
+    %                                                or subscript to find singularities
     
     % basic options
     %options.data_interpolation.file_exists = false;
