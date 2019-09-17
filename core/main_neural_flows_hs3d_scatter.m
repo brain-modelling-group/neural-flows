@@ -8,11 +8,11 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     %              4) classifies singularities.
     % data: a 2D array of size [timepoints x nodes/points] or 
     %         4D array of size [timepoints x xcoord x ycoord x zcoord]
-    % locs: coordinates points in 3D Euclidean space for which data values are known. 
+    % locs: a 2D array of size [nodes/points x 3] with coordinates of points in 3D Euclidean space for which data values are known. 
     %       These corresponds to the centres of gravity: ie, node locations 
     %       of brain network embedded in 3D dimensional space, or source
     %       locations from MEG.
-    % options
+    % options: a struct with structs inside
     %        .data_interpolation: a structure
     %                           .file_exists  -- a boolean flag to determine if the 
     %                                            interpolated data had been precalculated or not
@@ -24,8 +24,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     %                        .datamode = 'vel' % use velocity fields or surfaces to detect singularities
     %                        .indexmode = 'linear'; Use linear indices
     %                                                or subscript to find singularities
-    
-    % basic options structure
+    %Basic 'options' structure:
     %options.data_interpolation.file_exists = false;
     %options.sing_detection.datamode = 'vel''
     %options.sing_detection.inexmode = 'linear';
@@ -91,7 +90,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
         fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started interpolating data.'))
         
         % Parallel interpolation with the parallel toolbox
-        [mfile_interp, mfile_interp_sentinel] = par_interpolate_3d_data(data, ...
+        [mfile_interp, mfile_interp_sentinel] = data3d_interpolate_parallel(data, ...
                                                                         locs, X, Y, Z, ...
                                                                         in_bdy_mask, ...
                                                                         keep_interp_file);
