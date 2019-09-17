@@ -44,4 +44,4 @@ function mfile_vel = flows3d_hs3d_flow_stats(mfile_vel, ux, uy, uz, this_tpt)
     mfile_vel.min_nu(1, this_tpt) = nanmin(norm_vf(:));
     mfile_vel.max_nu(1, this_tpt) = nanmax(norm_vf(:));
     
-end % function get_vfield_info()
+end % function flows3d_hs3d_flow_stats()
