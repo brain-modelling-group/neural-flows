@@ -35,12 +35,8 @@ function varargout = main_neural_flows_hs3d_grid(data, X, Y, Z, options)
     
 %------------------------ FLOW CALCULATION -------------------------------%
     % Parameters for optical flow-- could be changed, could be parameters
-    alpha_smooth   = 0.05;
-    max_iterations = 128;
     
     % Save flow calculation parameters parameters 
-    options.flow_calculation.alpha_smooth   = alpha_smooth;
-    options.flow_calculation.max_iterations = max_iterations;
     options.flow_calculation.dtpts          = dtpts;
     options.flow_calculation.grid_size      = grid_size;
         
@@ -53,7 +49,6 @@ function varargout = main_neural_flows_hs3d_grid(data, X, Y, Z, options)
     % Save mask with points inside the convex hull of the brain
     mfile_vel.in_bdy_mask = in_bdy_mask;
     
-    options.flow_calculation.seed_init_vel = 42;
     
     % This function runs the loop over timepoints and saves the velocity
     % fields into a file
@@ -82,5 +77,15 @@ function varargout = main_neural_flows_hs3d_grid(data, X, Y, Z, options)
     % files will be deleted.
     delete(mfile_vel_sentinel)
     
-     
+    % Check if we actually want to get the handles to the matfiles 
+minnout = 0;
+maxnout = 3;
+% NOTE: not sure this check is ok
+nargoutchk(minnout, maxnout);
+
+if nargout > 1
+    varargout{1} = mfile_vel;
+    varargout{2} = mfile_interp;
+    varargout{3} = mfile_sings;
+end 
 end % function flows3d_compute_structured_grid()
