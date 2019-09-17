@@ -1,0 +1,27 @@
+CPP=g++
+CFLAGS=-O2 -fpic -DTETLIBRARY -m32
+LDFLAGS= -m32
+
+CXX=g++
+CXXFLAGS=-O2 -fpic -DTETLIBRARY -m32
+PREDCXXFLAGS=-O0 -fpic -m32
+SWITCHES=-Wall -DSELF_CHECK
+
+EXE=tet
+DIRSRCC=../../src/CNEM3D
+DIRSRCT=../../src/TETGEN
+DIROUT=../bin
+
+$(EXE):$(DIRSRCT)/predicates.cpp $(DIRSRCT)/tetgen.cpp $(DIRSRCC)/main_tetgen_exe.cpp
+	$(CPP) -I$(DIRSRCT) $(CFLAGS) -c $(DIRSRCC)/main_tetgen_exe.cpp
+	$(CXX) $(PREDCXXFLAGS) -c $(DIRSRCT)/predicates.cpp
+	$(CXX) $(CXXFLAGS) $(SWITCHES) -c $(DIRSRCT)/tetgen.cpp
+	$(CPP) -o $(DIROUT)/$@ $(LDFLAGS) predicates.o tetgen.o main_tetgen_exe.o
+
+.PHONY: clean mrproper
+
+clean:
+	rm -rf *.o
+
+rmproper: clean
+	rm -rf $(DIROUT)/$(EXE)

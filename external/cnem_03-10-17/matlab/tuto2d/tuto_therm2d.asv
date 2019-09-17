@@ -1,0 +1,111 @@
+% Copyright (C) 2003-2011
+% Lounes ILLOUL (illoul_lounes@yahoo.fr)
+% Philippe LORONG (philippe.lorong@ensam.eu)
+% Arts et Metiers ParisTech, Paris, France
+
+clc
+clear all;
+close all; 
+clc;
+addpath('../bin');
+
+%% load domain (nodes + boundary(s)) and  draw boundary(s) 
+
+load('data_small');% the domain : nodes + bounary(s) 
+
+% plot 
+% boundarys
+
+figure;
+hold on;
+axis equal;
+
+plot_boundary(XY_Node,Nb_Node_Front,Ind_Node_Front);
+
+% node
+
+plot(XY_Node(:,1),XY_Node(:,2),'.','color','green');
+
+hold off;
+
+%% SCNI integration
+
+[GS,XY_Node,Ind_Node_Front,Ind_Node_Tri,Ind_Node_New_Old,Ind_Node_Old_New,Cel]=...
+m_cnem2d_scni(XY_Node,Nb_Node_Front,Ind_Node_Front);
+
+%% thermal problem : 
+
+%% Assembling
+
+n=size(XY_Node,1);
+
+K=1; % constant
+%K=XY_Node(:,1)+0.1;% variable
+
+% 
+[B,C,V]= m_assembling_thermal(GS,K);
+K_Mat_T=B'*V*C*B;
+
+%% If axial problem
+% [B,C,V,D]= m_assembling_thermal_axi(GS,K,1);
+% K_Mat_T=B'*V*C*B+D*V*B;
+
+%% boundary condition definition
+
+T1=0; % Heat at external boundary (T Inf)
+T2=1; % Heat at internal boundary 
+%
+
+n_C_ext=Ind_Node_Front([1:Nb_Node_Front(1)]);
+n_C_int=Ind_Node_Front([Nb_Node_Front(1)+1:Nb_Node_Front(1)+Nb_Node_Front(2)]);
+
+T=zeros(n,1);
+T(n_C_ext')=T1;
+T(n_C_int')=XY_Node(n_C_int,2)-0.5;%T2;
+
+DDL_bloc=unique([n_C_int]);%n_C_ext;
+
+DDL_Tot=1:n;
+DDL_Libre=setdiff(DDL_Tot,DDL_bloc);
+
+%% solve problem
+
+Vec_B=-K_Mat_T(:,DDL_bloc)*T(DDL_bloc);
+T(DDL_Libre)=K_Mat_T(DDL_Libre,DDL_Libre)\Vec_B(DDL_Libre);
+
+%% post
+
+Gard_T=B*T;
+Flow=-C*Gard_T;
+
+%% Plot result
+
+%Heat
+
+h=figure;
+
+set(h,'Name','Heat');
+hold on;
+axis equal;
+colormap jet;
+plot_cel_vc(Cel,T);
+hold off;
+
+h=figure;
+set(h,'Name','var iso');
+hold on;
+axis equal;
+colormap jet
+tricontour([XY_Node(:,1),XY_Node(:,2)],Ind_Node_Tri,T,10);
+hold off;
+
+%Flow
+
+h=figure;
+set(h,'Name','Heat flow');
+hold on;
+axis equal;
+quiver(XY_Node(:,1),XY_Node(:,2),Flow(1:2:2*n),Flow(2:2:2*n));
+hold off;
+
+%%

@@ -1,0 +1,10 @@
+-a) Rebuild all the library
+ 
+-b) go to python\libbuild and run : make -f  make_tet
+      If matlab go to matlab\libbluid and do the same
+ 
+-c) Go to python\bin\py_cnem3d.py, line 39, 147, and 184  : and set Type_Call_Tet=1 
+
+-d) Go to matlab\bin\m_cnem3d_scni.m line 26 and set Type_Call_Tet=1;
+                                      m_cnem3d_interpol.m line 32 and set Type_Call_Tet=1;
+                       m_cnem3d_mesh.m line 26 and set Type_Call_Tet=1;
