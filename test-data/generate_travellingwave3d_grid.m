@@ -85,7 +85,7 @@ A = -X;
 wave3d(length(time), len_x, len_x, len_x) = 0;
 
 idx_start = ceil(len_x1/2);
-idx_end   = idx_start+len_x;
+idx_end   = idx_start+len_x-1;
 for tt=1:length(time)
     B = circshift(A, velocity*tt, 2);
     wave3d(tt, :, :, :) = B(:, idx_start:idx_end, :);
