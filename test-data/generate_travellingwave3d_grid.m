@@ -78,7 +78,7 @@ max_val_x = 10;
 max_val_x1 = 100;
 x = -max_val_x:hxyz:max_val_x;
 len_x = length(x);
-x1 = -max_val_x1:h:max_val_x1;
+x1 = -max_val_x1:hxyz:max_val_x1;
 len_x1 = length(x1);
 
 [X, ~, ~] = meshgrid(x1, x, x); % in metres
