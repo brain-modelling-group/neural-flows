@@ -205,6 +205,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
 % Check if we actually want to get the handles to the matfiles 
 minnout = 0;
 maxnout = 3;
+% NOTE: not sure this check is ok
 nargoutchk(minnout, maxnout);
 
 if nargout > 1
