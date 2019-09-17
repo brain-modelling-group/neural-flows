@@ -44,9 +44,6 @@ if any(tmp)
 else
     direction = 'x';
 end
- integer number between 1-4. Will fail
-%                       otherwise.
-
 
 tmp = strcmpi(varargin,'step'); 
 if any(tmp)
@@ -55,14 +52,12 @@ else
     h = 1;
 end
 
-
 tmp = strcmpi(varargin,'velocity'); % note really a velocity but an integer scaling for circshift
 if any(tmp)
     velocity = varargin{find(tmp)+1}; 
 else
     velocity = 1;
 end
-
 
 tmp = strcmpi(varargin,'visual_debugging'); % note really a velocity but an integer scaling for circshift
 if any(tmp)
