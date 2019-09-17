@@ -38,7 +38,7 @@ z_dim = 3;
 
 if strcmp(options.flow_calculation.init_conditions, 'random')
     seed_init_vel = options.flow_calculation.seed_init_vel;
-    [uxo, uyo, uzo] = get_initial_velocity_distribution(grid_size, ~mfile_vel.in_bdy_mask, seed_init_vel);
+    [uxo, uyo, uzo] = flows3d_hs3d_get_initial_flows(grid_size, ~mfile_vel.in_bdy_mask, seed_init_vel);
 
 else
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Using pre-calculated initial velocity conditions.'))
