@@ -1,9 +1,5 @@
 function null_points_3d = flows3d_hs3d_detect_nullflows_parallel(mfile_obj, X, Y, Z, in_bdy_mask, data_mode)
-% Locatees null regions of velocity fields. These are good 'singularity' candidates. 
-% Returns the location of the singularities either as: 
-% linear indices xyz_lidx, or as subscripts [x_idx, y_idx, z_idx]. 
-% TODO: clean up, break down into standlaone functions, return actual
-% points in space, not only indices; 
+% Locates null regions of velocity fields. These are good 'singularity' candidates. 
 % ARGUMENTS:
 %          mfile_obj -- a MatFile handle with the critical isosurfaces or
 %                       the velocity/flow fields. In the cases of using
