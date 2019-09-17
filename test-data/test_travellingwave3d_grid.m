@@ -1,10 +1,10 @@
 function test_travellingwave3d_grid()
 
 % Generate data
- options.hx = 1;
- options.hy = 1;
- options.hz = 1;
- options.ht = 1;
+ options.hx = 2;
+ options.hy = 2;
+ options.hz = 2;
+ options.ht = 0.5;
  [wave3d, X, Y, Z, ~] = generate_travellingwave3d_grid('visual_debugging', false, 'hxyz', options.hx, 'ht', options.ht, 'velocity', 1);
  
  options.flow_calculation.init_conditions = 'random';

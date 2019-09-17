@@ -1,10 +1,11 @@
 function test_travellingwave3d_scattered()
 
 % Generate data
- options.hx = 1;
- options.hy = 1;
- options.hz = 1;
- options.ht = 1;
+ options.hx = 2;
+ options.hy = 2;
+ options.hz = 2;
+ options.ht = 0.5;
+ % With these parameters the wave is moving at 4 m/s along the x-axis
  
  load('513COG.mat', 'COG')
  locs = COG(1:256, :);
