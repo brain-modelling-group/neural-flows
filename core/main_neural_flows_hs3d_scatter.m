@@ -25,7 +25,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     %                        .indexmode = 'linear'; Use linear indices
     %                                                or subscript to find singularities
     
-    % basic options
+    % basic options structure
     %options.data_interpolation.file_exists = false;
     %options.sing_detection.datamode = 'vel''
     %options.sing_detection.inexmode = 'linear';
@@ -51,7 +51,6 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     % step takes about 24 seconds. Downsampling to 8mm^3 - side 2mm it takes 3s.
     
     
-    % With the parallel interpolation this task takes under one 1h;
     
     % NOTEs on performance optical flow: 
     % max_iterations=16 
@@ -65,8 +64,6 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
       rng(options.chunk) % for the cluster environment.
     end
     
-   
-
     % Labels for 2D input arrays
     t_dim = 1; % time    
     dtpts = size(data, t_dim);
