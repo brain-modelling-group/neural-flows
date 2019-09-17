@@ -75,7 +75,7 @@ end
 
 % 
 max_val_x = 10;
-max_val_x1 = 100;
+max_val_x1 = 10*max_val_x;
 x = -max_val_x:hxyz:max_val_x;
 len_x = length(x);
 x1 = -max_val_x1:hxyz:max_val_x1;

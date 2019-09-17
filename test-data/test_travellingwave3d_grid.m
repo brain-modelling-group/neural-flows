@@ -3,16 +3,16 @@ function test_travellingwave3d_grid()
 % Generate data
 
 
- options.hx = 2;
- options.hy = 2;
- options.hz = 2;
- options.ht = 1;
+ options.hx = 1;
+ options.hy = 1;
+ options.hz = 1;
+ options.ht = 2;
  [wave3d, X, Y, Z, ~] = generate_travellingwave3d_grid('visual_debugging', false, 'hxyz', options.hx, 'ht', options.ht, 'velocity', 1);
  
  options.flow_calculation.init_conditions = 'random';
  options.flow_calculation.seed_init_vel = 42;
  options.flow_calculation.alpha_smooth   = 0.1;
- options.flow_calculation.max_iterations = 64;
+ options.flow_calculation.max_iterations = 128;
 
  mfile_flows = main_neural_flows_hs3d_grid(wave3d, X, Y, Z, options);
 
