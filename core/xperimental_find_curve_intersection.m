@@ -1,4 +1,4 @@
-function [xyz_points] = find_curve_intersection(surf_xy, surf_xz, surf_yz, h)
+function [xyz_points] = xperimental_find_curve_intersection(surf_xy, surf_xz, surf_yz, h)
 % Find the intersections of 3 curves in 3D. The curves are the output of 
 % find_surface_intersection.
 % this function basically calculates the eculidean distance between points

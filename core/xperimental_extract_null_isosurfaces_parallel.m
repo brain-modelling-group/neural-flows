@@ -1,4 +1,4 @@
-function [mfile_surf_obj,  mfile_surf_sentinel] = par_get_critical_isosurfaces(mfile_vel)
+function [mfile_surf_obj,  mfile_surf_sentinel] = xperimental_extract_null_isosurfaces_parallel(mfile_vel)
 % This function calculates the isosurfaces at velocity=0 for each of the
 % three orthogonal velocity components. This function calculate isosurfaces 
 % in parallel -- saves results to disk

@@ -1,4 +1,4 @@
-function decimated_surf_obj = decimate_surfaces(mfile_surf, fraction_to_keep)
+function decimated_surf_obj = xperimental_decimate_surfaces(mfile_surf, fraction_to_keep)
 % This function is a wrapper of reducepatch. 
 % It takes as input a matfile with the full resolution iossurfaces of zero
 % veolcity and outputs structure (surf_obj) with the decimated version.

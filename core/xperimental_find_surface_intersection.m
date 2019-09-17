@@ -1,5 +1,5 @@
 
-function [intersection_matrix, intSurface] = find_surface_intersection(surface1, surface2, varargin)
+function [intersection_matrix, intSurface] = xperimental_find_surface_intersection(surface1, surface2, varargin)
 %SURFACEINTERSECTION intersection of 2 surfaces
 % [intersection_matrix, intSurface] = SurfaceIntersection(surface1, surface2)
 % calculates the intersection of surfaces 1 and 2. Code can either return
@@ -20,7 +20,7 @@ function [intersection_matrix, intSurface] = find_surface_intersection(surface1,
 %
 % OUTPUT:
 % * intersection_matrix - sparse Matrix with n1 x n2 dimension where n1 and n2 are
-%               number of faces in surfaces
+%               number of faces in surfacesE
 % * intSurface - a structure with following fields:
 %     intSurface.vertices - N x 3 array of unique points
 %     intSurface.edges    - N x 2 array of edge vertex ID's

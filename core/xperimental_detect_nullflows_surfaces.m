@@ -1,4 +1,4 @@
-function null_points_3d = use_isosurfaces(mfile_surf_obj, X, Y, Z, index_mode, in_bdy_mask)
+function null_points_3d = xperimental_detect_nullflows_surfaces(mfile_surf_obj, X, Y, Z, index_mode, in_bdy_mask)
 %NOTE: Under development -- not tested.
 % mfile_surf_obj can be a matfile or a struct -- with the same internal 'structure'
 % as the file
