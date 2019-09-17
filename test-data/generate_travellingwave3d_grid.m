@@ -1,15 +1,20 @@
-function [wave3d, X, Y, Z, time] = generate_travellingwave3d_grid(direction, velocity)
+function [wave3d, X, Y, Z, time] = generate_travellingwave3d_grid(varargin)
 % Generates a plane "travelling" wave moving along one of the three main 
 % orthogonal axes of Euclidean space. The data is generating as a linear 
 % function of space (x, Y, or Z), so in a sense is a like sinusoidal plane
 % wave of infinite (temporal) period.
 %
-% ARGUMENTS:
+% (VAR)ARGUMENTS:
 %           direction -- a string with the desired wave propagation direction.
-%                        Available: {'x', 'y', 'z', 'radial', 'any', 'all'}.
+%                        Available: {'x', 'y', 'z'}.
 %                        Default: {'x'}.
 %           velocity -- an integer number between 1-4. Will fail
 %                       otherwise.
+%           step     -- a scalar with the space step size to generate the grid
+%           visual_debugging -- a boolean to determine whther to plot
+%                       figures or not.
+%                       Default: {true}.
+% 
 % OUTPUT:
 %           wave3d   -- a 4D array of size [21, 21, 21, 22]. The first 
 %                       dimension is time, and the last three dimensions are space.
@@ -35,20 +40,43 @@ function [wave3d, X, Y, Z, time] = generate_travellingwave3d_grid(direction, vel
 %       propogation velocities.
 %       consider addding a flag to use visual debugging or not
 
-% NOTE: hardcoded stuff size
 
-if nargin < 1
+tmp = strcmpi(varargin,'direction'); 
+if any(tmp)
+    direction = varargin{find(tmp)+1}; 
+else
     direction = 'x';
+end
+ integer number between 1-4. Will fail
+%                       otherwise.
+
+
+tmp = strcmpi(varargin,'step'); 
+if any(tmp)
+    h = varargin{find(tmp)+1}; 
+else
+    h = 1;
+end
+
+
+tmp = strcmpi(varargin,'velocity'); % note really a velocity but an integer scaling for circshift
+if any(tmp)
+    velocity = varargin{find(tmp)+1}; 
+else
     velocity = 1;
 end
 
-if nargin < 2
-    velocity = 1;
+
+tmp = strcmpi(varargin,'visual_debugging'); % note really a velocity but an integer scaling for circshift
+if any(tmp)
+    plot_stuff = varargin{find(tmp)+1}; 
+else
+    plot_stuff = true;
 end
 
+% 
 max_val_x = 10;
 max_val_x1 = 100;
-h=1;
 x = -max_val_x:h:max_val_x;
 len_x = length(x);
 x1 = -max_val_x1:h:max_val_x1;
@@ -95,29 +123,30 @@ switch direction
         ylabel_str = 'x-axis';
 end
 
-
 % Visual debugging of the first time point
 % TODO: generate a movie, perhaps of projections onto a 2d plane.
-fig_pcolor3 = figure('Name', 'nflows-travellingwave3d-space');
-these_axes = subplot(1,1,1, 'Parent', fig_pcolor3);
-tt = 1;
-pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)), 'axes', these_axes);
-xlabel('X')
-ylabel('Y')
-zlabel('Z')
+if plot_stuff
+    
+    fig_pcolor3 = figure('Name', 'nflows-travellingwave3d-space');
+    these_axes = subplot(1,1,1, 'Parent', fig_pcolor3);
+    tt = 1;
+    pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)), 'axes', these_axes);
+    xlabel('X')
+    ylabel('Y')
+    zlabel('Z')
 
-figure('Name', 'nflows-travellingwave3d-time')
-plot(time, squeeze(wave3d(:, idx_1, idx_2, idx_2)));
-xlim([time(1) time(end)])
-xlabel('time')
-ylabel('p(x, y, z)')
+    figure('Name', 'nflows-travellingwave3d-time')
+    plot(time, squeeze(wave3d(:, idx_1, idx_2, idx_2)));
+    xlim([time(1) time(end)])
+    xlabel('time')
+    ylabel('p(x, y, z)')
 
-figure('Name', 'nflows-travellingwave3d-space-time-1d')
-plot(time, temp, 'color', [0.65 0.65 0.65]);
-xlim([time(1) time(end)])
-xlabel('time')
-ylabel(['space: ' ylabel_str])
+    figure('Name', 'nflows-travellingwave3d-space-time-1d')
+    plot(time, temp, 'color', [0.65 0.65 0.65]);
+    xlim([time(1) time(end)])
+    xlabel('time')
+    ylabel(['space: ' ylabel_str])
 
-make_movie_gif(temp2)
-
+    make_movie_gif(temp2)
+end
 end % function generate_travellingwave3d_grid()
