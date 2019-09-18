@@ -22,12 +22,17 @@ function varargout = plot_sphereanim(data, locs, time, crange, cmap, animation_e
 %         None
 % AUTHOR: 
 %        James A. Roberts, QIMR 2010-2019 
-%        Paula Sanz-Leon, QIMR 2019
+%        Paula Sanz-Leon,  QIMR 2019, document and add 'animation_environment'
+%                                     to save movie, plot the animation or
+%                                     have the handles to the plot.
 % USAGE:
 %{
-number_of_nodes = 42;
+number_of_nodes = 512;
 timepoints  = 64;
 data = randn(timepoints, number_of_nodes);
+locs = randn(number_of_nodes, 3);
+time = 1:64;
+plot_sphereanim(data, locs, time)
 
 
 %}
