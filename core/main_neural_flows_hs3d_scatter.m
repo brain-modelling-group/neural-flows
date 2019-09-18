@@ -134,8 +134,6 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     end
     options.flow_calculation.seed_init_vel = seed_init_vel;
     
-    % Here is where the magic happens
-    flows3d_estimate_hs3d_flow(mfile_interp, mfile_vel, options)
     
     % Save grid - needed for singularity tracking and visualisation
     % Consider saving min max values and step, saves memory
@@ -150,6 +148,10 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     mfile_vel.ht = ht; % ms
     
     mfile_vel.options = options;
+    
+    % Here is where the magic happens
+    flows3d_estimate_hs3d_flow(mfile_interp, mfile_vel, options)
+    
     % Delete sentinels. If these variablesales are OnCleanup objects, then the 
     % files will be deleted.
     delete(mfile_interp_sentinel)    
