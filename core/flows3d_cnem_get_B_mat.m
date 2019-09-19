@@ -42,7 +42,7 @@ Type_FF   = 0;% 0 -> Sibson, 1 -> Laplace, 2 -> Linear fem
 %[GS, XYZ, ...
 % IN_Tri_Ini,IN_Tri,IN_Tet,INV_NN,PNV_NN,...
 % IN_New_Old,IN_Old_New] = m_cnem3d_scni(XYZ, IN_Tri_Ini, Type_FF, Sup_NN_GS);
-[GS, ~, ~, ~, ~, ~, ~, ~, ~, ~] = m_cnem3d_scni(XYZ, IN_Tri_Ini, Type_FF, Sup_NN_GS);
+[GS, ~, ~, ~, ~, ~, ~, ~, ~] = m_cnem3d_scni(XYZ, IN_Tri_Ini, Type_FF, Sup_NN_GS);
 
 nb_var = 1;
 

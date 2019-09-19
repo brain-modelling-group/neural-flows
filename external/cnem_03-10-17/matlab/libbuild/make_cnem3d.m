@@ -1,3 +1,6 @@
+% NOTE: PSL: you need to call this function from inside the directory is
+% in.
+
 clc;
 delete *.o*
 
