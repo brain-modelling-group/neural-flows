@@ -1,4 +1,4 @@
-function test_travellingwave3d_grid()
+function test_flow_estimation__travellingwave3d_grid_hs3d()
 
 % Generate data
  options.hx = 2;

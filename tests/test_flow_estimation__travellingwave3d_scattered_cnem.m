@@ -1,4 +1,4 @@
-function test_travellingwave3d_scattered_cnem()
+function test_flow_estimation__travellingwave3d_scattered_cnem()
 
  %Generate data
  options.hx = 2;

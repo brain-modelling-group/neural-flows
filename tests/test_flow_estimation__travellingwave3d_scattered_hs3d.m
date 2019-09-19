@@ -1,4 +1,4 @@
-function test_travellingwave3d_scattered()
+function test_flow_estimation__travellingwave3d_scattered_hs3d()
 
 % Generate data with these step sizes
  options.hx = 2;
