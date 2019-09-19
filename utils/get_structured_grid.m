@@ -32,14 +32,14 @@ z_dim = 3;
 int_locs = ceil(abs(points_xyz)).*sign(points_xyz);
 
 % Minima 
-min_x = min(int_locs(:, x_dim));
-min_y = min(int_locs(:, y_dim));
-min_z = min(int_locs(:, z_dim));  
+min_x = min(int_locs(:, x_dim)) - 2*hx;
+min_y = min(int_locs(:, y_dim)) - 2*hy;
+min_z = min(int_locs(:, z_dim)) - 2*hz;  
 
 % Maxima
-max_x = max(int_locs(:, x_dim));
-max_y = max(int_locs(:, y_dim));
-max_z = max(int_locs(:, z_dim));
+max_x = max(int_locs(:, x_dim)) + 2*hx;
+max_y = max(int_locs(:, y_dim)) + 2*hy;
+max_z = max(int_locs(:, z_dim)) + 2*hz;
     
 % Create the grid -- THIS IS THE PROBLEM WITH SPACING
 xx = min_x:hx:max_x;
