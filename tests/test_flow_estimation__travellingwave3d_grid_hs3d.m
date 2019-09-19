@@ -27,11 +27,6 @@ function test_flow_estimation__travellingwave3d_grid_hs3d()
  subplot(1, 3, 3, 'Parent', fig_hist)
  histogram(mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :))
  xlabel('uz')
-  
- %
- %for tt=1:22; pcolor3(squeeze(wave3d(tt, :, :, :))); caxis([-40 10]); pause(0.5); clf;end
- %
- %for tt=1:21; clf; pcolor3(ux(:, :, :, tt)); caxis([0 3.5]);colorbar;pause(0.5);end
- 
+
  
 end % function test_travellingwave3d_grid()
