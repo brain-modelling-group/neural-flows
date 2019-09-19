@@ -9,6 +9,7 @@
 %                      with instantaneous unwrapped phases (of the signal's envelope).
 %
 % REQUIRES: 
+%          none.
 %
 % USAGE:
 %{     
@@ -28,7 +29,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function phi = calculate_insta_phase(data)
 
-disp('Calculating instantaneous phases ...')
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Calculating instantaneous phases.'))
 
 if length(data) < 100000 % arbitrary biggish number
     this_version = version('-release');
@@ -57,5 +58,5 @@ else
         
     end  
 end
-fprintf('Finished calculating phases. \n')
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished calculating phases. \n'))
 end % function calculate_insta_phase()
