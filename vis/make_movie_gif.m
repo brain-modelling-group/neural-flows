@@ -34,7 +34,7 @@ for cc =1:tpts
   h.EdgeColor = 'none';
   % NOTE: these parameters should be passed as options
   colormap(parula(1024))
-  caxis([-40 10])
+  %caxis([-40 10])
   these_axes.Title.String = ['Time frame: ' num2str(cc, '%04d')];
   
   if save_anim == 1

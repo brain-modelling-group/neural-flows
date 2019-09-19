@@ -1,4 +1,15 @@
-function [ux, uy, uz] = generate_abcflow_3d_structured()
+function [ux, uy, uz] = generate_abcflow_3d_structured(abc)
+
+if nargin < 1
+    A = 1;
+    B = sqrt(2/3);
+    C = sqrt(1/3);
+else
+    A = abc(1);
+    B = abc(2);
+    C = abc(3);
+end
+    
 
 % Generates Arnold-Beltrami-Childress (ABC) flow
 % Arnold-Beltrami-Childress (ABC) flow is an analytically defined velocity ...
@@ -14,22 +25,11 @@ x = linspace(0, 2*pi,Nx);
 
 [X, Y, Z] = meshgrid(x, x, x);
 
-%A = 1;
-%B = sqrt(2/3);
-%C = sqrt(1/3);
-
-A = 1;
-B = 1; 
-C = 0.5;
-
-
 ux = A .* sin(Z) + C .* cos(Y);
 uy = B .* sin(X) + A .* cos(Z);
 uz = C .* sin(Y) + B .* cos(X);
 
-
 x = linspace(0, 1,Nx);
-
 [X, Y, Z] = meshgrid(x, x, x);
 
 fig_handle = figure('Name', 'nflows-abcflow');
