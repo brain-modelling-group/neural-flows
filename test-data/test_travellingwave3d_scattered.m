@@ -19,7 +19,9 @@ function test_travellingwave3d_scattered()
  options.flow_calculation.alpha_smooth   = 0.1;
  options.flow_calculation.max_iterations = 128;
  options.sing_detection = false;
- 
+ %
+ %wave3d_phi = calculate_insta_phase(wave3d);
+
  % Do the stuff
  [mfile_flows] = main_neural_flows_hs3d_scatter(wave3d, locs, options);
 
