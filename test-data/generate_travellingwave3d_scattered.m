@@ -23,7 +23,7 @@ function [wave3d, time] = generate_travellingwave3d_scattered(locs, varargin)
 %           wave3d   -- a 2D array of size [num_regions, timepoints].
 % REQUIRES: 
 %          pcolor3() for visual debugging
-%
+%edit
 % AUTHOR:
 %     Paula Sanz-Leon, QIMR Berghofer 2019, August 2019
 %
