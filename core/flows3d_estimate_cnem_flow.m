@@ -78,7 +78,7 @@ ydim = 2;
 zdim = 3;
 
 % Check if the values in phi are a phase value (angle) or not
-if is_phase
+if opts.is_phase
     
     for tt=1:tpts
         instant_phi = phi(tt, :);

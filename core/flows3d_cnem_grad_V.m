@@ -15,7 +15,7 @@ function nabla_V = flows3d_cnem_grad_V(B, V)
 % USAGE:
 %{     
 
-gradV = cnem_grad_V(B, V);
+gradV = flows3d_cnem_grad_V(B, V);
 
 %}
 %

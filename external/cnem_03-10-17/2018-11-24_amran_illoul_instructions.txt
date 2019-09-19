@@ -1,4 +1,4 @@
--a) Rebuild all the library
+-a) Rebuild all the library -- PSL: for linux systems with 64, make sure you have mutilib isntalled for 32 architecture
  
 -b) go to python\libbuild and run : make -f  make_tet
       If matlab go to matlab\libbluid and do the same
