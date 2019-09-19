@@ -5,7 +5,7 @@ bdy = shp.boundaryFacets;
 Type_FF   = 0;% 0 -> Sibson, 1 -> Laplace, 2 -> Linear fem
 Sup_NN_GS = 0;%
 
-% tet needs to be in your system's PATH variable, does not work to 
+% file 'tet' needs to be in your system's PATH variable, does not work to 
 % set it in matlab
 % or make it executable
 
