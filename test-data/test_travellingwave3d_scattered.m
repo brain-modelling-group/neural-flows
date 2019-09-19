@@ -12,7 +12,7 @@ function test_travellingwave3d_scattered()
  
  options.data_interpolation.file_exists = false;
  
- [wave3d, time] = generate_travellingwave3d_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht);
+ [wave3d, ~] = generate_travellingwave3d_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht);
  
  
  options.flow_calculation.init_conditions = 'random';
@@ -23,7 +23,7 @@ function test_travellingwave3d_scattered()
  options.sing_detection = false;
  
 
- main_neural_flows_hs3d_scatter(wave3d, locs, options);
+[mfile_flows] = main_neural_flows_hs3d_scatter(wave3d, locs, options);
 
  fig_hist = figure('Name', 'nflows-test-histograms-random-ic');
 
