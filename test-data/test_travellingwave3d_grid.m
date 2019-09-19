@@ -5,7 +5,7 @@ function test_travellingwave3d_grid()
  options.hy = 2;
  options.hz = 2;
  options.ht = 0.5;
- [wave3d, X, Y, Z, ~] = generate_travellingwave3d_grid('visual_debugging', false, 'hxyz', options.hx, 'ht', options.ht, 'velocity', 1);
+ [wave3d, X, Y, Z, ~] = generate_travellingwave3d_grid('visual_debugging', true, 'hxyz', options.hx, 'ht', options.ht, 'velocity', 1);
  
  options.flow_calculation.init_conditions = 'random';
  options.flow_calculation.seed_init_vel = 42;
@@ -18,12 +18,15 @@ function test_travellingwave3d_grid()
 
  subplot(1, 3, 1, 'Parent', fig_hist)
  histogram(mfile_flows.ux(2:end-1, 2:end-1, 2:end-1, :))
+ xlabel('ux')
  
  subplot(1, 3 ,2, 'Parent', fig_hist)
  histogram(mfile_flows.uy(2:end-1, 2:end-1, 2:end-1, :))
+ xlabel('uy')
  
  subplot(1, 3, 3, 'Parent', fig_hist)
  histogram(mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :))
+ xlabel('uz')
   
  %
  %for tt=1:22; pcolor3(squeeze(wave3d(tt, :, :, :))); caxis([-40 10]); pause(0.5); clf;end

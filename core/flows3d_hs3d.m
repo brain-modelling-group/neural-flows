@@ -54,7 +54,7 @@ avg_filter = vonneumann_neighbourhood_3d();
 % correction image, and avoid further calls in the iterations.
 % TODO: Probably a good idea to do this before calling the optical flow
 % routine
-%[~, edge_corrected_image] = nanconvn(F1, avg_filter, 'same');
+[~, edge_corrected_image] = nanconvn(F1, avg_filter, 'same');
 %edge_corrected_image = ones(size(F1));
                  
 % TODO: replace FOR by WHILE after introducing the Charbonnier
@@ -64,13 +64,15 @@ avg_filter = vonneumann_neighbourhood_3d();
         % NOTE: averaging may be useful if interpolation is not peformed, 
         % or if the data are noisy. For narrowband signals, the
         % averaging introduces artifacts.
-        %ux_avg = nanconvn(ux, avg_filter,'same', edge_corrected_image);
-        %uy_avg = nanconvn(uy, avg_filter,'same', edge_corrected_image);
-        %uz_avg = nanconvn(uz, avg_filter,'same', edge_corrected_image);
-        
-        ux_avg = imfilter(ux, avg_filter, 'replicate', 'same', 'conv');
-        uy_avg = imfilter(uy, avg_filter, 'replicate', 'same', 'conv');
-        uz_avg = imfilter(uz, avg_filter, 'replicate', 'same', 'conv');
+        ux_avg = nanconvn(ux, avg_filter,'same', edge_corrected_image);
+        uy_avg = nanconvn(uy, avg_filter,'same', edge_corrected_image);
+        uz_avg = nanconvn(uz, avg_filter,'same', edge_corrected_image);
+        % NOTE: the lines below do the job for a full grid, but they do not
+        % work for the case of an odd object embedde din the grid, cause imfilter
+        % does not seem to handle NaNs.
+        %ux_avg = imfilter(ux, avg_filter, 'replicate', 'same', 'conv');
+        %uy_avg = imfilter(uy, avg_filter, 'replicate', 'same', 'conv');
+        %uz_avg = imfilter(uz, avg_filter, 'replicate', 'same', 'conv');
 
 
         ux = ux_avg - ( Ix.*((Ix.*ux_avg) + (Iy.*uy_avg) + (Iz.*uz_avg) + It))...

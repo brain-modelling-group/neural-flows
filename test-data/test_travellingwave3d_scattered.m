@@ -20,19 +20,23 @@ function test_travellingwave3d_scattered()
  options.flow_calculation.alpha_smooth   = 0.1;
  options.flow_calculation.max_iterations = 128;
  
+ options.sing_detection = false;
  
- mfile_flows = main_neural_flows_hs3d_scatter(wave3d, locs, options);
+
+ main_neural_flows_hs3d_scatter(wave3d, locs, options);
 
  fig_hist = figure('Name', 'nflows-test-histograms-random-ic');
 
  subplot(1, 3, 1, 'Parent', fig_hist)
- histogram(mfile_flows.ux(:))
+ histogram(mfile_flows.ux)
+ xlabel('ux')
  
  subplot(1, 3 ,2, 'Parent', fig_hist)
- histogram(mfile_flows.uy(:))
- 
+ histogram(mfile_flows.uy)
+ xlabel('uy')
+
  subplot(1, 3, 3, 'Parent', fig_hist)
- histogram(mfile_flows.uz(:))
- 
+ histogram(mfile_flows.uz)
+ xlabel('uz')
  
 end % function test_travellingwave3d_scattered()

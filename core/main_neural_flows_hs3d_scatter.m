@@ -158,7 +158,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     delete(mfile_vel_sentinel)
     
 %---------------------- DETECT NULL FLOWS ---------------------------------%    
-   
+   if options.sing_detection
    % NOTE: TODO: The criterion/value for the detection therhesold should be a
    % parameter it can be rerun with different types.
    
@@ -216,5 +216,6 @@ if nargout > 1
     varargout{2} = mfile_interp;
     varargout{3} = mfile_sings;
 end
+   end
               
 end % function main_neural_flows_hs3d_scatter()
