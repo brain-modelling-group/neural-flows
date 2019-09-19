@@ -35,6 +35,7 @@ function [wave3d, time] = generate_travellingwave3d_scattered(locs, varargin)
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TODO: generalise set different propogation velocities.
+% TODO: generalise for travelling waves along the other dimensions.
 
 
 tmp = strcmpi(varargin,'hxyz'); 
