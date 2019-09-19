@@ -211,11 +211,14 @@ maxnout = 3;
 % NOTE: not sure this check is ok
 nargoutchk(minnout, maxnout);
 
-if nargout > 1
+if nargout >= 1
     varargout{1} = mfile_vel;
-    varargout{2} = mfile_interp;
-    varargout{3} = mfile_sings;
 end
-   end
+if nargout == 2
+    varargout{2} = mfile_interp;
+end
+if nargout > 2
+   varargout{3} = mfile_sings;
+end
               
 end % function main_neural_flows_hs3d_scatter()
