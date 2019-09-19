@@ -24,7 +24,7 @@ function test_travellingwave3d_scattered()
  [mfile_flows] = main_neural_flows_hs3d_scatter(wave3d, locs, options);
 
  % Plot the velocity estimates
- fig_hist = figure('Name', 'nflows-test-histograms-random-ic');
+ fig_hist = figure('Name', 'nflows-test-travellingwave3d-scattered-hs3d');
 
  subplot(1, 3, 1, 'Parent', fig_hist)
  histogram(mfile_flows.ux)
