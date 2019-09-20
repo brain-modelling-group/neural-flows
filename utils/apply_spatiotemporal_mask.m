@@ -1,4 +1,4 @@
-function wave = spatiotemporal_masks(wave, Aspace, Atime)
+function wave = apply_spatiotemporal_mask(wave, Aspace, Atime)
 % spatiotemporal_masks. Apply separate spatial and temporal amplitude
 % profiles to a wave 2D+t pattern
 % INPUTS:
