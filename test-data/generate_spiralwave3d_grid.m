@@ -141,11 +141,14 @@ max_val = max(wave3d(:));
 
 if plot_stuff
     fig_spiral = figure('Name', 'nflows-spiralwave3d-space-time');
-    these_axes = subplot(1, 1, 1, 'Parent', fig_spiral);
-
+    
     for tt=1:length(time)
-        cla; 
-        pcolor3(squeeze(wave3d(tt, :, :, :)), 'axes', these_axes); 
+        these_axes = subplot(1, 1, 1, 'Parent', fig_spiral);
+        these_axes.XLabel.String = 'X';
+        these_axes.YLabel.String = 'Y';
+        these_axes.ZLabel.String = 'Z';
+        cla;
+        pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)), 'axes', these_axes); 
         caxis([min_val  max_val]);pause(0.5); 
     end
 end     
