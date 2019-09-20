@@ -98,7 +98,7 @@ c = gausswidth / (2*sqrt(2*log(2)));
 %Beahviour of the spiral tip/centre or rotiation along z-axis form the
 %filament of a wave.
 tip = z;
-switch filement
+switch filament
     case 'helix'
         radius = 1;
         tip_y = radius.*sin(tip);
