@@ -1,11 +1,11 @@
-function [wave3d] = generate_spiralwave3d_grid(varargin)
-% Generates a rotating wave in 3D space+time. The rotation occurs on the XY-plane. 
+function [wave3d, X, Y, Z, time] = generate_spiralwave3d_grid(varargin)
+% Generates a spiral wave in 3D space+time. The rotation occurs on the XY-plane. 
 % The position of the centre of rotation (the tip) - on xy - changes with 
 % depth z.
 % 
 %  ARGUMENTS:
-%        ht         -- time step in seconds
-%        hx         -- 
+%        ht         -- time step in seconds (milliseconds)
+%        hx         -- space step size in metres (millimetres)
 %        T          -- maximum time in seconds 
 %        frequency  -- frequency in [Hz]
 %        lambda     -- radial wavelength in [m].
@@ -28,33 +28,61 @@ function [wave3d] = generate_spiralwave3d_grid(varargin)
 
 %}
 
-hx = opts.hx;
-hy = opts.hy;
-hz = opts.hz;
-ht = opts.ht;
-max_val = 16;
-max_val_time = 8;
+% TODO -- generalise to accept almost all harcoded values as parameters
+
+
+tmp = strcmpi(varargin,'hxyz'); 
+if any(tmp)
+    hxyz = varargin{find(tmp)+1}; 
+else
+    hxyz = 1;
+end
+
+tmp = strcmpi(varargin,'ht'); 
+if any(tmp)
+    ht = varargin{find(tmp)+1}; 
+else
+    ht = 1;
+end
+
+tmp = strcmpi(varargin,'velocity'); % note really a velocity but an integer scaling for circshift
+if any(tmp)
+    vel = varargin{find(tmp)+1}; 
+else
+    ux = 2;
+    uy = 2;
+    vel = [ux uy];
+end
+
+
+tmp = strcmpi(varargin,'visual_debugging'); % note really a velocity but an integer scaling for circshift
+if any(tmp)
+    plot_stuff = varargin{find(tmp)+1}; 
+else
+    plot_stuff = true;
+end
+
+
+
+max_val_space = 16; % in metres/millimetres
+max_val_time = 8;   % in seconds / milliseconds
 
 xdim = 1;
 ydim = 2;
-zdim = 3;
 
 time = 0:ht:max_val_time;
-x = -max_val:hx:max_val;
-y = -max_val:hy:max_val;
-z = -max_val:hz:max_val;
+x = -max_val_space:hxyz:max_val_space;
+y = -max_val_space:hxyz:max_val_space;
+z = -max_val_space:hxyz:max_val_space;
 
 [XX, YY, TT] = meshgrid(x, y, time);
 
-% Wave parameter - hardcoded
+% Wave parameter - hardcoded to get well behaved waves
 freq =      0.1; % Hz
 wavelength = 16; % m
 gausswidth = 20; 
-
 amp = 1.0;
 tip_centre = [0, 0]; % in metres
-vel = [0.00 0.00]; % shift the tip location
-
 
 % Convert parameters into more useful quantities
 % Angular frequency
@@ -62,29 +90,15 @@ w = 2*pi*freq;
 % Wavenumber
 k = 2*pi/wavelength;
 % Gaussian width parameter
-if exist('gausswidth', 'var') && isscalar(gausswidth) && gausswidth~=0
-    c = gausswidth / (2*sqrt(2*log(2)));
-end
-
-% Set velocity as zero by default if not specified
-if ~exist('vel', 'var') || isempty(vel)
-    ux = 5;
-    uy = 5;
-    uz = 0;
-    vel = [ux uy uz];
-end
+c = gausswidth / (2*sqrt(2*log(2)));
 
 
-% Spiral wave on a 2D plane
-% wave2d = exp(1i*(-w*TT + angle(XX-tip_centre(xdim)-vel(xdim)*TT + 1i*(YY-tip_centre(ydim)-vel(ydim)*TT)) - ...
-%                   k*sqrt((XX-tip_centre(xdim)-vel(xdim)*TT).^2 + (YY-tip_centre(ydim)-vel(ydim)*TT).^2)));
-
-
-%% Rotating spiral tip
+%Rotating spiral tip
 tip = z;
 radius = abs(z).^2/5; 
 tip_y = radius.*sin(tip);
 tip_x = radius.*cos(tip);
+
 
 wave3d(length(time), length(x), length(y), length(z)) = 0;
 
@@ -104,8 +118,24 @@ for kk=1:length(tip)
        wave2d = permute(wave2d, [3 1 2]);       
        wave3d(:, :, :, kk) = real(wave2d); 
     
-    
 end
 
+[X, Y, Z] = meshgrid(x, y, z);
+
+min_val = min(wave3d(:));
+max_val = max(wave3d(:));
+
+
+if plot_stuff
+    fig_spiral = figure('Name', 'nflows-spiralwave3d-space-time');
+    these_axes = subplot(1, 1, 1, 'Parent', fig_spiral);
+
+    for tt=1:length(time)
+        cla; 
+        pcolor3(squeeze(wave3d(tt, :, :, :)), 'axes', these_axes); 
+        caxis([min_val  max_val]);pause(0.5); 
+    end
+end     
+    
 
 end % end generate_spiralwave3d_grid()
