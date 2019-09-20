@@ -36,7 +36,9 @@ if length(data) < 100000 % arbitrary biggish number
    
     if str2double(this_version(1:4)) > 2016  
         % If using matlab 2016b or older this can be done directly as:
-        phi = unwrap(angle(hilbert((data - mean(data))))); % faster than bsxfun
+        %phi = unwrap(angle(hilbert((data - mean(data))))); % faster than bsxfun
+        phi = (angle(hilbert((data - mean(data))))); % faster than bsxfun
+
     else
         phi = unwrap(angle(hilbert(bsxfun(@minus,data,mean(data)))));
           

@@ -33,7 +33,8 @@ for cc =1:tpts
   h.FaceColor = 'interp';
   h.EdgeColor = 'none';
   % NOTE: these parameters should be passed as options
-  colormap(parula(1024))
+  %colormap(parula(1024))
+  colormap(hsv(1024))
   %caxis([-40 10])
   these_axes.Title.String = ['Time frame: ' num2str(cc, '%04d')];
   

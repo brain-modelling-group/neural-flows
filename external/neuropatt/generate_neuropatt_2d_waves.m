@@ -34,6 +34,7 @@ end
 % Create grid of coordinates
 hx = 0.5;
 hy = 0.5;
+ht = 0.5;
 [x, y, t] = meshgrid(1:hx:gridSize(1), 1:hy:gridSize(2), 1:gridSize(3));
 
 % Convert parameters into more useful quantities
