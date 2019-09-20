@@ -4,13 +4,9 @@ function [wave3d, X, Y, Z, time] = generate_spiralwave3d_grid(varargin)
 % depth z.
 % 
 %  ARGUMENTS:
-%        ht         -- time step in seconds (milliseconds)
-%        hx         -- space step size in metres (millimetres)
-%        T          -- maximum time in seconds 
-%        frequency  -- frequency in [Hz]
-%        lambda     -- radial wavelength in [m].
-%        direction  -- and integer +1 or -1, defines the direction of rotation. 
-%
+%        ht                -- time step in seconds (milliseconds)
+%        hx                -- space step size in metres (millimetres)
+%        visual_debugging  -- a boolean
 %  OUTPUT:
 %        data -- a 4D array of size [side_size, side_size, side_size, T/ht]; 
 %                where side_size = 2*half_size - 1; 
@@ -62,6 +58,12 @@ else
     plot_stuff = true;
 end
 
+tmp = strcmpi(varargin,'filament'); % filament type 
+if any(tmp)
+    filament = varargin{find(tmp)+1}; 
+else
+    filament = 'helix';
+end
 
 
 max_val_space = 16; % in metres/millimetres
@@ -93,12 +95,23 @@ k = 2*pi/wavelength;
 c = gausswidth / (2*sqrt(2*log(2)));
 
 
-%Rotating spiral tip
+%Beahviour of the spiral tip/centre or rotiation along z-axis form the
+%filament of a wave.
 tip = z;
-radius = abs(z).^2/5; 
-tip_y = radius.*sin(tip);
-tip_x = radius.*cos(tip);
-
+switch filement
+    case 'helix'
+        radius = 1;
+        tip_y = radius.*sin(tip);
+        tip_x = radius.*cos(tip);
+    case 'cone'
+        radius = abs(z).^2; 
+         tip_y = radius.*sin(tip);
+         tip_x = radius.*cos(tip);
+    case 'line'
+        tip_y = zeros(size(z));
+        tip_x = zeros(size(z));
+        
+end 
 
 wave3d(length(time), length(x), length(y), length(z)) = 0;
 
