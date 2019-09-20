@@ -1,4 +1,4 @@
-function [wave3d] = generate_spiralwave3d_grid(ht, T, frequency, hx, lambda, direction, varargin)
+function [wave3d] = generate_spiralwave3d_grid(varargin)
 % Generates a rotating wave in 3D space+time. The rotation occurs on the XY-plane. 
 % The position of the centre of rotation (the tip) - on xy - changes with 
 % depth z.
@@ -28,13 +28,16 @@ function [wave3d] = generate_spiralwave3d_grid(ht, T, frequency, hx, lambda, dir
 
 %}
 
-
 hx = opts.hx;
 hy = opts.hy;
 hz = opts.hz;
 ht = opts.ht;
-max_val = 32;
-max_val_time = 10;
+max_val = 16;
+max_val_time = 8;
+
+xdim = 1;
+ydim = 2;
+zdim = 3;
 
 time = 0:ht:max_val_time;
 x = -max_val:hx:max_val;
@@ -43,11 +46,10 @@ z = -max_val:hz:max_val;
 
 [XX, YY, TT] = meshgrid(x, y, time);
 
-
+% Wave parameter - hardcoded
 freq =      0.1; % Hz
-wavelength = 20; % m
-gausswidth = 20; % in ??
-
+wavelength = 16; % m
+gausswidth = 20; 
 
 amp = 1.0;
 tip_centre = [0, 0]; % in metres
@@ -66,61 +68,44 @@ end
 
 % Set velocity as zero by default if not specified
 if ~exist('vel', 'var') || isempty(vel)
-    vel = [-2 0];
+    ux = 5;
+    uy = 5;
+    uz = 0;
+    vel = [ux uy uz];
 end
 
-% A source pattern is just a sink pattern with negative frequency
 
-%if strcmp(sing_type, 'source')
-    %sing_type = 'sink';
-    w = -w;
-%end
-
-%[wave2d, ~, time] = generate_neuropatt_2d_waves(grid_size, wave_type, amp, freq, wavelength, tip_centre, vel, gaussWidth, opts);
-
-% Spiral wave
-wave2d = exp(1i*(-w*TT + angle(XX-tip_centre(1)-vel(1)*TT + 1i*(YY-tip_centre(2)-vel(2)*TT)) - ...
-                  k*sqrt((XX-tip_centre(1)-vel(1)*TT).^2 + (YY-tip_centre(2)-vel(2)*TT).^2)));
+% Spiral wave on a 2D plane
+% wave2d = exp(1i*(-w*TT + angle(XX-tip_centre(xdim)-vel(xdim)*TT + 1i*(YY-tip_centre(ydim)-vel(ydim)*TT)) - ...
+%                   k*sqrt((XX-tip_centre(xdim)-vel(xdim)*TT).^2 + (YY-tip_centre(ydim)-vel(ydim)*TT).^2)));
 
 
 %% Rotating spiral tip
 tip = z;
-tip_y = sin(tip);
-tip_x = cos(tip);
+radius = abs(z).^2/5; 
+tip_y = radius.*sin(tip);
+tip_x = radius.*cos(tip);
 
-for ii = 1:length(x)
-    for jj = 1:length(x)
-        for kk=1:length(x)
+wave3d(length(time), length(x), length(y), length(z)) = 0;
+
+for kk=1:length(tip)
             
-        % Spatial domain
-        [X, Y, ~] = meshgrid(x-tip_x(kk), ...
-                             y-tip_y(kk), ...
-                             z);
+       wave2d = exp(1i*(-w*TT + angle(XX-tip_x(kk)-vel(xdim)*TT + 1i*(YY-tip_y(kk)-vel(ydim)*TT)) - ...
+                  k*sqrt((XX-tip_x(kk)-vel(xdim)*TT).^2 + (YY-tip_y(kk)-vel(ydim)*TT).^2)));
+       wave2d(wave2d~=0) = amp * wave2d(wave2d~=0) ./ abs(wave2d(wave2d~=0));
+       
+       gaussian = @(c, loc, kk) exp(-1/(2*c^2) * (((XX(:, :, 1)-tip_x(kk)).^2 + ...
+                                                   (YY(:, :, 1)-tip_y(kk)).^2)));
+       wave2d = spatiotemporal_masks(wave2d, gaussian(c, tip_centre, kk));
+       
+       % Ensure that the maximum amplitude is still AMP
+       wave2d = wave2d / max(abs(wave2d(:))) * amp;
 
-        % Rotation plane is XY
-        [TH, ~] = cart2pol(X,Y);
-
-        wave3d(:, ii, jj, kk) = exp(1i.*(direction.*TH(ii,jj, kk)* ((2*pi)./lambda) -  2*pi*abs(frequency)*time));
-        
-        end
-    end
+       wave2d = permute(wave2d, [3 1 2]);       
+       wave3d(:, :, :, kk) = real(wave2d); 
+    
     
 end
-wave3d = wave3d .* exp(1i .* phase_offset);  
-wave3d = real(wave3d);
 
 
-%% Apply amplitude mask
-% Ensure that wave has equal amplitude everywhere
-wave2d(wave2d~=0) = amp * wave2d(wave2d~=0) ./ abs(wave2d(wave2d~=0));
-
-% Apply gaussian mask around centre location if specified
-if exist('c', 'var')
-    gaussian = @(c, loc) exp(-1/(2*c^2) * (((XX(:, :,1)-loc(1)).^2 + ...
-        (YY(:, :, 1)-loc(2)).^2)));
-    wave2d = spatiotemporal_masks(wave2d, gaussian(c, tip_centre));
-end
-
-% Ensure that the maximum amplitude is still AMP
-wave2d = wave2d / max(abs(wave2d(:))) * amp;
 end % end generate_spiralwave3d_grid()
