@@ -41,7 +41,7 @@ else
     ht = 1;
 end
 
-tmp = strcmpi(varargin,'velocity'); % note really a velocity but an integer scaling for circshift
+tmp = strcmpi(varargin,'velocity'); 
 if any(tmp)
     vel = varargin{find(tmp)+1}; 
 else
@@ -51,7 +51,7 @@ else
 end
 
 
-tmp = strcmpi(varargin,'visual_debugging'); % note really a velocity but an integer scaling for circshift
+tmp = strcmpi(varargin,'visual_debugging');
 if any(tmp)
     plot_stuff = varargin{find(tmp)+1}; 
 else
