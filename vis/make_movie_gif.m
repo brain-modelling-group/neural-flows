@@ -1,4 +1,4 @@
-function make_movie_gif(data, save_anim)
+function make_movie_gif(data, save_anim, cmap)
 
 % data should be (time, space dim 1, space dim 2)
 % save_anim  boolean, 0 - do not save, 1 save animation in gif
@@ -6,6 +6,7 @@ function make_movie_gif(data, save_anim)
 % =====================================================================
 if nargin < 2
    save_anim = 0;
+   cmap = parula;
 end
 %  Enter file name
 temp_fname = generate_temp_filename('gif_anim', 3);
@@ -16,7 +17,7 @@ anim_name = [temp_fname 'gif'];
 %  Frame counter start
   
 nt = 1;
-tpts = size(data, 3);
+tpts = size(data, 1);
 
 
 fig_gif = figure('Name', 'nflows-gifanim');
@@ -33,8 +34,8 @@ for cc =1:tpts
   h.FaceColor = 'interp';
   h.EdgeColor = 'none';
   % NOTE: these parameters should be passed as options
-  %colormap(parula(1024))
-  colormap(hsv(1024))
+  colormap(cmap)
+  %colormap(hsv(1024))
   %caxis([-40 10])
   these_axes.Title.String = ['Time frame: ' num2str(cc, '%04d')];
   
