@@ -96,7 +96,7 @@ for kk=1:length(tip)
        
        gaussian = @(c, loc, kk) exp(-1/(2*c^2) * (((XX(:, :, 1)-tip_x(kk)).^2 + ...
                                                    (YY(:, :, 1)-tip_y(kk)).^2)));
-       wave2d = spatiotemporal_masks(wave2d, gaussian(c, tip_centre, kk));
+       wave2d = apply_spatiotemporal_mask(wave2d, gaussian(c, tip_centre, kk));
        
        % Ensure that the maximum amplitude is still AMP
        wave2d = wave2d / max(abs(wave2d(:))) * amp;
