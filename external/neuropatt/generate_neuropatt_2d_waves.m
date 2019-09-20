@@ -1,5 +1,5 @@
 function [wave, pattType] = generate_neuropatt_2d_waves(gridSize, pattType, amp, ...
-    freq, wavelength, loc, vel, gausswidth)
+    freq, wavelength, loc, vel, gausswidth, opts)
 % GENERATEPATTERN generates a custom wave pattern based on inputs
 % INPUTS:
 %   - gridSize: 3 element vector [NX NY NT] giving the x, y, and time
@@ -20,6 +20,7 @@ function [wave, pattType] = generate_neuropatt_2d_waves(gridSize, pattType, amp,
 %   - gausswidth: scalar giving the full width at half maxiumum of the
 %       Gaussian amplitude mask applied around the pattern centre. If not
 %       supplied, amplitude will be uniform
+% opts -- structure
 % OUTPUTS:
 %   - wave: NX x NY x NT matrix of complex numbers containing specified
 %       wave pattern activity
@@ -32,10 +33,15 @@ if strcmp(pattType, 'random')
 end
 
 % Create grid of coordinates
-hx = 0.5;
-hy = 0.5;
-ht = 0.5;
-[x, y, t] = meshgrid(1:hx:gridSize(1), 1:hy:gridSize(2), 1:gridSize(3));
+if nargin < 9
+    opts.ht = 1;
+    opts.hx = 1;
+    opts.hy = 1;
+end
+hx = opts.hx;
+hy = opts.hz;
+ht = opts.ht;
+[x, y, t] = meshgrid(1:hx:gridSize(1), 1:hy:gridSize(2), 1:ht:gridSize(3));
 
 % Convert parameters into more useful quantities
 % Angular frequency
@@ -94,7 +100,7 @@ wave(wave~=0) = amp * wave(wave~=0) ./ abs(wave(wave~=0));
 if exist('c', 'var')
     gaussian = @(c, loc) exp(-1/(2*c^2) * (((x(:,:,1)-loc(1)).^2 + ...
         (y(:,:,1)-loc(2)).^2)));
-    wave = addAmplitudeProfiles(wave, gaussian(c, loc));
+    wave = spatiotemporal_masks(wave, gaussian(c, loc));
 end
 
 % Ensure that the maximum amplitude is still AMP
