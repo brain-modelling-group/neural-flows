@@ -104,47 +104,61 @@ idx_2 = idx_1 + 1;
 switch direction
     case 'y'
         wave3d = permute(wave3d, [1 3 2 4]);
-        temp = squeeze(wave3d(:, :, idx_1, idx_2));
-        temp2 = squeeze(wave3d(:, :, :, idx_2));
-        ylabel_str = 'y-axis';
+        %temp = squeeze(wave3d(:, :, idx_1, idx_2));
+        %temp2 = squeeze(wave3d(:, :, :, idx_2));
+        %ylabel_str = 'y-axis';
         
     case 'z'
         wave3d = permute(wave3d, [1 4 2 3]);
-        temp  = squeeze(wave3d(:, idx_1, idx_2, :)); % indices do not mean anything special -- just selecting a plane of 3d space
-        temp2 = squeeze(wave3d(:, idx_2, :, :)); 
-        ylabel_str = 'z-axis';
+        %temp  = squeeze(wave3d(:, idx_1, idx_2, :)); % indices do not mean anything special -- just selecting a plane of 3d space
+        %temp2 = squeeze(wave3d(:, idx_2, :, :)); 
+        %ylabel_str = 'z-axis';
         
     otherwise
         % assume x direction
-        temp = squeeze(wave3d(:, idx_1, :, idx_2));
-        temp2 = wave3d(:, :, :, idx_2); 
-        ylabel_str = 'x-axis';
+        %temp = squeeze(wave3d(:, idx_1, :, idx_2));
+        %temp2 = wave3d(:, :, :, idx_2); 
+        %ylabel_str = 'x-axis';
 end
 
 % Visual debugging of the first time point
 % TODO: generate a movie, perhaps of projections onto a 2d plane.
 if plot_stuff
     
-    fig_pcolor3 = figure('Name', 'nflows-travellingwave3d-space');
-    these_axes = subplot(1,1,1, 'Parent', fig_pcolor3);
-    tt = 1;
-    pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)), 'axes', these_axes);
-    xlabel('X')
-    ylabel('Y')
-    zlabel('Z')
+    min_val = min(wave3d(:));
+    max_val = max(wave3d(:));
+    
+%     fig_pcolor3 = figure('Name', 'nflows-travellingwave3d-space');
+%     these_axes = subplot(1,1,1, 'Parent', fig_pcolor3);
+%     tt = 1;
+%     pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)), 'axes', these_axes);
+%     xlabel('X')
+%     ylabel('Y')
+%     zlabel('Z')
+% 
+%     figure('Name', 'nflows-travellingwave3d-time')
+%     plot(time, squeeze(wave3d(:, idx_1, idx_2, idx_2)));
+%     xlim([time(1) time(end)])
+%     xlabel('time')
+%     ylabel('p(x, y, z)')
+% 
+%     figure('Name', 'nflows-travellingwave3d-space-time-1d')
+%     plot(time, temp, 'color', [0.65 0.65 0.65]);
+%     xlim([time(1) time(end)])
+%     xlabel('time')
+%     ylabel(['space: ' ylabel_str])
+    
+    fig_spiral = figure('Name', 'nflows-spiralwave3d-space-time');
+    for tt=1:length(time)
+        these_axes = subplot(1, 1, 1, 'Parent', fig_spiral);
+        these_axes.XLabel.String = 'X';
+        these_axes.YLabel.String = 'Y';
+        these_axes.ZLabel.String = 'Z';
+        cla;
+        pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)), 'axes', these_axes); 
+        caxis([min_val  max_val]);pause(0.5); 
+    end     
 
-    figure('Name', 'nflows-travellingwave3d-time')
-    plot(time, squeeze(wave3d(:, idx_1, idx_2, idx_2)));
-    xlim([time(1) time(end)])
-    xlabel('time')
-    ylabel('p(x, y, z)')
-
-    figure('Name', 'nflows-travellingwave3d-space-time-1d')
-    plot(time, temp, 'color', [0.65 0.65 0.65]);
-    xlim([time(1) time(end)])
-    xlabel('time')
-    ylabel(['space: ' ylabel_str])
-
-    make_movie_gif(temp2)
+    %make_movie_gif(temp2)
 end
 end % function generate_travellingwave3d_grid()
