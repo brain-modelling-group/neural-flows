@@ -1,13 +1,13 @@
 function test_flow_estimation__spiralwave3d_grid_hs3d()
 
 % Generate data
- options.hx = 0.25;
- options.hy = 0.25;
- options.hz = 0.25;
- options.ht = 0.25;
+ options.hx = 1;
+ options.hy = 1;
+ options.hz = 1;
+ options.ht = 1;
  [wave3d, X, Y, Z, ~] = generate_spiralwave3d_grid('visual_debugging', true, ...
                                                    'hxyz', options.hx, 'ht', options.ht, ...
-                                                   'velocity', [0 0], 'filament', 'line');
+                                                   'velocity', [0 0], 'filament', 'helix');
  
  options.flow_calculation.init_conditions = 'random';
  options.flow_calculation.seed_init_vel = 42;

@@ -113,8 +113,9 @@ z = min_val_z:hxyz:max_val_z;
 
 % Wave parameter - hardcoded to get well behaved waves
 freq =      0.1; % Hz
-wavelength = 16; % m
-gausswidth = 20; 
+wavelength = (max_val_y-min_val_y)/2; % m
+gausswidth = (max_val_y-min_val_y)/2;
+
 amp = 1.0;
 tip_centre = [0, 0]; % in metres
 
@@ -145,7 +146,7 @@ switch filament
         
 end 
 
-wave3d(length(time), length(x), length(y), length(z)) = 0;
+wave3d(length(time), length(y), length(x), length(z)) = 0;
 
 for kk=1:length(tip)
             

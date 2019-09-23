@@ -14,7 +14,7 @@ function [X, Y, Z, grid_size] = get_structured_grid(points_xyz, hx, hy, hz)
 %   grid_size  -- vector with the size of the grid (ie [M, N, P]) 
 %
 % REQUIRES: 
-%         None()
+%        get_grid_limits()
 %
 % USAGE:
 %{     
@@ -23,23 +23,11 @@ function [X, Y, Z, grid_size] = get_structured_grid(points_xyz, hx, hy, hz)
 %
 % MODIFICATION HISTORY:
 %     Paula Sanz-Leon, QIMR Berghofer February 2019
-% Human-readable labels for indexing dimensions of 3D arrays
-x_dim = 1;
-y_dim = 2;
-z_dim = 3;
 
-% Round up to the nearest integer, using ceil avoids errors in the interpolated data.    
-int_locs = ceil(abs(points_xyz)).*sign(points_xyz);
 
-% Minima 
-min_x = min(int_locs(:, x_dim)) - 2*hx;
-min_y = min(int_locs(:, y_dim)) - 2*hy;
-min_z = min(int_locs(:, z_dim)) - 2*hz;  
 
-% Maxima
-max_x = max(int_locs(:, x_dim)) + 2*hx;
-max_y = max(int_locs(:, y_dim)) + 2*hy;
-max_z = max(int_locs(:, z_dim)) + 2*hz;
+[min_x, min_y, min_z, max_x, max_y, max_z, ~] = get_grid_limits(points_xyz, hx, hy, hz);
+
     
 % Create the grid -- THIS IS THE PROBLEM WITH SPACING
 xx = min_x:hx:max_x;
