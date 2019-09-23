@@ -5,7 +5,7 @@ function test_flow_estimation__travellingwave3d_scattered_hs3d()
  options.hy = 2;
  options.hz = 2;
  options.ht = 0.5;
- % With these parameters the wave is moving at 4 m/s along the x-axis
+ % With these parameters the wave is moving at 4 m/s along the y-axis
  
  load('513COG.mat', 'COG')
  locs = COG(1:256, :);
