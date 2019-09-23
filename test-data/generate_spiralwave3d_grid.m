@@ -105,9 +105,9 @@ xdim = 1;
 ydim = 2;
 
 time = 0:ht:max_val_time;
-x = -min_val_x:hxyz:max_val_x;
-y = -min_val_y:hxyz:max_val_y;
-z = -min_val_z:hxyz:max_val_z;
+x = min_val_x:hxyz:max_val_x;
+y = min_val_y:hxyz:max_val_y;
+z = min_val_z:hxyz:max_val_z;
 
 [XX, YY, TT] = meshgrid(x, y, time);
 
