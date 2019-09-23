@@ -99,13 +99,13 @@ end
 
 [X, Y, Z] = meshgrid(x, x, x); % in metres
 
-idx_1 = ceil(len_x/2);
+idx_1 = floor(len_x/2);
 idx_2 = idx_1 + 1;
 switch direction
     case 'y'
         wave3d = permute(wave3d, [1 3 2 4]);
         temp = squeeze(wave3d(:, :, idx_1, idx_2));
-        temp2 = squeeze(wave3d(:, :, :, 12));
+        temp2 = squeeze(wave3d(:, :, :, idx_2));
         ylabel_str = 'y-axis';
         
     case 'z'
