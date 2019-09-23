@@ -50,7 +50,6 @@ else
     vel = [ux uy];
 end
 
-
 tmp = strcmpi(varargin,'visual_debugging');
 if any(tmp)
     plot_stuff = varargin{find(tmp)+1}; 
@@ -65,17 +64,50 @@ else
     filament = 'helix';
 end
 
+tmp = strcmpi(varargin,'max_val_space'); % max value in the grid along each axis
+if any(tmp)
+    max_xyz = varargin{find(tmp)+1};
+    max_val_x  = max_xyz(1);
+    max_val_y  = max_xyz(2);
+    max_val_z  = max_xyz(3);
+else
+    max_val_x = 16;
+    max_val_y = 16;
+    max_val_z = 16;
+end
 
-max_val_space = 16; % in metres/millimetres
+tmp = strcmpi(varargin,'min_val_space'); % min value in the grid along each axis
+if any(tmp)
+    min_xyz = varargin{find(tmp)+1};
+    min_val_x  = min_xyz(1);
+    min_val_y  = min_xyz(2);
+    min_val_z  = min_xyz(3);
+else
+    min_val_x = -16;
+    min_val_y = -16;
+    min_val_z = -16;
+end
+
+
+tmp = strcmpi(varargin,'tip_centre'); % min value in the grid along each axis
+if any(tmp)
+    tip_centre = varargin{find(tmp)+1};
+    tip_a = tip_centre(1);
+    tip_b = tip_centre(2);
+else
+    tip_a = 0;
+    tip_b = 0;
+end
+
 max_val_time = 8;   % in seconds / milliseconds
 
 xdim = 1;
 ydim = 2;
 
 time = 0:ht:max_val_time;
-x = -max_val_space:hxyz:max_val_space;
-y = -max_val_space:hxyz:max_val_space;
-z = -max_val_space:hxyz:max_val_space;
+x = -min_val_x:hxyz:max_val_x;
+y = -min_val_y:hxyz:max_val_y;
+z = -min_val_z:hxyz:max_val_z;
 
 [XX, YY, TT] = meshgrid(x, y, time);
 
@@ -108,8 +140,8 @@ switch filament
          tip_y = radius.*sin(tip);
          tip_x = radius.*cos(tip);
     case 'line'
-        tip_y = zeros(size(z));
-        tip_x = zeros(size(z));
+        tip_y = tip_a.*ones(size(z));
+        tip_x = tip_b.*ones(size(z));
         
 end 
 
