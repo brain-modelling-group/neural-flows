@@ -113,7 +113,8 @@ switch direction
       idx_end = length(x);
       idy_start = offset;
       idy_end   = offset+size(X, 1)-1;
-      idz_start = 1;
+      idz_start = 1;wave3d(length(time), size(locs, 1)) = 0;
+
       idz_end = length(z);
     case 'z'
       x = min(X(:)):hxyz:max(X(:));
@@ -139,7 +140,6 @@ for tt=1:length(time)
     % This step is super slow -- so do not run this example for long
     % timeseries.
     data_interpolant = scatteredInterpolant(X(:), Y(:), Z(:), B(:), 'linear', 'none');
-    %data_interpolant = scatteredInterpolant(Y(:), X(:), Z(:), B(:), 'linear', 'none');
     wave3d(tt, :) = data_interpolant(locs(:, 1), locs(:, 2), locs(:, 3));
 end
 
