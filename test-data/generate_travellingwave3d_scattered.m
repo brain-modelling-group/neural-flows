@@ -66,30 +66,80 @@ else
     plot_stuff = true;
 end
 
-[X, Y, Z, ~] = get_structured_grid(locs, hxyz, hxyz, hxyz);
+tmp = strcmpi(varargin,'direction'); 
+if any(tmp)
+    direction = varargin{find(tmp)+1}; 
+else
+    direction = 'x';
+end
 
-y = min(Y(:)):hxyz:max(Y(:));
-z = min(Z(:)):hxyz:max(Z(:));
-offset = 25;
-x1 = (min(X(:))-2*offset):hxyz:max(X(:));
-[X1, ~, ~] = meshgrid(x1, y, z);
+[X, Y, Z, ~] = get_structured_grid(locs, hxyz, hxyz, hxyz);
 
 % NOTE: hardcoded size 
 time = 0:ht:10; % in seconds
 
-A = X1;
 % Preallocate memory
 wave3d(length(time), size(locs, 1)) = 0;
 
-idx_start = offset;
-idx_end   = offset+size(X, 2)-1;
+switch direction
+    case 'x'
+        
+      y = min(Y(:)):hxyz:max(Y(:));
+      z = min(Z(:)):hxyz:max(Z(:));
+      offset = 25;
+      x1 = (min(X(:))-2*offset):hxyz:max(X(:));
+      [X1, ~, ~] = meshgrid(x1, y, z);
+      circshift_dim = 2;
+      A = X1;
+      % X
+      idx_start = offset;
+      idx_end   = offset+size(X, 2)-1;
+      % Y
+      idy_start = 1;
+      idy_end = length(y);
+      % Z
+      idz_start = 1;
+      idz_end = length(z);
+      
+    case 'y'
+      x = min(X(:)):hxyz:max(X(:));
+      z = min(Z(:)):hxyz:max(Z(:));
+      offset = 25;
+      y1 = (min(Y(:))-2*offset):hxyz:max(Y(:));
+      [~, Y1, ~] = meshgrid(x, y1, z);
+      circshift_dim = 1;
+      A = Y1;
+      idx_start = 1;
+      idx_end = length(x);
+      idy_start = offset;
+      idy_end   = offset+size(X, 1)-1;
+      idz_start = 1;
+      idz_end = length(z);
+    case 'z'
+      x = min(X(:)):hxyz:max(X(:));
+      y = min(Y(:)):hxyz:max(Y(:));
+      offset = 25;
+      z1 = (min(Z(:))-2*offset):hxyz:max(Z(:));
+      [~, ~, Z1] = meshgrid(x, y, z1);
+      circshift_dim = 3;
+      A = Z1;
+      idx_start = 1;
+      idx_end = length(x);
+      idy_start = 1;
+      idy_end = length(y);
+      idz_start = offset;
+      idz_end   = offset+size(X, 3)-1;
+end
+
+
 
 for tt=1:length(time)
-    B = circshift(A, velocity*tt, 2);
-    B = B(:, idx_start:idx_end, :);
+    B = circshift(A, velocity*tt, circshift_dim);
+    B = B(idy_start:idy_end, idx_start:idx_end, idz_start:idz_end);
     % This step is super slow -- so do not run this example for long
     % timeseries.
     data_interpolant = scatteredInterpolant(X(:), Y(:), Z(:), B(:), 'linear', 'none');
+    %data_interpolant = scatteredInterpolant(Y(:), X(:), Z(:), B(:), 'linear', 'none');
     wave3d(tt, :) = data_interpolant(locs(:, 1), locs(:, 2), locs(:, 3));
 end
 
