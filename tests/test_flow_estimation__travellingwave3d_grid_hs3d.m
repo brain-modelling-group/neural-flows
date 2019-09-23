@@ -5,7 +5,7 @@ function test_flow_estimation__travellingwave3d_grid_hs3d()
  options.hy = 2;
  options.hz = 2;
  options.ht = 0.5;
- [wave3d, X, Y, Z, ~] = generate_travellingwave3d_grid('visual_debugging', true, 'hxyz', options.hx, 'ht', options.ht, 'velocity', 1);
+ [wave3d, X, Y, Z, ~] = generate_travellingwave3d_grid('visual_debugging', false, 'hxyz', options.hx, 'ht', options.ht, 'velocity', 1, 'direction', 'y');
  
  options.flow_calculation.init_conditions = 'random';
  options.flow_calculation.seed_init_vel = 42;

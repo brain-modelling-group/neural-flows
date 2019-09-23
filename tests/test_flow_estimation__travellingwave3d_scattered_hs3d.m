@@ -11,7 +11,7 @@ function test_flow_estimation__travellingwave3d_scattered_hs3d()
  locs = COG(1:256, :);
  
  
- [wave3d, ~] = generate_travellingwave3d_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht);
+ [wave3d, ~] = generate_travellingwave3d_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'y');
  
  options.data_interpolation.file_exists = false;
  options.flow_calculation.init_conditions = 'random';
