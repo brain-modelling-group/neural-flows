@@ -97,7 +97,7 @@ else
     for tt=1:tpts
         instant_phi = phi(tt,:);
         instant_phi = instant_phi(:);
-        gradphi = cnem_grad_V(B, instant_phi);
+        gradphi = flows3d_cnem_grad_V(B, instant_phi);
         dphidxp(tt,:)= gradphi(:,xdim);
         dphidyp(tt,:)= gradphi(:,ydim);
         dphidzp(tt,:)= gradphi(:,zdim);
