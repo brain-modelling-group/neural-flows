@@ -1,4 +1,4 @@
-function [wave3d, X, Y, Z, time] = generate_planewave_3d_structured(direction)
+function [wave3d, X, Y, Z, time] = generate_planewave3d_grid(varargin)
 % Generates plane harmonic waves in 3D physical space +
 % time. The size of space and time vector are hardcoded as these waves are
 % intended for fast debugging and testing purposes. 
@@ -19,20 +19,57 @@ function [wave3d, X, Y, Z, time] = generate_planewave_3d_structured(direction)
 %
 % USAGE:
 %{
-    generate_planewave_3d_structured('all');
+    generate_planewave_3d_structured('x');
 
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 % NOTE: hardcoded stuff size
-x = -8:8;
+
+tmp = strcmpi(varargin,'direction'); 
+if any(tmp)
+    direction = varargin{find(tmp)+1}; 
+else
+    direction = 'x';
+end
+
+tmp = strcmpi(varargin,'hxyz'); 
+if any(tmp)
+    hxyz = varargin{find(tmp)+1}; 
+else
+    hxyz = 1;
+end
+
+tmp = strcmpi(varargin,'ht'); 
+if any(tmp)
+    ht = varargin{find(tmp)+1}; 
+else
+    ht = 1;
+end
+
+tmp = strcmpi(varargin,'velocity'); % note really a velocity but an integer scaling for circshift
+if any(tmp)
+    velocity = varargin{find(tmp)+1}; 
+else
+    velocity = 1;
+end
+
+tmp = strcmpi(varargin,'visual_debugging'); % note really a velocity but an integer scaling for circshift
+if any(tmp)
+    plot_stuff = varargin{find(tmp)+1}; 
+else
+    plot_stuff = true;
+end
+
+max_val = 10;
+x = -max_val:hxyz:max_val;
 len_x = length(x);
 
 [X, Y, Z] = meshgrid(x, x, x); % in metres
 R = sqrt(X.^2+Y.^2+Z.^2);
 
 % NOTE: hardcoded size 
-time = 0:200; % in seconds
+time = 0:ht:150; % in seconds
 omega = 0.1;%2*pi*0.05; % in rad sec^-1
 
 % NOTE: Hardocoded frequencies
@@ -80,32 +117,36 @@ switch direction
     case 'all'
         % I wonder about my sanity and state of mind when I find myself doing
         % recursive function calls in matlab.
-        generate_planewave_3d_structured('x');
-        generate_planewave_3d_structured('y');
-        generate_planewave_3d_structured('z');
-        generate_planewave_3d_structured('radial');
-        generate_planewave_3d_structured('blah');
+        generate_planewave3d_grid('x');
+        generate_planewave3d_grid('y');
+        generate_planewave3d_grid('z');
+        generate_planewave3d_grid('radial');
+        generate_planewave3d_grid('blah');
         return
         
     otherwise
         kr = 0;
 end
 
+omega_sign = 1;
 % Generate the wave
 for tt=1:length(time)
     % The - sign of omega * t means the direction of propagation will be
     % along the + direction of the corresponding axes.
-    wave3d(tt, :, :, :) = A.* exp(1i.*(kx.*X + ky.*Y + kz.*Z + kr.*R - omega.*time(tt)));
+    wave3d(tt, :, :, :) = A.* exp(1i.*(kx.*X + ky.*Y + kz.*Z + kr.*R - omega_sign.*omega.*time(tt)));
 end
 
 % Save only the real part
-wave3d = real(wave3d)+A;
+wave3d = real(wave3d);
 
 % Visual debugging of the first time point
 % TODO: generate a movie, perhaps of projections onto a 2d plane.
 figure('Name', 'nflows-planewave3d-space');
 tt = 1;
+%colormap(bluegred(256))
 pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)));
+colormap(bluegred(256))
+
 xlabel('X')
 ylabel('Y')
 zlabel('Z')
