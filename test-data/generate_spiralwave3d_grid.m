@@ -181,6 +181,7 @@ if plot_stuff
         these_axes.YLabel.String = 'Y';
         these_axes.ZLabel.String = 'Z';
         cla;
+        colormap(bluegred(256))
         pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)), 'axes', these_axes); 
         caxis([min_val  max_val]);pause(0.5); 
     end
