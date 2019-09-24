@@ -19,7 +19,7 @@ function [wave3d, X, Y, Z, time] = generate_planewave3d_grid(varargin)
 %
 % USAGE:
 %{
-    generate_planewave_3d_structured('x');
+    generate_planewave_3d_grid('x');
 
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -47,30 +47,55 @@ else
     ht = 1;
 end
 
-tmp = strcmpi(varargin,'velocity'); % note really a velocity but an integer scaling for circshift
+
+tmp = strcmpi(varargin,'max_val_space'); % max value in the grid along each axis
 if any(tmp)
-    velocity = varargin{find(tmp)+1}; 
+    max_xyz = varargin{find(tmp)+1};
+    max_val_x  = max_xyz(1);
+    max_val_y  = max_xyz(2);
+    max_val_z  = max_xyz(3);
 else
-    velocity = 1;
+    max_val_x = 16;
+    max_val_y = 16;
+    max_val_z = 16;
+end
+
+tmp = strcmpi(varargin,'min_val_space'); % min value in the grid along each axis
+if any(tmp)
+    min_xyz = varargin{find(tmp)+1};
+    min_val_x  = min_xyz(1);
+    min_val_y  = min_xyz(2);
+    min_val_z  = min_xyz(3);
+else
+    min_val_x = -16;
+    min_val_y = -16;
+    min_val_z = -16;
 end
 
 tmp = strcmpi(varargin,'visual_debugging'); % note really a velocity but an integer scaling for circshift
 if any(tmp)
     plot_stuff = varargin{find(tmp)+1}; 
-else
+else 
     plot_stuff = true;
 end
 
-max_val = 10;
-x = -max_val:hxyz:max_val;
-len_x = length(x);
 
-[X, Y, Z] = meshgrid(x, x, x); % in metres
+max_val_time = 150;
+time = 0:ht:max_val_time;
+x = min_val_x:hxyz:max_val_x;
+y = min_val_y:hxyz:max_val_y;
+z = min_val_z:hxyz:max_val_z;
+
+
+len_x = length(x);
+len_y = length(y);
+len_z = length(z);
+
+[X, Y, Z] = meshgrid(x, y, z); % in metres
 R = sqrt(X.^2+Y.^2+Z.^2);
 
 % NOTE: hardcoded size 
-time = 0:ht:150; % in seconds
-omega = 0.1;%2*pi*0.05; % in rad sec^-1
+omega = 0.2;%2*pi*0.05; % in rad sec^-1
 
 % NOTE: Hardocoded frequencies
 kx = 0.1; % in m^-1
@@ -79,14 +104,14 @@ kz = 0.1; % in m^-1
 kr = sqrt(kx.^2 + ky.^2 + kz.*2);
 
 %NOTE: estimation of wave propagation speed, should be output parameter if
-% we allow for input temp and pstial freqs.
+% we allow for input temp and spatial freqs.
 %c = omega ./ kr;
 
 % Amplitude of the wave.
 % NOTE: can be turned into a parameter
 A = 1;
 % Preallocate memory
-wave3d(length(time), len_x, len_x, len_x) = 0;
+wave3d(length(time), len_x, len_y, len_z) = 0;
 
 if nargin < 1
     direction = 'x';
@@ -139,22 +164,22 @@ end
 % Save only the real part
 wave3d = real(wave3d);
 
-% Visual debugging of the first time point
-% TODO: generate a movie, perhaps of projections onto a 2d plane.
-figure('Name', 'nflows-planewave3d-space');
-tt = 1;
-%colormap(bluegred(256))
-pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)));
-colormap(bluegred(256))
+if plot_stuff 
+    % Visual debugging of the first time point
+    % TODO: generate a movie, perhaps of projections onto a 2d plane.
+    figure('Name', 'nflows-planewave3d-space');
+    tt = 1;
+    %colormap(bluegred(256))
+    pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)));
+    colormap(bluegred(256))
 
-xlabel('X')
-ylabel('Y')
-zlabel('Z')
+    xlabel('X')
+    zlabel('Z')
 
-figure('Name', 'nflows-planewave3d-time')
-plot(time, squeeze(wave3d(:, 11,12, 12)));
-xlabel('time')
-ylabel('p(x, y, z)')
-
+    figure('Name', 'nflows-planewave3d-time')
+    plot(time, squeeze(wave3d(:, 11,12, 12)));
+    xlabel('time')
+    ylabel('p(x, y, z)')
+end
 end % function generate_planewave3d_structured()
 
