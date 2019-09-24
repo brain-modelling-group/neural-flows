@@ -52,7 +52,6 @@ else
     vel = [ux uy];
 end
 
-
 tmp = strcmpi(varargin,'tip_centre'); % min value in the grid along each axis
 if any(tmp)
     tip_centre = varargin{find(tmp)+1};
@@ -62,7 +61,6 @@ else
     tip_a = 0;
     tip_b = 0;
 end
-
 
 tmp = strcmpi(varargin,'visual_debugging');
 if any(tmp)
