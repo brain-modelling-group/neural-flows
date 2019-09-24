@@ -1,10 +1,12 @@
 function test_flow_estimation__travellingwave3d_scattered_cnem()
-
+%NOTE: takes about 51 seconds @dracarys
  %Generate data
  options.hx = 2;
  options.hy = 2;
  options.hz = 2;
  options.ht = 0.5;
+ options.alpha_radius = 30;
+ options.is_phase = true;
  % With these parameters the wave is moving at 2 m/s along the x-axis
  
  % Load centres of gravity
@@ -13,15 +15,19 @@ function test_flow_estimation__travellingwave3d_scattered_cnem()
  locs = [locs; COG(513, :)]; % amygdala on that side.
 
  % Generate fake data
- [wave3d, ~] = generate_travellingwave3d_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht);
+ [wave3d, ~] = generate_travellingwave3d_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'y');
  
- % Transform data into phase via hilber transform
- wave3d_phi = calculate_insta_phase(wave3d);
+ if options.is_phase
+     % Transform data into phase via hilber transform
+     wave3d = calculate_insta_phase(wave3d);
+     fig_name = 'nflows-test-travellingwave3d-scattered-cnem-phase';
+ else
+     fig_name = 'nflows-test-travellingwave3d-scattered-cnem-activity';
+ end
  
- v = flows3d_estimate_cnem_flow(wave3d_phi, locs, options.ht);
+ v = flows3d_estimate_cnem_flow(wave3d, locs, options.ht);
  
- 
- fig_hist = figure('Name', 'nflows-test-travellingwave3d-scattered-cnem');
+ fig_hist = figure('Name', fig_name);
 
  subplot(1, 3, 1, 'Parent', fig_hist)
  histogram(v.vxp(:, 1:50))

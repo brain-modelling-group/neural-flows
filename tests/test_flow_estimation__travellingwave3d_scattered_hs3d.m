@@ -1,5 +1,5 @@
 function test_flow_estimation__travellingwave3d_scattered_hs3d()
-
+% NOTE: Takes about 110 seconds @ dracarys
 % Generate data with these step sizes
  options.hx = 2;
  options.hy = 2;
@@ -20,7 +20,7 @@ function test_flow_estimation__travellingwave3d_scattered_hs3d()
  options.flow_calculation.max_iterations = 128;
  options.sing_detection = false;
  %
- %wave3d_phi = calculate_insta_phase(wave3d);
+ wave3d = calculate_insta_phase(wave3d);
 
  % Do the stuff
  [mfile_flows] = main_neural_flows_hs3d_scatter(wave3d, locs, options);
