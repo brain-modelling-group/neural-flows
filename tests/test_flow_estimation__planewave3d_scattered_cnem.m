@@ -30,17 +30,23 @@ function test_flow_estimation__planewave3d_scattered_cnem()
  
  fig_hist = figure('Name', fig_name);
 
- subplot(1, 3, 1, 'Parent', fig_hist)
+ subplot(1, 4, 1, 'Parent', fig_hist)
  histogram(v.vxp(:))
  xlabel('ux')
  
- subplot(1, 3 ,2, 'Parent', fig_hist)
+ subplot(1, 4 ,2, 'Parent', fig_hist)
  histogram(v.vyp(:))
  xlabel('uy')
 
- subplot(1, 3, 3, 'Parent', fig_hist)
+ subplot(1, 4, 3, 'Parent', fig_hist)
  histogram(v.vzp(:))
  xlabel('uz')
+ 
+ 
+ subplot(1, 4, 4, 'Parent', fig_hist)
+ histogram(sqrt(v.vxp(:).^2+v.vyp(:).^2+v.vzp(:).^2)))
+ xlabel('uz')
+
 
  
 end % function test_flow_estimation__planewave3d_grid_hs3d()
