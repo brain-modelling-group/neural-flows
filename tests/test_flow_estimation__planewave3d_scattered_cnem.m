@@ -10,7 +10,6 @@ function test_flow_estimation__planewave3d_scattered_cnem()
  options.alpha_radius = 30;
  options.is_phase = true;
  
- % With these parameters the wave is moving at 4 m/s along the y-axis
  
  load('513COG.mat', 'COG')
  locs = COG(1:256, :);
@@ -32,20 +31,20 @@ function test_flow_estimation__planewave3d_scattered_cnem()
 
  subplot(1, 4, 1, 'Parent', fig_hist)
  histogram(v.vxp(:))
- xlabel('ux')
+ xlabel('ux [mm/ms]')   
  
  subplot(1, 4 ,2, 'Parent', fig_hist)
  histogram(v.vyp(:))
- xlabel('uy')
+ xlabel('uy [mm/ms]')
 
  subplot(1, 4, 3, 'Parent', fig_hist)
  histogram(v.vzp(:))
- xlabel('uz')
+ xlabel('uz [mm/ms]')
  
  
  subplot(1, 4, 4, 'Parent', fig_hist)
- histogram(sqrt(v.vxp(:).^2+v.vyp(:).^2+v.vzp(:).^2)))
- xlabel('uz')
+ histogram(sqrt(v.vxp(:).^2+v.vyp(:).^2+v.vzp(:).^2))
+ xlabel('u_{norm} [mm/ms]')
 
 
  
