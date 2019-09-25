@@ -1,4 +1,4 @@
-function [wave3d, X, Y, Z, time] = generate_planewave3d_grid(varargin)
+function [wave3d, X, Y, Z, time] = generate_wave3dplane_grid(varargin)
 % Generates plane harmonic waves in 3D physical space +
 % time. The size of space and time vector are hardcoded as these waves are
 % intended for fast debugging and testing purposes. 

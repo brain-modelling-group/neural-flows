@@ -1,4 +1,4 @@
-function [wave3d, X, Y, Z, time] = generate_spiralwave3d_grid(varargin)
+function [wave3d, X, Y, Z, time] = generate_wave3dspiral_grid(varargin)
 % Generates a spiral wave in 3D space+time. The rotation occurs on the XY-plane. 
 % The position of the centre of rotation (the tip) - on xy - changes with 
 % depth z.
