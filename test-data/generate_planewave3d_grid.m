@@ -111,7 +111,7 @@ kr = sqrt(kx.^2 + ky.^2 + kz.*2);
 % NOTE: can be turned into a parameter
 A = 1;
 % Preallocate memory
-wave3d(length(time), len_x, len_y, len_z) = 0;
+wave3d(length(time), len_y, len_x, len_z) = 0;
 
 if nargin < 1
     direction = 'x';
