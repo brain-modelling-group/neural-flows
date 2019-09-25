@@ -1,4 +1,4 @@
-function [ux, uy, uz] = generate_spiralsink_3d_structured()
+function [ux, uy, uz] = generate_flow_spiralsink3d_grid()
 
 x = linspace(-5, 5, 43);
 [X, Y, Z] = meshgrid(x, x, x);
