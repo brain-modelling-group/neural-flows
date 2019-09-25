@@ -8,13 +8,12 @@ function test_flow_estimation__planewave3d_scattered_hs3d()
  options.hz = 2;
  options.ht = 2;
  
- % With these parameters the wave is moving at 4 m/s along the y-axis
  
  load('513COG.mat', 'COG')
  locs = COG(1:256, :);
  
  
- [wave3d, ~] = generate_planewave3d_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'y');
+ [wave3d, ~] = generate_planewave3d_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'z');
  
  % Options
  options.data_interpolation.file_exists = false;
