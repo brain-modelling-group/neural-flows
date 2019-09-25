@@ -15,7 +15,7 @@ function test_flow_estimation__travellingwave3d_scattered_cnem()
  locs = [locs; COG(513, :)]; % amygdala on that side.
 
  % Generate fake data
- [wave3d, ~] = generate_travellingwave3d_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'y');
+ [wave3d, ~] = generate_wave3dtravelling_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'y');
  
  if options.is_phase
      % Transform data into phase via hilber transform

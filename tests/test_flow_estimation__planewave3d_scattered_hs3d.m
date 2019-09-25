@@ -13,7 +13,7 @@ function test_flow_estimation__planewave3d_scattered_hs3d()
  locs = COG(1:256, :);
  
  
- [wave3d, ~] = generate_planewave3d_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'z');
+ [wave3d, ~] = generate_wave3dplane_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'z');
  
  % Options
  options.data_interpolation.file_exists = false;
