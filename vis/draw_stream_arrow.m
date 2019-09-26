@@ -17,7 +17,7 @@ function [stream_handle, options] = draw_stream_arrow(X0, Y0, U, V, options)
 %    stream_handle -- streamline objects handle
 %
 % AUTHOR:
-%    Paula Sanz-Leon, (2018), QIMR Berghofer
+%    Paula Sanz-Leon, December 2018, QIMR Berghofer
 %
 % USAGE:
 %{ 
@@ -82,7 +82,7 @@ switch options.start_points_mode
         x0 = start_X(:); 
         y0 = start_Y(:);
     otherwise
-        error(['patchflow:' mfilename ':NotImplemented'], ...
+        error(['neural-flows::' mfilename '::NotImplemented'], ...
               'The streamline init method you requested is not implemented yet.');
         
 end
