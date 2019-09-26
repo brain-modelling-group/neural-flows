@@ -98,17 +98,26 @@ h2=streamline(X, Y, Z, U, V, W, 0.01, 0.01, -0.5);
 h1=streamline(X, Y, Z, U, V, W, 0.5, -0.5, 0.05);
 h2=streamline(X, Y, Z, U, V, W, -0.5, -0.5, -0.05);
 %%
-set(h1,'Color','red');
-set(h2,'Color','blue');
+set(h1,'Color',[0.3 0.3 0.3]);
+set(h2,'Color',[0.3 0.3 0.3]);
+
+% Start point
+plot3(h2.XData(1), h2.YData(1), h2.ZData(1), 'rx')
+plot3(h1.XData(1), h1.YData(1), h1.ZData(1), 'rx')
+
+% End point
+plot3(h1.XData(end), h1.YData(end), h1.ZData(end), 'ko')
+plot3(h2.XData(end), h2.YData(end), h2.ZData(end), 'ko')
 
 view(3);
 
-%   
- %options.stream_length_steps=21;
- %options.curved_arrow = 1;
- %options.start_points_mode = 'random-sparse';
-% 
- %draw_stream_arrow(X(:, :, 16), squeeze(Z(:, 16, :)), V(:, :, 16), squeeze(W(:, 16, :)), options)
+%%   
+options.stream_length_steps=11;
+options.curved_arrow = 1;
+options.start_points_mode = 'grid';
+% try to draw without normalisation by the norm because it is used as the
+% cmap.
+draw_stream_arrow(X(:, :, 16), Y(:, :, 16), U(:, :, 16), V(:, :, 16), options)
 
 
 %end
