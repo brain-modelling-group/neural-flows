@@ -1,4 +1,4 @@
-function [ux, uy, uz] = generate_burgesvortex_3d_structured()
+function [ux, uy, uz] = generate_flow3d_burgesvortex_grid()
 % Generates Bruges vortex flow
 
 alpha = 0.2; % strain-rate 
