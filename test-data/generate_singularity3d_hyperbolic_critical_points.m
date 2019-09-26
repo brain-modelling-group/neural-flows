@@ -1,34 +1,44 @@
-function generate_singularity3d_hyperbolic_critical_points(varargin)
+%function generate_singularity3d_hyperbolic_critical_points(varargin)
 
 
 % Sink in 3D
-[X, Y, Z] = meshgrid(-2:2^-2:2);
-U = -X;
-V = -Y;
-W = -Z;
+x = -1:2^-4:1;
+y = -1:2^-4:1;
+z = -1:2^-4:1;
 
-% source in 3D
-U = X;
-V = Y;
-W = Z;
-
+ [X, Y, Z] = meshgrid(x, y, z);
+% U = -X;
+% V = -Y;
+% W = -Z;
+% 
+% % Source in 3D
+% U = X;
+% V = Y;
+% W = Z;
+% 
 % % Spiral sink
- U = Y-X;
- V = -X-Y;
- W = -(1/sign(Z).*(Z.^2)); %zeros(size(Z));
- W(isnan(W)) = 0;
+% U = Y-X;
+% V = -X-Y;
+% W = -(1/sign(Z).*(Z.^2)); %zeros(size(Z));
+% W(isnan(W)) = 0;
  
  
- % % Spiral source
- U = -(Y-X);
- V = -(-X-Y);
- W = Z; %zeros(size(Z));
- W(isnan(W)) = 0;
+% Spiral source
+U = 0.01*Y-0.0*X;
+V = -0.01*X-(0.01.*abs(z)).*Y;
+W = -((0.5*Z)); %zeros(size(Z));
+W(isnan(W)) = 0;
+
+U = -U;
+V = -V;
+UV = sqrt(U.^2 + V.^2);
+%U = U./UV;
+%V = V./UV;
+U(isnan(U)) = 0;
+V(isnan(V)) = 0;
+W = -W;
  
- 
- U = Z;
- V = X;
- W = Y;
+
 % 
 % xlim([-0.25 0.25])
 % ylim([-0.25 0.25])
@@ -77,26 +87,31 @@ quiv_handle.LineWidth = 1.5;
 plot3(ax, [-1 1], [0 0], [0 0], 'r', 'linewidth', 1.5)
 plot3(ax, [0 0], [-1 1], [0 0], 'g', 'linewidth', 1.5)
 plot3(ax, [0 0], [0 0], [-1 1], 'b', 'linewidth', 1.5)
-ax.XLim = [-2 2];
-ax.YLim = [-2 2];
-ax.ZLim = [-2 2];
+ax.XLim = [-1 1];
+ax.YLim = [-1 1];
+ax.ZLim = [-1 1];
 
 ax.XLabel.String = 'x [mm]';
 ax.YLabel.String = 'y [mm]';
 ax.ZLabel.String = 'z [mm]';
 
 %h=streamline(X, Y, Z, U, V, W, -0.5, -0.5, 2);
-h=streamline(X, Y, Z, U, V, W, 0.05, 0.05, 0.5);
+h1=streamline(X, Y, Z, U, V, W, 0.0, 0.01, 0.05);
+h2=streamline(X, Y, Z, U, V, W, 0.0, 0.01, -0.05);
 
-set(h,'Color','red');
+%h=streamline(X, Y, Z, U, V, W, -0.01, 0.01, 0.05);
+
+set(h1,'Color','red');
+set(h2,'Color','blue');
+
 view(3);
 
+% 
+ options.stream_length_steps=21;
+ options.curved_arrow = 1;
+ options.start_points_mode = 'random-sparse';
+% 
+ draw_stream_arrow(X(:, :, 16), Y(:, :, 16), U(:, :, 16), V(:, :, 16), options)
 
-options.stream_length_steps=42;
-options.curved_arrow = 1;
-options.start_points_mode = 'grid';
 
-draw_stream_arrow(X(:, :, 1), Y(:, :, 1), U(:, :, 1), V(:, :, 1), options)
-
-
-end
+%end
