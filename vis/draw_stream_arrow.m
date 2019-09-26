@@ -174,7 +174,10 @@ function plot_arrow(P, ~, ~, this_colour, ~)
        xa2 = x2 +u-alpha*(u-beta*(v+eps));
        ya1 = y2 +v-alpha*(v-beta*(u+eps)); 
        ya2 = y2 +v-alpha*(v+beta*(u+eps));
-       plot([xa1 x2 xa2],[ya1 y2 ya2],'color', this_colour); hold on
+       
+       % Make filled arrows cause they look prettier
+       patch([xa1 x2 xa2 xa1],[ya1 y2 ya2 ya1], this_colour, 'EdgeColor', this_colour); hold on
+       
 
 end % function plot_arrow()
 
