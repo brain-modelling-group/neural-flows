@@ -1,4 +1,4 @@
-function [ux, uy, uz] = generate_flow_spiralsink3d_grid()
+function [ux, uy, uz] = generate_flow3d_spiralsink_grid()
 
 hxyz = 0.5;
 max_val = 4;

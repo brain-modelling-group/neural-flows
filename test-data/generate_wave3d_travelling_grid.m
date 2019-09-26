@@ -1,4 +1,4 @@
-function [wave3d, X, Y, Z, time] = generate_wave3dtravelling_grid(varargin)
+function [wave3d, X, Y, Z, time] = generate_wave3d_travelling_grid(varargin)
 % Generates a plane "travelling" wave moving along one of the three main 
 % orthogonal axes of Euclidean space. The data is generating as a linear 
 % function of space (x, Y, or Z), so in a sense is a like sinusoidal plane

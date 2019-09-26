@@ -1,4 +1,4 @@
-function [ux, uy, uz] = generate_abcflow_3d_structured(abc)
+function [ux, uy, uz] = generate_flow3d_abc_grid(abc)
 
 if nargin < 1
     A = 1;

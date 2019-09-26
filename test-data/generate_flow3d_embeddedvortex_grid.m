@@ -1,4 +1,4 @@
-function [ux, uy, uz] = generate_embeddedvortex_3d_structured()
+function [ux, uy, uz] = generate_flow3d_embeddedvortex_grid()
 A = -5;
 B = 0.2;
 % Author, Paula Sanz-Leon

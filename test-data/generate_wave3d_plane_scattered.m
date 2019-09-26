@@ -1,4 +1,4 @@
-function [wave3d, time] = generate_wave3dplane_scattered(locs, varargin)
+function [wave3d, time] = generate_wave3d_plane_scattered(locs, varargin)
 % Generates a spiral wave in 3D space+time. The rotation occurs on the XY-plane. 
 % The position of the centre of rotation (the tip) - on xy - changes with 
 % depth z.
