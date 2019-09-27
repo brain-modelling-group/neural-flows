@@ -16,7 +16,7 @@ function test_flow_estimation__spiralwave3d_scattered_cnem()
  locs = COG(1:256, :);
  
  
- [wave3d, ~] = generate_wave3dspiral_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht);
+ [wave3d, ~] = generate_wave3d_spiral_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht);
  
  if options.is_phase
      % Transform data into phase via hilber transform

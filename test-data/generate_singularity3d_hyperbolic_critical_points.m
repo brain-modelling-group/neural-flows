@@ -117,7 +117,8 @@ options.curved_arrow = 1;
 options.start_points_mode = 'grid';
 % try to draw without normalisation by the norm because it is used as the
 % cmap.
-draw_stream_arrow(X(:, :, 16), Y(:, :, 16), U(:, :, 16), V(:, :, 16), options)
+
+[st_handle, options] = draw_stream_arrow(squeeze(X(17, :, :))', squeeze(Z(17, :, :))', squeeze(U(17, :, :))', squeeze(W(17, :, :))', options);
 
 
 %end

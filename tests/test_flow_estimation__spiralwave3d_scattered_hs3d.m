@@ -13,7 +13,7 @@ function test_flow_estimation__spiralwave3d_scattered_hs3d()
  locs = COG(1:256, :);
  
  
- [wave3d, ~] = generate_wave3dspiral_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht);
+ [wave3d, ~] = generate_wave3d_spiral_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht);
  
  % Options
  options.data_interpolation.file_exists = false;

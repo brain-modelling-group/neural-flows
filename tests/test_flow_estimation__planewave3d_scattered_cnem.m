@@ -15,7 +15,7 @@ function test_flow_estimation__planewave3d_scattered_cnem()
  locs = COG(1:256, :);
  
  
- [wave3d, ~] = generate_wave3dplane_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'z');
+ [wave3d, ~] = generate_wave3d_plane_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'z');
  
  if options.is_phase
      % Transform data into phase via hilber transform

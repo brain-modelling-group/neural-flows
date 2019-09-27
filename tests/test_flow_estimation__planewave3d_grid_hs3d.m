@@ -5,7 +5,7 @@ function test_flow_estimation__planewave3d_grid_hs3d()
  options.hy = 1;
  options.hz = 1;
  options.ht = 1;
- [wave3d, X, Y, Z, ~] = generate_wave3dplane_grid('visual_debugging', false, 'hxyz', options.hx, 'ht', options.ht, 'direction', 'x');
+ [wave3d, X, Y, Z, ~] = generate_wave3d_plane_grid('visual_debugging', false, 'hxyz', options.hx, 'ht', options.ht, 'direction', 'x');
  
  options.flow_calculation.init_conditions = 'random';
  options.flow_calculation.seed_init_vel = 42;
