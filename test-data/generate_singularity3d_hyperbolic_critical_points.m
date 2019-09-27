@@ -1,4 +1,4 @@
-function fig_sing3d = generate_singularity3d_hyperbolic_critical_points(cp_type)
+function [fig_sing3d, ux, uy, uz] = generate_singularity3d_hyperbolic_critical_points(cp_type)
 
 % Grid - display the critical points in a cube of side 2 in (-1, 1)
 % perhaps use the resolution as parameters.
@@ -11,7 +11,7 @@ z = -1:2^-4:1;
 [X, Y, Z] = meshgrid(x, y, z);
 
 switch cp_type
-    case {'source', 'reppelor', 'unstable-focus'}
+    case {'source'}
         ux = X;
         uy = Y;
         uz = Z;
@@ -19,7 +19,9 @@ switch cp_type
         p1 = [0.01 0.01  0.1];
         p2 = [0.01 0.01 -0.1];
         
-    case {'sink', 'attractor', 'stable-focus'}
+        [~, color] = singularity3d_get_numlabel(cp_type);
+        
+    case {'sink'}
         ux = -X;
         uy = -Y;
         uz = -Z;
@@ -27,7 +29,7 @@ switch cp_type
         p1 = [ 0.5  0.5  0.5];
         p2 = [-0.5 -0.5 -0.5];
             
-    case {'1-2-saddle', 'sink-saddle', 'attractive-saddle'}
+    case {'1-2-saddle'}
         % 1-out-2-in
         TH = atan2(Y, X);
         R = sqrt(X.^2+Y.^2);
@@ -38,7 +40,7 @@ switch cp_type
         p1 = [  0.5  0.8  0.1];
         p2 = [ -0.5  -0.8 -0.1];
         
-    case {'2-1-saddle', 'source-saddle', 'repellent-saddle'}
+    case {'2-1-saddle'}
         TH = atan2(Y, X);
         R = sqrt(X.^2+Y.^2);
         ux = R.* cos(TH);
@@ -67,7 +69,7 @@ switch cp_type
         p1 = [0.0, -0.01, -0.01];
         p2 = [0.0,  0.01, +0.01];
  
-    case {'spiral-1-2-saddle'}
+    case {'1-2-spiral-saddle'}
         % 1-out-2-in
         [ux, uy, uz] = spiral_source();
         ux = -ux;
@@ -76,18 +78,25 @@ switch cp_type
         p1 = [ 0.5, -0.5,  0.05];
         p2 = [-0.5, -0.5, -0.05];
         
-    case {'spiral-2-1-saddle'}
+    case {'2-1-spiral-saddle'}
         % Source Spiral saddle - 2-out 1-in 
         [ux, uy, uz] = spiral_source();
         uz = -uz;
         
         p1 = [0.01, 0.01,  0.5];
         p2 = [0.01, 0.01, -0.5];
-        
+    case 'all'
+        singularity_list = s3d_get_singularity_list();
+        for kk=1:8
+            generate_singularity3d_hyperbolic_critical_points(singularity_list{kk});
+        end
+        return
     otherwise
         error(['neural-flows::' mfilename '::UnknownType'], 'Unknown type of critical points')
 
 end
+% Get appropriate color
+[~, color] = singularity3d_get_numlabel(cp_type);
 
 fig_name = ['nflows-singularity3d_hyperbolic-cp-' cp_type];
 fig_sing3d = figure('Name', fig_name);
@@ -112,9 +121,14 @@ quiv_handle = quiver3(X(1:dsf:end, 1:dsf:end, 1:dsf:end), ...
 quiv_handle.Color = [0.2 0.2 0.2];
 quiv_handle.LineWidth = 0.01;
 quiv_handle.Parent = ax(1);
-plot3(ax(1), [-1 1], [0 0], [0 0], 'r', 'linewidth', 1.5)
-plot3(ax(1), [0 0], [-1 1], [0 0], 'g', 'linewidth', 1.5)
-plot3(ax(1), [0 0], [0 0], [-1 1], 'b', 'linewidth', 1.5)
+
+% Plot axes going through the centre
+plot3(ax(1), [-1 1], [0 0], [0 0], 'color', [0.65 0.0 0.0], 'linewidth', 1.5)
+plot3(ax(1), [0 0], [-1 1], [0 0], 'color', [0.0 0.65 0.0], 'linewidth', 1.5)
+plot3(ax(1), [0 0], [0 0], [-1 1], 'color', [0.0 0.0 0.65], 'linewidth', 1.5)
+
+% Plot the critical point at the origin
+plot3(ax(1), 0, 0, 0, 'o', 'markerfacecolor', color(1:3), 'markersize', 12, 'markeredgecolor', color(1:3))
 
 for ii=1:4
     ax(ii).XLim = [-1 1];
@@ -135,12 +149,12 @@ h1.Parent = ax(1);
 h2.Parent = ax(1);
 
 % Start points
-plot3(ax(1), h2.XData(1), h2.YData(1), h2.ZData(1), 'x', 'markeredgecolor', [163, 46, 46]./256, 'markersize', 10)
-plot3(ax(1), h1.XData(1), h1.YData(1), h1.ZData(1), 'x', 'markeredgecolor', [163, 46, 46]./256, 'markersize', 10)
+plot3(ax(1), h2.XData(1), h2.YData(1), h2.ZData(1), 'x', 'markerfacecolor', 'r', 'markeredgecolor', 'r', 'markersize', 6)
+plot3(ax(1), h1.XData(1), h1.YData(1), h1.ZData(1), 'x', 'markerfacecolor', 'r', 'markeredgecolor', 'r', 'markersize', 6)
 
 % End points
-plot3(ax(1), h1.XData(end), h1.YData(end), h1.ZData(end), 'ko', 'markerfacecolor', 'k')
-plot3(ax(1), h2.XData(end), h2.YData(end), h2.ZData(end), 'ko', 'markerfacecolor', 'k')
+plot3(ax(1), h1.XData(end), h1.YData(end), h1.ZData(end), 'ko', 'markerfacecolor', 'k', 'markeredgecolor', 'w')
+plot3(ax(1), h2.XData(end), h2.YData(end), h2.ZData(end), 'ko', 'markerfacecolor', 'k', 'markeredgecolor', 'w')
 
 view(3);
 
