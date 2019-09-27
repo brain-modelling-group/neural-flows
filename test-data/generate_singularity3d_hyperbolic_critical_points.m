@@ -1,8 +1,26 @@
 function [fig_sing3d, ux, uy, uz] = generate_singularity3d_hyperbolic_critical_points(cp_type)
-
-% Grid - display the critical points in a cube of side 2 in (-1, 1)
-% perhaps use the resolution as parameters.
-% Paula Sanz-Leon, September 2019, QIMR
+% Generate canonical hyperbolic critical points in a grid of side 2 in the
+% range of [-1 1];
+%
+% ARGUMENTS:
+%        cp_type -- a string specifying the type of hyperbolic critical
+%        point.
+%       
+%
+% OUTPUT: 
+%        fig_sing3d -- Figure handle
+%        ux -- 3D array with the x component of the vector field
+%        uy -- 3D array with the x component of the vector field
+%        uz -- 3D array with the x component of the vector field
+%
+% REQUIRES: 
+%       s3d_get_singularity_list()
+%       singularity3d_get_numlabel()
+% USAGE:
+%{
+    
+%}
+% AUTHOR: Paula Sanz-Leon, QIMR September 2019 
 
 x = -1:2^-4:1;
 y = -1:2^-4:1;
@@ -18,9 +36,7 @@ switch cp_type
         
         p1 = [0.01 0.01  0.1];
         p2 = [0.01 0.01 -0.1];
-        
-        [~, color] = singularity3d_get_numlabel(cp_type);
-        
+                
     case {'sink'}
         ux = -X;
         uy = -Y;
