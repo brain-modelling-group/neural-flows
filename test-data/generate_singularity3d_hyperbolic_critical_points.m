@@ -23,6 +23,9 @@ switch cp_type
         ux = -X;
         uy = -Y;
         uz = -Z;
+        
+        p1 = [ 0.5  0.5  0.5];
+        p2 = [-0.5 -0.5 -0.5];
             
     case {'1-2-saddle', 'sink-saddle', 'attractive-saddle'}
         TH = atan2(Y, X);
@@ -31,17 +34,26 @@ switch cp_type
         uy = - R.* sin(TH);
         uz = Z;
         
+        p1 = [ 0.1  0.1  1];
+        p2 = [ 0.1  0.1 -1];
+        
     case {'2-1-saddle', 'source-saddle', 'repellent-saddle'}
         TH = atan2(Y, X);
         R = sqrt(X.^2+Y.^2);
         ux = R.* cos(TH);
         uy = R.* sin(TH);
         uz = -Z;
+        
+        p1 = [ 0.1  0.1  1];
+        p2 = [ 0.1  0.1 -1];
            
     case {'spiral-sink'}
         ux =  Y-X;
         uy = -X-Y;
         uz = -Z;
+        
+        p1 = [ 0.5, -0.5,  0.05];
+        p2 = [-0.5, -0.5, -0.05];
         
     case {'spiral-source'}
         
