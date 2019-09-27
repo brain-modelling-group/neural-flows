@@ -1,5 +1,4 @@
-function generate_singularity3d_hyperbolic_critical_points(cp_type)
-
+function fig_sing3d = generate_singularity3d_hyperbolic_critical_points(cp_type)
 
 % Grid - display the critical points in a cube of side 2 in (-1, 1)
 % perhaps use the resolution as parameters.
@@ -94,8 +93,12 @@ fig_name = ['nflows-singularity3d_hyperbolic-cp-' cp_type];
 fig_sing3d = figure('Name', fig_name);
 fig_sing3d.Position = [1   18   17   14.5];
 fig_sing3d.Color = [1, 1, 1];
-ax = subplot(1, 1, 1, 'Parent', fig_sing3d);
-hold(ax, 'on')
+ax(1) = subplot(2, 2, 4, 'Parent', fig_sing3d);
+ax(2) = subplot(2, 2, 3, 'Parent', fig_sing3d);
+ax(3) = subplot(2, 2, 2, 'Parent', fig_sing3d);
+ax(4) = subplot(2, 2, 1, 'Parent', fig_sing3d);
+
+hold(ax(1), 'on')
 dsf = 1; % downsample factor
 unorm = sqrt(ux.^2+uy.^2+uz.^2);
 max_unorm = max(unorm(:));
@@ -108,16 +111,19 @@ quiv_handle = quiver3(X(1:dsf:end, 1:dsf:end, 1:dsf:end), ...
                   
 quiv_handle.Color = [0.2 0.2 0.2 0.01];
 quiv_handle.LineWidth = 0.01;
-plot3(ax, [-1 1], [0 0], [0 0], 'r', 'linewidth', 1.5)
-plot3(ax, [0 0], [-1 1], [0 0], 'g', 'linewidth', 1.5)
-plot3(ax, [0 0], [0 0], [-1 1], 'b', 'linewidth', 1.5)
-ax.XLim = [-1 1];
-ax.YLim = [-1 1];
-ax.ZLim = [-1 1];
+quiv_handle.Parent = ax(1);
+plot3(ax(1), [-1 1], [0 0], [0 0], 'r', 'linewidth', 1.5)
+plot3(ax(1), [0 0], [-1 1], [0 0], 'g', 'linewidth', 1.5)
+plot3(ax(1), [0 0], [0 0], [-1 1], 'b', 'linewidth', 1.5)
 
-ax.XLabel.String = 'x [mm]';
-ax.YLabel.String = 'y [mm]';
-ax.ZLabel.String = 'z [mm]';
+for ii=1:4
+    ax(ii).XLim = [-1 1];
+    ax(ii).YLim = [-1 1];
+    ax(ii).ZLim = [-1 1];
+end
+ax(1).XLabel.String = 'x [mm]';
+ax(1).YLabel.String = 'y [mm]';
+ax(1).ZLabel.String = 'z [mm]';
 
 % Spiral source
 h1 = streamline(X, Y, Z, ux, uy, uz, p1(1), p1(2), p1(3));
@@ -125,16 +131,46 @@ h2 = streamline(X, Y, Z, ux, uy, uz, p1(1), p2(2), p2(3));
 
 set(h1,'Color',[0.3 0.3 0.3]);
 set(h2,'Color',[0.3 0.3 0.3]);
+h1.Parent = ax(1);
+h2.Parent = ax(1);
 
 % Start points
-plot3(h2.XData(1), h2.YData(1), h2.ZData(1), 'x', 'markeredgecolor', [163, 46, 46]./256, 'markersize', 10)
-plot3(h1.XData(1), h1.YData(1), h1.ZData(1), 'x', 'markeredgecolor', [163, 46, 46]./256, 'markersize', 10)
+plot3(ax(1), h2.XData(1), h2.YData(1), h2.ZData(1), 'x', 'markeredgecolor', [163, 46, 46]./256, 'markersize', 10)
+plot3(ax(1), h1.XData(1), h1.YData(1), h1.ZData(1), 'x', 'markeredgecolor', [163, 46, 46]./256, 'markersize', 10)
 
 % End points
-plot3(h1.XData(end), h1.YData(end), h1.ZData(end), 'ko', 'markerfacecolor', 'k')
-plot3(h2.XData(end), h2.YData(end), h2.ZData(end), 'ko', 'markerfacecolor', 'k')
+plot3(ax(1), h1.XData(end), h1.YData(end), h1.ZData(end), 'ko', 'markerfacecolor', 'k')
+plot3(ax(1), h2.XData(end), h2.YData(end), h2.ZData(end), 'ko', 'markerfacecolor', 'k')
 
-view(2);
+view(3);
+
+copyobj(get(ax(1),'Children'),ax(2));
+copyobj(get(ax(1),'Children'),ax(3));
+copyobj(get(ax(1),'Children'),ax(4));
+
+% Other refinements
+ax(4).GridAlpha = 0;
+ax(1).XLabel.String = 'x';
+ax(1).YLabel.String = 'y';
+ax(1).ZLabel.String = 'z';
+ax(1).View = [90 0];
+
+
+ax(2).YLabel.String = 'y';
+ax(2).XLabel.String = 'x';
+ax(2).ZLabel.String = 'z';
+ax(2).View = [0 0];
+
+ax(3).YLabel.String = 'y';
+ax(3).XLabel.String = 'x';
+ax(3).ZLabel.String = 'z';
+ax(3).View = [0 90];
+
+
+ax(4).YLabel.String = 'y';
+ax(4).XLabel.String = 'x';
+ax(4).ZLabel.String = 'z';
+
 
 %%   
 %options.stream_length_steps=11;
