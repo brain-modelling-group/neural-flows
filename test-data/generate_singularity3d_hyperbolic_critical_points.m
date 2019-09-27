@@ -54,8 +54,8 @@ switch cp_type
         uy = -X-Y;
         uz = -Z;
         
-        p1 = [ 0.5, -0.5,  0.5];
-        p2 = [-0.5,  0.5, -0.5];
+        p1 = [-0.5, -0.5,  0.9];
+        p2 = [-0.5,  0.8, -0.9];
         
     case {'spiral-source'}
         
@@ -90,8 +90,8 @@ switch cp_type
 
 end
 
-
-fig_sing3d = figure('Name', 'nflows-singularity3d_hyperbolic-cp');
+fig_name = ['nflows-singularity3d_hyperbolic-cp-' cp_type];
+fig_sing3d = figure('Name', fig_name);
 fig_sing3d.Position = [1   18   17   14.5];
 fig_sing3d.Color = [1, 1, 1];
 ax = subplot(1, 1, 1, 'Parent', fig_sing3d);
