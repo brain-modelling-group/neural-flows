@@ -116,7 +116,7 @@ end
 
 fig_name = ['nflows-singularity3d_hyperbolic-cp-' cp_type];
 fig_sing3d = figure('Name', fig_name);
-fig_sing3d.Position = [1   18   17   14.5];
+fig_sing3d.Position = [1   18   19   17];
 fig_sing3d.Color = [1, 1, 1];
 ax(1) = subplot(2, 2, 4, 'Parent', fig_sing3d);
 ax(2) = subplot(2, 2, 3, 'Parent', fig_sing3d);
@@ -180,23 +180,54 @@ copyobj(get(ax(1),'Children'),ax(3));
 copyobj(get(ax(1),'Children'),ax(4));
 
 % Other refinements
+% ZY - plane
 ax(1).XLabel.String = 'x';
 ax(1).YLabel.String = 'y';
 ax(1).ZLabel.String = 'z';
 ax(1).View = [90 0];
+ax(1).Title.String = 'ZY';
+
+id_x = ceil(length(x)/(2*dsf)); % index of the slice laong x-we need to keep.
+U = ax(1).Children(end).UData;
+V = ax(1).Children(end).VData;
+W = ax(1).Children(end).WData;
+ax(1).Children(end).UData = zeros(size(V));
+ax(1).Children(end).VData = zeros(size(V));
+ax(1).Children(end).WData = zeros(size(V));
+
+ax(1).Children(end).UData(:, id_x, :) = U(:, id_x, :);
+ax(1).Children(end).VData(:, id_x, :) = V(:, id_x, :);
+ax(1).Children(end).WData(:, id_x, :) = W(:, id_x, :);
 
 
+% ZX - plane
 ax(2).YLabel.String = 'y';
 ax(2).XLabel.String = 'x';
 ax(2).ZLabel.String = 'z';
 ax(2).View = [0 0];
+ax(2).Title.String = 'ZX';
 
+id_y = ceil(length(y)/(2*dsf)); % index of the slice laong x-we need to keep.
+U = ax(2).Children(end).UData;
+V = ax(2).Children(end).VData;
+W = ax(2).Children(end).WData;
+ax(2).Children(end).UData = zeros(size(V));
+ax(2).Children(end).VData = zeros(size(V));
+ax(2).Children(end).WData = zeros(size(V));
+
+ax(2).Children(end).UData(id_y, :, :) = U(id_y, :, :);
+ax(2).Children(end).VData(id_y, :, :) = V(id_y, :, :);
+ax(2).Children(end).WData(id_y, :, :) = W(id_y, :, :);
+
+% XY - plane
 ax(3).YLabel.String = 'y';
 ax(3).XLabel.String = 'x';
 ax(3).ZLabel.String = 'z';
 ax(3).View = [0 90];
+ax(3).Title.String = 'XY';
 
 
+% 3D view
 ax(4).YLabel.String = 'y';
 ax(4).XLabel.String = 'x';
 ax(4).ZLabel.String = 'z';
@@ -205,14 +236,9 @@ ax(4).GridAlpha = 0;
 ax(4).Children(end).LineStyle = 'none';
 
 
-%%   
-%options.stream_length_steps=11;
-%options.curved_arrow = 1;
-%options.start_points_mode = 'grid';
-% try to draw without normalisation by the norm because it is used as the
-% cmap.
+% Correct the 2D projections so they look prettier -- in particular the
+% spiral saddles and sources/sinks --
 
-%[st_handle, options] = draw_stream_arrow(squeeze(X(17, :, :))', squeeze(Z(17, :, :))', squeeze(U(17, :, :))', squeeze(W(17, :, :))', options);
 
 
 function [ux, uy, uz] = spiral_source()
