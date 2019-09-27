@@ -3,6 +3,7 @@ function generate_singularity3d_hyperbolic_critical_points(cp_type)
 
 % Grid - display the critical points in a cube of side 2 in (-1, 1)
 % perhaps use the resolution as parameters.
+% Paula Sanz-Leon, September 2019, QIMR
 
 x = -1:2^-4:1;
 y = -1:2^-4:1;
@@ -12,12 +13,12 @@ z = -1:2^-4:1;
 
 switch cp_type
     case {'source', 'reppelor', 'unstable-focus'}
-        ux = -X;
-        uy = -Y;
-        uz = -Z;
+        ux = X;
+        uy = Y;
+        uz = Z;
         
-        p1 = [0 0  0.1];
-        p2 = [0 0 -0.1];
+        p1 = [0.01 0.01  0.1];
+        p2 = [0.01 0.01 -0.1];
         
     case {'sink', 'attractor', 'stable-focus'}
         ux = -X;
@@ -30,8 +31,8 @@ switch cp_type
     case {'1-2-saddle', 'sink-saddle', 'attractive-saddle'}
         TH = atan2(Y, X);
         R = sqrt(X.^2+Y.^2);
-        ux = - R.* cos(TH);
-        uy = - R.* sin(TH);
+        ux = -R.* cos(TH);
+        uy = -R.* sin(TH);
         uz = Z;
         
         p1 = [ 0.1  0.1  1];
@@ -69,7 +70,8 @@ switch cp_type
         [ux, uy, uz] = spiral_source();
         ux = -ux;
         uy = -uy;
-        
+        p1 = [ 0.5, -0.5,  0.05];
+        p2 = [-0.5, -0.5, -0.05];
         p1 = [ 0.5, -0.5,  0.05];
         p2 = [-0.5, -0.5, -0.05];
         
@@ -87,9 +89,8 @@ switch cp_type
 end
 
 
-
-
 fig_sing3d = figure('Name', 'nflows-singularity3d_hyperbolic-cp');
+fig_sing3d.Position = [1   18   18   18];
 fig_sing3d.Color = [1, 1, 1];
 ax = subplot(1, 1, 1, 'Parent', fig_sing3d);
 hold(ax, 'on')
@@ -115,12 +116,12 @@ set(h1,'Color',[0.3 0.3 0.3]);
 set(h2,'Color',[0.3 0.3 0.3]);
 
 % Start points
-plot3(h2.XData(1), h2.YData(1), h2.ZData(1), 'rx')
-plot3(h1.XData(1), h1.YData(1), h1.ZData(1), 'rx')
+plot3(h2.XData(1), h2.YData(1), h2.ZData(1), 'kx')
+plot3(h1.XData(1), h1.YData(1), h1.ZData(1), 'kx')
 
 % End points
-plot3(h1.XData(end), h1.YData(end), h1.ZData(end), 'ko')
-plot3(h2.XData(end), h2.YData(end), h2.ZData(end), 'ko')
+plot3(h1.XData(end), h1.YData(end), h1.ZData(end), 'ko', 'markerfacecolor', 'k')
+plot3(h2.XData(end), h2.YData(end), h2.ZData(end), 'ko', 'markerfacecolor', 'k')
 
 view(3);
 
