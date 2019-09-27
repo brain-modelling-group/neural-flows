@@ -1,78 +1,87 @@
-%function generate_singularity3d_hyperbolic_critical_points(varargin)
+function generate_singularity3d_hyperbolic_critical_points(cp_type)
 
 
-% Sink in 3D
+% Grid - display the critical points in a cube of side 2 in (-1, 1)
+% perhaps use the resolution as parameters.
+
 x = -1:2^-4:1;
 y = -1:2^-4:1;
 z = -1:2^-4:1;
 
- [X, Y, Z] = meshgrid(x, y, z);
-%% Sink
-% U = -X;
-% V = -Y;
-% W = -Z;
-% 
-%% Source in 3D
-% U = X;
-% V = Y;
-% W = Z;
+[X, Y, Z] = meshgrid(x, y, z);
 
-%% Saddle-source (2-out, 1-in)
-%TH = atan2(Y, X);
-%R = sqrt(X.^2+Y.^2);
-%U = R.* cos(TH);
-%V = R.* sin(TH);
-%W = -Z;
+switch cp_type
+    case {'source', 'reppelor', 'unstable-focus'}
+        ux = -X;
+        uy = -Y;
+        uz = -Z;
+        
+        p1 = [0 0  0.1];
+        p2 = [0 0 -0.1];
+        
+    case {'sink', 'attractor', 'stable-focus'}
+        ux = -X;
+        uy = -Y;
+        uz = -Z;
+            
+    case {'1-2-saddle', 'sink-saddle', 'attractive-saddle'}
+        TH = atan2(Y, X);
+        R = sqrt(X.^2+Y.^2);
+        ux = - R.* cos(TH);
+        uy = - R.* sin(TH);
+        uz = Z;
+        
+    case {'2-1-saddle', 'source-saddle', 'repellent-saddle'}
+        TH = atan2(Y, X);
+        R = sqrt(X.^2+Y.^2);
+        ux = R.* cos(TH);
+        uy = R.* sin(TH);
+        uz = -Z;
+           
+    case {'spiral-sink'}
+        ux =  Y-X;
+        uy = -X-Y;
+        uz = -Z;
+        
+    case {'spiral-source'}
+        
+        %NOTE: I'm not sure this critical point is entirely correct, as it 
+        % basically becomes a limit cycle - centre 
+        
+        [ux, uy, uz] = spiral_source();
+        % Seed xyz points for sample trajectory
+        p1 = [0.0, 0.01,  0.01];
+        p2 = [0.0, 0.01, -0.01];
+ 
+    case {'spiral-1-2-saddle', 'sink-spiral-saddle'}
+        [ux, uy, uz] = spiral_source();
+        ux = -ux;
+        uy = -uy;
+        
+        p1 = [ 0.5, -0.5,  0.05];
+        p2 = [-0.5, -0.5, -0.05];
+        
+    case {'spiral-2-1-saddle', 'source-spiral-saddle'}
+        % Source Spiral saddle - 2-out 1-in 
+        [ux, uy, uz] = spiral_source();
+        uz = -uz;
+        
+        p1 = [0.01, 0.01,  0.5];
+        p2 = [0.01, 0.01, -0.5];
+        
+    otherwise
+        error(['neural-flows::' mfilename '::UnknownType'], 'Unknown type of critical points')
 
-%% Saddle-sink (1-out, 2-in)
-%TH = atan2(Y, X);
-%R = sqrt(X.^2+Y.^2);
-%U = - R.* cos(TH);
-%V = - R.* sin(TH);
-%W = Z;
+end
 
-%% Spiral sink
-U =  Y-X;
-V = -X-Y;
-W = -Z; %zeros(size(Z));
-W(isnan(W)) = 0;
 
-%% Spiral source
-a = 0.2;
-b = 0.5;
-U =  a*Y-(a.*abs(z)).*X;
-V = -a*X-(a.*abs(z)).*Y;
-W = -((b*Z)); %zeros(size(Z));
-W(isnan(W)) = 0;
 
-U = -U;
-V = -V;
-UV = sqrt(U.^2 + V.^2);
-U = U./UV;
-V = V./UV;
-U(isnan(U)) = 0;
-V(isnan(V)) = 0;
-W = -W;
-
-%% Spiral saddle - 2-out 1-in
-
-U = U;
-V = V;
-W = -W;
-
-%% Spiral saddle 1-out 2-in
-
-U = -U;
-V = -V;
-W = W;
-
-%%
 
 fig_sing3d = figure('Name', 'nflows-singularity3d_hyperbolic-cp');
 fig_sing3d.Color = [1, 1, 1];
 ax = subplot(1, 1, 1, 'Parent', fig_sing3d);
 hold(ax, 'on')
-quiv_handle = quiver3(X, Y, Z, U, V, W);
+quiv_handle = quiver3(X, Y, Z, ux, uy, uz);
 quiv_handle.Color = [0.2 0.2 0.2 0.01];
 quiv_handle.LineWidth = 0.5;
 plot3(ax, [-1 1], [0 0], [0 0], 'r', 'linewidth', 1.5)
@@ -86,39 +95,48 @@ ax.XLabel.String = 'x [mm]';
 ax.YLabel.String = 'y [mm]';
 ax.ZLabel.String = 'z [mm]';
 
-%% Spiral source
-h1=streamline(X, Y, Z, U, V, W, 0.0, 0.01, 0.01);
-h2=streamline(X, Y, Z, U, V, W, 0.0, 0.01, -0.01);
+% Spiral source
+h1 = streamline(X, Y, Z, ux, uy, uz, p1(1), p1(2), p1(3));
+h2 = streamline(X, Y, Z, ux, uy, uz, p1(1), p2(2), p2(3));
 
-%% Spiral Saddle 2-out(uy, ux), 1-in (uz)
-h1=streamline(X, Y, Z, U, V, W, 0.01, 0.01, 0.5);
-h2=streamline(X, Y, Z, U, V, W, 0.01, 0.01, -0.5);
-
-%% Spiral Saddle 1-out(uz), 2-in (ux,uy)
-h1=streamline(X, Y, Z, U, V, W, 0.5, -0.5, 0.05);
-h2=streamline(X, Y, Z, U, V, W, -0.5, -0.5, -0.05);
-%%
 set(h1,'Color',[0.3 0.3 0.3]);
 set(h2,'Color',[0.3 0.3 0.3]);
 
-% Start point
+% Start points
 plot3(h2.XData(1), h2.YData(1), h2.ZData(1), 'rx')
 plot3(h1.XData(1), h1.YData(1), h1.ZData(1), 'rx')
 
-% End point
+% End points
 plot3(h1.XData(end), h1.YData(end), h1.ZData(end), 'ko')
 plot3(h2.XData(end), h2.YData(end), h2.ZData(end), 'ko')
 
 view(3);
 
 %%   
-options.stream_length_steps=11;
-options.curved_arrow = 1;
-options.start_points_mode = 'grid';
+%options.stream_length_steps=11;
+%options.curved_arrow = 1;
+%options.start_points_mode = 'grid';
 % try to draw without normalisation by the norm because it is used as the
 % cmap.
 
-[st_handle, options] = draw_stream_arrow(squeeze(X(17, :, :))', squeeze(Z(17, :, :))', squeeze(U(17, :, :))', squeeze(W(17, :, :))', options);
+%[st_handle, options] = draw_stream_arrow(squeeze(X(17, :, :))', squeeze(Z(17, :, :))', squeeze(U(17, :, :))', squeeze(W(17, :, :))', options);
 
 
-%end
+function [ux, uy, uz] = spiral_source()
+        a = 0.2;
+        b = 0.5;
+        ux =  a*Y-(a.*abs(z)).*X;
+        uy = -a*X-(a.*abs(z)).*Y;
+        uz = -((b*Z)); %zeros(size(Z));
+        uz(isnan(uz)) = 0;
+        
+        ux = -ux;
+        uy = -uy;
+        UV = sqrt(ux.^2 + uy.^2);
+        ux = ux./UV; % This normalisation is basically for visaulisation purposes
+        uy = uy./UV;
+        ux(isnan(ux)) = 0; 
+        uy(isnan(uy)) = 0;
+        uz = -uz;
+end
+end
