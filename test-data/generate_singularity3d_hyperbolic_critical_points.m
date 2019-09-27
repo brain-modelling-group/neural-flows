@@ -51,7 +51,7 @@ switch cp_type
     case {'spiral-sink'}
         ux =  Y-X;
         uy = -X-Y;
-        uz = -Z;
+        uz = -2*Z;
         
         p1 = [-0.5, -0.5,  0.9];
         p2 = [-0.5,  0.8, -0.9];
@@ -99,7 +99,7 @@ ax(3) = subplot(2, 2, 2, 'Parent', fig_sing3d);
 ax(4) = subplot(2, 2, 1, 'Parent', fig_sing3d);
 
 hold(ax(1), 'on')
-dsf = 1; % downsample factor
+dsf = 2; % downsample factor
 unorm = sqrt(ux.^2+uy.^2+uz.^2);
 max_unorm = max(unorm(:));
 quiv_handle = quiver3(X(1:dsf:end, 1:dsf:end, 1:dsf:end), ...
@@ -109,7 +109,7 @@ quiv_handle = quiver3(X(1:dsf:end, 1:dsf:end, 1:dsf:end), ...
                       uy(1:dsf:end,1:dsf:end,1:dsf:end)./max_unorm, ...
                       uz(1:dsf:end,1:dsf:end,1:dsf:end)./max_unorm, 1);
                   
-quiv_handle.Color = [0.2 0.2 0.2 0.01];
+quiv_handle.Color = [0.2 0.2 0.2];
 quiv_handle.LineWidth = 0.01;
 quiv_handle.Parent = ax(1);
 plot3(ax(1), [-1 1], [0 0], [0 0], 'r', 'linewidth', 1.5)
@@ -144,12 +144,12 @@ plot3(ax(1), h2.XData(end), h2.YData(end), h2.ZData(end), 'ko', 'markerfacecolor
 
 view(3);
 
+% Copy graphical objects onto other subplots 
 copyobj(get(ax(1),'Children'),ax(2));
 copyobj(get(ax(1),'Children'),ax(3));
 copyobj(get(ax(1),'Children'),ax(4));
 
 % Other refinements
-ax(4).GridAlpha = 0;
 ax(1).XLabel.String = 'x';
 ax(1).YLabel.String = 'y';
 ax(1).ZLabel.String = 'z';
@@ -170,6 +170,9 @@ ax(3).View = [0 90];
 ax(4).YLabel.String = 'y';
 ax(4).XLabel.String = 'x';
 ax(4).ZLabel.String = 'z';
+ax(4).View = [40 17];
+ax(4).GridAlpha = 0;
+ax(4).Children(end).LineStyle = 'none';
 
 
 %%   
