@@ -29,14 +29,15 @@ switch cp_type
         p2 = [-0.5 -0.5 -0.5];
             
     case {'1-2-saddle', 'sink-saddle', 'attractive-saddle'}
+        % 1-out-2-in
         TH = atan2(Y, X);
         R = sqrt(X.^2+Y.^2);
         ux = -R.* cos(TH);
         uy = -R.* sin(TH);
         uz = Z;
         
-        p1 = [ 0.1  0.1  1];
-        p2 = [ 0.1  0.1 -1];
+        p1 = [  0.5  0.8  0.1];
+        p2 = [ -0.5  -0.8 -0.1];
         
     case {'2-1-saddle', 'source-saddle', 'repellent-saddle'}
         TH = atan2(Y, X);
@@ -45,16 +46,16 @@ switch cp_type
         uy = R.* sin(TH);
         uz = -Z;
         
-        p1 = [ 0.1  0.1  1];
-        p2 = [ 0.1  0.1 -1];
+        p1 = [ 0.1   0.1  1];
+        p2 = [ 0.1  -0.1 -1];
            
     case {'spiral-sink'}
         ux =  Y-X;
         uy = -X-Y;
         uz = -Z;
         
-        p1 = [ 0.5, -0.5,  0.05];
-        p2 = [-0.5, -0.5, -0.05];
+        p1 = [ 0.5, -0.5,  0.5];
+        p2 = [-0.5,  0.5, -0.5];
         
     case {'spiral-source'}
         
@@ -62,20 +63,21 @@ switch cp_type
         % basically becomes a limit cycle - centre 
         
         [ux, uy, uz] = spiral_source();
+        uz = 3.5.*uz;
         % Seed xyz points for sample trajectory
-        p1 = [0.0, 0.01,  0.01];
-        p2 = [0.0, 0.01, -0.01];
+        p1 = [0.0, -0.01, -0.01];
+        p2 = [0.0,  0.01, +0.01];
  
-    case {'spiral-1-2-saddle', 'sink-spiral-saddle'}
+    case {'spiral-1-2-saddle'}
+        % 1-out-2-in
         [ux, uy, uz] = spiral_source();
         ux = -ux;
         uy = -uy;
-        p1 = [ 0.5, -0.5,  0.05];
-        p2 = [-0.5, -0.5, -0.05];
+ 
         p1 = [ 0.5, -0.5,  0.05];
         p2 = [-0.5, -0.5, -0.05];
         
-    case {'spiral-2-1-saddle', 'source-spiral-saddle'}
+    case {'spiral-2-1-saddle'}
         % Source Spiral saddle - 2-out 1-in 
         [ux, uy, uz] = spiral_source();
         uz = -uz;
@@ -90,13 +92,22 @@ end
 
 
 fig_sing3d = figure('Name', 'nflows-singularity3d_hyperbolic-cp');
-fig_sing3d.Position = [1   18   18   18];
+fig_sing3d.Position = [1   18   17   14.5];
 fig_sing3d.Color = [1, 1, 1];
 ax = subplot(1, 1, 1, 'Parent', fig_sing3d);
 hold(ax, 'on')
-quiv_handle = quiver3(X, Y, Z, ux, uy, uz);
+dsf = 1; % downsample factor
+unorm = sqrt(ux.^2+uy.^2+uz.^2);
+max_unorm = max(unorm(:));
+quiv_handle = quiver3(X(1:dsf:end, 1:dsf:end, 1:dsf:end), ...
+                      Y(1:dsf:end, 1:dsf:end,1:dsf:end), ...
+                      Z(1:dsf:end, 1:dsf:end, 1:dsf:end), ...
+                      ux(1:dsf:end,1:dsf:end,1:dsf:end)./max_unorm, ...
+                      uy(1:dsf:end,1:dsf:end,1:dsf:end)./max_unorm, ...
+                      uz(1:dsf:end,1:dsf:end,1:dsf:end)./max_unorm, 1);
+                  
 quiv_handle.Color = [0.2 0.2 0.2 0.01];
-quiv_handle.LineWidth = 0.5;
+quiv_handle.LineWidth = 0.01;
 plot3(ax, [-1 1], [0 0], [0 0], 'r', 'linewidth', 1.5)
 plot3(ax, [0 0], [-1 1], [0 0], 'g', 'linewidth', 1.5)
 plot3(ax, [0 0], [0 0], [-1 1], 'b', 'linewidth', 1.5)
@@ -116,14 +127,14 @@ set(h1,'Color',[0.3 0.3 0.3]);
 set(h2,'Color',[0.3 0.3 0.3]);
 
 % Start points
-plot3(h2.XData(1), h2.YData(1), h2.ZData(1), 'kx')
-plot3(h1.XData(1), h1.YData(1), h1.ZData(1), 'kx')
+plot3(h2.XData(1), h2.YData(1), h2.ZData(1), 'x', 'markeredgecolor', [163, 46, 46]./256, 'markersize', 10)
+plot3(h1.XData(1), h1.YData(1), h1.ZData(1), 'x', 'markeredgecolor', [163, 46, 46]./256, 'markersize', 10)
 
 % End points
 plot3(h1.XData(end), h1.YData(end), h1.ZData(end), 'ko', 'markerfacecolor', 'k')
 plot3(h2.XData(end), h2.YData(end), h2.ZData(end), 'ko', 'markerfacecolor', 'k')
 
-view(3);
+view(2);
 
 %%   
 %options.stream_length_steps=11;
