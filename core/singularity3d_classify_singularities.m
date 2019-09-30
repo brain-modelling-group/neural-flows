@@ -1,13 +1,15 @@
-function  [singularity_classification] =   singularity3d_classify_singularities(null_points_3d, mfile_vel_obj)
+function  [singularity_classification] =   singularity3d_classify_singularities(null_points_3d, mvel_obj)
 % 1) calculates jacobian for each critical point, and then 
 % 2) classify type of critical point. 
 % ARGUMENTS:
 %          null_points_3d        -- a struct of size [1 x no. timepoints]
-%                         -- .xyz_idx [no. of singularities x 1] -- linear indices 
-%                                     [no. of singularities x 3] -- subscripts
-%          mfile_vel_obj  -- a MatFile handle pointing to the flows/velocity
+%                                -- .xyz_idx [no. of singularities x 1] -- linear indices 
+%                                            [no. of singularities x 3] -- subscripts
+%          mvel_obj              -- a MatFile handle pointing to the flows/velocity
 %                            fields. Needed for the calculation of the
-%                            jacobian matrix. 
+%                            jacobian matrix. Or a matlab structure with
+%                            the same fields as the matfile produced by the
+%                            code.
 % OUTPUT:
 %         singularity_classification  --  a cell array of size [1 x no. timepoints]
 %                                         where each element is a cell of size
@@ -28,7 +30,7 @@ singularity_classification = cell(size(null_points_3d));
 tpts = size(null_points_3d, 2);
 
 % Load options structure
-options = mfile_vel.options;
+options = mvel_obj.options;
 grid_size = options.flow_calculation.grid_size;
 
 % Check if we stored linear indices or subscripts 
@@ -40,9 +42,9 @@ if size(null_points_3d(1).xyz_idx, 2) < 2
     
 end
 
-hx = mfile_vel_obj.hx; 
-hy = mfile_vel_obj.hy; 
-hz = mfile_vel_obj.hz; 
+hx = mvel_obj.hx; 
+hy = mvel_obj.hy; 
+hz = mvel_obj.hz; 
 
 
 for tt=1:tpts % parallizable stuff but the classification runs very fast
@@ -54,9 +56,9 @@ for tt=1:tpts % parallizable stuff but the classification runs very fast
        end
        
        % Create temp variables with partial load of a matfile. 
-       ux = mfile_vel_obj.ux(:, :, :, tt);
-       uy = mfile_vel_obj.uy(:, :, :, tt);
-       uz = mfile_vel_obj.uz(:, :, :, tt);
+       ux = mvel_obj.ux(:, :, :, tt);
+       uy = mvel_obj.uy(:, :, :, tt);
+       uz = mvel_obj.uz(:, :, :, tt);
        
        num_critical_points = size(null_points_3d(tt).xyz_idx, 1);
        singularity_labels  = cell(num_critical_points, 1);

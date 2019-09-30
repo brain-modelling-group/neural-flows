@@ -14,7 +14,7 @@ function singularity_type = singularity3d_classify_critical_points(J3D)
 % If l1, l2, l3 are all real then:
 %    all positive > source
 %    all negative > sink
-%    1 positive, 2 negative > 1:2 saddle
+%    1 positive, 2 negative > 1:2 saddle -->
 %    2 positive, 1 negative > 2:1 saddle
 % If one eigenvalue is real and the two imaginary eigenvalues are complex
 % conjugates (a+ib, a-ib):
@@ -82,12 +82,14 @@ function singularity_type = classify_all_real(E)
        singularity_type = 'sink';
 
     elseif sum(sign(E)) < 0
-        % One positive: Two negative: 1:2 saddle node
-        singularity_type = '1-2-saddle';
+        % Two negative:One positive: 2(in):1(out) -- attracting/sink saddle
+        % saddle node.
+        singularity_type = '2-1-saddle';
         
     elseif sum(sign(E)) > 0
-        % Two positive: One negative: 2:1 saddle node
-        singularity_type = '2-1-saddle';
+        % One negative:Two positive: 1(in):2(out) saddle node -- repelling/source
+        % saddle node.
+        singularity_type = '1-2-saddle';
         
     elseif sum(sign(E)) == 0
         singularity_type = '1-1-0-saddle';

@@ -52,10 +52,10 @@ switch sing_str_label
     case 'sink'   % done
         sing_numeric_label = 2;
         color = [49, 54, 149, 1];
-    case '2-1-saddle' % done - more source (red) than sink
+    case '1-2-saddle' % done - more source (red) than sink
         sing_numeric_label = 3;
         color = [244, 109, 67, 1];
-    case '1-2-saddle'   % done - more sink (blue) than source
+    case '2-1-saddle'   % done - more sink (blue) than source
         sing_numeric_label = 4;
         color = [69, 117, 180, 1];
     case 'spiral-source' % done
@@ -64,10 +64,10 @@ switch sing_str_label
     case 'spiral-sink' % done
         sing_numeric_label = 6;
         color = [116, 173, 209, 1];
-    case '2-1-spiral-saddle' % done - more source (red) than sink
+    case '1-2-spiral-saddle' % done - more source (red) than sink -- first number indicates number of directions going "IN"/sink
         sing_numeric_label = 7;
         color = [254 224,144, 1];
-    case '1-2-spiral-saddle' % done - more sink (blue) than source
+    case '2-1-spiral-saddle' % done - more sink (blue) than source
         sing_numeric_label = 8;
         color = [171, 217, 233, 1];        
     % ORBITS
