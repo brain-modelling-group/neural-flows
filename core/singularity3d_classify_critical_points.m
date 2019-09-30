@@ -122,7 +122,7 @@ elseif real(E(real_eigenvalue)) < 0
    elseif  real(imag_eigenvalues(1)) < 0 
        singularity_type = 'spiral-sink';
    end
-elseif real(E(real_eigenvalue)) == 0 % may be a centre
+elseif real(E(real_eigenvalue)) == 0 % may be a centre, although we should never reach this part of the code
     if (sum(abs(real(imag_eigenvalues))) == 0) && (sum(abs(imag(imag_eigenvalues))) ~= 0)
         singularity_type = 'centre';
     end
