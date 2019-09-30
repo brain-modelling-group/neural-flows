@@ -53,7 +53,6 @@ switch sing_str_label
         sing_numeric_label = 2;
         color = [49, 54, 149, 1];
     case 'spiral-source' % done
-
         sing_numeric_label = 3;
         color = [244, 109, 67, 1];
     case 'spiral-sink' % done

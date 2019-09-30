@@ -18,13 +18,13 @@ function analyse_sing_spatial_distribution(mfile_sing, sing_labels, XYZ, num_fra
 
 % Kindda hardcoded values, but at least make it idiomatic
 source_ = 1;
-spiral_source_ = 5;
-saddle_source = 3;
+spiral_source_ = 3;
+saddle_source = 5;
 saddle_source_ = 7;
 
 sink_ = 2;
-spiral_sink_ = 6;
-saddle_sink = 4;
+spiral_sink_ = 4;
+saddle_sink = 6;
 saddle_sink_ = 8; 
 
 xyz_idx = mfile_sing.xyz_idx;    
