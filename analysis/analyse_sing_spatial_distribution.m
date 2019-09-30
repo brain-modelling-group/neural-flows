@@ -6,7 +6,7 @@ function analyse_sing_spatial_distribution(mfile_sing, sing_labels, XYZ, num_fra
 % XYZ size - npoints x 3
 % sing_labels -- > struct not cell with the numeric labels
 
-[~, cmap] = get_singularity_list_cmap();
+[~, cmap] = singularity3d_get_numlabel();
 % figure_handle_xyz = figure('Name', 'nflows-singularities-over-spacetime');
 % numsubplot = 3; % One for each spatial dimension
 % ax_xyz = gobjects(numsubplot);
