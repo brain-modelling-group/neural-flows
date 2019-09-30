@@ -14,7 +14,8 @@ function  [singularity_classification] =   singularity3d_classify_singularities(
 %                                         [no. of singularities]. The cells
 %                                         have human readable strings with
 %                                         the type of singularity detected. 
-%       
+% REQUIRES:
+%          switch_index_mode()
 % AUTHOR:
 %     Paula Sanz-Leon, QIMR Berghofer February 2019
 % USAGE:
@@ -26,10 +27,16 @@ function  [singularity_classification] =   singularity3d_classify_singularities(
 singularity_classification = cell(size(null_points_3d));
 tpts = size(null_points_3d, 2);
 
+% Load options structure
+options = mfile_vel.options;
+grid_size = options.flow_calculation.grid_size;
+
+
+
 if size(null_points_3d(1).xyz_idx, 2) < 2
 
     for tt=1:tpts
-        xyz_subs = switch_index_mode(null_points_3d(tt).xyz_idx, 'subscript', mfile_vel_obj.X);
+        xyz_subs = switch_index_mode(null_points_3d(tt).xyz_idx, 'subscript', grid_size);
         null_points_3d(tt).xyz_idx = xyz_subs;
     end    
     
