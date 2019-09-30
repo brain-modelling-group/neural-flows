@@ -35,19 +35,19 @@ for this_point = 1:num_critical_points
     [Mx, My, Mz] = moore_neighbourhood_3d(ix, iy, iz);
     
     % preallocate memory in the right shape
-    vx_cube = zeros(3, 3, 3);
-    vy_cube = vx_cube;
-    vz_cube = vx_cube;
+    ux_cube = zeros(3, 3, 3);
+    uy_cube = ux_cube;
+    uz_cube = ux_cube;
     
     for this_elem = 1:numel(Mx)
-        vx_cube(this_elem) = ux(Mx(this_elem), My(this_elem), Mz(this_elem));
-        vy_cube(this_elem) = uy(Mx(this_elem), My(this_elem), Mz(this_elem));
-        vz_cube(this_elem) = uz(Mx(this_elem), My(this_elem), Mz(this_elem));
+        ux_cube(this_elem) = ux(Mx(this_elem), My(this_elem), Mz(this_elem));
+        uy_cube(this_elem) = uy(Mx(this_elem), My(this_elem), Mz(this_elem));
+        uz_cube(this_elem) = uz(Mx(this_elem), My(this_elem), Mz(this_elem));
     end
 
-    [dvxdx, dvxdy, dvxdz] = gradient(vx_cube, hx, hy, hz);
-    [dvydx, dvydy, dvydz] = gradient(vy_cube, hx, hy, hz);
-    [dvzdx, dvzdy, dvzdz] = gradient(vz_cube, hx, hy, hz);
+    [dvxdx, dvxdy, dvxdz] = gradient(ux_cube, hx, hy, hz);
+    [dvydx, dvydy, dvydz] = gradient(uy_cube, hx, hy, hz);
+    [dvzdx, dvzdy, dvzdz] = gradient(uz_cube, hx, hy, hz);
     J3D(:, :, this_point) = [dvxdx(centre_point_lidx) dvxdy(centre_point_lidx)  dvxdz(centre_point_lidx);
                              dvydx(centre_point_lidx) dvydy(centre_point_lidx)  dvydz(centre_point_lidx);
                              dvzdx(centre_point_lidx) dvzdy(centre_point_lidx)  dvzdz(centre_point_lidx)];
