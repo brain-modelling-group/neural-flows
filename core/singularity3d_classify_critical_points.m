@@ -47,7 +47,7 @@ if sum(E) == 0
         return
 end       
 if rank(J3D, tolerance) < 3
-    singularity_type = classify_orbits_3d(E);
+    singularity_type = singularity3d_classify_orbits(E);
     return
 end
 
