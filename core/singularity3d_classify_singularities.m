@@ -1,8 +1,8 @@
-function  [singularity_classification] =   singularity3d_classify_singularities(xyz_idx, mfile_vel_obj)
+function  [singularity_classification] =   singularity3d_classify_singularities(null_points_3d, mfile_vel_obj)
 % 1) calculates jacobian for each critical point, and then 
 % 2) classify type of critical point. 
 % ARGUMENTS:
-%          xyz_idx        -- a struct of size [1 x no. timepoints]
+%          null_points_3d        -- a struct of size [1 x no. timepoints]
 %                         -- .xyz_idx [no. of singularities x 1] -- linear indices 
 %                                     [no. of singularities x 3] -- subscripts
 %          mfile_vel_obj  -- a MatFile handle pointing to the flows/velocity
@@ -16,21 +16,21 @@ function  [singularity_classification] =   singularity3d_classify_singularities(
 %                                         the type of singularity detected. 
 %       
 % AUTHOR:
-%     Paula Sanz-Leon, QIMR Berghofer 2019
+%     Paula Sanz-Leon, QIMR Berghofer February 2019
 % USAGE:
 %{
     
 %}
 % NOTE: as the timeseries get longer, we can in principle parallelise this
 % function.
-singularity_classification = cell(size(xyz_idx));
-tpts = size(xyz_idx, 2);
+singularity_classification = cell(size(null_points_3d));
+tpts = size(null_points_3d, 2);
 
-if size(xyz_idx(1).xyz_idx, 2) < 2
+if size(null_points_3d(1).xyz_idx, 2) < 2
 
     for tt=1:tpts
-        xyz_subs = switch_index_mode(xyz_idx(tt).xyz_idx, 'subscript', mfile_vel_obj.X);
-        xyz_idx(tt).xyz_idx = xyz_subs;
+        xyz_subs = switch_index_mode(null_points_3d(tt).xyz_idx, 'subscript', mfile_vel_obj.X);
+        null_points_3d(tt).xyz_idx = xyz_subs;
     end    
     
 end
@@ -51,17 +51,17 @@ for tt=1:tpts % parallizable stuff but the classification runs very fast
        
        % Check if we have critical points. There are 'frames' for which
        % nothing was detected, we should not attempt to calculate jacobian.
-       if isempty(xyz_idx(tt).xyz_idx)
+       if isempty(null_points_3d(tt).xyz_idx)
            continue
        end
        
-       num_critical_points = size(xyz_idx(tt).xyz_idx, 1);
+       num_critical_points = size(null_points_3d(tt).xyz_idx, 1);
        singularity_labels  = cell(num_critical_points, 1);
 
        for ss=1:num_critical_points
            % Check if any subscript is on the boundary of the grid. 
            % This will cause a problem in the jacobian calculation. 
-           point = xyz_idx(tt).xyz_idx(ss, :);
+           point = null_points_3d(tt).xyz_idx(ss, :);
            % Move points a little
            %point = rectify_boundary_points(point, grid_size);
            % Flag points at the boundary
