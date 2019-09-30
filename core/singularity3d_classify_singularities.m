@@ -101,6 +101,7 @@ end % function detect_boundary_points
 
 
 function rectified_point = rectify_boundary_points(point, grid_size)
+ %NOTE: WARNING: THIS DOES NOT WORK
     xdim=1;
     ydim=2;
     zdim=3;
