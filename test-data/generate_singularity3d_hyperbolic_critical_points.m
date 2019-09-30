@@ -45,8 +45,8 @@ switch cp_type
         p1 = [ 0.5  0.5  0.5];
         p2 = [-0.5 -0.5 -0.5];
             
-    case {'1-2-saddle'}
-        % 1-out-2-in
+    case {'2-1-saddle'}
+        % 2-in-1-out
         TH = atan2(Y, X);
         R = sqrt(X.^2+Y.^2);
         ux = -R.* cos(TH);
@@ -56,7 +56,8 @@ switch cp_type
         p1 = [  0.5  0.8  0.1];
         p2 = [ -0.5  -0.8 -0.1];
         
-    case {'2-1-saddle'}
+    case {'1-2-saddle'}
+        % 1-in-2-out
         TH = atan2(Y, X);
         R = sqrt(X.^2+Y.^2);
         ux = R.* cos(TH);
@@ -85,8 +86,8 @@ switch cp_type
         p1 = [0.0, -0.01, -0.01];
         p2 = [0.0,  0.01, +0.01];
  
-    case {'1-2-spiral-saddle'}
-        % 1-out-2-in
+    case {'2-1-spiral-saddle'}
+        % 2-in-1-out
         [ux, uy, uz] = spiral_source();
         ux = -ux;
         uy = -uy;
@@ -94,8 +95,8 @@ switch cp_type
         p1 = [ 0.5, -0.5,  0.05];
         p2 = [-0.5, -0.5, -0.05];
         
-    case {'2-1-spiral-saddle'}
-        % Source Spiral saddle - 2-out 1-in 
+    case {'1-2-spiral-saddle'}
+        % Source Spiral saddle - 1-in-2-out 
         [ux, uy, uz] = spiral_source();
         uz = -uz;
         
