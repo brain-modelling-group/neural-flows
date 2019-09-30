@@ -26,26 +26,30 @@ function singularity_type = singularity3d_classify_critical_points(J3D)
 %                      if a < 0 --> spiral sink
 % Calculate matrix with eigenvalues of Jacobian
 
-% Check if anything went wrong with the Jacobian calculation
+% REFERENCES:
+% FlowVisual: A Visualization App for Teaching and Understanding 3D Flow Field Concepts
+% Wang, Tao, Ma, Shen, circa 2016
 
+% Check if anything went wrong with the Jacobian calculation
 if any(isnan(J3D(:)))
     singularity_type = 'nan';
     return
 end
 
+% Calculate eigenvalues
 [~, D] = eig(J3D);
 
 % Return only eigenvalues
 E = diag(D);
 
 tolerance = 1e-8; % arbitrary tolerance to determine the rank of V
-% Check if the matrix is degenerate
-
-% If the Jacobian is all zero
-if sum(E) == 0
+% If the eigenvals of Jacobian are all zero
+if sum(abs(E)) == 0
         singularity_type = 'zero';
         return
-end       
+end
+
+% Check if the matrix is degenerate
 if rank(J3D, tolerance) < 3
     singularity_type = singularity3d_classify_orbits(E);
     return
