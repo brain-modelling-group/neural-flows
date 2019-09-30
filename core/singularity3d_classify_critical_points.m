@@ -43,18 +43,19 @@ end
 E = diag(D);
 
 tolerance = 1e-8; % arbitrary tolerance to determine the rank of V
-% If the eigenvals of Jacobian are all zero
+
+% If the eigenvals of Jacobian are all zero, which is a weird case
+% This check will fail if eigenvals of the Jacobian are complex
 if sum(abs(E)) == 0
         singularity_type = 'zero';
         return
 end
 
-% Check if the matrix is degenerate
+% Check if the Jacobian matrix is degenerate
 if rank(J3D, tolerance) < 3
     singularity_type = singularity3d_classify_orbits(E);
     return
 end
-
 
 % Check if we have complex numbers. NOTE: If there is at least one complex
 % eigenvalue, then all the values in E are cast as complex 
@@ -105,22 +106,27 @@ end % function classify_all_real()
 function singularity_type = classify_some_imaginary(E)
 % E -- eigenvalues of the jacobian matrix
 real_eigenvalue = find(imag(E) == 0);
-imag_eigenvalues = E(~isreal(E));
+imag_eigenvalues = E(imag(E) ~= 0);
 
 if real(E(real_eigenvalue)) > 0
    if real(imag_eigenvalues(1)) > 0
        singularity_type = 'spiral-source';
-   else 
-       % 1 positive(out), two negatives (in)
+   elseif  real(imag_eigenvalues(1)) < 0
+       % two negatives (in), 1 positive(out)
        singularity_type = '2-1-spiral-saddle';
    end
 elseif real(E(real_eigenvalue)) < 0
    if real(imag_eigenvalues(1)) > 0
-       % 2 positives(out), one negative (in)
+       % one negative (in), 2 positives(out) 
        singularity_type = '1-2-spiral-saddle';
-   else 
+   elseif  real(imag_eigenvalues(1)) < 0 
        singularity_type = 'spiral-sink';
    end
+elseif real(E(real_eigenvalue)) == 0 % may be a centre
+    if (sum(abs(real(imag_eigenvalues))) == 0) && (sum(abs(imag(imag_eigenvalues))) ~= 0)
+        singularity_type = 'centre';
+    end
 end
-
+    
+   
 end % function classify_some_imaginary()

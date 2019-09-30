@@ -92,7 +92,7 @@ switch sing_str_label
     case {'1-1-0-saddle'} 
         sing_numeric_label = 15;
         color = [0 255 0 0];   % These ones may be artificial  
-    case {'nan', 'orbit?', 'boundary', 'zero', 'empty'}
+    case {'nan', 'orbit?', 'boundary', 'zero', 'empty', 'centre'}
         sing_numeric_label = 16;
         color = [0, 0, 0, 0];
     otherwise
