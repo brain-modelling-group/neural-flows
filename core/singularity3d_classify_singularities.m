@@ -76,8 +76,8 @@ for tt=1:tpts % parallizable stuff but the classification runs very fast
            end
            
            % Calculate the Jacobian at each critical point 
-           [J3D] = jacobian3d(point_idx, ux, uy, uz, hx, hy, hz);
-           singularity_labels{ss} = classify_critical_points_3d(J3D);
+           [J3D] = singularity3d_calculate_jacobian(point_idx, ux, uy, uz, hx, hy, hz);
+           singularity_labels{ss} = singularity3d_classify_critical_points(J3D);
        end
 
        singularity_classification{tt} = singularity_labels;
