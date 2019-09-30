@@ -1,4 +1,4 @@
-function [J3D] = singularity3d_calculate_jacobian(critical_xyz_idx, vx, vy, vz, hx, hy, hz)
+function [J3D] = singularity3d_calculate_jacobian(critical_xyz_idx, ux, uy, uz, hx, hy, hz)
 % Estimates the 3 x 3 Jacobian of ux, uy, uz around the estimated critical points
 % critical_xyz_idx are the indices of the estimated points
 
@@ -40,9 +40,9 @@ for this_point = 1:num_critical_points
     vz_cube = vx_cube;
     
     for this_elem = 1:numel(Mx)
-        vx_cube(this_elem) = vx(Mx(this_elem), My(this_elem), Mz(this_elem));
-        vy_cube(this_elem) = vy(Mx(this_elem), My(this_elem), Mz(this_elem));
-        vz_cube(this_elem) = vz(Mx(this_elem), My(this_elem), Mz(this_elem));
+        vx_cube(this_elem) = ux(Mx(this_elem), My(this_elem), Mz(this_elem));
+        vy_cube(this_elem) = uy(Mx(this_elem), My(this_elem), Mz(this_elem));
+        vz_cube(this_elem) = uz(Mx(this_elem), My(this_elem), Mz(this_elem));
     end
 
     [dvxdx, dvxdy, dvxdz] = gradient(vx_cube, hx, hy, hz);
