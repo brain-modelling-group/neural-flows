@@ -86,6 +86,9 @@ end
 end % classify_singularities()
 
 function boundary_vec = detect_boundary_points(point_idx, grid_size)
+% This function only detects points on the faces of the grid 'cube'.
+% It does not handle an irregular domain.
+
     xdim=1;
     ydim=2;
     zdim=3;
