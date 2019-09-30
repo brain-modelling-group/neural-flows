@@ -57,4 +57,4 @@ for this_point = 1:num_critical_points
    
 end
     
-end % function jacobian3d()
+end % function singularity3d_calculate_jacobian()
