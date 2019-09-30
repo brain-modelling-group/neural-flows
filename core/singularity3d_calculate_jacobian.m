@@ -33,7 +33,7 @@ for this_point = 1:num_critical_points
     iy = critical_xyz_idx(this_point, jj);
     iz = critical_xyz_idx(this_point, kk);
     
-    [Mx, My, Mz] = moore_neighbourhood_3d(ix, iy, iz);
+    [My, Mx, Mz] = moore_neighbourhood_3d(ix, iy, iz);
     
     % preallocate memory in the right shape
     ux_cube = zeros(3, 3, 3);
