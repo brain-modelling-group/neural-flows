@@ -52,7 +52,7 @@ switch sing_str_label
     case 'sink'   % done
         sing_numeric_label = 2;
         color = [49, 54, 149, 1];
-    case '1-2-saddle' % done - more source (red) than sink
+    case '1-2-saddle' % done - more source (red) than sink m-in-n-out
         sing_numeric_label = 3;
         color = [244, 109, 67, 1];
     case '2-1-saddle'   % done - more sink (blue) than source
