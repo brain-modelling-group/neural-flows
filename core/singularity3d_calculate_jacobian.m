@@ -45,12 +45,12 @@ for this_point = 1:num_critical_points
         uz_cube(this_elem) = uz(Mx(this_elem), My(this_elem), Mz(this_elem));
     end
 
-    [dvxdx, dvxdy, dvxdz] = gradient(ux_cube, hx, hy, hz);
-    [dvydx, dvydy, dvydz] = gradient(uy_cube, hx, hy, hz);
-    [dvzdx, dvzdy, dvzdz] = gradient(uz_cube, hx, hy, hz);
-    J3D(:, :, this_point) = [dvxdx(centre_point_lidx) dvxdy(centre_point_lidx)  dvxdz(centre_point_lidx);
-                             dvydx(centre_point_lidx) dvydy(centre_point_lidx)  dvydz(centre_point_lidx);
-                             dvzdx(centre_point_lidx) dvzdy(centre_point_lidx)  dvzdz(centre_point_lidx)];
+    [duxdx, duxdy, duxdz] = gradient(ux_cube, hx, hy, hz);
+    [duydx, duydy, duydz] = gradient(uy_cube, hx, hy, hz);
+    [duzdx, duzdy, duzdz] = gradient(uz_cube, hx, hy, hz);
+    J3D(:, :, this_point) = [duxdx(centre_point_lidx) duxdy(centre_point_lidx)  duxdz(centre_point_lidx);
+                             duydx(centre_point_lidx) duydy(centre_point_lidx)  duydz(centre_point_lidx);
+                             duzdx(centre_point_lidx) duzdy(centre_point_lidx)  duzdz(centre_point_lidx)];
     
     
 
