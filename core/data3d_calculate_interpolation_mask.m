@@ -41,7 +41,8 @@ outter_bdy_mask = outter_bdy_mask + circshift(outter_bdy_mask, shift_steps, ydim
 outter_bdy_mask = outter_bdy_mask + circshift(outter_bdy_mask, shift_steps, zdim) + circshift(outter_bdy_mask, -shift_steps, zdim);
 outter_bdy_mask(outter_bdy_mask > 0) = 1;
 
-diff_mask = outter_bdy_mask - inner_bdy_mask;
+diff_mask = logical(outter_bdy_mask - inner_bdy_mask);
+outter_bdy_mask = logical(outter_bdy_mask);
 
 
 end % function data3d_calculate_interpolation_mask()
