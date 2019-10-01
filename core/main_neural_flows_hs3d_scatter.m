@@ -127,7 +127,8 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     root_fname_vel = 'temp_flows';
     
     [mfile_vel, mfile_vel_sentinel] = create_temp_file(root_fname_vel, keep_vel_file); 
-    % Save mask with points inside the convex hull of the brain
+    
+    % Save masks with convex hulls of the brain
     mfile_vel.in_bdy_mask = in_bdy_mask;
     mfile_vel.interp_mask = interp_mask;
     mfile_vel.diff_mask = diff_mask;
@@ -147,7 +148,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     mfile_vel.Y = Y;
     mfile_vel.Z = Z;
     
-    % Save time and space step deletesizes
+    % Save time and space step 
     mfile_vel.hx = hx; % mm
     mfile_vel.hy = hy; % mm
     mfile_vel.hz = hz; % mm
