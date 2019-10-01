@@ -65,14 +65,22 @@ fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started burn-in 
 for bb=1:burnin_len
     % Calculate the velocity components
     [uxo, uyo, uzo] = flows3d_hs3d(FA, FB, alpha_smooth, ...
-                                                    max_iterations, ...
-                                                    uxo, uyo, uzo, ...
-                                                    hx, hy, hz, ht);       
+                                           max_iterations, ...
+                                           uxo, uyo, uzo, ...
+                                           hx, hy, hz, ht);       
 end
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished burn-in period for random initial velocity conditions.'))
 
 
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started estimation of flows.'))
+
+% Set velocity field at the points located in shell between inner and outer boundaries to zero
+try 
+    diff_mask = mfile_vel.diff_mask;
+catch 
+    diff_mask = []; % assume we are using a grid and do not need diff_mask
+end
+
 for this_tpt = 1:dtpts-1
 
     % Read activity data                
@@ -81,10 +89,16 @@ for this_tpt = 1:dtpts-1
 
     % Calculate the velocity components
     [uxo, uyo, uzo] = flows3d_hs3d(FA, FB, alpha_smooth, ...
-                                                max_iterations, ...
-                                                uxo, uyo, uzo, ...
-                                                hx, hy, hz, ht);                                
-
+                                           max_iterations, ...
+                                           uxo, uyo, uzo, ...
+                                           hx, hy, hz, ht);
+    % Remove boundary points                                   
+    if ~isempty(diff_mask)
+        uxo(diff_mask) = nan;
+        uyo(diff_mask) = nan;
+        uzo(diff_mask) = nan;
+    end
+        
     % Save the velocity components
     mfile_vel.ux(:, :, :, this_tpt) = single(uxo);
     mfile_vel.uy(:, :, :, this_tpt) = single(uyo);
