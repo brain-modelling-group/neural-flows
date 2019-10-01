@@ -72,14 +72,18 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     hy = options.hy;
     hz = options.hz; 
   
-    % Generate a structured grid    
-    [X, Y, Z, grid_size] = get_structured_grid(locs, options.hx, options.hy, options.hz);
+    % Generate a structured grid 
+    scaling_factor = 1.05; % inflate locations a little bit, so the grids have enough blank space around the volume
+    [X, Y, Z, grid_size] = get_structured_grid(scaling_factor*locs, options.hx, options.hy, options.hz);
     
-   
     % Get a mask with the points that are inside and outside the convex
     % hull
     [in_bdy_mask, ~] = data3d_calculate_boundary(locs, X(:), Y(:), Z(:));
     in_bdy_mask = reshape(in_bdy_mask, grid_size);
+    % Get a mask that is slightly larger so we can define a shell with a thickness that will be 
+    % the boundary of our domain. 
+    [interp_mask, diff_mask] = data3d_calculate_interpolation_mask(in_bdy_mask);
+
     
 %--------------------- INTERPOLATION OF DATA -----------------------------%    
     % Perform interpolation on the data and save in a temp file -- asumme
@@ -92,7 +96,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
         % Parallel interpolation with the parallel toolbox
         [mfile_interp, mfile_interp_sentinel] = data3d_interpolate_parallel(data, ...
                                                                         locs, X, Y, Z, ...
-                                                                        in_bdy_mask, ...
+                                                                        interp_mask, ...
                                                                         keep_interp_file);
          
         % Clean up parallel pool
@@ -125,6 +129,8 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     [mfile_vel, mfile_vel_sentinel] = create_temp_file(root_fname_vel, keep_vel_file); 
     % Save mask with points inside the convex hull of the brain
     mfile_vel.in_bdy_mask = in_bdy_mask;
+    mfile_vel.interp_mask = interp_mask;
+    mfile_vel.diff_mask = diff_mask;
     
     % Get some dummy initial conditions
     if isfield(options, 'chunk')
