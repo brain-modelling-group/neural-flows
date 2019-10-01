@@ -1,6 +1,7 @@
 function singularity_type = singularity3d_classify_orbits(E)
-% Classifies hyperbolic periodi orbits (p. o.) in 3D space based on the 
-% eigenvalues of the jacobian matrix. 
+% Classifies hyperbolic periodic orbits (p. o.) in 3D space based on the 
+% eigenvalues of the jacobian matrix -- Strictly speaking this is classification is 
+% not correctm because the eigenvalues should be of the poincare map. 
 
 % E -- vector with eigenvalues, one of the eigenvalues is zero
 
