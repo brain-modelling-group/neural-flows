@@ -93,7 +93,7 @@ function [ux, uy, uz] = horn_schunk_step(ux, uy, uz)
 end
   
 
-end % function compute_flow_hsd3()
+end % function flows3d_hsd3()
 
 function avg_filter = vonneumann_neighbourhood_3d()
     % Neumann neighbourhood in 3D - 6-nearest neighbours for averaging 
