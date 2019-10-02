@@ -60,20 +60,11 @@ avg_filter = vonneumann_neighbourhood_3d();
 % TODO: replace FOR by WHILE after introducing the Charbonnier
 % penalty/tolerance as in Neuropatt
 
-    for tt=1:max_iterations-1
+    for tt=1:max_iterations
        [ux,uy,uz] = horn_schunk_step(ux, uy, uz);
                    
-       % Reassing zeros
-       ux(diff_mask) = 0;
-       uy(diff_mask) = 0;
-       uz(diff_mask) = 0;
-                   
     end
-    
-    for tt=max_iterations
-         [ux,uy,uz] = horn_schunk_step(ux, uy, uz);
-    end
-    
+     
     
     function [ux, uy, uz] = horn_schunk_step(ux, uy, uz)
                 % NOTE: averaging may be useful if interpolation is not peformed, 
