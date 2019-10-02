@@ -66,8 +66,8 @@ avg_filter = vonneumann_neighbourhood_3d();
     end
      
     
-    function [ux, uy, uz] = horn_schunk_step(ux, uy, uz)
-                % NOTE: averaging may be useful if interpolation is not peformed, 
+function [ux, uy, uz] = horn_schunk_step(ux, uy, uz)
+        % NOTE: averaging may be useful if interpolation is not peformed, 
         % or if the data are noisy. For narrowband signals, the
         % averaging introduces artifacts.
         ux_avg = nanconvn(ux, avg_filter,'same', edge_corrected_image);
@@ -90,7 +90,7 @@ avg_filter = vonneumann_neighbourhood_3d();
         uz = uz_avg - ( Iz.*( (Ix.*ux_avg) + (Iy.*uy_avg) + (Iz.*uz_avg) + It))...
                        ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
         
-    end
+end
   
 
 end % function compute_flow_hsd3()
