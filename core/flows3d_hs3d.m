@@ -1,4 +1,4 @@
-function [ux, uy, uz] = flows3d_hs3d(F1, F2, alpha_smooth, max_iterations, uxo, uyo, uzo, hx, hy, hz, ht)
+function [ux, uy, uz] = flows3d_hs3d(F1, F2, alpha_smooth, max_iterations, uxo, uyo, uzo, hx, hy, hz, ht, diff_mask)
 %% This function estimates the velocity components between two subsequent 3D 
 % images using the Horn-Schunck optical flow method (HS3D). 
 %
@@ -60,8 +60,23 @@ avg_filter = vonneumann_neighbourhood_3d();
 % TODO: replace FOR by WHILE after introducing the Charbonnier
 % penalty/tolerance as in Neuropatt
 
-    for tt=1:max_iterations
-        % NOTE: averaging may be useful if interpolation is not peformed, 
+    for tt=1:max_iterations-1
+       [ux,uy,uz] = horn_schunk_step(ux, uy, uz);
+                   
+       % Reassing zeros
+       ux(diff_mask) = 0;
+       uy(diff_mask) = 0;
+       uz(diff_mask) = 0;
+                   
+    end
+    
+    for tt=max_iterations
+         [ux,uy,uz] = horn_schunk_step(ux, uy, uz);
+    end
+    
+    
+    function [ux, uy, uz] = horn_schunk_step(ux, uy, uz)
+                % NOTE: averaging may be useful if interpolation is not peformed, 
         % or if the data are noisy. For narrowband signals, the
         % averaging introduces artifacts.
         ux_avg = nanconvn(ux, avg_filter,'same', edge_corrected_image);
@@ -83,6 +98,7 @@ avg_filter = vonneumann_neighbourhood_3d();
 
         uz = uz_avg - ( Iz.*( (Ix.*ux_avg) + (Iy.*uy_avg) + (Iz.*uz_avg) + It))...
                        ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
+        
     end
   
 
