@@ -63,10 +63,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
       rng(options.chunk) % for the cluster environment.
     end
     
-    % Labels for 2D input arrays
-    t_dim = 1; % time    
-    dtpts = size(data, t_dim);
-  
+   
     ht = options.ht;
     hx = options.hx; 
     hy = options.hy;
@@ -82,8 +79,8 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     in_bdy_mask = reshape(in_bdy_mask, grid_size);
     % Get a mask that is slightly larger so we can define a shell with a thickness that will be 
     % the boundary of our domain. 
-    [interp_mask, diff_mask] = data3d_calculate_interpolation_mask(in_bdy_mask);
-
+    thickness_mask = 1;
+    [interp_mask, diff_mask] = data3d_calculate_interpolation_mask(in_bdy_mask, thickness_mask);
     
 %--------------------- INTERPOLATION OF DATA -----------------------------%    
     % Perform interpolation on the data and save in a temp file -- asumme
@@ -107,13 +104,17 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
          options.data_interpolation.file_name = mfile_interp.Properties.Source;
     else
         % Load the data if file already exists
-        mfile_interp = matfile(options.data_interpolation.file_name);
+        mfile_interp = matfile(options.data_interpolation.file_name, 'Writable', true);
         mfile_interp_sentinel = [];
     end
         mfile_interp.options = options;
         % Make the file read-only file to avoid corruption
         mfile_interp.Properties.Writable = false;
         fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished interpolating data.'))
+        
+        % Get how many time points we have
+        t_dim = 4; % time    
+        dtpts = size(mfile_interp.data, t_dim);
 
 %------------------------ FLOW CALCULATION -------------------------------%
     % Parameters for optical flow-- could be changed, could be parameters
