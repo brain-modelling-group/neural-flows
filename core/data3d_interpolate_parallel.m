@@ -44,7 +44,6 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
     end
 
     % Create file for the interpolated data
-    root_fname = 'temp_interp';
     [mfile_interp_obj, mfile_interp_sentinel] = create_temp_file(root_fname, keep_interp_data);
     
     % Write dummy data to disk
