@@ -8,11 +8,11 @@ X = mfile_vel_obj.X;
 Y = mfile_vel_obj.Y;
 Z = mfile_vel_obj.Z;
 
-    parfor tt=1:tpts
+    for tt=1:tpts
          null_points_3d(tt).xyz_idx = locate_null_velocity_coordinates(mfile_vel_obj.ux(:, :, :, tt), ...
                                                                        mfile_vel_obj.uy(:, :, :, tt), ...
                                                                        mfile_vel_obj.uz(:, :, :, tt), ...
-                                                                       detection_threshold);        %#ok<PFBNS>
+                                                                       detection_threshold);      
                                                             
          null_points_3d(tt).x = locate_points(X, null_points_3d(tt).xyz_idx);
          null_points_3d(tt).y = locate_points(Y, null_points_3d(tt).xyz_idx);
