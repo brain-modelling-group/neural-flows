@@ -34,5 +34,4 @@ function test_flow_estimation__travellingwave3d_grid_hs3d()
                 mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :).^2))
  xlabel('u_{norm} [m/s]')
  
- 
-end % function test_travellingwave3d_grid()
+end % function test_flow_estimation__travellingwave3d_grid_hs3d()
