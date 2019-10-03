@@ -18,7 +18,7 @@ function test_flow_estimation__planewave3d_scattered_cnem()
  [wave3d, ~] = generate_wave3d_plane_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'z');
  
  if options.is_phase
-     % Transform data into phase via hilber transform
+     % Transform data into phase via hilbert transform
      wave3d = calculate_insta_phase(wave3d);
      fig_name = 'nflows-test-planewave3d-scattered-cnem-phase';
  else
@@ -46,6 +46,4 @@ function test_flow_estimation__planewave3d_scattered_cnem()
  histogram(sqrt(v.vxp(:).^2+v.vyp(:).^2+v.vzp(:).^2))
  xlabel('u_{norm} [mm/ms]')
 
-
- 
-end % function test_flow_estimation__planewave3d_grid_hs3d()
+end % function test_flow_estimation__planewave3d_scattered_cnem()
