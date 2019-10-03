@@ -61,6 +61,8 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
 
     if isfield(options, 'chunk')
       rng(options.chunk) % for the cluster environment.
+    else
+       options.chunk = 0;
     end
     
    
@@ -87,6 +89,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     % OS is Linux
      % flags to decide what to do with temp intermediate files
     keep_interp_file = true;
+    root_fname_interp = ['temp_interp-' num2str(options.chunk, '%03d')];
     if ~options.data_interpolation.file_exists % Or not necesary because it is fmri data
         fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started interpolating data.'))
         
@@ -94,7 +97,8 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
         [mfile_interp, mfile_interp_sentinel] = data3d_interpolate_parallel(data, ...
                                                                             locs, X, Y, Z, ...
                                                                             interp_mask, ...
-                                                                            keep_interp_file);
+                                                                            keep_interp_file, ...
+                                                                            root_fname_interp);
          
         % Clean up parallel pool
         % delete(gcp); % commented because it adds 30s-1min of overhead
