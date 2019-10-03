@@ -7,7 +7,7 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
     load('513COG.mat', 'COG')
 
     % window size
-    ws = 4097;
+    ws =  65;
     % shift step
     shift_step = ws - 64;
     datalen  = size(soln, 2);
@@ -33,19 +33,33 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
     cd /scratch/CGMD
 
     % Options for the flow computation
-    options.interp_data.file_exists = false;
-    options.sing_detection.datamode  = 'vel';
-    options.sing_detection.indexmode = 'linear';
+    options.data_interpolation.file_exists = false;
+    options.sing_analysis.detection_datamode  = 'vel';
+    
+    % Resolution
+    options.hx = 3;
+    options.hy = 3;
+    options.hz = 3;
+    options.ht = 1;
+    
+    % 
     options.chunk = idx_chunk;
     options.chunk_start = idx_start;
     options.chunk_stop  = idx_stop;
+    
+    % 
+    options.flow_calculation.init_conditions = 'random';
+    options.flow_calculation.seed_init_vel = 42;
+    options.flow_calculation.alpha_smooth   = 0.1;
+    options.flow_calculation.max_iterations = 64;
+    options.sing_analysis.detection = true;
 
     % Tic
     tstart = string(datetime('now'));
     fprintf('%s%s\n', ['Started: ' tstart])
 
     % Do the stuff
-    [mfile_vel, mfile_interp, mfile_sings] = compute_neural_flows_3d_ug(data, locs, options);
+    [mfile_vel, mfile_interp, mfile_sings] = main_neural_flows_hs3d_scatter(data, locs, options);
 
     % Toc
     tend = string(datetime('now'));
