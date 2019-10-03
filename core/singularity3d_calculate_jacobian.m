@@ -10,7 +10,7 @@ function [J3D] = singularity3d_calculate_jacobian(critical_xyz_idx, ux, uy, uz, 
 %      |                         |
 %      | dVz/dx   dVz/dy   dVz/dz|
 
-% labels along the x, y, z dimension for integer indices
+% labels along the y,x, z dimension for integer indices
 ii = 1;
 jj = 2;
 kk = 3;
