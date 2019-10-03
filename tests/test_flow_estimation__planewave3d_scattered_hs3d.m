@@ -29,20 +29,20 @@ function test_flow_estimation__planewave3d_scattered_hs3d()
 
  subplot(1, 4, 1, 'Parent', fig_hist)
  histogram(mfile_flows.ux(2:end-1, 2:end-1, 2:end-1, :))
- xlabel('ux')
+ xlabel('ux [m/s]')
  
  subplot(1, 4 ,2, 'Parent', fig_hist)
  histogram(mfile_flows.uy(2:end-1, 2:end-1, 2:end-1, :))
- xlabel('uy')
+ xlabel('uy [m/s]')
  
  subplot(1, 4, 3, 'Parent', fig_hist)
  histogram(mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :))
- xlabel('uz')
+ xlabel('uz [m/s]')
  
  subplot(1, 4, 4, 'Parent', fig_hist)
  histogram(sqrt(mfile_flows.ux(2:end-1, 2:end-1, 2:end-1, :).^2 + ...
                 mfile_flows.uy(2:end-1, 2:end-1, 2:end-1, :).^2 + ...
                 mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :).^2))
- xlabel('u_{norm}')
+ xlabel('u_{norm} [m/s]')
  
 end % function test_flow_estimation__planewave3d_scattered_hs3d()

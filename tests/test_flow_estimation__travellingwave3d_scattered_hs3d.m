@@ -28,16 +28,22 @@ function test_flow_estimation__travellingwave3d_scattered_hs3d()
  % Plot the velocity estimates
  fig_hist = figure('Name', 'nflows-test-travellingwave3d-scattered-hs3d');
 
- subplot(1, 3, 1, 'Parent', fig_hist)
+ subplot(1, 4, 1, 'Parent', fig_hist)
  histogram(mfile_flows.ux)
- xlabel('ux')
+ xlabel('ux [m/s]')
  
- subplot(1, 3 ,2, 'Parent', fig_hist)
+ subplot(1, 4 ,2, 'Parent', fig_hist)
  histogram(mfile_flows.uy)
- xlabel('uy')
+ xlabel('uy [m/s]')
 
- subplot(1, 3, 3, 'Parent', fig_hist)
+ subplot(1, 4, 3, 'Parent', fig_hist)
  histogram(mfile_flows.uz)
- xlabel('uz')
+ xlabel('uz [m/s]')
  
-end % function test_travellingwave3d_scattered()
+ subplot(1, 4, 4, 'Parent', fig_hist)
+ histogram(sqrt(mfile_flows.ux(2:end-1, 2:end-1, 2:end-1, :).^2 + ...
+                mfile_flows.uy(2:end-1, 2:end-1, 2:end-1, :).^2 + ...
+                mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :).^2))
+ xlabel('u_{norm} [m/s]')
+ 
+end % function test_flow_estimation__travellingwave3d_scattered_hs3d()
