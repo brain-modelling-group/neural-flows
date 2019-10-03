@@ -60,7 +60,7 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
     fprintf('%s%s\n', ['Started: ' tstart])
 
     % Do the stuff 
-   main_neural_flows_hs3d_scatter(data, locs, options);
+    main_neural_flows_hs3d_scatter(data, locs, options);
 
     % Toc
     tend = string(datetime('now'));
