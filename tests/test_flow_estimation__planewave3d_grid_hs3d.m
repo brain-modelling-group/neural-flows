@@ -34,7 +34,5 @@ function test_flow_estimation__planewave3d_grid_hs3d()
  subplot(1, 4, 4, 'Parent', fig_hist)
  histogram(sqrt(v.vxp(:).^2+v.vyp(:).^2+v.vzp(:).^2))
  xlabel('u_{norm} [m/s]')
-
-
  
 end % function test_flow_estimation__planewave3d_grid_hs3d()
