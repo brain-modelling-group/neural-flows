@@ -29,16 +29,20 @@ function test_flow_estimation__travellingwave3d_scattered_cnem()
  
  fig_hist = figure('Name', fig_name);
 
- subplot(1, 3, 1, 'Parent', fig_hist)
+ subplot(1, 4, 1, 'Parent', fig_hist)
  histogram(v.vxp(:, 1:50))
- xlabel('ux')
+ xlabel('ux [m/s]')
  
- subplot(1, 3 ,2, 'Parent', fig_hist)
+ subplot(1, 4 ,2, 'Parent', fig_hist)
  histogram(v.vyp(:, 1:50))
- xlabel('uy')
+ xlabel('uy [m/s]')
 
- subplot(1, 3, 3, 'Parent', fig_hist)
+ subplot(1, 4, 3, 'Parent', fig_hist)
  histogram(v.vzp(:, 1:50))
- xlabel('uz')
+ xlabel('uz [m/s]')
  
-end % function test_travellingwave3d_scattered()
+ subplot(1, 4, 4, 'Parent', fig_hist)
+ histogram(sqrt(v.vxp(:).^2+v.vyp(:).^2+v.vzp(:).^2))
+ xlabel('u_{norm} [mm/ms]')
+ 
+end % function test_flow_estimation__travellingwave3d_scattered_cnem()
