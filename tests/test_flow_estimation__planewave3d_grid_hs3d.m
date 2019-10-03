@@ -16,17 +16,23 @@ function test_flow_estimation__planewave3d_grid_hs3d()
 
  fig_hist = figure('Name', 'nflows-test-planewave3d-grid-hs3d');
 
- subplot(1, 3, 1, 'Parent', fig_hist)
+ subplot(1, 4, 1, 'Parent', fig_hist)
  histogram(mfile_flows.ux(2:end-1, 2:end-1, 2:end-1, :))
- xlabel('ux')
+ xlabel('ux [m/s]')
  
- subplot(1, 3 ,2, 'Parent', fig_hist)
+ subplot(1, 4, 2, 'Parent', fig_hist)
  histogram(mfile_flows.uy(2:end-1, 2:end-1, 2:end-1, :))
- xlabel('uy')
+ xlabel('uy [m/s]')
  
- subplot(1, 3, 3, 'Parent', fig_hist)
+ subplot(1, 4, 3, 'Parent', fig_hist)
  histogram(mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :))
- xlabel('uz')
+ xlabel('uz [m/s]')
+ 
+  
+ subplot(1, 4, 4, 'Parent', fig_hist)
+ histogram(sqrt(v.vxp(:).^2+v.vyp(:).^2+v.vzp(:).^2))
+ xlabel('u_{norm} [m/s]')
+
 
  
 end % function test_planewave3d_grid()
