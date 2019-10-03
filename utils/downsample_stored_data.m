@@ -2,13 +2,13 @@ function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp, mfile_sings)
 
     % NOTE: newfilename for flows and interp should be passed as an
     % argument
-    newflowfilename  = ['flows_act_wc1d1_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
+    newflowfilename  = ['flows_act_long_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
     resample_flows(newflowfilename)
     
-    newinterpfilename = ['interp_act_wc1d1_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
+    newinterpfilename = ['interp_act_long_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
     resample_interp(newinterpfilename)
         
-    newsingfilename = ['sngs_act_wc1d1_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
+    newsingfilename = ['sngs_act_long_chunkidx_' num2str(idx_chunk, '%03d') '.mat'];
     resample_sings(newsingfilename)
 
     
@@ -123,7 +123,7 @@ function downsample_stored_data(idx_chunk, mfile_vel, mfile_interp, mfile_sings)
         % Open new filename
         newfile_obj = matfile(newfilename, 'Writable', true); 
 
-        downsample_factor_space = 2;
+        downsample_factor_space = 4;
 
         % Original grid is in the flow files
         newfile_obj.downsample_factor_space = downsample_factor_space;
