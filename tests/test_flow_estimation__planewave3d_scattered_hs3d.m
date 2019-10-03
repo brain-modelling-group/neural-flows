@@ -41,9 +41,8 @@ function test_flow_estimation__planewave3d_scattered_hs3d()
  
  subplot(1, 4, 4, 'Parent', fig_hist)
  histogram(sqrt(mfile_flows.ux(2:end-1, 2:end-1, 2:end-1, :).^2 + ...
-           mfile_flows.uy(2:end-1, 2:end-1, 2:end-1, :).^2 + ...
-           mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :).^2))
+                mfile_flows.uy(2:end-1, 2:end-1, 2:end-1, :).^2 + ...
+                mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :).^2))
  xlabel('u_{norm}')
-
  
-end % function test_flow_estimation__spiralwave3d_grid_hs3d()
+end % function test_flow_estimation__planewave3d_scattered_hs3d()
