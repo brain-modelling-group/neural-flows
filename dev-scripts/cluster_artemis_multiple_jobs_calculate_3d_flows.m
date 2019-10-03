@@ -2,14 +2,14 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
 % Script to process data on Sydney's Artemis
 
     %load('long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln')
-    %in1 = load('/home/psan7097/neural-flows/demo-data/W_c1_d1ms_trial1.mat');
-    in1 = load('demo-data/W_c1_d1ms_trial1.mat');
+    in1 = load('/home/psan7097/neural-flows/demo-data/W_c1_d1ms_trial1.mat');
+    %in1 = load('demo-data/W_c1_d1ms_trial1.mat');
 
     soln = in1.nodes.'; 
     load('513COG.mat', 'COG')
 
     % window size
-    ws =  129;
+    ws =  4097;
     % shift step
     shift_step = ws - 64;
     datalen  = size(soln, 2);
@@ -27,12 +27,12 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
     clear COG soln
 
     % Cluster properties
-    %local_cluster = parcluster('local');
-    %local_cluster.NumWorkers = 12;   % This should match the requested number of cpus
-    %parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
+    local_cluster = parcluster('local');
+    local_cluster.NumWorkers = 12;   % This should match the requested number of cpus
+    parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
 
     % Change directory to scratch, so temp files will be created there
-    %cd /scratch/CGMD
+    cd /scratch/CGMD
 
     % Options for the flow computation
     options.data_interpolation.file_exists = false;
