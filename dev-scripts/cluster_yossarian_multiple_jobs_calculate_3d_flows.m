@@ -26,7 +26,7 @@ function cluster_yossarian_multiple_jobs_calculate_3d_flows(idx_chunk)
 
     % Cluster properties
     local_cluster = parcluster('local');
-    local_cluster.NumWorkers = 32;   % This should match the requested number of cpus
+    local_cluster.NumWorkers = 24;   % This should match the requested number of cpus
     parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
 
     % Change directory to scratch, so temp files will be created there
@@ -60,4 +60,12 @@ function cluster_yossarian_multiple_jobs_calculate_3d_flows(idx_chunk)
 
      % Do the stuff 
     main_neural_flows_hs3d_scatter(data, locs, options);
-end % 
+    
+    % Toc
+    tend = string(datetime('now'));
+    fprintf('%s%s\n', ['Finished: ' tend])
+    tictoc = etime(datevec(tend), datevec(tstart)) / 3600;
+    fprintf('%s%s%s\n\n', ['Elapsed time: ' string(tictoc) ' hours'])
+
+end % cluster_yossarian_multiple_jobs_calculate_3d_flows()
+
