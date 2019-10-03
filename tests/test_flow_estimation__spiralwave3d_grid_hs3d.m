@@ -18,17 +18,23 @@ function test_flow_estimation__spiralwave3d_grid_hs3d()
 
  fig_hist = figure('Name', 'nflows-test-travellingwave3d-grid-hs3d');
 
- subplot(1, 3, 1, 'Parent', fig_hist)
+ subplot(1, 4, 1, 'Parent', fig_hist)
  histogram(mfile_flows.ux(2:end-1, 2:end-1, 2:end-1, :))
  xlabel('ux')
  
- subplot(1, 3 ,2, 'Parent', fig_hist)
+ subplot(1, 4 ,2, 'Parent', fig_hist)
  histogram(mfile_flows.uy(2:end-1, 2:end-1, 2:end-1, :))
  xlabel('uy')
  
- subplot(1, 3, 3, 'Parent', fig_hist)
+ subplot(1, 4, 3, 'Parent', fig_hist)
  histogram(mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :))
  xlabel('uz')
 
+ subplot(1, 4, 4, 'Parent', fig_hist)
+ histogram(sqrt(mfile_flows.ux(2:end-1, 2:end-1, 2:end-1, :).^2 + ...
+                mfile_flows.uy(2:end-1, 2:end-1, 2:end-1, :).^2 + ...
+                mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :).^2))
+ xlabel('u_{norm} [m/s]')
+ 
  
 end % function test_flow_estimation__spiralwave3d_grid_hs3d()
