@@ -201,7 +201,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
        
        
        % Save what we just found
-       root_fname_sings = ['temp_snglrty' num2str(options.chunk, '%03d')];
+       root_fname_sings = ['temp_snglrty-' num2str(options.chunk, '%03d')];
        keep_sings_file = true;
        [mfile_sings, mfile_sings_sentinel] = create_temp_file(root_fname_sings, keep_sings_file);
        mfile_sings.null_points_3d = null_points_3d;
