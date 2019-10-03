@@ -86,8 +86,8 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     
 %--------------------- INTERPOLATION OF DATA -----------------------------%    
     % Perform interpolation on the data and save in a temp file -- asumme
-    % OS is Linux
-     % flags to decide what to do with temp intermediate files
+    % OS is Linux, cause why would you use anything else?
+    % Flag to decide what to do with temp intermediate files
     keep_interp_file = true;
     root_fname_interp = ['temp_interp-' num2str(options.chunk, '%03d')];
     if ~options.data_interpolation.file_exists % Or not necesary because it is fmri data
@@ -159,6 +159,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     mfile_vel.hz = hz; % mm
     mfile_vel.ht = ht; % ms
     
+    % Save all options in the flow/velocity file 
     mfile_vel.options = options;
     
     % Here is where the magic happens
@@ -197,7 +198,6 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
            otherwise
                error(['neural-flows:: ', mfilename, '::UnknownOption. Invalid datamode for detecting singularities.'])
        end
-       
        
        
        % Save what we just found
