@@ -1,6 +1,4 @@
 function flows3d_estimate_hs3d_flow(mfile_data, mfile_vel, options)
-
-
 % Read kind of input paramters, options is a bad name for a structure
 % with parameters that are not actually mandatory 
 
