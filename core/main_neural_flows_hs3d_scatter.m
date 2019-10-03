@@ -166,7 +166,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     delete(mfile_vel_sentinel)
     
 %---------------------- DETECT NULL FLOWS ---------------------------------%    
-   if options.sing_detection
+   if options.sing_analysis.detection
        % NOTE: TODO: The criterion/value for the detection therhesold should be a
        % parameter it can be rerun with different types.
        
@@ -176,7 +176,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
        mfile_vel.Properties.Writable = false;
        
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started detection of null flows.'))
-       switch options.sing_detection.datamode
+       switch options.sing_analysis.detection_datamode
            case 'surf'
                error(['neural-flows:: ', mfilename, '::FutureOption. This singularity detection datamode is not fully implemented yet.'])
                %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started extraction of critical isosurfaces'))
