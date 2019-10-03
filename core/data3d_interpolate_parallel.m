@@ -1,4 +1,4 @@
-function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel(data, locs, X, Y, Z, in_bdy_mask, keep_interp_data)
+function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel(data, locs, X, Y, Z, in_bdy_mask, keep_interp_data, root_fname)
 % This is a wrapper function for Matlab's ScatteredInterpolant. We can interpolate
 % each frame of a 4D array independtly using parfor and save the interpolated data for 
 % later use with optical flow. Then, just delete the interpolated data
@@ -37,6 +37,10 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
     
     if tpts < 2
         disp('NOTE to self: This will fail becaus there is only one data point')
+    end
+    
+    if nargin < 8
+        root_fname = 'temp_interp';
     end
 
     % Create file for the interpolated data
