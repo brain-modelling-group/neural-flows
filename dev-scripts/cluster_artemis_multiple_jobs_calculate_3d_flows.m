@@ -7,7 +7,7 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
     load('513COG.mat', 'COG')
 
     % window size
-    ws =  65;
+    ws =  129;
     % shift step
     shift_step = ws - 64;
     datalen  = size(soln, 2);
@@ -34,7 +34,6 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
 
     % Options for the flow computation
     options.data_interpolation.file_exists = false;
-    options.sing_analysis.detection_datamode  = 'vel';
     
     % Resolution
     options.hx = 3;
@@ -52,14 +51,16 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
     options.flow_calculation.seed_init_vel = 42;
     options.flow_calculation.alpha_smooth   = 0.1;
     options.flow_calculation.max_iterations = 64;
-    options.sing_analysis.detection = true;
+    options.sing_analysis.detection = true;    
+    options.sing_analysis.detection_datamode  = 'vel';
+
 
     % Tic
     tstart = string(datetime('now'));
     fprintf('%s%s\n', ['Started: ' tstart])
 
-    % Do the stuff
-    [mfile_vel, mfile_interp, mfile_sings] = main_neural_flows_hs3d_scatter(data, locs, options);
+    % Do the stuff 
+   main_neural_flows_hs3d_scatter(data, locs, options);
 
     % Toc
     tend = string(datetime('now'));
@@ -67,14 +68,5 @@ function cluster_artemis_multiple_jobs_calculate_3d_flows(idx_chunk)
     tictoc = etime(datevec(tend), datevec(tstart)) / 3600;
     fprintf('%s%s%s\n\n', ['Elapsed time: ' string(tictoc) ' hours'])
 
-    % Perform downsampling
-    tstart = string(datetime('now'));
-    fprintf('%s%s\n', ['Started downsampling: ' tstart])
     
-    downsample_stored_data(idx_chunk, mfile_vel, mfile_interp, mfile_sings)
-    
-    tend = string(datetime('now'));
-    fprintf('%s%s\n', ['Finished downsampling: ' tend])
-    tictoc = etime(datevec(tend), datevec(tstart)) / 3600;
-    fprintf('%s%s%s\n', ['Elapsed downsampling time: ' string(tictoc) ' hours'])
 end % 

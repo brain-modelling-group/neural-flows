@@ -21,7 +21,6 @@ Z = mfile_vel_obj.Z;
     
     
 
-
 end
 
 % Uses the vector fields to locate singularities
@@ -38,3 +37,5 @@ end
 function p = locate_points(XX, idx)
     p = XX(idx);
 end
+
+
