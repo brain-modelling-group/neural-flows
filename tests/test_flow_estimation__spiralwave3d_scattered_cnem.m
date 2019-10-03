@@ -43,4 +43,4 @@ function test_flow_estimation__spiralwave3d_scattered_cnem()
  xlabel('uz')
 
  
-end % function test_flow_estimation__spiralwave3d_grid_hs3d()
+end % function test_flow_estimation__spiralwave3d_scattered_cnem()

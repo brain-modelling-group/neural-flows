@@ -45,4 +45,4 @@ function test_flow_estimation__spiralwave3d_scattered_hs3d()
                 mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :).^2))
  xlabel('u_{norm} [m/s]')
  
-end % function test_flow_estimation__spiralwave3d_grid_hs3d()
+end % function test_flow_estimation__spiralwave3d_scattered_hs3d()
