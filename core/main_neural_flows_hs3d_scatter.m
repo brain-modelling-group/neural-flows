@@ -188,7 +188,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
                % delete(mfile_surf_sentinel)
            case 'vel'
                % Use velocity vector fields
-               [null_points_3d]  = flows3d_hs3d_detect_nullflows_parallel(mfile_vel, [], [], [], [], options.sing_detection.datamode);
+               [null_points_3d]  = flows3d_grid_detect_nullflows_parallel(mfile_vel, [], [], [], [], options.sing_analysis.detection_datamode);
                
            otherwise
                error(['neural-flows:: ', mfilename, '::UnknownOption. Invalid datamode for detecting singularities.'])
