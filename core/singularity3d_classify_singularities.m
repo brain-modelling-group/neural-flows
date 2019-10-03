@@ -85,44 +85,18 @@ for tt=1:tpts % parallizable stuff but the classification runs very fast
        singularity_classification{tt} = singularity_labels;
 end
 
-end % classify_singularities()
+end % singularity3d_classify_singularities()
 
 function boundary_vec = detect_boundary_points(point_idx, grid_size)
-% This function only detects points on the faces of the grid 'cube'.
+% This function only detects points on the faces of the grid.
 % It does not handle an irregular domain.
 
-    xdim=1;
-    ydim=2;
+    xdim=2;
+    ydim=1;
     zdim=3;
     boundary_vec = [intersect(point_idx, 1), ...
                     intersect(point_idx(xdim), grid_size(xdim)), ...
                     intersect(point_idx(ydim), grid_size(ydim)), ...
                     intersect(point_idx(zdim), grid_size(zdim))];
 
-end % function detect_boundary_points
-
-
-function rectified_point = rectify_boundary_points(point, grid_size)
- %NOTE: WARNING: THIS DOES NOT WORK
-    xdim=1;
-    ydim=2;
-    zdim=3;
-    % This function just moves the location of the point to the next
-    % nearest neighbour along the offending dimension
-    
-    point(point == 1) = 4;
-    if point(xdim) >= grid_size(xdim)-3
-        point(xdim) = grid_size(xdim)-4; % This assumes our spatial sampling is not terrible
-    end
-    
-    if point(ydim) >= grid_size(ydim)-3
-        point(ydim) = grid_size(ydim)-4; % This assumes our spatial sampling is not terrible
-    end
-    
-    if point(zdim) >= grid_size(zdim)-3
-        point(zdim) = grid_size(zdim)-4; % This assumes our spatial sampling is not terrible
-    end
-        
-    rectified_point = point;
-
-end % function rectify_boundary_points()
+end % function detect_boundary_points()

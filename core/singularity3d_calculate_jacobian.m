@@ -27,10 +27,9 @@ centre_point_lidx = 14;
 
 % Iterate over critical points and calculate their jacobian
 for this_point = 1:num_critical_points
-    critical_xyz_idx
 
-    ix = critical_xyz_idx(this_point, ii);
-    iy = critical_xyz_idx(this_point, jj);
+    iy = critical_xyz_idx(this_point, ii);
+    ix = critical_xyz_idx(this_point, jj);
     iz = critical_xyz_idx(this_point, kk);
     
     [My, Mx, Mz] = moore_neighbourhood_3d(ix, iy, iz);
