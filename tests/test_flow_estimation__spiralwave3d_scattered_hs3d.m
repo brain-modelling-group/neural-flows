@@ -21,7 +21,7 @@ function test_flow_estimation__spiralwave3d_scattered_hs3d()
  options.flow_calculation.seed_init_vel = 42;
  options.flow_calculation.alpha_smooth   = 0.1;
  options.flow_calculation.max_iterations = 128;
- options.sing_detection = false;
+ options.sing_analysis.detection = false;
 
  mfile_flows = main_neural_flows_hs3d_scatter(wave3d, locs, options);
 
