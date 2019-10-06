@@ -65,6 +65,14 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
        options.chunk = 0;
     end
     
+    % Alpha radius has to be adjusted depending on the location data
+    % (mostly, granularity of parcellation).
+    if isfield(options.data_interpolation, 'bdy_alpha_radius')
+        bdy_alpha_radius = options.data_interpolation.bdy_alpha_radius;
+    else
+        bdy_alpha_radius = 30;
+    end
+    
    
     ht = options.ht;
     hx = options.hx; 
@@ -77,11 +85,11 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     
     % Get a mask with the points that are inside and outside the convex
     % hull
-    [in_bdy_mask, ~] = data3d_calculate_boundary(locs, X(:), Y(:), Z(:));
+    [in_bdy_mask, ~] = data3d_calculate_boundary(locs, X(:), Y(:), Z(:), bdy_alpha_radius);
     in_bdy_mask = reshape(in_bdy_mask, grid_size);
     % Get a mask that is slightly larger so we can define a shell with a thickness that will be 
     % the boundary of our domain. 
-    thickness_mask = 1;
+    thickness_mask = 2;
     [interp_mask, diff_mask] = data3d_calculate_interpolation_mask(in_bdy_mask, thickness_mask);
     
 %--------------------- INTERPOLATION OF DATA -----------------------------%    
