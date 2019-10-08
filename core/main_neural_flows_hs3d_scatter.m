@@ -72,7 +72,6 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     else
         bdy_alpha_radius = 30;
     end
-    
    
     ht = options.ht;
     hx = options.hx; 
@@ -97,7 +96,11 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     % OS is Linux, cause why would you use anything else?
     % Flag to decide what to do with temp intermediate files
     keep_interp_file = true;
-    root_fname_interp = ['temp_interp-' num2str(options.chunk, '%03d')];
+    if isfield(options.data_interpolation, 'filename_string')
+        root_fname_interp = [options.data_interpolation.filename_string '-temp_interp-' num2str(options.chunk, '%03d')];
+    else       
+        root_fname_interp = ['temp_interp-' num2str(options.chunk, '%03d')];
+    end
     if ~options.data_interpolation.file_exists % Or not necesary because it is fmri data
         fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started interpolating data.'))
         
@@ -136,9 +139,12 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     options.flow_calculation.dtpts  = dtpts;
     options.flow_calculation.grid_size = grid_size;
         
-    % We open a matfile to store output and avoid huge memory usage 
-    root_fname_vel = ['temp_flows-' num2str(options.chunk, '%03d')];
-    
+    % We open a matfile to store output and avoid huge memory usage
+    if isfield(options.flow_calculation, 'filename_string')
+        root_fname_vel = [options.flow_calculation.filename_string '-temp_flows-' num2str(options.chunk, '%03d')];
+    else
+        root_fname_vel = ['temp_flows-' num2str(options.chunk, '%03d')];
+    end
     [mfile_vel, mfile_vel_sentinel] = create_temp_file(root_fname_vel, keep_vel_file); 
     
     % Save masks with convex hulls of the brain
@@ -209,7 +215,11 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
        
        
        % Save what we just found
-       root_fname_sings = ['temp_snglrty-' num2str(options.chunk, '%03d')];
+       if isfield(options.sing_analysis, 'filename_string')
+          root_fname_sings = [options.sing_analysis.filename_string '-temp_snglrty-' num2str(options.chunk, '%03d')];
+       else
+          root_fname_sings = ['temp_snglrty-' num2str(options.chunk, '%03d')];
+       end
        keep_sings_file = true;
        [mfile_sings, mfile_sings_sentinel] = create_temp_file(root_fname_sings, keep_sings_file);
        mfile_sings.null_points_3d = null_points_3d;
