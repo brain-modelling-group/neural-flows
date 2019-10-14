@@ -1,5 +1,7 @@
 function [figure_handle] = plot_velocity_polaraxes(vx, vy, vz, scaling_factor)
 
+% vx, vy, vz, 1D arrays of size (1 x tpts)
+
 
 if nargin < 4
     scaling_factor = 1;
@@ -45,7 +47,9 @@ hold(pax, 'on')
 % Radius properties
 rticks = linspace(0, mxv, 5);
 
-for ii=1:length(rticks); rticks_label{ii} = num2str(rticks(ii));end
+for ii=1:length(rticks) 
+    rticks_label{ii} = num2str(rticks(ii));
+end
 pax.RTick = rticks;
 pax.RTickLabel = rticks_label;
 pax.RLim = [0 mxv];
@@ -81,7 +85,8 @@ for tt=1:size(vx, 2)
     hz.RData      = data_z(:, tt);
     hz.ThetaData  = theta_z(:, tt)*pi/180;
     drawnow
-    export_fig(sprintf( './frame_%03d.png', tt ), '-r150', '-nocrop', figure_handle)
+    pause(0.2)
+    %export_fig(sprintf( './frame_%03d.png', tt ), '-r150', '-nocrop', figure_handle)
 end
 
 end % plot_velocity_polaraxes()
