@@ -20,7 +20,7 @@ if isempty(sing_str_label)
     sing_str_label = 'empty';
 end
 switch sing_str_label
-    % FIXED POINTS
+    % FIXED POINTS - ATTRACTORS/REPELLORS
     case 'source' % done
         sing_numeric_label = 1;
     case 'sink'   % done
@@ -29,6 +29,7 @@ switch sing_str_label
         sing_numeric_label = 3;
     case 'spiral-sink' % done
         sing_numeric_label = 4;
+    % SADDLES
     case '1-2-saddle' % done - more source (red) than sink m-in-n-out
         sing_numeric_label = 5;  
     case '2-1-saddle'   % done - more sink (blue) than source
