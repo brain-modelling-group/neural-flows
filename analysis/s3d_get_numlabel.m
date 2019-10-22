@@ -1,5 +1,5 @@
 function [sing_numeric_label] = s3d_get_numlabel(sing_str_label)
-% This function maps singularity human-readable labels into integer numbers
+% This function maps singularity human-readable strin labels into integer numbers
 % for quantitative classification.
 %
 % ARGUMENTS:
