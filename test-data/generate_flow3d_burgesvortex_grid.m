@@ -22,7 +22,7 @@ uy = -alpha/2.*Y + ...
       gamma/(2*pi).*(1-exp(-R./((4*nu)/alpha))) .* (1./R) .* X; 
 uz = alpha .* Z;
 
-fig_handle = figure('Name', 'nflows-abcflow');
+fig_handle = figure('Name', 'nflows-burges');
 unorm = sqrt(ux.^2 + uy.^2 + uz.^2);
 hcone = coneplot(X, Y, Z, ux, uy, uz, X, Y, Z, unorm);
 set(hcone,'EdgeColor','none');
