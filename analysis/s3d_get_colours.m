@@ -31,30 +31,30 @@ switch sing_label
         color = [165, 0, 38, 1];
     case {'sink', 2}       
         color = [49, 54, 149, 1];
-    case {'spiral-source', 3} % done
+    case {'spiral-source', 3} 
         color = [244, 109, 67, 1];
-    case {'spiral-sink', 4}   % done
+    case {'spiral-sink', 4}   
         color = [69, 117, 180, 1];
-    case {'1-2-saddle', 5}    % done - more source (red) than sink m-in-n-out
+    case {'1-2-saddle', 5}    % more source (red) than sink m-in-n-out
         color = [253, 174, 97, 1];
-    case {'2-1-saddle', 6}    % done - more sink (blue) than source
+    case {'2-1-saddle', 6}    % more sink (blue) than source
         color = [116, 173, 209, 1];
-    case {'1-2-spiral-saddle', 7} % done - more source (red) than sink -- first number indicates number of directions going "IN"/sink
+    case {'1-2-spiral-saddle', 7} % more source (red) than sink -- first number indicates number of directions going "IN"/sink
         color = [254 224,144, 1];
-    case {'2-1-spiral-saddle', 8} % done - more sink (blue) than source
+    case {'2-1-spiral-saddle', 8} % more sink (blue) than source
         color = [171, 217, 233, 1];        
     % ORBITS
-    case {'source-po', 9}% done
+    case {'source-po', 9}% 
         color = [197, 27, 125, 1];
-    case {'sink-po', 10} % done
+    case {'sink-po', 10} % 
         color = [77, 146, 33, 1];
     case {'saddle-po', 11}
         color = [253, 224, 239, 1];
     case {'twisted-po', 12}
         color = [230, 245, 208, 1];
-    case {'spiral-source-po', 13} % done
+    case {'spiral-source-po', 13} % 
         color = [233, 163, 201, 1];
-    case {'spiral-sink-po', 14}% done
+    case {'spiral-sink-po', 14}% 
         color = [161, 215, 106, 1];
     case {'1-1-0-saddle', 15} 
         color = [0 255 0 0];   % These ones may be artificial  
