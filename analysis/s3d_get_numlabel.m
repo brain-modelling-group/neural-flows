@@ -3,10 +3,10 @@ function [sing_numeric_label] = s3d_get_numlabel(sing_str_label)
 % for quantitative classification.
 %
 % ARGUMENTS:
-%        sing_label -- a string or integer specifying the type of hyperbolic singularity.
+%        sing_label -- a string specifying the type of hyperbolic singularity.
 %
 % OUTPUT: 
-%        colour -- a  1 x 4 vector whose values correspond to [r, g, b, alpha]
+%        sing_numeric_labelr -- an integer
 %
 % REQUIRES: 
 %        None
@@ -14,7 +14,7 @@ function [sing_numeric_label] = s3d_get_numlabel(sing_str_label)
 %{
     
 %}
-% AUTHOR: Paula Sanz-Leon, QIMR September 2019 
+% AUTHOR: Paula Sanz-Leon, QIMR February 2019 
 
 if isempty(sing_str_label)
     sing_str_label = 'empty';
