@@ -4,11 +4,23 @@ function [color] = s3d_get_colours(sing_label)
 %
 % ARGUMENTS:
 %        sing_label -- a string or integer specifying the type of hyperbolic singularity.
-%                      Options: string --> {'source', 'sink', ...
-%                                           '2-1-saddle', '1-2-saddle', ...
-%                                           'spiral-sink', 'spiral-source', ...
-%                                           '2-1-spiral-saddle', '1-2-spiral-saddle',
-%                                            'nan'} 
+%                      Options: string --> {'source', 
+%                                           'sink', 
+%                                           '2-1-saddle', 
+%                                           '1-2-saddle', ...
+%                                           'spiral-sink', 
+%                                           'spiral-source', ...
+%                                           '2-1-spiral-saddle', 
+%                                           '1-2-spiral-saddle',
+%                                           'source-po',...         % untested
+%                                           'sink-po',...           % untested
+%                                           'saddle-po',...         % untested
+%                                           'twisted-po',...        % untested
+%                                           'spiral-source-po',...  % untested
+%                                           'spiral-sink-po', ...   % untested
+%                                           '1-1-0-saddle', ...     % untested
+%                                           'nan', 'empty', 'unknown'};                
+%     
 %                               integer --> 1 to 16
 %
 % OUTPUT: 
