@@ -4,14 +4,19 @@ function [fig_sing3d, ux, uy, uz, X, Y, Z] = generate_singularity3d_hyperbolic_c
 %
 % ARGUMENTS:
 %        cp_type -- a string specifying the type of hyperbolic critical
-%        point.
+%                   point. Options: {'source', 'sink', ...
+%                                    '2-1-saddle', '1-2-saddle', ...
+%                                    'spiral-sink', 'spiral-source', ...
+%                                    '2-1-spiral-saddle', '1-2-spiral-saddle',
+%                                    'all'}
 %       
 %
 % OUTPUT: 
 %        fig_sing3d -- Figure handle
 %        ux -- 3D array with the x component of the vector field
-%        uy -- 3D array with the x component of the vector field
-%        uz -- 3D array with the x component of the vector field
+%        uy -- 3D array with the y component of the vector field
+%        uz -- 3D array with the z component of the vector field
+%        X, Y, Z -- 3D arrays with the grid of the space where fields are defined 
 %
 % REQUIRES: 
 %       s3d_get_singularity_list()
