@@ -8,6 +8,15 @@ function test_singularity_classification__criticalpoints3d_grid(cp_type)
 %
 % ARGUMENTS:
 %          cp_type  -- a string with the name of the singularity to test.
+%                      Options: {'source', 
+%                                'sink',
+%                                '2-1-saddle', 
+%                                '1-2-saddle', 
+%                                'spiral-sink', 
+%                                'spiral-source',
+%                                '2-1-spiral-saddle', 
+%                                '1-2-spiral-saddle',
+%                                'all'}
 % OUTPUT: 
 %          None
 %
@@ -22,10 +31,9 @@ function test_singularity_classification__criticalpoints3d_grid(cp_type)
 % MODIFICATION HISTORY:
 %     Paula Sanz-Leon -- QIMR October 2019
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TODO: add filename string expression as input variable
 
 if nargin < 1
-    cp_type = 'spiral-source';
+    cp_type = 'all';
 end
 
 [~, ux, uy, uz, X, ~, ~] = generate_singularity3d_hyperbolic_critical_points(cp_type);
