@@ -1,5 +1,5 @@
 function [fig_sing3d, ux, uy, uz, X, Y, Z] = generate_singularity3d_hyperbolic_critical_points(cp_type)
-% Generate canonical hyperbolic critical points in a grid of side 2 in the
+% Generate 8 canonical hyperbolic 3D critical points in a grid of side 2 in the
 % range of [-1 1];
 %
 % ARGUMENTS:
@@ -20,7 +20,7 @@ function [fig_sing3d, ux, uy, uz, X, Y, Z] = generate_singularity3d_hyperbolic_c
 %
 % REQUIRES: 
 %       s3d_get_singularity_list()
-%       singularity3d_get_numlabel()
+%       s3d_get_colours()
 % USAGE:
 %{
     
