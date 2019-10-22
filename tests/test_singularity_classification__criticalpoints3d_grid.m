@@ -1,4 +1,27 @@
-function test_sing_classification_critical_points_grid(cp_type)
+function test_singularity_classification__criticalpoints3d_grid(cp_type)
+% This function test the accuracy of the singularity classification functions 
+% called via singularity3d_classify_singularities(). The current function
+% only tests the 8 canonical critical points in 3D. It first generates the 
+% vector field with the requested singularity and then applies the
+% classification.
+%
+% ARGUMENTS:
+%          cp_type  -- a string with the name of the singularity to test.
+% OUTPUT: 
+%          None
+%
+% REQUIRES: 
+%           generate_singularity3d_hyperbolic_critical_points()
+%          
+% USAGE:
+%{     
+
+%}
+%
+% MODIFICATION HISTORY:
+%     Paula Sanz-Leon -- QIMR October 2019
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODO: add filename string expression as input variable
 
 [~, ux, uy, uz, X, ~, ~] = generate_singularity3d_hyperbolic_critical_points(cp_type);
 
