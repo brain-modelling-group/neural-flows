@@ -23,8 +23,11 @@ function test_singularity_classification__criticalpoints3d_grid(cp_type)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TODO: add filename string expression as input variable
 
-[~, ux, uy, uz, X, ~, ~] = generate_singularity3d_hyperbolic_critical_points(cp_type);
+if nargin < 1
+    cp_type = 'spiral-source';
+end
 
+[~, ux, uy, uz, X, ~, ~] = generate_singularity3d_hyperbolic_critical_points(cp_type);
 
 % Fake time points
 max_t = 16;
