@@ -118,7 +118,7 @@ switch cp_type
 
 end
 % Get appropriate color
-[~, color] = singularity3d_get_numlabel(cp_type);
+[color] = s3d_get_colours(cp_type);
 
 fig_name = ['nflows-singularity3d_hyperbolic-cp-' cp_type];
 fig_sing3d = figure('Name', fig_name);
