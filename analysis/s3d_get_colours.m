@@ -17,9 +17,9 @@ function [color] = s3d_get_colours(sing_label)
 % AUTHOR: Paula Sanz-Leon, QIMR September 2019 
 
 if isempty(sing_label)
-    sing_str_label = 'empty';
+    sing_label = 'empty';
 end
-switch sing_str_label
+switch sing_label
     % FIXED POINTS
     case {'source', 1} 
         color = [165, 0, 38, 1];
