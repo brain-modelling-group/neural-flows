@@ -2,7 +2,7 @@ function [mstruct_vel] = generate_flow3d_abc_unsteady_grid(abc, visual_debugging
 % Generates time-dependent (unsteady) Arnold-Beltrami-Childress (ABC) 3D flow 
 %
 % ARGUMENTS:
-%        abc -- a tpts x 3 vector with the coefficients for the ABC flow.
+%        abc -- a 2d array of size [tpts x 3] with the coefficients for the ABC flow.
 %       
 %
 % OUTPUT: 
