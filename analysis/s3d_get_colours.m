@@ -4,6 +4,12 @@ function [color] = s3d_get_colours(sing_label)
 %
 % ARGUMENTS:
 %        sing_label -- a string or integer specifying the type of hyperbolic singularity.
+%                      Options: string --> {'source', 'sink', ...
+%                                           '2-1-saddle', '1-2-saddle', ...
+%                                           'spiral-sink', 'spiral-source', ...
+%                                           '2-1-spiral-saddle', '1-2-spiral-saddle',
+%                                            'nan'} 
+%                               integer --> 1 to 16
 %
 % OUTPUT: 
 %        colour -- a  1 x 4 vector whose values correspond to [r, g, b, alpha]
@@ -52,7 +58,7 @@ switch sing_label
         color = [161, 215, 106, 1];
     case {'1-1-0-saddle', 15} 
         color = [0 255 0 0];   % These ones may be artificial  
-    case {'nan', 'orbit?', 'boundary', 'zero', 'empty', 'centre', 16}
+    case {'nan', 'orbit?', 'boundary', 'zero', 'empty', 'centre', 'other', 'unknown', 16}
         color = [0, 0, 0, 0];
     otherwise
         error(['neuralflows:' mfilename ':BadInput'], ...

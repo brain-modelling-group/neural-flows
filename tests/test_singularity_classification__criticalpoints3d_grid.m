@@ -3,7 +3,8 @@ function test_singularity_classification__criticalpoints3d_grid(cp_type)
 % called via singularity3d_classify_singularities(). The current function
 % only tests the 8 canonical critical points in 3D. It first generates the 
 % vector field with the requested singularity and then applies the
-% classification.
+% classification. If the singularity is missclassified, an error message
+% is displayed.
 %
 % ARGUMENTS:
 %          cp_type  -- a string with the name of the singularity to test.
