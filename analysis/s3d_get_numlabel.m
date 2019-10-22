@@ -1,6 +1,20 @@
 function [sing_numeric_label] = s3d_get_numlabel(sing_str_label)
 % This function maps singularity human-readable labels into integer numbers
 % for quantitative classification.
+%
+% ARGUMENTS:
+%        sing_label -- a string or integer specifying the type of hyperbolic singularity.
+%
+% OUTPUT: 
+%        colour -- a  1 x 4 vector whose values correspond to [r, g, b, alpha]
+%
+% REQUIRES: 
+%        None
+% USAGE:
+%{
+    
+%}
+% AUTHOR: Paula Sanz-Leon, QIMR September 2019 
 
 if isempty(sing_str_label)
     sing_str_label = 'empty';
