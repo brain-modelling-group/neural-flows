@@ -1,7 +1,13 @@
 function null_points_3d = flows3d_grid_detect_nullflows_velocities(mfile_vel_obj)
 
-tpts = size(mfile_vel_obj, 'ux', 4); %#ok<GTARG>
-
+try
+    % If MatFile
+    tpts = size(mfile_vel_obj, 'ux', 4); %#ok<GTARG>
+catch
+    % if struct
+    tpts = size(mfile_vel_obj.ux, 4);
+end
+    
 null_points_3d = struct([]); 
 detection_threshold = mfile_vel_obj.detection_threshold;
 X = mfile_vel_obj.X;
