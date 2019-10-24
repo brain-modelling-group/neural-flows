@@ -16,9 +16,11 @@ function [mstruct_vel] = generate_flow3d_abc_unsteady_grid(abc, visual_debugging
 % USAGE:
 %{
 tmax = 16;
-a = linspace(0.5, 1.5, tmax).';
-b = linspace(0.5, 1.5, tmax).';
-c = linspace(0.5, 1.5, tmax).';
+a  = ones(tmax, 1);
+b2 = linspace(0.5, 1, tmax).';
+c2 = 1 - b2;
+b = sqrt(b2);
+c = sqrt(c2);
 abc = horzcat(a, b, c);
 
 visual_debugging = false;

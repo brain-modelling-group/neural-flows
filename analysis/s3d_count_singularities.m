@@ -1,20 +1,17 @@
-function out = s3d_count_singularities(sing_numeric_labels)
+function out = s3d_count_singularities(singularity_classification_num_list)
 % A wrapper function to count how many singularities of each type
 % we have in the input structure.
 % s3d_count_singularities
 %
 % ARGUMENTS:
-%        sing_numeric_labels -- a struct of length num_frames/timepoints
-%                           .numlabels
-%                           .color
-%        <arg2> -- <description>
+%        singularity_classification_num_list -- a cell array of siz 1 x tpts
 %
 % OUTPUT: 
 %        <output1> -- <description>
 %        <output2> -- <description>
 %
 % REQUIRES: 
-%        get_singularity_list()
+%        s3d_get_singularity_list()
 %        get_singularity_numlabel()
 %
 % USAGE:
@@ -23,21 +20,13 @@ function out = s3d_count_singularities(sing_numeric_labels)
 %}
 %
 
-% NOTE: Hardcoded ==> we may end up with more types
-base_singularity_list_str = get_singularity_list();
+base_singularity_num_list = cellfun(@(x) s3d_get_numlabel(x), s3d_get_singularity_list());
 
-base_singularity_list_numeric(length(base_singularity_list_str)) = 0;
+out = zeros(length(singularity_classification_num_list), length(base_singularity_num_list));
 
-% Get singularity numeric label assigned to each singularity string label 
-for ss=1:length(base_singularity_list_str)
-    base_singularity_list_numeric(ss) = get_singularity_numlabel(base_singularity_list_str{ss});
-end
-
-out = zeros(length(sing_numeric_labels), length(base_singularity_list_numeric));
-
-for tt=1:length(sing_numeric_labels)
-    [counts,~] = hist(sing_numeric_labels(tt).numlabel, base_singularity_list_numeric);
+for tt=1:length(singularity_classification_num_list)
+    [counts, ~] = hist(singularity_classification_num_list{tt}, base_singularity_num_list);
     out(tt, :) = counts;
 end
 
-end % function count_singularities()
+end % s3d_count_singularities()

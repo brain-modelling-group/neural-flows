@@ -35,6 +35,8 @@ singularity_list = {'source', ...
                     'spiral-source-po',...  % untested
                     'spiral-sink-po', ...   % untested
                     '1-1-0-saddle', ...     % untested
-                    'nan'};                 % untested
+                    'nan', ...
+                    'boundary', ...
+                    'empty'};                
                 
 end % function s3d_get_singularity_list()

@@ -13,7 +13,7 @@ function [singularity_classification_num_list] = s3d_str2num_label(singularity_c
 %        labels.
 %
 % REQUIRES: 
-%        s3d_get_num_label
+%        s3d_get_num_label()
 % USAGE:
 %{
     
