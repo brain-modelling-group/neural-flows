@@ -19,7 +19,7 @@ function [color] = s3d_get_colours(sing_label)
 %                                           'spiral-source-po',...  % untested
 %                                           'spiral-sink-po', ...   % untested
 %                                           '1-1-0-saddle', ...     % untested
-%                                           'nan', 'empty', 'unknown'};                
+%                                           'nan', 'empty', 'unknown', 'all'};                
 %     
 %                               integer --> 1 to 16
 %
@@ -72,6 +72,12 @@ switch sing_label
         color = [0 255 0 0];   % These ones may be artificial  
     case {'nan', 'orbit?', 'boundary', 'zero', 'empty', 'centre', 'other', 'unknown', 16, 17, 18}
         color = [0, 0, 0, 0];
+    case 'all'
+        base_list = s3d_get_singularity_list();
+        color = zeros(length(base_list), 4);
+        for ss=1:length(base_list)
+            color(ss, :) = s3d_get_colours(base_list{ss});
+        end
     otherwise
         error(['neuralflows:' mfilename ':BadInput'], ...
               'Unknown singularity type');

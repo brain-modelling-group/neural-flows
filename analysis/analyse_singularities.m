@@ -1,12 +1,13 @@
-function sing_labels = analyse_singularities(mfile_sing, XYZ)
+function sing_labels = analyse_singularities(mstruct_sing, XYZ)
 % This function takes as an input a matfile with the list of
 % singularities, and generates plots to give an idea of their
 % beahviour over time
 %
 %
 % ARGUMENTS:
-%        mfile_sing -- a matfile with the classified singularities
-%        XYZ                -- the original XYZ grid as a 2D array of size [numpoints x 3] array  
+%        mfile_sing -- a matfile with the classified singularities, or a
+%                      structure with the same fields
+%        XYZ       -- the original XYZ grid as a 2D array of size [numpoints x 3] array  
 %
 % OUTPUT: 
 %        sing_numeric_labels -- a struct of length num_frames/timepoints
@@ -14,8 +15,8 @@ function sing_labels = analyse_singularities(mfile_sing, XYZ)
 %             .color         --  
 %
 % REQUIRES: 
-%        get_singularity_list()
-%        get_singularity_numlabel()
+%        s3d_get_singularity_list()
+%        s3d_get_numlabel()
 %        count_singularities()
 %
 % USAGE:
@@ -24,30 +25,23 @@ function sing_labels = analyse_singularities(mfile_sing, XYZ)
 %}
 % PSL, QIMR 2019
 
-singularity_cell = mfile_sing.singularity_classification;
+singularity_list_str = mstruct_sing.singularity_classification;
 
 
 % Get basic info
-num_frames = length(singularity_cell);
-num_sing_per_frame = cellfun(@length, singularity_cell);
+num_frames = length(singularity_list_str);
+num_sing_per_frame = cellfun(@length, singularity_list_str);
 
 % Get numeric_labels and colours
 sing_labels = struct([]);
 
-for tt=1:num_frames
-    if num_sing_per_frame(tt) == 0
-        [sing_labels(tt).numlabel(1),  ...
-         sing_labels(tt).color(1, :)] = get_singularity_numlabel([]);
-    else    
-        for ss=1:num_sing_per_frame(tt)
-            [sing_labels(tt).numlabel(ss), ...
-             sing_labels(tt).color(ss, :)] = get_singularity_numlabel(singularity_cell{tt}{ss});
-        end
-    end
-end
+singularity_list_num = s3d_str2d_num_label(singularity_list_str);
 
 % Count how many singularities of each type we have
-sing_count = count_singularities(sing_labels);
+sing_count = s3d_count_singularities(singularity_list_num);
+
+
+% cellfun(@(x) s3d_get_colours(x), s3d_get_singularity_list(), 'UniformOutput', false)
 
 % Plot traces of each singularity
 plot_singularity_traces(sing_count)
