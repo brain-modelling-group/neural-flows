@@ -35,6 +35,7 @@ function [sing_numeric_label] = s3d_get_numlabel(sing_str_label)
 if isempty(sing_str_label)
     sing_str_label = 'empty';
 end
+
 switch sing_str_label
     % FIXED POINTS - ATTRACTORS/REPELLORS
     case 'source' % done
@@ -69,8 +70,12 @@ switch sing_str_label
         sing_numeric_label = 14;
     case {'1-1-0-saddle'} 
         sing_numeric_label = 15;
-    case {'nan', 'orbit?', 'boundary', 'zero', 'empty', 'centre'}
+    case {'nan', 'orbit?', 'zero', 'centre'}
         sing_numeric_label = 16;
+    case {'boundary'}
+        sing_numeric_label = 17;
+    case {'empty'}
+        sing_numeric_label = 18;
     otherwise
         error(['neuralflows:' mfilename ':BadInput'], ...
            'Unrecognised singularity type');
