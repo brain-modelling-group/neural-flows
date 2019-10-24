@@ -11,10 +11,11 @@ function [mstruct_vel] = generate_flow3d_abc_unsteady_grid(abc, visual_debugging
 %                      classification.
 %
 % REQUIRES: 
+%          generate_flow3d_abc_grid()
 %
 % USAGE:
 %{
-tmax = 32;
+tmax = 16;
 a = linspace(0.5, 1.5, tmax).';
 b = linspace(0.5, 1.5, tmax).';
 c = linspace(0.5, 1.5, tmax).';
