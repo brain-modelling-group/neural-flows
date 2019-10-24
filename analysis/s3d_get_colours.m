@@ -70,7 +70,7 @@ switch sing_label
         color = [161, 215, 106, 1];
     case {'1-1-0-saddle', 15} 
         color = [0 255 0 0];   % These ones may be artificial  
-    case {'nan', 'orbit?', 'boundary', 'zero', 'empty', 'centre', 'other', 'unknown', 16}
+    case {'nan', 'orbit?', 'boundary', 'zero', 'empty', 'centre', 'other', 'unknown', 16, 17, 18}
         color = [0, 0, 0, 0];
     otherwise
         error(['neuralflows:' mfilename ':BadInput'], ...
