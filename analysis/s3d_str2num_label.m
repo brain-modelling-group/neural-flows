@@ -3,26 +3,14 @@ function [singularity_classification_num_list] = s3d_str2num_label(singularity_c
 % cell array into integer numbers for quantitative classification,
 %
 % ARGUMENTS:
-%        sing_label -- a string specifying the type of hyperbolic singularity.
-%                     Options: {'source', ...
-%                    'sink', ...
-%                    'spiral-source',... 
-%                    'spiral-sink',...
-%                    '1-2-saddle',... 
-%                    '2-1-saddle',...
-%                    '1-2-spiral-saddle', ...
-%                    '2-1-spiral-saddle', ...
-%                    'source-po',...         % untested
-%                    'sink-po',...           % untested
-%                    'saddle-po',...         % untested
-%                    'twisted-po',...        % untested
-%                    'spiral-source-po',...  % untested
-%                    'spiral-sink-po', ...   % untested
-%                    '1-1-0-saddle', ...     % untested
-%                    'nan', 'empty', 'unknown'};                
+%        singularity_classification_str_list -- a celll array of size 1 x
+%        tpts, where each element is a cell array of different size
+%        depending on how many singularities where found.
 %
 % OUTPUT: 
-%        sing_numeric_labelr -- an integer
+%        singularity_classification_num_list -- a cell array of the same
+%        size as singularity_classification_str_list, but with numeric
+%        labels.
 %
 % REQUIRES: 
 %        s3d_get_num_label
@@ -36,9 +24,7 @@ tpts = size(singularity_classification_str_list, 2);
 singularity_classification_num_list = cell(size(singularity_classification_str_list));
 
 for tt=1:tpts
-     
     singularity_classification_num_list{tt} = cellfun(@(x) s3d_get_numlabel(x), singularity_classification_str_list{tt});
-
 end
 
 end
