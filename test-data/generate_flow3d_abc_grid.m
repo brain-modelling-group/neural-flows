@@ -23,6 +23,8 @@ function [ux, uy, uz, X, Y, Z] = generate_flow3d_abc_grid(abc, varargin)
     
 %}
 % AUTHOR: Paula Sanz-Leon, QIMR August 2019 
+% REFERENCES:
+% Didov, Ulysky (2018) Analysis of stationary points and their bifurcations in the ABC flow
 
 if nargin < 1
     A = 1;
@@ -41,8 +43,9 @@ end
 
 % Author, Paula Sanz-Leon, QIMR 2019
 
-Nx = 32;
-x = linspace(0, 2*pi, Nx);
+Nx = 33;
+x = linspace(-pi, pi, Nx);
+x(end) = [];
 
 [X, Y, Z] = meshgrid(x, x, x);
 
@@ -50,8 +53,8 @@ ux = A .* sin(Z) + C .* cos(Y);
 uy = B .* sin(X) + A .* cos(Z);
 uz = C .* sin(Y) + B .* cos(X);
 
-x = linspace(0, 1, Nx);
-[X, Y, Z] = meshgrid(x, x, x);
+%x = linspace(0, 1, Nx);
+%[X, Y, Z] = meshgrid(x, x, x);
 
 if visual_debugging
     fig_handle = figure('Name', 'nflows-abcflow');
