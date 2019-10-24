@@ -1,4 +1,4 @@
-function  [singularity_classification] =   singularity3d_classify_singularities(null_points_3d, mvel_obj)
+function  [singularity_classification_list] =   singularity3d_classify_singularities(null_points_3d, mvel_obj)
 % 1) calculates jacobian for each critical point, and then 
 % 2) classify type of critical point. 
 % ARGUMENTS:
@@ -26,7 +26,7 @@ function  [singularity_classification] =   singularity3d_classify_singularities(
 %}
 % NOTE: as the timeseries get longer, we can in principle parallelise this
 % function.
-singularity_classification = cell(size(null_points_3d));
+singularity_classification_list = cell(size(null_points_3d));
 tpts = size(null_points_3d, 2);
 
 % Load options structure
@@ -52,6 +52,8 @@ for tt=1:tpts % parallizable stuff but the classification runs very fast
        % Check if we have critical points. There are 'frames' for which
        % nothing was detected, we should not attempt to calculate jacobian.
        if isempty(null_points_3d(tt).xyz_idx)
+           singularity_labels = {'empty'};
+           singularity_classification_list{tt} = singularity_labels;
            continue
        end
        
@@ -82,7 +84,7 @@ for tt=1:tpts % parallizable stuff but the classification runs very fast
            singularity_labels{ss} = singularity3d_classify_critical_points(J3D);
        end
 
-       singularity_classification{tt} = singularity_labels;
+       singularity_classification_list{tt} = singularity_labels;
 end
 
 end % singularity3d_classify_singularities()
