@@ -57,8 +57,9 @@ end % function analyse_singularities()
 
 function plot_singularity_traces(sing_count)
 
-        [singularity_list, cmap] = get_singularity_list_cmap();
-
+        base_list = s3d_get_singularity_list();
+        cmap_base_list = s3d_get_colours('all');
+        
         figure_handle = figure('Name', 'nflows-singularities-over-time');
         numsubplots = 8;
         
@@ -70,8 +71,8 @@ function plot_singularity_traces(sing_count)
         end
 
         for jj=1:numsubplots
-            stairs(ax(jj), sing_count(:, jj), 'color', cmap(jj, 1:3), 'linewidth', 2)
-            ax(jj).Title.String = singularity_list{jj};
+            stairs(ax(jj), sing_count(:, jj), 'color', cmap_base_list(jj, 1:3), 'linewidth', 2)
+            ax(jj).Title.String = base_list{jj};
             ax(jj).XLabel.String = 'time';
             ax(jj).YLabel.String = 'count';
         end
@@ -82,7 +83,7 @@ end
 
 function plot_singularty_scatter(mfile_sing, sing_labels, XYZ, num_frames)
     
-    [~, cmap] = get_singularity_list_cmap();
+    cmap_base_list = s3d_get_colours('all');
 
     figure_handle_xyz = figure('Name', 'nflows-singularities-over-spacetime');
     numsubplot = 3; % One for each spatial dimension
