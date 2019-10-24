@@ -1,23 +1,50 @@
-function null_points_3d = flows3d_grid_detect_nullflows_velocities(mfile_vel_obj)
+function null_points_3d = flows3d_grid_detect_nullflows_velocities(mvel_obj)
+% This evaluates the singularity detection functions, and the effect of the 
+% threshold currently used.
+%
+% ARGUMENTS:
+%          mvel_obj -- a MatFile or structure with an unsteady flow 
+%                         
+% OUTPUT: 
+%          null_points_3d -- a struture of length tpts, with the following
+%                            fields:
+%                                   xyz_idx -- linear indices, with respect
+%                                              to the grid size of the detected
+%                                              singularities. 
+%                                   x, y, z -- a float with the best approximation of the
+%                                              coordinates of the singularities. 
+%                                              Values wiill depend on the
+%                                              resolution of the grid.
+%
+% REQUIRES: 
+%           
+%          
+% USAGE:
+%{     
 
+%}
+%
+% MODIFICATION HISTORY:
+%     Paula Sanz-Leon -- QIMR February 2019
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 try
     % If MatFile
-    tpts = size(mfile_vel_obj, 'ux', 4); %#ok<GTARG>
+    tpts = size(mvel_obj, 'ux', 4); %#ok<GTARG>
 catch
     % if struct
-    tpts = size(mfile_vel_obj.ux, 4);
+    tpts = size(mvel_obj.ux, 4);
 end
     
 null_points_3d = struct([]); 
-detection_threshold = mfile_vel_obj.detection_threshold;
-X = mfile_vel_obj.X;
-Y = mfile_vel_obj.Y;
-Z = mfile_vel_obj.Z;
+detection_threshold = mvel_obj.detection_threshold;
+X = mvel_obj.X;
+Y = mvel_obj.Y;
+Z = mvel_obj.Z;
 
     for tt=1:tpts
-         null_points_3d(tt).xyz_idx = locate_null_velocity_coordinates(mfile_vel_obj.ux(:, :, :, tt), ...
-                                                                       mfile_vel_obj.uy(:, :, :, tt), ...
-                                                                       mfile_vel_obj.uz(:, :, :, tt), ...
+         null_points_3d(tt).xyz_idx = locate_null_velocity_coordinates(mvel_obj.ux(:, :, :, tt), ...
+                                                                       mvel_obj.uy(:, :, :, tt), ...
+                                                                       mvel_obj.uz(:, :, :, tt), ...
                                                                        detection_threshold);      
                                                             
          null_points_3d(tt).x = locate_points(X, null_points_3d(tt).xyz_idx);
