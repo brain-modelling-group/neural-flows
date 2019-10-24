@@ -32,9 +32,6 @@ singularity_list_str = mstruct_sing.singularity_classification;
 num_frames = length(singularity_list_str);
 num_sing_per_frame = cellfun(@length, singularity_list_str);
 
-% Get numeric_labels and colours
-sing_labels = struct([]);
-
 singularity_list_num = s3d_str2d_num_label(singularity_list_str);
 
 % Count how many singularities of each type we have
@@ -49,7 +46,7 @@ plot_singularity_traces(sing_count)
 % NOTE: use sing_labels, rather than the file, so we can 
 % pass directly the output of this function and save ourselves a bit of
 % time.
-plot_singularty_scatter(mfile_sing, sing_labels, XYZ, num_frames)
+plot_singularty_scatter(mstruct_sing, sing_labels, XYZ, num_frames)
 
 
 end % function analyse_singularities()
