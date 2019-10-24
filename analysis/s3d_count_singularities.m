@@ -12,7 +12,6 @@ function out = s3d_count_singularities(singularity_classification_num_list)
 %
 % REQUIRES: 
 %        s3d_get_singularity_list()
-%        get_singularity_numlabel()
 %
 % USAGE:
 %{
