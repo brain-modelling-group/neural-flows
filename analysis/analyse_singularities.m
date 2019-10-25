@@ -1,19 +1,14 @@
-function sing_count = analyse_singularities(singularity_list_str, null_points_3d)
+function varargout = analyse_singularities(mobj_sing)
 % This function takes as an input a matfile with the list of
 % singularities, and generates plots to give an idea of their
-% beahviour over time
+% beahviour over time and space (1d). It's basically a visual summary.
 %
 %
 % ARGUMENTS:
-%        singularity_list_str -- singularity cell array of size 1 x tpts,
-%                                with the string labels of singularities detected at each time
-%                                point
-%        XYZ       -- the original XYZ grid as a 2D array of size [numpoints x 3] array  
+%           mobj_sing -- a MatFile or a structure with the same internal
+%                        structure with the singularitiy classification
 %
-% OUTPUT: 
-%        sing_numeric_labels -- a struct of length num_frames/timepoints
-%             .numlabels     -- 
-%             .color         --  
+% OUTPUT:   
 %
 % REQUIRES: 
 %        s3d_get_base_singularity_list()
@@ -24,12 +19,9 @@ function sing_count = analyse_singularities(singularity_list_str, null_points_3d
 %{
     <example-commands-to-make-this-function-run>
 %}
-% PSL, QIMR 2019
+% PSL, QIMR August 2019
 
-% Get basic info
-num_frames = length(singularity_list_str);
-
-singularity_list_num = s3d_str2d_num_label(singularity_list_str);
+singularity_list_num = s3d_str2d_num_label(mobj_sing, mobj_sing.singularity_list_str);
 
 % Count how many singularities of each type we have
 sing_count = s3d_count_singularities(singularity_list_num);
@@ -40,8 +32,16 @@ plot_singularity_count_traces(sing_count)
 % NOTE: use sing_labels, rather than the file, so we can 
 % pass directly the output of this function and save ourselves a bit of
 % time.
-plot_singularity_scatter_xyz_vs_time(singularity_list_str, sing_labels, XYZ, num_frames)
+base_list = s3d_get_base_singularity_list();
+% Basic options
+cp_base = base_list(1:4);
+cp_saddles = base_list(5:8);
 
+fig_xyz_base = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sing.null_points_3d, cp_base);
+fig_xyz_saddles = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sing.null_points_3d, cp_saddles);
+
+varargout{1} = {fig_xyz_base};
+varargout{2} = {fig_xyz_saddles};
 
 end % function analyse_singularities()
 
