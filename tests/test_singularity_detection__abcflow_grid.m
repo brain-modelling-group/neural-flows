@@ -10,6 +10,8 @@ function test_singularity_detection__abcflow_grid(mstruct_vel, detection_thresho
 %
 % REQUIRES: 
 %          flows3d_grid_detect_nullflows_velocities()
+%          singularity3d_classify_singularities()
+%          s3d_produce_visual_summary()
 %          
 % USAGE:
 %{     
