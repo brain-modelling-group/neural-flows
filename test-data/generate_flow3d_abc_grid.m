@@ -43,7 +43,7 @@ end
 
 % Author, Paula Sanz-Leon, QIMR 2019
 
-Nx = 33;
+Nx = 43;
 x = linspace(-pi, pi, Nx);
 x(end) = [];
 
