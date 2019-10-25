@@ -1,12 +1,13 @@
-function sing_labels = analyse_singularities(mstruct_sing, XYZ)
+function sing_count = analyse_singularities(singularity_list_str, XYZ)
 % This function takes as an input a matfile with the list of
 % singularities, and generates plots to give an idea of their
 % beahviour over time
 %
 %
 % ARGUMENTS:
-%        mfile_sing -- a matfile with the classified singularities, or a
-%                      structure with the same fields
+%        singularity_list_str -- singularity cell array of size 1 x tpts,
+%                                with the string labels of singularities detected at each time
+%                                point
 %        XYZ       -- the original XYZ grid as a 2D array of size [numpoints x 3] array  
 %
 % OUTPUT: 
@@ -15,9 +16,9 @@ function sing_labels = analyse_singularities(mstruct_sing, XYZ)
 %             .color         --  
 %
 % REQUIRES: 
-%        s3d_get_singularity_list()
+%        s3d_get_base_singularity_list()
 %        s3d_get_numlabel()
-%        count_singularities()
+%        s3d_count_singularities()
 %
 % USAGE:
 %{
@@ -25,12 +26,8 @@ function sing_labels = analyse_singularities(mstruct_sing, XYZ)
 %}
 % PSL, QIMR 2019
 
-singularity_list_str = mstruct_sing.singularity_classification;
-
-
 % Get basic info
 num_frames = length(singularity_list_str);
-num_sing_per_frame = cellfun(@length, singularity_list_str);
 
 singularity_list_num = s3d_str2d_num_label(singularity_list_str);
 
@@ -44,15 +41,13 @@ plot_singularity_count_traces(sing_count)
 % NOTE: use sing_labels, rather than the file, so we can 
 % pass directly the output of this function and save ourselves a bit of
 % time.
-plot_singularty_scatter(mstruct_sing, sing_labels, XYZ, num_frames)
+plot_singularity_scatter(singularity_list_str, sing_labels, XYZ, num_frames)
 
 
 end % function analyse_singularities()
 
 
-
-
-function plot_singularty_scatter(mfile_sing, sing_labels, XYZ, num_frames)
+function plot_singularity_scatter(mfile_sing, sing_labels, XYZ, num_frames)
     
     cmap_base_list = s3d_get_colours('all');
 
@@ -123,15 +118,4 @@ function plot_singularty_scatter(mfile_sing, sing_labels, XYZ, num_frames)
     
     ax_xyz(3).XLabel.String = 'time';
     linkaxes(ax_xyz, 'x')
-end
-
-function [singularity_list, cmap] = get_singularity_list_cmap()
-
-% Get string labels and singularity colourmap
-        singularity_list = get_singularity_list();
-        cmap(length(singularity_list), 4) = 0;    
-
-        for jj=1:length(singularity_list)
-          [~, cmap(jj, :)] = get_singularity_numlabel(singularity_list{jj});
-        end
 end
