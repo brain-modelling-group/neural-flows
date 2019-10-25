@@ -27,7 +27,7 @@ function [color] = s3d_get_colours(sing_label)
 %        colour -- a  1 x 4 vector whose values correspond to [r, g, b, alpha]
 %
 % REQUIRES: 
-%        None
+%       s3d_get_base_singularity_list()
 % USAGE:
 %{
     
@@ -73,7 +73,7 @@ switch sing_label
     case {'nan', 'orbit?', 'boundary', 'zero', 'empty', 'centre', 'other', 'unknown', 16, 17, 18}
         color = [0, 0, 0, 0];
     case 'all'
-        base_list = s3d_get_singularity_list();
+        base_list = s3d_get_base_singularity_list();
         color = zeros(length(base_list), 4);
         for ss=1:length(base_list)
             color(ss, :) = s3d_get_colours(base_list{ss});
