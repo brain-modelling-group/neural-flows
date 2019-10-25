@@ -32,7 +32,6 @@ mstruct_vel.detection_threshold = detection_threshold;
 mobj_sing.null_points_3d = flows3d_grid_detect_nullflows_velocities(mstruct_vel);
 
 % Perform classification
-
 mobj_sing.singularity_classification_list = singularity3d_classify_singularities(mobj_sing.null_points_3d, mstruct_vel);
 
 analyse_singularities(mobj_sing)
