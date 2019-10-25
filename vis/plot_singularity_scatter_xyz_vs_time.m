@@ -50,7 +50,6 @@ xplot = 1;
 yplot = 2;
 zplot = 3;
 
-
 num_sing_to_plot = length(cp_type);
 
 % Anonymous function to get the indices of the singularity we want to plot
@@ -61,7 +60,7 @@ for cc=1:num_sing_to_plot
     
     num_label_cp = s3d_get_numlabel(cp_type{cc});
     cmap_cp = s3d_get_colours(cp_type{cc});
-    % Remove alpha
+    % Remove alphas
     cmap_cp(:, 4) = []; 
   
     for tt=1:num_frames
@@ -86,3 +85,4 @@ for cc=1:num_sing_to_plot
 end
     linkaxes(ax_xyz, 'x')
 end
+% function plot_singularity_scatter_xyz_vs_time()
