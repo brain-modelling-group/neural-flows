@@ -78,6 +78,7 @@ switch sing_label
         for ss=1:length(base_list)
             color(ss, :) = s3d_get_colours(base_list{ss});
         end
+        return
     otherwise
         error(['neuralflows:' mfilename ':BadInput'], ...
               'Unknown singularity type');
