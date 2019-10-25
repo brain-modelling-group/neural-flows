@@ -38,10 +38,8 @@ singularity_list_num = s3d_str2d_num_label(singularity_list_str);
 sing_count = s3d_count_singularities(singularity_list_num);
 
 
-% cellfun(@(x) s3d_get_colours(x), s3d_get_singularity_list(), 'UniformOutput', false)
-
 % Plot traces of each singularity
-plot_singularity_traces(sing_count)
+plot_singularity_count_traces(sing_count)
 
 % NOTE: use sing_labels, rather than the file, so we can 
 % pass directly the output of this function and save ourselves a bit of
@@ -52,31 +50,7 @@ plot_singularty_scatter(mstruct_sing, sing_labels, XYZ, num_frames)
 end % function analyse_singularities()
 
 
-function plot_singularity_traces(sing_count)
 
-        base_list = s3d_get_singularity_list();
-        cmap_base_list = s3d_get_colours('all');
-        
-        figure_handle = figure('Name', 'nflows-singularities-over-time');
-        numsubplots = 8;
-        
-        % Preallocate array of graphic objects
-        ax = gobjects(numsubplots, 1);
-        for jj=1:numsubplots     
-            ax(jj) = subplot(4, 2, jj, 'Parent', figure_handle);
-            hold(ax(jj), 'on')
-        end
-
-        for jj=1:numsubplots
-            stairs(ax(jj), sing_count(:, jj), 'color', cmap_base_list(jj, 1:3), 'linewidth', 2)
-            ax(jj).Title.String = base_list{jj};
-            ax(jj).XLabel.String = 'time';
-            ax(jj).YLabel.String = 'count';
-        end
-        
-        linkaxes(ax, 'x')
-
-end
 
 function plot_singularty_scatter(mfile_sing, sing_labels, XYZ, num_frames)
     
