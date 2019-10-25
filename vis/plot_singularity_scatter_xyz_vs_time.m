@@ -1,7 +1,27 @@
 function figure_handle_xyz = plot_singularity_scatter_xyz_vs_time(singularity_list_num, null_points_3d, cp_type, figure_handle_xyz)
-
-% This function plots different type of singularities as a a function of 
-% position along one axis (X, Y, Z) vs time.
+% This function plots singularities as a a function of 
+% their position along one axis (X, Y, Z) vs time.
+%
+% ARGUMENTS:
+%        singularity_list_num -- a cell array of size 1 x tpts with the numeric labels of singularities.
+%        null_point_3d -- a structure of length tpts whose field contains
+%                         the position of the detected singularities.
+%        cp_type       -- a cell array with the str labes of the singularities we want to plot. 
+%        figure_handle_xyz -- a handle to the figure with 3 subplots where
+%                             we want to plot the results. Normally first
+%                             call should omit this input, but passed to
+%                             the function in subsequent calls.
+% OUTPUT: 
+%        figure_handle_xyz 
+%
+% REQUIRES: 
+%       s3d_get_numlabel()
+%       s3d_get_colours()
+%
+% USAGE:
+%{
+    <example-commands-to-make-this-function-run>
+%}
 
 numsubplot = 3; % One for each spatial dimension
 
@@ -33,6 +53,7 @@ zplot = 3;
 
 num_sing_to_plot = length(cp_type);
 
+% Anonymous function to get the indices of the singularity we want to plot
 get_idx_cp_type = @(sing_list_frame, num_label_cp_type) find(sing_list_frame == num_label_cp_type);
 
 
@@ -42,8 +63,7 @@ for cc=1:num_sing_to_plot
     cmap_cp = s3d_get_colours(cp_type{cc});
     % Remove alpha
     cmap_cp(:, 4) = []; 
-
-    
+  
     for tt=1:num_frames
         x = null_points_3d(1, tt).x;
         y = null_points_3d(1, tt).y;
@@ -55,7 +75,6 @@ for cc=1:num_sing_to_plot
 
     end
            
-       
         [ax_xyz(xplot:zplot).XLim] = deal([1 num_frames]);
         ax_xyz(xplot).YLabel.String = y_labels{xplot}; 
         ax_xyz(xplot).XLabel.String = x_labels{xplot};
