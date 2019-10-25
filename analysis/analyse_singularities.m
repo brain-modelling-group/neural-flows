@@ -21,7 +21,7 @@ function varargout = analyse_singularities(mobj_sing)
 %}
 % PSL, QIMR August 2019
 
-singularity_list_num = s3d_str2d_num_label(mobj_sing, mobj_sing.singularity_list_str);
+singularity_list_num = s3d_str2num_label(mobj_sing.singularity_classification_list);
 
 % Count how many singularities of each type we have
 sing_count = s3d_count_singularities(singularity_list_num);
@@ -29,9 +29,6 @@ sing_count = s3d_count_singularities(singularity_list_num);
 % Plot traces of each singularity
 plot_singularity_count_traces(sing_count)
 
-% NOTE: use sing_labels, rather than the file, so we can 
-% pass directly the output of this function and save ourselves a bit of
-% time.
 base_list = s3d_get_base_singularity_list();
 % Basic options
 cp_base = base_list(1:4);
