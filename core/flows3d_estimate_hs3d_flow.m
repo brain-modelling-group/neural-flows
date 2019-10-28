@@ -121,12 +121,13 @@ for this_tpt = 1:dtpts-1
                                            hx, hy, hz, ht);
  
     % Save the velocity components
+    uno = single(sqrt(uxo.^2 + uyo.^2 + uzo.^2));
     mfile_vel.ux(:, :, :, this_tpt) = single(uxo);
     mfile_vel.uy(:, :, :, this_tpt) = single(uyo);
     mfile_vel.uz(:, :, :, this_tpt) = single(uzo);
-    [~, mfile_vel.un(:, :, :, this_tpt)]  =  single(normalise_vector_field([uxo(:) uyo(:) uzo(:)], 2));
+    mfile_vel.un(:, :, :, this_tpt) =  uno;
     % Save some other useful information to guesstimate the singularity detection threshold
-    mfile_vel = flows3d_hs3d_flow_stats(mfile_vel, uxo(:), uyo(:), uzo(:), this_tpt);
+    mfile_vel = flows3d_hs3d_flow_stats(mfile_vel, uxo(:), uyo(:), uzo(:), uno(:), this_tpt);
 
 end
 end % function flows3d_estimate_hs3d_flow()
