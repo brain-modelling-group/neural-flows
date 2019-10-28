@@ -1,11 +1,11 @@
 function mfile_vel = flows3d_hs3d_flow_stats(mfile_vel, ux, uy, uz, un, this_tpt)
 % Get basic info of a velocity vector field
 % ARGUMENTS:
-%   mfile_vel  -- an mFile handle to the file where the data will be stored 
-%   ux, uy, yz -- arrays with the componentns of the velocity vector field
-%   this_tpt   -- index to store the info.
+%   mfile_vel  -- an MatFile handle to the file where the data will be stored 
+%   ux, uy, uz, un -- arrays with the componentns of the velocity vector field
+%   this_tpt       -- index to store the info.
 % OUTPUT       
-%  mfile_vel  -- an mFile handle to the file where the data will be stored 
+%  mfile_vel  -- an mFile handle to the file where the new data fields will be stored 
 % REQUIRES: 
 %        None
 %
@@ -16,7 +16,7 @@ function mfile_vel = flows3d_hs3d_flow_stats(mfile_vel, ux, uy, uz, un, this_tpt
 %}
 %
 % MODIFICATION HISTORY:
-%     Paula Sanz-Leon, QIMR Berghofer 2018
+%     Paula Sanz-Leon, QIMR Berghofer December 2018
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
