@@ -33,15 +33,15 @@ function mfile_vel = flows3d_hs3d_flow_stats(mfile_vel, ux, uy, uz, this_tpt)
     mfile_vel.sum_uy(1, this_tpt) = nansum(uy(:));
     mfile_vel.sum_uz(1, this_tpt) = nansum(uz(:));
 
+    % NOTE-TO-SELF: not sure this is an important/useful metric
     uu = abs(ux(:) .* uy(:) .* uz(:));
 
     mfile_vel.min_uu(1, this_tpt) = nanmin(uu(:));
     mfile_vel.max_uu(1, this_tpt) = nanmax(uu(:));
 
+    % 
 
-    [~, norm_vf] = normalise_vector_field([ux(:) uy(:) uz(:)], 2);
-
-    mfile_vel.min_nu(1, this_tpt) = nanmin(norm_vf(:));
-    mfile_vel.max_nu(1, this_tpt) = nanmax(norm_vf(:));
+    mfile_vel.min_un(1, this_tpt) = nanmin(un(:));
+    mfile_vel.max_un(1, this_tpt) = nanmax(un(:));
     
 end % function flows3d_hs3d_flow_stats()
