@@ -42,9 +42,7 @@ Y = mvel_obj.Y;
 Z = mvel_obj.Z;
 
     for tt=1:tpts
-         null_points_3d(tt).xyz_idx = locate_null_velocity_coordinates(mvel_obj.ux(:, :, :, tt), ...
-                                                                       mvel_obj.uy(:, :, :, tt), ...
-                                                                       mvel_obj.uz(:, :, :, tt), ...
+         null_points_3d(tt).xyz_idx = locate_null_velocity_coordinates(mvel_obj.un(:, :, :, tt), ...
                                                                        detection_threshold);      
                                                             
          null_points_3d(tt).x = locate_points(X, null_points_3d(tt).xyz_idx);
@@ -57,13 +55,10 @@ Z = mvel_obj.Z;
 end
 
 % Uses the vector fields to locate singularities
-function xyz_idx = locate_null_velocity_coordinates(ux, uy, uz, detection_threshold)
+function xyz_idx = locate_null_velocity_coordinates(un, detection_threshold)
         
-        % Find linear indices
-        %uu = abs(ux(:) .* uy(:) .* uz(:)); % based on magnitude
         % NOTE: need to come up with better ways to detect these points
-        [~, uu] = normalise_vector_field([ux(:) uy(:) uz(:)], 2); % based on the norm
-        xyz_idx = find(uu >= detection_threshold(1) & uu < detection_threshold(2));
+        xyz_idx = find(un >= detection_threshold(1) & un < detection_threshold(2));
 
 end
 
