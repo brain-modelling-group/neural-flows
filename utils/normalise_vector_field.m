@@ -18,12 +18,12 @@ function [v, norm_vf] = normalise_vector_field(v, dim)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 norm_vf = sqrt(sum(v.^2, 2));
 
-% Avoid division by zero
-norm_vf(norm_vf < 1e-8) = 1;
-
 try 
+    % Avoid division by zero
+    norm_vf(norm_vf < 1e-8) = 1;
     v = v./norm_vf;
-catch 
+catch
+    norm_vf(norm_vf < 1e-8) = 1;
     disp('Cannot perform implicit expansion/broadcasting of arrays. Using repmat instead ...')
     v = v .* repmat(1./norm_vf, [ones(dim-1,1)' size(v, dim)]);
 end
