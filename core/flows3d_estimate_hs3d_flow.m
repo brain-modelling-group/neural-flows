@@ -1,9 +1,31 @@
 function flows3d_estimate_hs3d_flow(mfile_data, mfile_vel, options)
-% Read kind of input paramters, options is a bad name for a structure
-% with parameters that are not actually mandatory 
+% This function runs the iterative part of the Horn-Schunk algorithm. 
+%
+% ARGUMENTS:
+%           mfile_data --- is the MatFile file with the data (interpolated
+%                           or not), or  a 4D [x,y,z,t] array with all the
+%                           data.
+%          mfile_vel   -- a handle to the MatFile 
+%
+% OUTPUT: 
+%          None
+%
+% REQUIRES: 
+%           flows3d_hs3d_get_initial_flows()
+%           flows3d_hs3d()
+%           flows3d_hs3d_flow_stats()
+%           normalise_vector_field()
+% USAGE:
+%{     
 
-% mfile_data is the mat file with the data (interpolated or not)
-% but it could be a 4D array with all the data in it
+
+%}
+%
+% MODIFICATION HISTORY:
+%     Paula Sanz-Leon -- QIMR December 2018
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 try 
     % check if we can get the size, if yes, it means this var is a 4D array
     if length(size(mfile_data)) == 4
