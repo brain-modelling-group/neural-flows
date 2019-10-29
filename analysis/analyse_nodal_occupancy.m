@@ -1,52 +1,6 @@
-% This function tries to assign a 'singularity' type to each 
-% brain region 
+function analyse_nodal_occupancy()
 
-load('513COG.mat');
-locs = COG;
 
-[x1, y1, z1] = sphere(12);
-
-fig = figure(1);
-ax = subplot(1,1,1, 'Parent', fig);
-hold(ax, 'on')
-alpha_radius = 15;
-
-for nn=1:size(locs, 1)
-    x = alpha_radius*x1(:)+locs(nn, 1);
-    y = alpha_radius*y1(:)+locs(nn, 2);
-    z = alpha_radius*z1(:)+locs(nn, 3);
-
-    P = [x y z];
-    alpha_shapes(nn).shp = alphaShape(P,15);
-    plot(alpha_shapes(nn).shp)
-
-    
-end
-
-%% 
-tpts = 1;
-for tt=1:tpts
-    for nn=1:size(locs, 1)
- 
-    [in_sings(nn).innies] = inShape(alpha_shapes(nn).shp, null_points_3d(tt).x, null_points_3d(tt).y, null_points_3d(tt).z);
-    
-    if sum(in_sings(nn).innies) > 0
-        disp('got something')
-        %nn
-        idx = find(in_sings(nn).innies);
-        if length(idx) > 1
-            [this_sng] = mode(singularity_list_num{tt}(find(in_sings(nn).innies)));
-            if this_sng == 16
-                in_sings(nn).innies(:) = 0;
-            end
-                
-        else
-            this_sng = singularity_list_num{tt}(idx)
-        end
-        %singularity_list_num{tt}(find(in_sings(nn).innies))
-    end
-    end
-end
 
 
 %%
@@ -95,5 +49,11 @@ valid_node_idx = find(sing_idx & total_nodal_occupancy);
 
 sing_type = sing_idx(valid_node_idx);
 
+% Plot the occupancy of every type of singularity for valid nodes
+stairs(sing_nodal_occupancy(:, valid_node_idx).')
 
 
+bh = bar(sing_nodal_occupancy(:, valid_node_idx).', 'stacked');
+colormap(cmap)
+
+end % function analyse_nodal_occupancy()
