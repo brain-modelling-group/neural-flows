@@ -129,14 +129,3 @@ start_tt = 256;
      ax.Children(1).Color = cmap(saddle_source_, 1:3);
      ax.Children(1).MarkerFaceColor = cmap(saddle_source_, 1:3);
 end
-
-function [singularity_list, cmap] = get_singularity_list_cmap()
-
-% Get string labels and singularity colourmap
-        singularity_list = get_singularity_list();
-        cmap(length(singularity_list), 4) = 0;    
-
-        for jj=1:length(singularity_list)
-          [~, cmap(jj, :)] = get_singularity_numlabel(singularity_list{jj});
-        end
-end

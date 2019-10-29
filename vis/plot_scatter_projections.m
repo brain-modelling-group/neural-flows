@@ -30,7 +30,7 @@ plot3(xcoord.*ones(size(fb_bh.zy)), y(fb_bh.zy), z(fb_bh.zy), 'k')
 plot3(xcoord.*ones(size(fb_lh.zy)), y(fb_lh.zy), z(fb_lh.zy), 'color', [0.65 0.65 0.65], 'linestyle', '--')
 plot3(xcoord.*ones(size(fb_rh.zy)), y(fb_rh.zy), z(fb_rh.zy), 'color', [0.65 0.65 0.65], 'linestyle', '--')
 
-% Plot projection of surfaces
+%% Plot projection of surfaces
 % sxy = xy_boundary;
 % szy = zy_boundary(2);
 % szx = zx_boundary(2);
@@ -88,73 +88,69 @@ ax.YLabel.String = 'Y [mm]';
 ax.ZLabel.String = 'Z [mm]';
 
 
+cmap = s3d_get_colours('all');
+cmap(:, 4) = []; 
 
-num_sing = cellfun(@length, singularity_cell);
-for tt=1:length(num_sing)
-    for ss=1:num_sing(tt)
-     [label(tt).label(ss), color_map(tt).colormap(ss, :)] = map_str2int(singularity_cell{tt}{ss});
-    
-    end
-end
+% singularity to numeric labels
+singularity_list_num = s3d_str2num_label(mfile_sing.singularity_classification_list);
 
 load('convex_hull_lh_513parc.mat')
 patch(ax, 'Faces', boundary_lh.faces, 'Vertices', boundary_lh.vertices, 'FaceAlpha', 0.1, 'FaceColor', [0.9 0.9 0.9], 'EdgeColor', 'k', 'EdgeAlpha', 0.1)
 
-% Get colours              hold(ax, 'on')
   
-for ii=1:length(singularity_list)
-  [~, cmap(ii, :)] = map_str2int(singularity_list{ii});
-end
 
 
+%%
 
 dot_radius = 142;
 alpha_value = 0.5;
-this_singularity = 6;
-for tt=1:200
-   if ~isempty(xyz_idx(tt).xyz_idx)
+this_singularity = 2;
+%%
+
+for tt=3000:3150
        %cidx = sum(color_map(tt).colormap(:, 1:3),2); 
        %idx = find(cidx == 1);
-       
-       idx = find(label(tt).label == this_singularity);
+       null_points_3d = mfile_sing.null_points_3d(1, tt);
+       idx = find(singularity_list_num{tt} == this_singularity);
        
        if ~isempty(idx)
-       %p3_handle.XData = X(xyz_idx(tt).xyz_idx(idx));
-       %p3_handle.YData = Y(xyz_idx(tt).xyz_idx(idx));
-       %p3_handle.ZData = Z(xyz_idx(tt).xyz_idx(idx));
-       %p3_handle.CData = color_map(tt).colormap(idx, 1:3);
+     
        
-       pxy_handle = scatter3(ax,  X(xyz_idx(tt).xyz_idx(idx)), ...
-                                  Y(xyz_idx(tt).xyz_idx(idx)), ...
-                                  zcoord*ones(length(xyz_idx(tt).xyz_idx(idx)), 1), dot_radius, color_map(tt).colormap(idx, 1:3), 'filled', ...
-                          'Markerfacealpha', alpha_value);
+       pxy_handle = scatter3(ax,  null_points_3d.x(idx), ...
+                                  null_points_3d.y(idx), ...
+                                  zcoord*ones(length(idx), 1), dot_radius, cmap(this_singularity*ones(length(idx), 1), :), 'filled', ...
+                                  'Markerfacealpha', alpha_value);
        
-       pzy_handle = scatter3(ax, xcoord*ones(length(xyz_idx(tt).xyz_idx(idx)), 1), ...
-                                 Y(xyz_idx(tt).xyz_idx(idx)), ...
-                                 Z(xyz_idx(tt).xyz_idx(idx)), dot_radius, color_map(tt).colormap(idx, 1:3), 'filled', ...
+       pzy_handle = scatter3(ax, xcoord*ones(length(idx), 1), ...
+                                 null_points_3d.y(idx), ...
+                                 null_points_3d.z(idx), ...
+                                 dot_radius,cmap(this_singularity*ones(length(idx), 1), :), 'filled', ...
+                                 'Markerfacealpha', alpha_value);
+       pzx_handle = scatter3(ax,  null_points_3d.x(idx), ...
+                                  ycoord*ones(length(idx), 1), ...
+                                  null_points_3d.z(idx), ... 
+                                  dot_radius, cmap(this_singularity*ones(length(idx), 1), :), 'filled', ...
                           'Markerfacealpha', alpha_value);
-       pzx_handle = scatter3(ax,  X(xyz_idx(tt).xyz_idx(idx)), ...
-                                  ycoord*ones(length(xyz_idx(tt).xyz_idx(idx)), 1), ...
-                                  Z(xyz_idx(tt).xyz_idx(idx)), dot_radius, color_map(tt).colormap(idx, 1:3), 'filled', ...
-                          'Markerfacealpha', alpha_value);
+                      
        %pxyz_handle = scatter3(ax, X(xyz_idx(tt).xyz_idx(idx)), ...
        %                           Y(xyz_idx(tt).xyz_idx(idx)), ...
        %                           Z(xyz_idx(tt).xyz_idx(idx)), dot_radius, color_map(tt).colormap(idx, 1:3), 'filled', ...
-       %                   'Markerfacealpha', alpha_value);
-
+       %                           'Markerfacealpha', alpha_value);
+       drawnow
        end
-   end
-   %drawnow
+       
 end
+   %drawnow
 
-% Build legend
- h(this_singularity) = plot(NaN,NaN,'o', ... 
-                          'markerfacecolor', cmap(this_singularity, 1:3), ...
-                          'markeredgecolor', cmap(this_singularity, 1:3), ...
-                          'markersize', 14);
 
-legend(h([1 2]), singularity_list{[1 2]})
+%% Build legend
+% h(this_singularity) = plot(NaN,NaN,'o', ... 
+%                          'markerfacecolor', cmap(this_singularity, 1:3), ...
+%                          'markeredgecolor', cmap(this_singularity, 1:3), ...
+%                          'markersize', 14);
 
-lh = findobj(figure_handle,'Type','Legend');
-lh.Location = 'northwest';
-lh.EdgeColor = 'none';
+%legend(h([1 2]), singularity_list{[1 2]})
+
+%lh = findobj(figure_handle,'Type','Legend');
+%lh.Location = 'northwest';
+%lh.EdgeColor = 'none';

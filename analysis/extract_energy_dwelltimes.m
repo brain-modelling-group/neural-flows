@@ -1,5 +1,5 @@
 function [dwell_times, jump_times] = extract_energy_dwelltimes(data, opts)
-% Estimate dwelltimes of data, based on compute_cohcorrgram_dwelltimes.m
+% Estimate dwelltimes of data -- based on compute_cohcorrgram_dwelltimes.m
 % ARGUMENTS:
 %        data   -- a 2D array of size [time x nodes/locs/vertices]; 
 %        opts -- a struct with fields:

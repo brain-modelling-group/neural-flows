@@ -37,9 +37,13 @@ cp_saddles = base_list(5:8);
 
 fig_xyz_base    = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sing.null_points_3d, cp_base);
 fig_xyz_saddles = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sing.null_points_3d, cp_saddles);
+fig_xyz_all = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sing.null_points_3d, base_list(1:8));
+
 
 varargout{1} = {fig_xyz_base};
 varargout{2} = {fig_xyz_saddles};
+varargout{3} = {fig_xyz_all};
+
 
 end % function analyse_singularities()
 
