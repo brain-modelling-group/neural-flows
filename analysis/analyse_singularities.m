@@ -21,12 +21,8 @@ function varargout = analyse_singularities(mobj_sing)
     <example-commands-to-make-this-function-run>
 %}
 % PSL, QIMR August 2019
-try
-    singularity_list_num = s3d_str2num_label(mobj_sing.singularity_classification_list);
-catch
-    % deprecated variable name
-    singularity_list_num = s3d_str2num_label(mobj_sing.singularity_classification);
-end
+
+singularity_list_num = s3d_str2num_label(mobj_sing.singularity_classification_list);
     
 % Count how many singularities of each type we have
 sing_count = s3d_count_singularities(singularity_list_num);
