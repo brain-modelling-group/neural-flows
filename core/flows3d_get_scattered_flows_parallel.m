@@ -11,12 +11,12 @@ function [mfile_vel] = flows3d_get_scattered_flows_parallel(mfile_vel, locs)
 % OUTPUT:
 %       mfile_vel : the same MatFile handle, but the file will have a new field uxyz_sc
 % 
-% AUTHOR:
-%     Paula Sanz-Leon
 % USAGE:
 %{
     
 %}
+% AUTHOR:
+%     Paula Sanz-Leon, QIMR Berghofer, October 2019
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
     % These parameter values are essential
