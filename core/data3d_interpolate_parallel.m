@@ -36,7 +36,7 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
     tpts = size(data, 1);
     
     if tpts < 2
-        disp('NOTE to self: This will fail becaus there is only one data point')
+        disp('NOTE to self: This will fail because there is only one data point')
     end
     
     if nargin < 8

@@ -1,14 +1,15 @@
 function [mfile_vel] = flows3d_get_scattered_flows_parallel(mfile_vel, locs)
 % This is a wrapper function for Matlab's ScatteredInterpolant, to obtain the 
-% flows values at exactly the centres of gravity of the the regions, so as to 
-% minimise the errors introduce by different resolutions.
+% flows values at exactly the centres of gravity of the original brain regions, so as to 
+% minimise the errors introduce by different grid resolutions.
+%
 % ARGUMENTS:
-%           mfile_vel -- a MatFile handle to the filw with the flows, inlcuding the norm of
+%           mfile_vel -- a MatFile handle to the file with the flows, inlcuding the norm of
 %                        the flows un which we will use here
 %           locs: original locations of known (scattered) data
 %    
 % OUTPUT:
-%       mfile_vel : the same MatFile handle, but the file will have new fields now
+%       mfile_vel : the same MatFile handle, but the file will have a new field uxyz_sc
 % 
 % AUTHOR:
 %     Paula Sanz-Leon
