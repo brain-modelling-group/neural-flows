@@ -1,0 +1,154 @@
+#!/usr/bin/env bash
+
+# Install a Matlab Runtime.
+#
+#USAGE:
+#  # The call has one argument, with the form:
+#  install-mcr '<year-based-runtime-version>'
+#
+#  # For example, to install runtime version R2018b(v95), run:
+#  install-mcr 'R2018b'
+#
+#REQUIRES:
+#  curl -- a tool to transfer data to or from a server.
+#
+#DESCRIPTION:
+#  Uses 'curl' to download a requested Matlab runtime.
+#
+#  NOTE: Automated web-address generation should work for R2014b or newer,
+#        with the exception of R2015aSP1.
+#
+# Author: Stuart A. Knock (2019-01-24)
+#
+#
+
+# Use the header as a basic help message.
+[[ "$1" =~ ^('-h'|'--help'|'')$ ]] && { head -n $((LINENO-2)) "${BASH_SOURCE[0]}" | tail -n +2; exit 0 ; }
+
+#Who called me...
+CALLER=$(whoami)
+
+# Strongly recommend against running as root.
+if [[ "$EUID" = '0' || "$UID" = '0' || "$USER" = 'root' || "$CALLER" = 'root' ]]; then
+  printf 'ERROR: %s\n' "You do NOT need to run the Matlab runtime install script as root."
+  exit 1
+fi
+
+#--------------------------------------------------------------#
+
+# Get requested version from command line arg
+MCR_VERSION="$1"
+
+# Confirm it matches the expected version pattern
+MCR_VERSION_PATTERN='R20[0-2][0-9][ab]' # Matches Matlab release names up to 'R2029b'.
+[[ "$MCR_VERSION" =~ ^$MCR_VERSION_PATTERN$ ]] || { printf 'ERROR: %s\n' 'Requested version not recognised, should be of the form "R2018b".' ; exit 1; }
+
+# Set the version specific directory name
+MCR_VERSION_DIR="MCR_${MCR_VERSION}"
+
+# Set a download location
+MCR_DOWNLOAD_DIR=~/Downloads/matlab/"${MCR_VERSION_DIR}"
+
+# Set the install directory
+MCR_INSTALL_DIR=~/Matlab/"${MCR_VERSION_DIR}"
+MCR_INSTALL_LOGFILE="$MCR_DOWNLOAD_DIR/mcr_install_log_$(date --iso-8601='date').txt"
+
+#--------------------------------------------------------------#
+
+# Inform caller of intended download and install, request confirmation.
+
+printf '\n  %s\n' "We will attempt to download the Matlab-runtime version: '$MCR_VERSION'"
+printf '  %s\n' "The installer will be downloaded to: '$MCR_DOWNLOAD_DIR'"
+printf '  %s\n\n' "It will then be installed to: '$MCR_INSTALL_DIR'"
+
+printf '  %s\n\n' 'Any directories that do not already exist will be created.'
+
+yesorno='' # Default to not continuing.
+read -r -n1 -p "Do you want '${BASH_SOURCE[0]##*/}' to continue? y/(n)>" yesorno
+printf '\n'
+[[ "$yesorno" == 'y' ]] || { printf '%s\n' "Aborting at user request (received '$yesorno', you must press 'y' to continue)." ; exit 1; }
+
+#--------------------------------------------------------------#
+
+# Create needed directories that do not already exist
+
+# Create download directory
+if [[ ! -d "$MCR_DOWNLOAD_DIR" ]]; then
+  if ! mkdir --parents "$MCR_DOWNLOAD_DIR"; then
+    printf 'ERROR: %s\n' "Failed to make directory '$MCR_DOWNLOAD_DIR'"
+    exit 1
+  fi
+else
+  # As it already exists, check that this version hasn't already been downloaded.
+  printf 'WARNING: %s\n' "Download directory already exists: '$MCR_DOWNLOAD_DIR'"
+  printf '    %s\n' 'Checking if this version has already been downloaded.'
+  MCR_DOWNLOAD_DIR_CONTAINS="$(find "$MCR_DOWNLOAD_DIR" -mindepth 1 -print -quit)"
+  if [[ -n "$MCR_DOWNLOAD_DIR_CONTAINS" ]]; then
+    printf 'WARNING %s\n' "Download location already contains files, continuing assuming these are valid."
+    MCR_ALREADY_DOWNLOADED='PROBABLY TRUE'
+  fi
+fi
+
+# Create install directory.
+if [[ ! -d "$MCR_INSTALL_DIR" ]]; then
+  if ! mkdir --parents "$MCR_INSTALL_DIR"; then
+    printf 'ERROR: %s\n' "Failed to make directory '$MCR_INSTALL_DIR'"
+    exit 1
+  fi
+else
+  MCR_INSTALL_DIR_CONTAINS="$(find "$MCR_INSTALL_DIR" -mindepth 1 -print -quit)"
+  [[ -n "$MCR_INSTALL_DIR_CONTAINS" ]] && { printf 'ERROR %s\n' "Install location already contains files." ; exit 1; }
+fi
+
+#--------------------------------------------------------------#
+
+# Download Matlab runtime
+
+# Set download address based on version, assumes 2014b or newer (based on Mathworks' download conventions)
+MCR_RUNTIME_WEB_ADDRESS="http://ssd.mathworks.com/supportfiles/downloads/${MCR_VERSION}/deployment_files/${MCR_VERSION}/installers/glnxa64/MCR_${MCR_VERSION}_glnxa64_installer.zip"
+MCR_RUNTIME_ZIP="${MCR_RUNTIME_WEB_ADDRESS##*/}"
+
+if [[ -z "$MCR_ALREADY_DOWNLOADED" ]]; then
+  #Request just the HEAD of the download address, to quickly check whether it is accessible.
+  if curl --output /dev/null --silent --head --fail "$MCR_RUNTIME_WEB_ADDRESS"; then
+    printf '%s\n' 'Attempting to download Matlab-runtime, this can take an hour...'
+    if ! curl --output "$MCR_DOWNLOAD_DIR/$MCR_RUNTIME_ZIP" --silent --request GET "$MCR_RUNTIME_WEB_ADDRESS"; then
+      printf 'ERROR: %s\n' "Failed to download: '$MCR_RUNTIME_WEB_ADDRESS'"
+      exit 1
+    fi
+  else #otherwise the page is, at least currently, inaccessible.
+      printf 'ERROR: %s\n' "Matlab runtime download link INACCESIBLE: '$MCR_RUNTIME_WEB_ADDRESS'"
+      exit 1
+  fi
+fi
+
+#--------------------------------------------------------------#
+
+# Unpack the Downloaded runtime installer
+if [[ -f "$MCR_DOWNLOAD_DIR/$MCR_RUNTIME_ZIP" ]]; then
+  if ! unzip -tq "$MCR_DOWNLOAD_DIR/$MCR_RUNTIME_ZIP"; then
+    printf 'ERROR: %s\n' "Downloaded zip file appears corrupt: '$MCR_DOWNLOAD_DIR/$MCR_RUNTIME_ZIP'"
+    exit 1
+  else
+    printf '%s\n' "Matlab-runtime installer zip file seems OK."
+  fi
+  if ! unzip -q "$MCR_DOWNLOAD_DIR/$MCR_RUNTIME_ZIP" -d "$MCR_DOWNLOAD_DIR"; then
+    printf 'ERROR: %s\n' "Failed to unpack the download zip file: '$MCR_DOWNLOAD_DIR/$MCR_RUNTIME_ZIP'"
+    exit 1
+  fi
+else
+  printf 'ERROR: %s\n' "Matlab runtime zip file not found: '$MCR_DOWNLOAD_DIR/$MCR_RUNTIME_ZIP'"
+  exit 1
+fi
+
+#--------------------------------------------------------------#
+
+# Install Matlab runtime
+if ! "${MCR_DOWNLOAD_DIR}/install" -mode silent -agreeToLicense yes -destinationFolder "$MCR_INSTALL_DIR" -outputFile "$MCR_INSTALL_LOGFILE"; then
+  printf '\nERROR: %s\n\n' "Failed to install Matlab-runtime, see: '$MCR_INSTALL_LOGFILE'."
+  exit 1
+else
+  printf '\n  %s\n' "Installed Matlab-Runtime '$MCR_VERSION' in: '$MCR_INSTALL_DIR'."
+  printf '  %s\n\n' "See install log for more details: '$MCR_INSTALL_LOGFILE'."
+  exit 0
+fi

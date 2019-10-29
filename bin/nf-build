@@ -1,0 +1,365 @@
+#!/usr/bin/env bash
+
+# Build script for neural-flows.
+#
+#USAGE:
+#  # From the repository's root directory, run:
+#  ./bin/nf-build --check
+#  # or
+#  ./bin/nf-build --test
+#  # or
+#  ./bin/nf-build --deploy
+#
+#REQUIRES:
+#  mcc -- Matlab compiler: build the stand-alone executable.
+#  git -- Source control: identify repo root; check status before deploy.
+#  run-neural-flows -- script to set paths appropriately before running
+#                      he stand-alone executable. Only used for --test.
+#
+#DESCRIPTION:
+#  Builds the neural-flows code into a stand-alone executable using mcc,
+#  Matlab's compiler: https://www.mathworks.com/help/compiler/mcc.html.
+#  Supports three flags:
+#    --check: [default] Simply tries to build the current code using mcc.
+#    --test: Build with verbose information and logfile enabled. Copy the
+#            successfully built executable to the repository's bin/ directory.
+#            Then run some basic tests using the stand alone executable -- this
+#            is only partially implemented.
+#    --deploy: 
+#
+#  NOTE: Currently, the name of the stand-alone executable and the entry point
+#        for neural-flows is hard coded (see the variables EXECUTABLE_NAME
+#        and MAIN_FUNCTION_FILE below).
+#
+# Author: Stuart A. Knock (2019-10-29)
+#
+#
+
+# Use the header as a basic help message.
+[[ "$1" =~ ^('-h'|'--help')$ ]] && { head -n $((LINENO-2)) "${BASH_SOURCE[0]}" | tail -n +2; exit 0 ; }
+
+# Check we were called sensibly
+(( $# > 1)) && { printf 'ERROR: %s\n' "${BASH_SOURCE[0]} takes at most one argument." ; exit 1 ; }
+
+# Default to just building the stand-alone executable.
+if (( $# == 0 )); then
+  COMMAND_FLAG='--check'
+else
+  COMMAND_FLAG="$1"
+fi
+
+# We need mcc, so check it exists.
+if ! command -v mcc > /dev/null 2>&1 ; then
+  # There is no direct link to mcc, so check for Matlab and try to use its path:
+  if command -v matlab > /dev/null 2>&1 ; then
+    MATLAB_EXECUTABLE_PATH="$(realpath "$(command -v matlab)")"
+    MCC_COMMAND="${MATLAB_EXECUTABLE_PATH%matlab}mcc"
+    [[ -f "$MCC_COMMAND" ]] || { printf 'ERROR: %s\n' 'We need mcc, but can not find it.' ; exit 1 ; }
+  else
+    printf 'ERROR: %s\n' 'We need mcc, but it does not appear to be installed.'
+    exit 1
+  fi
+else
+  MCC_COMMAND='mcc'
+fi
+
+# We need git, so check it exists.
+if ! command -v git > /dev/null 2>&1 ; then
+  printf 'ERROR: %s\n' 'We need git, but it does not appear to be installed.'
+  exit 1
+fi
+
+# Where am I
+SCRIPT_PATH="$( cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1 ; pwd -P )"
+
+# Get the full path to the repository's root directory
+if ! REPO_ROOT_DIR="$( cd "$SCRIPT_PATH" || exit 1 ; git rev-parse --show-toplevel)"; then
+  printf 'ERROR: %s\n' "Could not determine repository root directory."
+  printf '       %s\n' 'This script assumes it is in a git repository,'
+  printf '       %s\n' 'but that does not seem to be the case.'
+  exit 1
+fi
+
+BUILD_DIR="${REPO_ROOT_DIR}/build"
+BIN_DIR="${REPO_ROOT_DIR}/bin"
+
+# If it does not already exist, create the build directory
+if [[ ! -d "$BUILD_DIR" ]]; then
+  if ! mkdir "$BUILD_DIR"; then
+  printf 'ERROR: %s\n' "Could not find or create build directory: '$BUILD_DIR'."
+  exit 1
+  fi
+fi
+
+# Change to the build directory.
+cd "$BUILD_DIR" || { printf 'ERROR: %s\n' 'Failed to change to build directory.' ; exit 1 ; }
+
+# Specify the name of the generated executable -- set based on API expectation.
+EXECUTABLE_NAME='neuralflows'
+
+# Specify the main entry point for neural-flows.
+# MAIN_FUNCTION_FILE="${REPO_ROOT_DIR}/core/main_neural_flows_hs3d_grid.m"
+MAIN_FUNCTION_FILE="${REPO_ROOT_DIR}/tests/test_flow_estimation__spiralwave3d_scattered_hs3d.m"
+
+# # List implicitly used matlab files, these are typically function calls that
+# # are generated at runtime with things like str2func().
+# IMPLICIT_SUPPORT_FILES=('mk/sleepde_mk1_1.m'        \
+#                         'mk/sleepde_mk1_2.m'        \
+#                         'mk/sleepde_mk1_4_Cfixed.m' \
+#                         'mk/sleepde_mk1_4.m')
+# # Prepend the repository's absolute path.
+# IMPLICIT_SUPPORT_FILES=("${IMPLICIT_SUPPORT_FILES[@]/#/${REPO_ROOT_DIR}/}")
+
+# Specify search path for the neural-flows code, mcc needs to find it, but,
+# we can't use addpath() and co either in the code or a startup.m file.
+#NOTE: This assumes you need every directory in your path
+INCLUDE_COMMANDS=('-I' "${REPO_ROOT_DIR}/analysis" \
+                  '-I' "${REPO_ROOT_DIR}/analysis/routing" \
+                  '-I' "${REPO_ROOT_DIR}/core" \
+                  '-I' "${REPO_ROOT_DIR}/demo-data" \
+                  '-I' "${REPO_ROOT_DIR}/demo-scripts" \
+                  '-I' "${REPO_ROOT_DIR}/dev-scripts" \
+                  '-I' "${REPO_ROOT_DIR}/external" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/matlab" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/matlab/bin" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/matlab/libbuild" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/matlab/tuto2d" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/matlab/tuto3d" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python/bin" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python/libbuild" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python/libbuild/temp" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python/libbuild/temp/home" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python/libbuild/temp/home/paula" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python/libbuild/temp/home/paula/Work" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python/libbuild/temp/home/paula/Work/Code" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python/libbuild/temp/home/paula/Work/Code/Matlab" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python/libbuild/temp/home/paula/Work/Code/Matlab/cnem_03-10-17" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python/libbuild/temp/home/paula/Work/Code/Matlab/cnem_03-10-17/src" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python/libbuild/temp/home/paula/Work/Code/Matlab/cnem_03-10-17/src/TETGEN" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python/tuto" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python/tuto/bare" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python/tuto/cubeuni3d" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python/tuto/data2d_small" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/python/tuto/data3d_small" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/src" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/src/CNEM2D" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/src/CNEM3D" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/src/TETGEN" \
+                  '-I' "${REPO_ROOT_DIR}/external/cnem_03-10-17/src/UTILE" \
+                  '-I' "${REPO_ROOT_DIR}/pbs" \
+                  '-I' "${REPO_ROOT_DIR}/preprocessing" \
+                  '-I' "${REPO_ROOT_DIR}/test-data" \
+                  '-I' "${REPO_ROOT_DIR}/tests" \
+                  '-I' "${REPO_ROOT_DIR}/utils" \
+                  '-I' "${REPO_ROOT_DIR}/vis" \
+                  '-I' "${REPO_ROOT_DIR}/vis/colourmaps")
+# INCLUDE_COMMANDS=()
+
+# Do stuff appropriate for the given command line switch.
+case "$COMMAND_FLAG" in
+  --check)
+    #build:
+    "$MCC_COMMAND" -m -v -o "$EXECUTABLE_NAME" \
+                   -R '-nodisplay'             \
+                   "${INCLUDE_COMMANDS[@]}"    \
+                   "$MAIN_FUNCTION_FILE"       \
+                   "${IMPLICIT_SUPPORT_FILES[@]}"
+    exit $?
+  ;;
+
+  --test)
+    # Get a date-time string to add to the logfile name for this build
+    FILE_NAME_NOW="$(date +%FT%H%M%S)"  #ISO 8601: YYYY-mm-ddThhMMSS
+    "$MCC_COMMAND" -m -v -o "$EXECUTABLE_NAME"                      \
+                   -w 'enable'                                      \
+                   -R '-nodisplay'                                  \
+                   -R "-logfile,neural-flows_build_${FILE_NAME_NOW}.log" \
+                   "${INCLUDE_COMMANDS[@]}"                         \
+                   "$MAIN_FUNCTION_FILE"                            \
+                   "${IMPLICIT_SUPPORT_FILES[@]}"
+    mcc_status="$?"
+    if (( mcc_status != 0 )); then
+      printf 'ERROR: %s\n' 'Build process failed, mcc returned with an error state.'
+      exit "$mcc_status"
+    else
+      # Copy the executable to the repository's bin/ directory.
+      if ! cp "$EXECUTABLE_NAME" "${REPO_ROOT_DIR}/bin/"; then
+        printf 'ERROR: %s\n' "Failed to copy stand-alone executable to bin."
+        exit 1
+      fi
+    fi
+
+    printf '\n    %s\n\n' 'Running all test-cases...'
+    # Change to the repository's root directory.
+    cd "$REPO_ROOT_DIR" || { printf 'ERROR: %s\n' 'Failed to change into the repo root dir.' ; exit 1 ; }
+
+    # # Run all "correct" test-cases.
+    # if ! all_correct_tests_list="$(mktemp "/tmp/nf-build-correct-test-file-list_$FILE_NAME_NOW"-XXXX)"; then
+    #   printf 'ERROR: %s\n' 'Failed to create temporary correct-test-list file.'
+    #   exit 1
+    # fi
+    # ls -1 "test/from_api/correct_single_"*.'json' > "$all_correct_tests_list" || { printf 'ERROR: %s\n' 'Failed to identify correct-test-cases.' ; exit 1 ; }
+
+    # while read -r correct_test_case ; do
+    #   if ! ./bin/run-neural-flows "$(< "$correct_test_case")"; then
+    #     printf 'ERROR: %s\n' "Test Failed: '${correct_test_case}'."
+    #     #shellcheck disable=SC2016 #We do not want the '"$(<' to expand.
+    #     printf '       %s\n' 'Try running: ./bin/run-neural-flows "$(< '"'${correct_test_case}'"')"'
+    #     exit 1
+    #   fi
+    # done < "$all_correct_tests_list"
+
+    # # Run all "incorrect" test-cases.
+    # if ! all_incorrect_tests_list="$(mktemp "/tmp/nf-build-incorrect-test-file-list_$FILE_NAME_NOW"-XXXX)"; then
+    #   printf 'ERROR: %s\n' 'Failed to create temporary incorrect-test-list file.'
+    #   exit 1
+    # fi
+    # ls -1 "test/from_api/incorrect_single_"*.'json' > "$all_incorrect_tests_list"|| { printf 'ERROR: %s\n' 'Failed to identify incorrect-test-cases.' ; exit 1 ; }
+
+    # while read -r incorrect_test_case ; do
+    #   #NOTE: "incorrect" test cases should write an error message output file, but not return an error.
+    #   if ! ./bin/run-neural-flows "$(< "$incorrect_test_case")"; then
+    #     printf 'ERROR: %s\n' "Test Failed: '${incorrect_test_case}'."
+    #     #shellcheck disable=SC2016 #We do not want the '"$(<' to expand.
+    #     printf '       %s\n' 'Try running: ./bin/run-neural-flows "$(< '"'${incorrect_test_case}'"')"'
+    #     exit 1
+    #   fi
+    # done < "$all_incorrect_tests_list"
+
+    printf '\n'
+    printf '    %s\n' '#######################'
+    printf '    %s\n' '## All Tests Passed. ##'
+    printf '    %s\n' '#######################'
+    printf '\n'
+    exit 0
+  ;;
+
+  --deploy)
+
+    # Make sure the repo is in a clean state
+    if ! git_status="$(git status --untracked-files=no --porcelain )"; then
+      printf 'ERROR: %s\n' "Could not determine status of the git repo you are installing from."
+      exit 1
+    fi
+    if [[ -n "$git_status" ]]; then
+      printf 'ERROR: %s\n' 'The git repo you are installing from has uncommitted changes.'
+      printf '       %s\n' 'Commit, stash or revert changes before trying again.'
+      exit 1
+    fi
+
+    # Make sure we are deploying from master
+    if ! current_branch="$( git rev-parse --abbrev-ref HEAD )"; then
+      printf 'ERROR: %s\n' "Failed to determine current git branch."
+      exit 1
+    fi
+    if [[ "$current_branch" != 'master' ]]; then
+      printf 'ERROR: %s\n' "Not currently on branch master -- ABORTING."
+      exit 1
+    fi
+
+    # Get the current commit to use in naming the logfile generated by this build.
+    if ! COMMIT="$(git rev-parse --short HEAD)"; then
+      printf 'ERROR: %s\n' "Failed to determine current commit."
+      exit 1
+    fi
+
+    # Get today's date to use in naming the logfile generated by this build, and API backup.
+    TODAY="$(date --iso-8601='date')"
+
+    # Build the stand-alone executable
+    "$MCC_COMMAND" -m -o "$EXECUTABLE_NAME"                           \
+                   -R '-nodisplay'                                    \
+                   -R "-logfile,neural-flows_build_${TODAY}_${COMMIT}.log" \
+                   "${INCLUDE_COMMANDS[@]}"                           \
+                   "$MAIN_FUNCTION_FILE"                              \
+                   "${IMPLICIT_SUPPORT_FILES[@]}"
+    mcc_status="$?"
+    if (( mcc_status != 0 )); then
+      printf 'ERROR: %s\n' "Build process failed, mcc returned with an error state: '$mcc_status'."
+      exit "$mcc_status"
+    else
+      # Copy the executable to the repository's bin/ directory.
+      if ! cp "$EXECUTABLE_NAME" "${REPO_ROOT_DIR}/bin/"; then
+        printf 'ERROR: %s\n' "Failed to copy stand-alone executable to bin."
+        exit 1
+      fi
+    fi
+
+    # # If on physics linux machine (/suphys directory is present on them but not VM),
+    # # then scp to VM.
+    # if [[ -d '/suphys' ]]; then
+
+    #   VM_ADDRESS='alertness@172.16.176.186'
+    #   VM_HOME="${VM_ADDRESS}:/usr/physics/alertness"
+
+    #   if [[ "$COMMAND_FLAG" == '--test-deploy' ]]; then
+
+    #     # Create a temporary tar-ball of the new neural-flows executable and the latest versions of our scripts.
+    #     DEPLOY_TARBALL="$(mktemp --suffix=.tar "/tmp/nf-build-test-deploy-${TODAY}-XXXX")"
+    #     DEPLOY_TARBALL_BASENAME="${DEPLOY_TARBALL##*/}"
+    #     cd "${BIN_DIR}" || { printf 'ERROR: %s\n' "Failed to change to bin directory." ; exit 1 ; }
+    #     if ! tar cf "${DEPLOY_TARBALL}" "${EXECUTABLE_NAME}" 'install-mcr' 'run-neural-flows'; then
+    #       printf 'ERROR: %s\n' "Failed to generate deploy tar-ball."
+    #       exit 1
+    #     fi
+
+    #     # Copy tar-ball of new neural-flows executable and scripts to ~/bin on VM
+    #     if ! scp "${DEPLOY_TARBALL}" "${VM_HOME}/bin/${DEPLOY_TARBALL_BASENAME}"; then
+    #       printf 'ERROR: %s\n' "Failed to copy new '${EXECUTABLE_NAME}' executable to VM, you will have to do it manually."
+    #       exit 1
+    #     fi
+
+    #     # Back-up existing neural-flows executable from ~/bin on VM, then unpack tar-ball.
+    #     #shellcheck disable=SC2029 #We want these variables to expand client side.
+    #     if ! ssh -x "$VM_ADDRESS" "cd ~/bin && cp ${EXECUTABLE_NAME} ~/backup-bin/${EXECUTABLE_NAME}_$(date +%FT%H%M%S) && tar xf ${DEPLOY_TARBALL_BASENAME}"; then
+    #       printf 'ERROR: %s\n' "Failed to back-up previous '${EXECUTABLE_NAME}' executable, you will have to do it manually."
+    #       exit 1
+    #     fi
+
+    #     printf '\n  %s\n' 'The new executable has been successfully deployed to ~/bin on the VM,'
+    #     printf '  %s\n'   'you should login to the VM and run tests at the command line using the'
+    #     printf '  %s\n\n' 'run-neural-flows script, to make sure it is working.'
+
+    #   elif [[ "$COMMAND_FLAG" == '--api-deploy' ]]; then #Actually deploy to API's path on the VM.
+
+    #     printf '\n\n  %s\n\n' 'WARNING: This will copy the new executable to the location on the VM, accessed by the API.'
+    #     printf '    %s\n' 'If you have not already done so, you should first run:'
+    #     printf '      %s\n' " ${BASH_SOURCE[0]} --test-deploy"
+    #     printf '    %s\n\n' 'and then do some test runs on the VM, using run-neural-flows, to make sure the new executable is working.'
+
+    #     yesorno='' # Default to not continuing.
+    #     read -r -n1 -p "Are you sure you want to replace the executable currently used by the API? y/(n)>" yesorno
+    #     printf '\n'
+    #     [[ "$yesorno" == 'y' ]] || { printf '%s\n' "Aborting at user request (received '$yesorno', you must press 'y' to continue)." ; exit 1; }
+
+    #     # Back-up existing neural-flows executable from API on VM.
+    #     #shellcheck disable=SC2029 #We want these variables to expand client side.
+    #     if ! ssh  -x "$VM_ADDRESS" "cp -ar ~/workspace/neural-flowsArg/model.current ~/workspace/neural-flowsArg/model.${TODAY}"; then
+    #       printf 'ERROR: %s\n' "Failed to back-up previous '${EXECUTABLE_NAME}' executable, ."
+    #       exit 1
+    #     fi
+    #     # Copy new neural-flows executable to API location on VM
+    #     if ! scp "${EXECUTABLE_NAME}" "${VM_HOME}/workspace/neural-flowsArg/model.current/${EXECUTABLE_NAME}"; then
+    #       printf 'ERROR: %s\n' "Failed to copy new '${EXECUTABLE_NAME}' executable to VM, you will have to do it manually."
+    #       exit 1
+    #     fi
+    #     printf '\n  %s\n' 'The new executable has been successfully deployed to the API, you'
+    #     printf '  %s\n\n' 'should run tests via the web-interface to make sure it is working.'
+    #   else
+    #     printf 'ERROR: %s\n' "I have no idea, this should not happen, but I'm erring for paranoia's sake."
+    #     exit 1
+    #   fi
+    # else
+    #   printf 'WARNING: %s\n' 'Automated copy to VM only supported on physics systems, and you do not appear to be on one.'
+    #   printf '         %s\n' 'You will need to manually copy the executable to the VM.'
+    # fi
+
+    exit 0
+  ;;
+*)
+  printf 'ERROR: %s\n' "Unrecognised command line switch: '$COMMAND_FLAG'"
+  exit 1
+;;
+esac
