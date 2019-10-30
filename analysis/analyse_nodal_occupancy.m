@@ -1,4 +1,4 @@
-function analyse_nodal_occupancy(msing_obj, locs, nodes_str_lab, dis_th)
+function [nodal_occupancy_matrix, total_nodal_occupancy, transition_matrix, tracking_matrix, valid_node_idx] = analyse_nodal_occupancy(msing_obj, locs, nodes_str_lab, dis_th)
 % This function calculates singularity occupancy rates at the nodes of the connectome 
 % ARGUMENTS:
 %         msing_obj   -- a MatFile or structure handle pointing to the singularities
@@ -114,10 +114,10 @@ lgd_ax.Location = 'northwest';
 
 %keyboard
 % Plot xmas balls
-time = 1:tpts;
-crange = [0 num_base_sngs];
-cmap = [0.65 0.65 0.65; cmap];
-plot_sphereanim(transition_matrix.', locs, time, crange, cmap);
+%time = 1:tpts;
+%crange = [0 num_base_sngs];
+%cmap = [0.65 0.65 0.65; cmap];
+%plot_sphereanim(transition_matrix.', locs, time, crange, cmap);
 
 
 end % function analyse_nodal_occupancy()
