@@ -1,7 +1,7 @@
 function [energy] = calculate_nodal_energy(flow_field)
 %Computation of kinetic energy 
 % ARGUMENTS:
-%  flow_field         -- A 3D array with optical flow field of size
+%  flow_field         -- A 3D array with flow fields of size
 %                       [nodes, 3, timepoints]
 % OUTPUT:
 %
