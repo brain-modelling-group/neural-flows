@@ -88,6 +88,7 @@ else
 end
 
 sp_handle = add_sphere_size_internal(locs(:,1),locs(:,2),locs(:,3),sphereradius*ones(nnodes,1),data(1,:));
+set(sp_handle, 'facealpha', 0.3)
 drawnow
 cdata = get(sp_handle,'cdata');
 
@@ -102,7 +103,7 @@ switch animation_env
         title(['Time:' num2str(time(ii), '%.3f') ' s'])
         set(sp_handle, 'cdata', cdata)
         drawnow
-        pause(0.5)
+        %pause(0.5)
     end
     case 'movie'
         try
@@ -110,7 +111,7 @@ switch animation_env
         catch
             vidfile = VideoWriter('sphere_animation.avi');
         end    
-        vidfile.FrameRate = 10;
+        vidfile.FrameRate = 30;
         open(vidfile);
         axis off; 
         view(2)

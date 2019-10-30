@@ -1,4 +1,4 @@
-function analyse_nodal_occupancy(msing_obj, locs, dis_th)
+function analyse_nodal_occupancy(msing_obj, locs, nodes_str_lab, dis_th)
 % This function calculates singularity occupancy rates at the nodes of the connectome 
 % ARGUMENTS:
 %         msing_obj   -- a MatFile or structure handle pointing to the singularities
@@ -11,7 +11,7 @@ function analyse_nodal_occupancy(msing_obj, locs, dis_th)
 %                              filled with integers representing
 %                              singularities 
 % REQUIRES:
-%         s3d_get_numlabel()
+%         s3d_str2num_label()
 %         dis()
 % AUTHOR:
 %     Paula Sanz-Leon, QIMR Berghofer October 2019
@@ -21,12 +21,16 @@ function analyse_nodal_occupancy(msing_obj, locs, dis_th)
 %}
 
 if nargin < 3
-    dis_th = 30; % mm distance threhsold for a singularity to be considered to happen at(ish) a node.
+    for nn=1:size(locs, 1)
+        nodes_str_lab{nn} = num2str(nn, '%03d');
+    end
+if nargin < 4
+    dis_th = 50; % mm distance threhsold for a singularity to be considered to happen at(ish) a node.
 end
 
 % NOTE: Perhaps we shpuld do this once at the end of the classificationa and
 % store in the file.
-singularity_list_num = s3d_get_numlabel(msing_obj.singularity_classification_list);
+singularity_list_num = s3d_str2num_label(msing_obj.singularity_classification_list);
 tpts = length(singularity_list_num);
 
 % Quantify only critical points
@@ -36,7 +40,7 @@ num_nodes = size(locs, 1);
 % Preallocate stuff
 tracking_matrix(num_base_sngs, num_nodes, tpts) = 0;
 transition_matrix(num_nodes, tpts) = 0;
-null_points_3d = mfile_sing.null_points_3d;
+null_points_3d = msing_obj.null_points_3d;
 
 % NOTE: The following nested for loops are surprisingly fast
 for tt=1:tpts
@@ -85,11 +89,35 @@ valid_node_idx = find(sing_idx & total_nodal_occupancy);
 sing_type = sing_idx(valid_node_idx);
 
 % Plot the occupancy of every type of singularity for valid nodes
-stairs(nodal_occupancy_matrix(:, valid_node_idx).')
+%stairs(nodal_occupancy_matrix(:, valid_node_idx).')
 
+% TODO: configiure graphics property to handle paper units so we can plot
+% stuff and give figure sizes
+figure_bar = figure('Name', 'nflows-bar-nodal-occupancy');
+ax = subplot(1,1,1, 'Parent', figure_bar);
 
-bh = bar(nodal_occupancy_matrix(:, valid_node_idx).', 'stacked');
+bh = bar(ax, nodal_occupancy_matrix(:, valid_node_idx).');
 cmap = s3d_get_colours('critical-points');
-colormap(cmap)
+
+for ii=1:length(bh)
+    bh(ii).FaceColor = cmap(ii, :);
+end
+ax.XTick = 1:length(valid_node_idx);
+ax.XTickLabel = nodes_str_lab(valid_node_idx);
+ax.XTickLabelRotation = 45;
+ax.YLabel.String = 'occupancy [#frames]';
+base_cp = s3d_get_base_singularity_list();
+lgd_ax = legend(base_cp(1:num_base_sngs));
+lgd_ax.Title.String = 'Singularity Type';
+lgd_ax.Orientation = 'horizontal';
+lgd_ax.Location = 'northwest';
+
+%keyboard
+% Plot xmas balls
+time = 1:tpts;
+crange = [0 num_base_sngs];
+cmap = [0.65 0.65 0.65; cmap];
+plot_sphereanim(transition_matrix.', locs, time, crange, cmap);
+
 
 end % function analyse_nodal_occupancy()

@@ -19,7 +19,7 @@ function figure_handle = plot_singularity_count_traces(sing_count)
 %}
 
         base_list = s3d_get_base_singularity_list();
-        cmap_base_list = s3d_get_colours('all');
+        cmap_base_list = s3d_get_colours('critical-points');
         
         figure_handle = figure('Name', 'nflows-singularities-over-time');
         numsubplots = 8;
@@ -32,7 +32,7 @@ function figure_handle = plot_singularity_count_traces(sing_count)
         end
 
         for jj=1:numsubplots
-            stairs(ax(jj), sing_count(:, jj), 'color', cmap_base_list(jj, 1:3), 'linewidth', 2)
+            stairs(ax(jj), sing_count(:, jj), 'color', cmap_base_list(jj, :), 'linewidth', 2)
             ax(jj).Title.String = base_list{jj};
             ax(jj).XLabel.String = 'time';
             ax(jj).YLabel.String = 'count';

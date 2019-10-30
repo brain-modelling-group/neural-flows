@@ -31,7 +31,6 @@ function [sing_numeric_label] = s3d_get_numlabel(sing_str_label)
     
 %}
 % AUTHOR: Paula Sanz-Leon, QIMR February 2019 
-
 switch sing_str_label
     % FIXED POINTS - ATTRACTORS/REPELLORS
     case {'source'} % done
