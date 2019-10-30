@@ -2,9 +2,8 @@ function cluster_neurosrv_multiple_jobs_get_nodal_3d_flows(idx_chunk)
 % Script to obtain nodal flows on neurosrv
  
 
-   temp_list_flows = {'a'};
 
-   this_file = temp_list_flows{idx_chunk};
+   this_file = get_flowfile_name(idx_chunk);
 
 
     load('513COG.mat', 'COG')
