@@ -22,7 +22,7 @@ function mfile_sings = singularity3d_detection(mfile_flows, detection_threshold)
 % MODIFICATION HISTORY:
 %  Paula Sanz-Leon -- QIMR December 2018
 
-options = mflows_obj.options; 
+options = mfile_flows.options; 
 
 if nargin < 2
     
