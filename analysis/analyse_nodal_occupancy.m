@@ -58,7 +58,6 @@ for tt=1:tpts
     end
 end
 
-
 % Some statistics
 % The following matrix gives an idea of how much time a nodes is (close to)
 % a specific singularity. 
@@ -67,9 +66,11 @@ nodal_occupancy_matrix = sum(tracking_matrix, 3);
 % Find the singularity that is most frequent (in time) in each region
 % sing_indx is a 1 x num_nodes vector whose elements are the numeric label
 % of the singularity with the highest occupancy value
+% This is choice, as we could have the case two singularities with the same
+% occupancy, but that's a problem for later. 
 [max_occupancy, sing_idx] = max(nodal_occupancy_matrix); % probably divide by time_period/num_frames so as to 
 
-% sum across occupancy of different singularity types, total occupancy is time spent as a valid
+% Sum across occupancy of different singularity types, total occupancy is time spent as a valid
 % type of singularity vs none/undefined.
 total_nodal_occupancy = sum(nodal_occupancy_matrix, 1);
 
@@ -88,6 +89,7 @@ stairs(nodal_occupancy_matrix(:, valid_node_idx).')
 
 
 bh = bar(nodal_occupancy_matrix(:, valid_node_idx).', 'stacked');
+cmap = s3d_get_colours('critical-points');
 colormap(cmap)
 
 end % function analyse_nodal_occupancy()
