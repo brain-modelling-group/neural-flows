@@ -1,5 +1,6 @@
 function [energy] = calculate_nodal_energy(flow_field)
-%Computation of kinetic energy 
+%Computation of kinetic energy. The kinetic energy is similar to the norm of the
+% vector field, but it emphasizes low ( val < 1) vs high energy states (val > 1)
 % ARGUMENTS:
 %  flow_field         -- A 3D array with flow fields of size
 %                       [nodes, 3, timepoints]
