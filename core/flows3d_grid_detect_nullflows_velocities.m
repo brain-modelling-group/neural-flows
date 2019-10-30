@@ -45,7 +45,7 @@ Z = mvel_obj.Z;
         % default
          un = sqrt(mvel_obj.ux(:, :, :, tt).^2 + mvel_obj.uy(:, :, :, tt).^2 +mvel_obj.uz(:, :, :, tt).^2);
          null_points_3d(tt).xyz_idx = locate_null_velocity_coordinates(un, detection_threshold);      
-         null_points_3d(tt).x = locate_points(X, null_points_3d(tt).xyz_id);
+         null_points_3d(tt).x = locate_points(X, null_points_3d(tt).xyz_idx);
          null_points_3d(tt).y = locate_points(Y, null_points_3d(tt).xyz_idx);
          null_points_3d(tt).z = locate_points(Z, null_points_3d(tt).xyz_idx);
     end 
