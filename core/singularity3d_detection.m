@@ -7,7 +7,7 @@ function mfile_sings = singularity3d_detection(mfile_flows, detection_threshold)
 %          mfile_flows   -- a handle to the MatFile 
 %
 % OUTPUT: 
-%          None
+%          mfile_sings   -- a handle to a Matfile with the singulrities
 %
 % REQUIRES: 
 %           guesstimate_nullflows_threshold()
