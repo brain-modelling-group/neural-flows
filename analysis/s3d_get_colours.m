@@ -78,12 +78,14 @@ switch sing_label
     case {'critical-points', 'cp', 'base-cp'}
         base_list = s3d_get_base_singularity_list();
         num_base_cp = 8;
-        color = zeros(num_base_cp, 4);
+        if ~alpha_val
+            color = zeros(num_base_cp, 3);
+        else
+            color = zeros(num_base_cp, 4);
+        end
+            
         for ss=1:num_base_cp
             color(ss, :) = s3d_get_colours(base_list{ss});
-        end
-        if ~alpha_val
-            color(:, 4) = [];
         end
         return
         
@@ -93,11 +95,15 @@ switch sing_label
         for ss=1:length(base_list)
             color(ss, :) = s3d_get_colours(base_list{ss});
         end
+        
         return
     otherwise
         error(['neuralflows:' mfilename ':BadInput'], ...
               'Unknown singularity type');
 end
 color = color./255;
+if ~alpha_val
+    color(:, 4) = [];
+end
 end
 % function  s3d_get_colours()
