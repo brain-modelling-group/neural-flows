@@ -2,7 +2,7 @@ function null_points_3d = flows3d_grid_detect_nullflows_parallel(mfile_obj, X, Y
 % Locates null regions of velocity fields. These are good 'singularity' candidates. 
 % ARGUMENTS:
 %          mfile_obj -- a MatFile handle with the critical isosurfaces or
-%                       the velocity/flow fields. In the cases of using
+%                       the flow fields. In the cases of using
 %                       isosurfaces, mfile_obj could also be a struct
 %          data_mode      -- a string to determine whther to use surfaces or
 %                            velocity fields to detect the critical points. 
