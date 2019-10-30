@@ -35,24 +35,8 @@ if nargin < 2
     end
 end
 
-       
-switch options.sing_analysis.detection_datamode
-    case 'surf'
-        error(['neural-flows:: ', mfilename, '::FutureOption. This singularity detection datamode is not fully implemented yet.'])
-        %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started extraction of critical isosurfaces'))
-        %Calculate critical isosurfaces
-        %[mfile_surf, mfile_surf_sentinel] = xperimental_extract_null_isosurfaces_parallel(mfile_vel);
-        %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished extraction of critical isosurfaces'))
-        % Detect intersection of critical isosurfaces
-        % [null_points_3d]  = flows3d_hs3d_detect_nullflows_parallel(mfile_surf, X, Y, Z, in_bdy_mask, , options.sing_detection.datamode);
-        % delete(mfile_surf_sentinel)
-    case 'vel'
-        % Use velocity vector fields
-        [null_points_3d]  = flows3d_grid_detect_nullflows_parallel(mfile_flows, [], [], [], [], options.sing_analysis.detection_datamode);
-               
-    otherwise
-        error(['neural-flows:: ', mfilename, '::UnknownOption. Invalid datamode for detecting singularities.'])
-end
+% Use velocity vector fields
+[null_points_3d]  = flows3d_grid_detect_nullflows_velocities(mfile_flows, detection_threshold);
 
 % Save what we just found
 if isfield(options.sing_analysis, 'filename_string')
