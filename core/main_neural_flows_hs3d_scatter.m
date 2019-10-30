@@ -179,51 +179,16 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     % Here is where the magic happens
     flows3d_estimate_hs3d_flow(mfile_interp, mfile_vel, options)
     
-    % Delete sentinels. If these variablesales are OnCleanup objects, then the 
+    % Delete sentinels. If these variable are OnCleanup objects, then the 
     % files will be deleted.
     delete(mfile_interp_sentinel)    
     delete(mfile_vel_sentinel)
     
-%---------------------- DETECT NULL FLOWS ---------------------------------%    
+%---------------------- DETECT NULL FLOWS - CRITICAL POINTS ---------------%    
    if options.sing_analysis.detection
-       % NOTE: TODO: The criterion/value for the detection therhesold should be a
-       % parameter it can be rerun with different types.
-       
-       % Close the file to avoid corruption
-       detection_threshold = guesstimate_nullflows_threshold(mfile_vel.min_nu);
-       mfile_vel.detection_threshold = detection_threshold;
-       mfile_vel.Properties.Writable = false;
        
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started detection of null flows.'))
-       switch options.sing_analysis.detection_datamode
-           case 'surf'
-               error(['neural-flows:: ', mfilename, '::FutureOption. This singularity detection datamode is not fully implemented yet.'])
-               %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started extraction of critical isosurfaces'))
-               %Calculate critical isosurfaces
-               %[mfile_surf, mfile_surf_sentinel] = xperimental_extract_null_isosurfaces_parallel(mfile_vel);
-               %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished extraction of critical isosurfaces'))
-               % Detect intersection of critical isosurfaces
-               % [null_points_3d]  = flows3d_hs3d_detect_nullflows_parallel(mfile_surf, X, Y, Z, in_bdy_mask, , options.sing_detection.datamode);
-               % delete(mfile_surf_sentinel)
-           case 'vel'
-               % Use velocity vector fields
-               [null_points_3d]  = flows3d_grid_detect_nullflows_parallel(mfile_vel, [], [], [], [], options.sing_analysis.detection_datamode);
-               
-           otherwise
-               error(['neural-flows:: ', mfilename, '::UnknownOption. Invalid datamode for detecting singularities.'])
-       end
-       
-       
-       % Save what we just found
-       if isfield(options.sing_analysis, 'filename_string')
-          root_fname_sings = [options.sing_analysis.filename_string '-temp_snglrty-' num2str(options.chunk, '%03d')];
-       else
-          root_fname_sings = ['temp_snglrty-' num2str(options.chunk, '%03d')];
-       end
-       keep_sings_file = true;
-       [mfile_sings, mfile_sings_sentinel] = create_temp_file(root_fname_sings, keep_sings_file);
-       mfile_sings.null_points_3d = null_points_3d;
-       delete(mfile_sings_sentinel)
+       mfile_sings = singularity3d_detection(mfile_vel);
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished detection of null flows.'))
        
 %------------------------ CLASSIFY SINGULARITIES -------------------------%
