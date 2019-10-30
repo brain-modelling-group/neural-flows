@@ -41,16 +41,15 @@ Y = mvel_obj.Y;
 Z = mvel_obj.Z;
 
     for tt=1:tpts
-         null_points_3d(tt).xyz_idx = locate_null_velocity_coordinates(mvel_obj.un(:, :, :, tt), ...
-                                                                       detection_threshold);      
-                                                            
-         null_points_3d(tt).x = locate_points(X, null_points_3d(tt).xyz_idx);
+        % TODO: remove in the future as we now calculate the norm by
+        % default
+         un = sqrt(mvel_obj.ux(:, :, :, tt).^2 + mvel_obj.uy(:, :, :, tt).^2 +mvel_obj.uz(:, :, :, tt).^2);
+         null_points_3d(tt).xyz_idx = locate_null_velocity_coordinates(un, detection_threshold);      
+         null_points_3d(tt).x = locate_points(X, null_points_3d(tt).xyz_id);
          null_points_3d(tt).y = locate_points(Y, null_points_3d(tt).xyz_idx);
          null_points_3d(tt).z = locate_points(Z, null_points_3d(tt).xyz_idx);
     end 
     
-    
-
 end
 
 % Uses the vector fields to locate singularities
