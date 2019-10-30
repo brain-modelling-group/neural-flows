@@ -6,11 +6,12 @@ function [energy] = calculate_energy_nodal(flow_field)
 %                       [nodes, 3, timepoints]
 % OUTPUT:
 %
-%   energy_node       -- Displacement energy in the flow field,
+%   energy.node       -- Displacement energy in the flow field,
 %                             returns energy for node    
 % 
-%   energy_sum        -- Displacement energy in the flow,
+%   energy.sum        -- Displacement energy in the flow,
 %                             summed over space. 
+%   energy.av         -- Average displacement enegy
 % REQUIRES: 
 %
 % USAGE:
@@ -35,8 +36,8 @@ zdim = 3;
 energy.node = squeeze((((flow_field(:, xdim, :).^2 + flow_field(:, ydim, :).^2 + flow_field(:, zdim, :).^2)/2)));
 
 % 
-energy.sum = sum(energy_node);
+energy.sum = sum(energy.node);
 
-energy.av = mean(energy_node);
+energy.av = mean(energy.node);
 
 end % end calculate_nodal_energy()
