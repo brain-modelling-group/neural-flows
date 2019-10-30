@@ -1,4 +1,4 @@
-function null_points_3d = flows3d_grid_detect_nullflows_velocities(mvel_obj)
+function null_points_3d = flows3d_grid_detect_nullflows_velocities(mvel_obj, detection_threshold)
 % This evaluates the singularity detection functions, and the effect of the 
 % threshold currently used.
 %
@@ -36,7 +36,6 @@ catch
 end
     
 null_points_3d = struct([]); 
-detection_threshold = mvel_obj.detection_threshold;
 X = mvel_obj.X;
 Y = mvel_obj.Y;
 Z = mvel_obj.Z;
