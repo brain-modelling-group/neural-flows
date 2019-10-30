@@ -45,9 +45,9 @@ function [mfile_vel] = flows3d_get_scattered_flows_parallel(mfile_vel, locs)
     % Write dummy data to disk
     mfile_vel.uxyz_sc  = zeros([size(locs), tpts]);     
 
-    % Open a pallell pool using all available workers
-    %percentage_of_workers = 0.8; % 1 --> all workers, too agressive
-    %open_parpool(percentage_of_workers);
+    %Open a pallell pool using all available workers
+    percentage_of_workers = 0.5; % 1 --> all workers, too agressive
+    open_parpool(percentage_of_workers);
     
   
     interpolation_3d_storage_expression = 'uxyz_sc(:, :, jdx)';
