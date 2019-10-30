@@ -1,5 +1,26 @@
 function mfile_sings = singularity3d_detection(mfile_flows, detection_threshold)
+% This function runs the detection of null flows and saves the points in a new
+% matfile. 
+%
+% ARGUMENTS:
+%          
+%          mfile_flows   -- a handle to the MatFile 
+%
+% OUTPUT: 
+%          None
+%
+% REQUIRES: 
+%           guesstimate_nullflows_threshold()
+%           flows3d_grid_detect_nullflows_parallel()
+%           create_temp_file()
+% USAGE:
+%{     
 
+
+%}
+%
+% MODIFICATION HISTORY:
+%  Paula Sanz-Leon -- QIMR December 2018
 % A complete mflows Matfile should have all necessary options. mfile flows
 % should be writable.
 
