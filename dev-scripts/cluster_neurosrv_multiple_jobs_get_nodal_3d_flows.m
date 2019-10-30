@@ -1,5 +1,5 @@
 function cluster_neurosrv_multiple_jobs_get_nodal_3d_flows(idx_chunk)
-% Script to obtain nodal flows 
+% Script to obtain nodal flows on neurosrv
  
 
    temp_list_flows = {'a'};
