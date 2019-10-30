@@ -25,7 +25,6 @@ function mfile_sings = singularity3d_detection(mfile_flows, detection_threshold)
 options = mfile_flows.options; 
 
 if nargin < 2
-    
     try 
         % Newer version
         detection_threshold = guesstimate_nullflows_threshold(mfile_flows.min_un);
