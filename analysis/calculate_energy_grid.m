@@ -28,21 +28,21 @@ function [energy] = calculate_energy_grid(mflow_obj)
 % NOTE: Displacement energy, this is a kinectic energy-like expression: 1/2 m v^2
 % The mass is m=1
  
-tpts = size(mflow_obj.ux, 'ux', 4);
+tpts = size(mflow_obj, 'ux', 4);
 
 % Probably best to iterate over time
 
-energy.node(sum(find(mflow_obj.interp_mask)), tpts) = 0;
-
-for tt=1:tpts
+temp_energy(length(find(mflow_obj.in_bdy_mask)), tpts) = 0;
+good_idx = find(mflow_obj.interp_mask == true);
+parfor tt=1:tpts
     ux = mflow_obj.ux(:, :, :, tt);
     uy = mflow_obj.uy(:, :, :, tt);
     uz = mflow_obj.uz(:, :, :, tt);
-    energy.node(:, tt) = 0.5*(ux(mflows.interp_mask == true).^2 + uy(mflows.interp_mask == true).^2 + uz(mflows.interp_mask == true).^2);
+    temp_energy(:, tt) = 0.5*(ux(good_idx).^2 + uy(good_idx).^2 + uz(good_idx).^2);
 end
 % 
-energy.sum = sum(energy.node);
+energy.sum = nansum(temp_energy);
 
-energy.av = mean(energy.node);
+energy.av = nanmean(temp_energy);
 
 end % end calculate_energy_grid()

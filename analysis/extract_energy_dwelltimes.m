@@ -28,6 +28,8 @@ end
 switch opts.metrictype
     case 'inverse_var'
         metric = 1./var(data, 0, 1);
+    case 'none'
+        metric = data;
     otherwise
         if  ischar(opts.metrictype) % check that metric is a string
             error(['neural-flows:: ', mfilename, '::Unknown metric option.'])
@@ -41,6 +43,8 @@ end
 switch opts.threshtype
     case 'mean'
         transitionthr = nanmean(metric);
+    case 'median'
+        transitionthr = nanmedian(metric);
     case 'mean+1sd'
         transitionthr = nanmean(metric) + nanstd(metric);
     case 'mean+2sd'
@@ -54,11 +58,9 @@ upcrossings = find(diff(metric-transitionthr>=0)==1);
 % Pull out the suprathreshold segments
 avs = extractbursts(metric, transitionthr); 
 % Use the peak as the representative transition time
-jumpsi = cellfun(@(x) find(x==max(x)), avs) + upcrossings(1:length(avs))-1; 
+jump_times = cellfun(@(x) find(x==max(x)), avs).' + upcrossings(1:length(avs))-1; 
 % Estimate dwell times
-dwell_times = diff(jumpsi)*(opts.dt); % dwell times
+dwell_times = diff(jump_times)*(opts.dt); % dwell times
 
-if nargout > 1
-    jump_times = CC.ct(jumpsi);
-end
+
 end % function extract_energy_dwelltimes()

@@ -1,4 +1,4 @@
-function [stable, transient, stablePoints, transientPoints] = classify_energy_states(energy, time_vec, sampling_period, min_duration, extrema_detection, energy_mode, display_flag)
+function [stable, transient, stablePoints, transientPoints] = classify_energy_states(energy, time_vec, sampling_period, min_duration, extrema_detection, display_flag)
 % compute_energy_states  Computation of low and high energy states based on optical flow estimates 
 % INPUT ARGUMENTS:
 %   energy              -- a vector with the kinetic energy estimates
@@ -13,8 +13,6 @@ function [stable, transient, stablePoints, transientPoints] = classify_energy_st
 %   extrema_detection   -- string with the method used to detect local
 %                          extrema. {'peaks' | 'valleys'}.
 %
-%   energy_mode         -- string with the mode we should use to
-%                          calculate energy. {'vertex', 'triangle'}
 %   display_flag        -- flag to plot displacement energy vs time and timepoints 
 %                          labeled as non-transition or transition state
 % OUTPUT ARGUMENTS:
@@ -44,8 +42,8 @@ function [stable, transient, stablePoints, transientPoints] = classify_energy_st
 
 if display_flag
     figure_handle = figure;
-    ax_handles(1) = subplot(211);
-    ax_handles(2) = subplot(212);
+    ax_handles(1) = subplot(2,1,1, 'Parent', figure_handle);
+    ax_handles(2) = subplot(2,1,2, 'Parent', figure_handle);
 end
 
 % Setup: get displacement energy, this is a kinectic energy-like expression: 1/2 m v^2
@@ -122,7 +120,7 @@ end
 % Display microstate interval on displaced energy curve
 if display_flag
   hold(ax_handles(2), 'on')
-  plot(ax_handles(2), time_vec, energy, 'color', 'k', 'linewdith', 0.5) 
+  plot(ax_handles(2), time_vec, energy, 'color', 'k', 'linewidth', 0.5) 
   for m = 1:size(extrema,1)
     if abs(extrema(m,3)) < eps % Stable states
       color = [111,203,159]/255;
@@ -168,7 +166,6 @@ for m = 2:size(extrema,1)
       end
       extrema(m-1,2) = extrema(m,2);   % 2nd interval's beginning is 1st interval
       extrema(m,1)   = extrema(m-1,1); % 1st interval's end is 2nd inte%     Original, Julien Lefevre -- brainstorm
-rval
       extrema(m-1,3) = tag; % Both get same label ...
       extrema(m,3)   = tag; % ... of the bigger interval
     elseif m < size(extrema,1) && extrema(m,2) > extrema(m+1,1) - min_duration_samples
