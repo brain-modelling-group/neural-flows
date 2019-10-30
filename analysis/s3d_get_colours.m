@@ -1,4 +1,4 @@
-function [color] = s3d_get_colours(sing_label)
+function [color] = s3d_get_colours(sing_label, alpha_val)
 % This function maps singularity human-readable labels, expressed as strings or
 % integer numbers into the predefined colour for that singularity type. 
 %
@@ -37,6 +37,9 @@ function [color] = s3d_get_colours(sing_label)
 if isempty(sing_label)
     sing_label = 'empty';
 end
+if nargin < 2
+    alpha_val = false;
+end
 switch sing_label
     % FIXED POINTS
     case {'source', 1} 
@@ -72,6 +75,18 @@ switch sing_label
         color = [0 255 0 0];   % These ones may be artificial  
     case {'nan', 'orbit?', 'boundary', 'zero', 'empty', 'centre', 'other', 'unknown', 16, 17, 18}
         color = [0, 0, 0, 0];
+    case {'critical-points', 'cp', 'base-cp'}
+        base_list = s3d_get_base_singularity_list();
+        num_base_cp = 8;
+        color = zeros(num_base_cp, 4);
+        for ss=1:num_base_cp
+            color(ss, :) = s3d_get_colours(base_list{ss});
+        end
+        if ~alpha_val
+            color(:, 4) = [];
+        end
+        return
+        
     case 'all'
         base_list = s3d_get_base_singularity_list();
         color = zeros(length(base_list), 4);
