@@ -21,8 +21,6 @@ function mfile_sings = singularity3d_detection(mfile_flows, detection_threshold)
 %
 % MODIFICATION HISTORY:
 %  Paula Sanz-Leon -- QIMR December 2018
-% A complete mflows Matfile should have all necessary options. mfile flows
-% should be writable.
 
 options = mflows_obj.options; 
 
@@ -37,10 +35,6 @@ if nargin < 2
     end
 end
 
-% Write new detection threshold
-mfile_flows.detection_threshold = detection_threshold;
-% Close the file to avoid corruption
-mfile_flows.Properties.Writable = false;
        
 switch options.sing_analysis.detection_datamode
     case 'surf'
