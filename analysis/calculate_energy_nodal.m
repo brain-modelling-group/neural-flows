@@ -1,4 +1,4 @@
-function [energy] = calculate_nodal_energy(flow_field)
+function [energy] = calculate_energy_nodal(flow_field)
 %Computation of kinetic energy. The kinetic energy is similar to the norm of the
 % vector field, but it emphasizes low ( val < 1) vs high energy states (val > 1)
 % ARGUMENTS:
