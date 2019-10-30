@@ -60,9 +60,7 @@ for cc=1:num_sing_to_plot
     
     num_label_cp = s3d_get_numlabel(cp_type{cc});
     cmap_cp = s3d_get_colours(cp_type{cc});
-    % Remove alphas
-    cmap_cp(:, 4) = []; 
-  
+        
     for tt=1:num_frames
         x = null_points_3d(1, tt).x;
         y = null_points_3d(1, tt).y;
