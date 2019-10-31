@@ -114,10 +114,10 @@ lgd_ax.Location = 'northwest';
 
 %keyboard
 % Plot xmas balls
-%time = 1:tpts;
-%crange = [0 num_base_sngs];
-%cmap = [0.65 0.65 0.65; cmap];
-%plot_sphereanim(transition_matrix.', locs, time, crange, cmap);
+time = 1:tpts;
+crange = [0 num_base_sngs];
+cmap = [0.65 0.65 0.65; cmap];
+plot_sphereanim(transition_matrix.', locs, time, crange, cmap);
 
 
 end % function analyse_nodal_occupancy()
