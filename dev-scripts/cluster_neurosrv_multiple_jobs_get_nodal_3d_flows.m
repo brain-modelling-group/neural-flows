@@ -14,11 +14,12 @@ function cluster_neurosrv_multiple_jobs_get_nodal_3d_flows(idx_chunk)
 
     % Cluster properties
     local_cluster = parcluster('local');
-    local_cluster.NumWorkers = 24;   % This should match the requested number of cpus
+    local_cluster.NumWorkers = 8;   % This should match the requested number of cpus
     parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
 
     % Change directory to where we have stored the data    
-    cd /home/paulasl/ldrive/Lab_JamesR/paulaSL/Projects/brainwaves-simulated
+    %cd /home/paulasl/ldrive/Lab_JamesR/paulaSL/Projects/brainwaves-simulated
+    cd /home/paula/TempData
      
     mfile_vel = matfile(this_file, 'Writable', true);
    
