@@ -111,7 +111,7 @@ if visual_debugging
      
      plot(ax(num_modes+1), time_vec, Upeak)
      ax(num_modes+1).Title.String = sprintf('Modes timeseries');
-     ax(num_modes+1).YLim = ULims;
+     ax(num_modes+1).YLim = ulims;
      ax(num_modes+1).XLim = [time_vec(1), time_vec(end)];
      line(ax(num_modes+1), ax(num_modes+1).XLim, [0 0], 'Color', 'k')
      ax(num_modes+1).XLabel.String = 'Time';
