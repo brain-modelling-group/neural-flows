@@ -106,7 +106,7 @@ if visual_debugging
 
     end
      [~, Upeak] = envelope(U, 4, 'peak');
-     mav_u_val = 1.1*max(abs(Upeak(:)));
+     max_u_val = 1.1*max(abs(Upeak(:)));
      ulims = [-max_u_val max_u_val];
      
      plot(ax(num_modes+1), time_vec, Upeak)
