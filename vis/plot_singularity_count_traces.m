@@ -24,6 +24,7 @@ function figure_handle = plot_singularity_count_traces(sing_count)
         figure_handle = figure('Name', 'nflows-singularities-over-time');
         numsubplots = 8;
         
+        tpts = size(sing_count, 1);
         % Preallocate array of graphic objects
         ax = gobjects(numsubplots, 1);
         for jj=1:numsubplots     
@@ -36,6 +37,7 @@ function figure_handle = plot_singularity_count_traces(sing_count)
             ax(jj).Title.String = base_list{jj};
             ax(jj).XLabel.String = 'time';
             ax(jj).YLabel.String = 'count';
+            ax(jj).XLim = [1 tpts];
         end
         
         linkaxes(ax, 'x')
