@@ -28,11 +28,11 @@ function figure_handle_xyz = plot_singularity_scatter_xyz_vs_time(singularity_li
 
 numsubplot = 3; % One for each spatial dimension
 
-figure_handle_xyz = figure('Name', 'nflows-singularities-over-1d-space-time');
+figure_handle_xyz = figure('Name', 'nflows-singularities-over-1d-space-time', varargin{:});
 ax_xyz = gobjects(numsubplot);
 
 for jj=1:numsubplot
-    ax_xyz(jj) = subplot(numsubplot, 1, jj, 'Parent', figure_handle_xyz, varargin{:});
+    ax_xyz(jj) = subplot(numsubplot, 1, jj, 'Parent', figure_handle_xyz);
     hold(ax_xyz(jj), 'on')
 end
 
