@@ -155,7 +155,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     mfile_vel.X = X;
     mfile_vel.Y = Y;
     mfile_vel.Z = Z;
-    
+    msings_obj
     % Save time and space step 
     mfile_vel.hx = hx; % mm
     mfile_vel.hy = hy; % mm
@@ -183,7 +183,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
 %------------------------ CLASSIFY SINGULARITIES -------------------------%
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started classification of singularities.'))
        % Calculate jacobian and classify singularities
-       singularity_classification = singularity3d_classify_singularities(null_points_3d, mfile_vel);
+       singularity_classification = singularity3d_classify_singularities(mfile_sings.null_points_3d, mfile_vel);
        mfile_sings.singularity_classification_list = singularity_classification;
        mfile_sings.options = options;
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished classification of singularities.'))

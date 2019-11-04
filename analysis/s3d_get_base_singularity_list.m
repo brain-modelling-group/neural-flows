@@ -1,4 +1,4 @@
-function singularity_list = s3d_get_singularity_list()
+function singularity_list = s3d_get_base_singularity_list()
 % This is kind of a dummy function that returns the list with available 
 % types of singularities in the classification functions. 
 %
