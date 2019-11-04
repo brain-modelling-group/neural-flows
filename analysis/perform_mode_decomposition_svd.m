@@ -116,5 +116,6 @@ if visual_debugging
      line(ax(num_modes+1), ax(num_modes+1).XLim, [0 0], 'Color', 'k')
      ax(num_modes+1).XLabel.String = 'Time';
      ax(num_modes+1).YLabel.String = 'Component score';
+     
 end
 end % function perform_mode_decomposition()
