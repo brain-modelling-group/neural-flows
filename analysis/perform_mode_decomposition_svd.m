@@ -105,8 +105,10 @@ if visual_debugging
         ax(imode).Title.String = sprintf('Mode %i, Var = %0.1f%%', imode, prct_var(imode));
 
     end
-     ULims = [min(U(:)), max(U(:))];
      [~, Upeak] = envelope(U, 4, 'peak');
+     mav_u_val = 1.1*max(abs(Upeak(:)));
+     ulims = [-max_u_val max_u_val];
+     
      plot(ax(num_modes+1), time_vec, Upeak)
      ax(num_modes+1).Title.String = sprintf('Modes timeseries');
      ax(num_modes+1).YLim = ULims;
