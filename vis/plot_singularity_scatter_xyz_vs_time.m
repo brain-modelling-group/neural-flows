@@ -1,4 +1,4 @@
-function figure_handle_xyz = plot_singularity_scatter_xyz_vs_time(singularity_list_num, null_points_3d, cp_type, figure_handle_xyz)
+function figure_handle_xyz = plot_singularity_scatter_xyz_vs_time(singularity_list_num, null_points_3d, cp_type, varargin)
 % This function plots singularities as a a function of 
 % their position along one axis (X, Y, Z) vs time.
 %
@@ -11,6 +11,9 @@ function figure_handle_xyz = plot_singularity_scatter_xyz_vs_time(singularity_li
 %                             we want to plot the results. Normally first
 %                             call should omit this input, but passed to
 %                             the function in subsequent calls.
+%         varargin   -- for the time being a 1 x 2 cell array with
+%                      {'Visible', 'off'}:
+%
 % OUTPUT: 
 %        figure_handle_xyz 
 %
@@ -25,22 +28,21 @@ function figure_handle_xyz = plot_singularity_scatter_xyz_vs_time(singularity_li
 
 numsubplot = 3; % One for each spatial dimension
 
-if nargin < 4
-    figure_handle_xyz = figure('Name', 'nflows-singularities-over-1d-space-time');
-    ax_xyz = gobjects(numsubplot);
+figure_handle_xyz = figure('Name', 'nflows-singularities-over-1d-space-time');
+ax_xyz = gobjects(numsubplot);
 
-    for jj=1:numsubplot
-        ax_xyz(jj) = subplot(numsubplot, 1, jj, 'Parent', figure_handle_xyz);
-        hold(ax_xyz(jj), 'on')
-    end
-
-else 
-    ax_xyz = gobjects(numsubplot);
-    for jj=1:3
-       ax_xyz(4-jj) = figure_handle_xyz.Children(jj);
-    end
-        
+for jj=1:numsubplot
+    ax_xyz(jj) = subplot(numsubplot, 1, jj, 'Parent', figure_handle_xyz, varargin{:});
+    hold(ax_xyz(jj), 'on')
 end
+
+% else 
+%     ax_xyz = gobjects(numsubplot);
+%     for jj=1:3
+%        ax_xyz(4-jj) = figure_handle_xyz.Children(jj);
+%     end
+%         
+% end
 
 num_frames = length(singularity_list_num);
     
@@ -71,8 +73,17 @@ for cc=1:num_sing_to_plot
         plot(ax_xyz(zplot), tt*ones(length(idx_cp_type), 1), z(idx_cp_type), '.', 'markeredgecolor', cmap_cp)
 
     end
-           
+        % Limits
+        offset_factor = 2; % NOTE: this should be a configurable parameter
         [ax_xyz(xplot:zplot).XLim] = deal([1 num_frames]);
+        temp_lim =  ax_xyz(xplot).YLim;
+        ax_xyz(xplot).YLim = [temp_lim(1)-offset_factor temp_lim(2)+offset_factor]; 
+        temp_lim =  ax_xyz(yplot).YLim;
+        ax_xyz(yplot).YLim = [temp_lim(1)-offset_factor temp_lim(2)+offset_factor]; 
+        temp_lim =  ax_xyz(zplot).YLim;
+        ax_xyz(zplot).YLim = [temp_lim(1)-offset_factor temp_lim(2)+offset_factor];
+        
+        % Labels
         ax_xyz(xplot).YLabel.String = y_labels{xplot}; 
         ax_xyz(xplot).XLabel.String = x_labels{xplot};
         ax_xyz(yplot).YLabel.String = y_labels{yplot}; 

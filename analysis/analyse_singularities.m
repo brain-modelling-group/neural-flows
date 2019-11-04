@@ -1,4 +1,4 @@
-function varargout = analyse_singularities(mobj_sings)
+function varargout = analyse_singularities(mobj_sings, varargin)
 % This function takes as an input a matfile with the list of
 % singularities, and generates plots to give an idea of their
 % beahviour over time and space (1d). It's basically a visual summary.
@@ -7,6 +7,8 @@ function varargout = analyse_singularities(mobj_sings)
 % ARGUMENTS:
 %           mobj_sings -- a MatFile or a structure with the same internal
 %                        structure with the singularitiy classification
+%            varargin   -- for the time being a 1 x 2 cell array with
+%                         {'Visible', 'off'}, to set figures to invisible;
 %
 % OUTPUT:   
 %
@@ -38,6 +40,7 @@ cp_saddles = base_list(5:8);
 
 % Plot scatters over time
 fig_xyz_base    = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, cp_base);
+keyboard
 fig_xyz_saddles = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, cp_saddles);
 fig_xyz_po = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, base_list(9:14));
 fig_xyz_all_cp = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, base_list(1:14));
