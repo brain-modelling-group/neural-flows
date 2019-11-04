@@ -48,5 +48,4 @@ varargout{2} = {fig_xyz_saddles};
 varargout{3} = {fig_xyz_all_cp};
 varargout{4} = {fig_xyz_po};
 
-
 end % function analyse_singularities()
