@@ -137,7 +137,7 @@ V(:, isNegative) = -V(:, isNegative);
 % Plot spatial modes containing most energy
 if visual_debugging
     
-    fig_spatial_modes =  plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, num_points, prct_var);
+    fig_spatial_modes =  plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, num_points, prct_var, quiver_scale_factor);
     varargout{1} = fig_spatial_modes;
 end
 end % function perform_mode_decomposition()
