@@ -17,18 +17,22 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
 %                  locations from MEG.
 %               
 %            options: a struct with structs inside
-%                    % Basic 'options' structure:
-%                    options.data_interpolation.file_exists = false;
-%                    options.sing_detection.datamode = 'vel''
-%                    options.flow_calculation.alpha_smooth = 0.125; 
-%                    options.flow_calculation.max_iterations = 32;
-%                    options.flow_calculation.init_conditions = 'random';
-%                    options.hz = 1;
-%                    options.hy = 1;
-%                    options.hx = 1;
-%                    options.ht = 1;
-
-%    
+%            % Basic options 
+%              options.chunk % anumber that could be slice of a long timeseries, or a different trial or recording session, used for filenames
+%            
+%            % Data options
+%             options.data_interpolation.file_exists = false;
+%
+%            % Flow options  
+%            options.flow_calculation.init_conditions = 'random';
+%            options.flow_calculation.seed_init_vel = 42;
+%            options.flow_calculation.alpha_smooth   = 0.1;
+%            options.flow_calculation.max_iterations = 64;
+%
+%            % Singularity options
+%            options.sing_analysis.detection = true;    
+%            options.sing_analysis.detection_datamode  = 'vel';
+%%    
 % OUTPUT:
 %      varargout: handles to the files where results are stored
 % 
@@ -53,7 +57,9 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     else
         bdy_alpha_radius = 30;
     end
-   
+
+%-------------------------- GRID AND MASK -------------------------------------%    
+
     ht = options.ht;
     hx = options.hx; 
     hy = options.hy;
@@ -72,7 +78,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     thickness_mask = 2;
     [interp_mask, diff_mask] = data3d_calculate_interpolation_mask(in_bdy_mask, thickness_mask);
     
-%--------------------- INTERPOLATION OF DATA -----------------------------%    
+%-------------------------- INTERPOLATION OF DATA -----------------------------%    
     % Perform interpolation on the data and save in a temp file -- asumme
     % OS is Linux, cause why would you use anything else?
     % Flag to decide what to do with temp intermediate files
@@ -112,7 +118,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
         t_dim = 4; % time    
         dtpts = size(mfile_interp.data, t_dim);
 
-%------------------------ FLOW CALCULATION -------------------------------%
+%----------------------------- FLOW CALCULATION -------------------------------%
     % Parameters for optical flow-- could be changed, could be parameters
     keep_vel_file    = true; % TODO: probably turn into input parameter
     
@@ -165,21 +171,21 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     delete(mfile_interp_sentinel)    
     delete(mfile_vel_sentinel)
     
-%---------------------- DETECT NULL FLOWS - CRITICAL POINTS ---------------%    
+%-------------------------- DETECT NULL FLOWS - CRITICAL POINTS ---------------%    
    if options.sing_analysis.detection
        
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started detection of null flows.'))
        mfile_sings = singularity3d_detection(mfile_vel);
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished detection of null flows.'))
        
-%------------------------ CLASSIFY SINGULARITIES -------------------------%
+%----------------------------- CLASSIFY SINGULARITIES -------------------------%
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started classification of singularities.'))
        % Calculate jacobian and classify singularities
        singularity_classification = singularity3d_classify_singularities(mfile_sings.null_points_3d, mfile_vel);
        mfile_sings.singularity_classification_list = singularity_classification;
        mfile_sings.options = options;
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished classification of singularities.'))
-%-------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
        % Check if we actually want to get the handles to the matfiles
        minnout = 0;
        maxnout = 3;
