@@ -8,7 +8,7 @@ function [U, S, V, varargout] = perform_mode_decomposition_svd(mflows_obj, data_
 %            num_modes --  an integer with the maximum number of modes to display
 %            
 %            time_vec  -- a vector of size [1 x tpts], must match the temporal dimension of the flows 
-%%           visual_debugging    -- a boolean to define whther to plot stuff or not
+%            visual_debugging    -- a boolean to define whther to plot stuff or not
 %            quiver_scale_factor -- one of the varargin for quiver3
 % OUTPUT:
 %      [U, S, V]  -- svd matrices 
@@ -47,6 +47,7 @@ if strcmp(data_type, 'grid')
 
     try
         [ny, nx, nz, nt] = size(mflows_obj, 'ux');
+        nt = nt/2;
 
     catch 
         [ny, nx, nz, nt] = size(mflows_obj.ux);
@@ -59,14 +60,17 @@ if strcmp(data_type, 'grid')
     % NOTE: to check why we get nans in the flows point inside the boundary.
     for tt=1:nt
         temp = reshape(mflows_obj.ux(:, :, :, tt), nx*ny*nz, []);
-        ux(:, tt) = temp(in_bdy_idx);
-        ux(isnan(ux)) = 0;
+        temp = temp(in_bdy_idx);
+        temp(isnan(temp)) = 0;
+        ux(:, tt) = temp;
         temp = reshape(mflows_obj.uy(:, :, :, tt), nx*ny*nz, []);
-        uy(:, tt) = temp(in_bdy_idx);
-        uy(isnan(uy)) = 0;
+        temp = temp(in_bdy_idx);
+        temp(isnan(temp)) = 0;
+        uy(:, tt) = temp;
         temp = reshape(mflows_obj.uz(:, :, :, tt), nx*ny*nz, []);
-        uz(:, tt) = temp(in_bdy_idx);
-        uz(isnan(uz)) = 0;
+        temp = temp(in_bdy_idx);
+        temp(isnan(temp)) = 0;
+        uz(:, tt) = temp;
     end
 
     X = mflows_obj.X;
