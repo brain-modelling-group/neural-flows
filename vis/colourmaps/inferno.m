@@ -4,7 +4,7 @@
 %
 % ARGUMENTS:
 %    m -- number of colours in colormap.
-%    order -- ['fwd'|'rev'] ordering of returned colormap array.
+%    ordering -- ['fwd'|'rev'] ordering of returned colormap array.
 %
 % OUTPUT:
 %    c -- [m,3] colormap array.
@@ -20,7 +20,7 @@
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [c] = inferno(m, order)
+function [c] = inferno(m, ordering)
     %% If number of colours (m) not specified, try setting from current colormap.
     if nargin < 1 || isempty(m)
        f = get(groot, 'CurrentFigure');
@@ -31,8 +31,8 @@ function [c] = inferno(m, order)
        end
     end
 
-    if nargin < 2  || isempty(order)
-        order = 'fwd';
+    if nargin < 2  || isempty(ordering)
+        ordering = 'fwd';
     end
 
 
@@ -302,7 +302,7 @@ bcm = [1.46159096e-03,   4.66127766e-04,   1.38655200e-02; ...
     %% Linear interpolation of basis colormap.
     c = interp1(1:nc, bcm, 1:cstep:nc);
 
-    if strcmp(order, 'rev') % reverse colormap
+    if strcmp(ordering, 'rev') % reverse colormap
         c = c(end:-1:1, :);
     end
 

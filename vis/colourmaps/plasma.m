@@ -4,7 +4,7 @@
 %
 % ARGUMENTS:
 %    m -- number of colours in colormap.
-%    order -- ['fwd'|'rev'] ordering of returned colormap array.
+%    ordering -- ['fwd'|'rev'] ordering of returned colormap array.
 %
 % OUTPUT:
 %    c -- [m,3] colormap array.
@@ -31,8 +31,8 @@ function [c] = plasma(m, order)
        end
     end
 
-    if nargin < 2  || isempty(order)
-        order = 'fwd';
+    if nargin < 2  || isempty(ordering)
+        ordering = 'fwd';
     end
 
 
@@ -302,7 +302,7 @@ bcm = [5.03832136e-02,   2.98028976e-02,   5.27974883e-01; ...
     %% Linear interpolation of basis colormap.
     c = interp1(1:nc, bcm, 1:cstep:nc);
 
-    if strcmp(order, 'rev') % reverse colormap
+    if strcmp(ordering, 'rev') % reverse colormap
         c = c(end:-1:1, :);
     end
 

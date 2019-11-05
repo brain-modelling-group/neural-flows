@@ -4,7 +4,7 @@
 %
 % ARGUMENTS:
 %    m -- number of colours in colormap.
-%    order -- ['fwd'|'rev'] ordering of returned colormap array.
+%    ordering -- ['fwd'|'rev'] ordering of returned colormap array.
 %
 % OUTPUT:
 %    c -- [m,3] colormap array.

@@ -1,14 +1,12 @@
-%% Return a colormap array [m,3] -- sequential, shades of red-yellow-white-blue.
+%% Return a colormap array [m,3] -- diverging, shades of red-yellow-white-blue.
 %
 %
 % ARGUMENTS:
 %    m -- number of colours in colormap.
+%    ordering -- ['fwd'|'rev'] ordering of returned colormap array.
 %
 % OUTPUT:
-%    c -- [m,3] colourmap array.
-%
-% REQUIRES:
-%
+%    c -- [m,3] colormap array.
 % AUTHOR:
 %     Paula Sanz-Leon (2018-12-21).
 %
@@ -19,7 +17,8 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [c] = redyellowwhiteblue(m, mode)
+
+function [c] = redyellowwhiteblue(m, ordering)
     %% If number of colours (m) not specified, try setting from current colormap.
     if nargin < 1
        f = get(groot, 'CurrentFigure');
@@ -31,7 +30,7 @@ function [c] = redyellowwhiteblue(m, mode)
     end
     
     if nargin < 2 
-        mode='dir';
+        ordering='fwd';
     end
 
 
@@ -102,7 +101,7 @@ function [c] = redyellowwhiteblue(m, mode)
     %% Linear interpolation of basis colormap.
     c = interp1(1:nc, bcm, 1:cstep:nc);
     
-    if strcmp(mode, 'rev') % reverse colormap 
+    if strcmp(ordering, 'rev') % reverse colormap 
         c = c(end:-1:1, :);
     end
 end % function redyellowwhiteblue()
