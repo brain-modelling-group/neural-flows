@@ -1,4 +1,4 @@
-function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, num_points, prct_var)
+function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, num_points, prct_var, quiver_scale_factor)
 
   fig_spatial_modes = figure('Name', 'nflows-spatial-modes');
 
