@@ -19,8 +19,9 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, num_modes, num_points
         ax(imode).Title.String = sprintf('Mode %i, Var = %0.1f%%', imode, prct_var(imode));
 
     end
+    
      smooth_window = 4; % number of samples to smooth the envelope
-     [~, Upeak] = envelope(U, smooth_window 'peak');
+     [~, Upeak] = envelope(U, smooth_window, 'peak');
      max_u_val = 1.1*max(abs(Upeak(:)));
      ulims = [-max_u_val max_u_val];
      
