@@ -171,7 +171,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     % Perhaps consider only returning this file and deleting the gridded flow file.
 
     [mfile_flow] = flows3d_get_scattered_flows_parallel(mfile_flow, locs);
-
+    
     % Save original locations, just in case
     mfile_flow.locs = locs;
 

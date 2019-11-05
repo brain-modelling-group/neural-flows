@@ -8,13 +8,13 @@ function cluster_neurosrv_multiple_jobs_get_nodal_3d_flows(idx_chunk)
 
     load('513COG.mat', 'COG')
 
-    locs = COG;
+    locs = 0.85*COG;
 
     clear COG
 
     % Cluster properties
     local_cluster = parcluster('local');
-    local_cluster.NumWorkers = 8;   % This should match the requested number of cpus
+    local_cluster.NumWorkers = 12;   % This should match the requested number of cpus
     parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
 
     % Change directory to where we have stored the data    

@@ -27,7 +27,7 @@ function [mflows_obj] = flows3d_get_scattered_flows_parallel(mflows_obj, locs)
     x_dim = 1;
     y_dim = 2;
     z_dim = 3;
-    tpts = size(, 'ux', 4);
+    tpts = size(mflows_obj, 'ux', 4);
     
     if tpts < 2
         disp('NOTE to self: This will fail because there is only one data point')
