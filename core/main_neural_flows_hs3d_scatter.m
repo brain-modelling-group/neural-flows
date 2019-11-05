@@ -132,12 +132,12 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     else
         root_fname_vel = ['temp_flows-' num2str(options.chunk, '%03d')];
     end
-    [mfile_vel, mfile_vel_sentinel] = create_temp_file(root_fname_vel, keep_vel_file); 
+    [mfile_flow, mfile_flow_sentinel] = create_temp_file(root_fname_vel, keep_vel_file); 
     
     % Save masks with convex hulls of the brain
-    mfile_vel.in_bdy_mask = in_bdy_mask;
-    mfile_vel.interp_mask = interp_mask;
-    mfile_vel.diff_mask = diff_mask;
+    mfile_flow.in_bdy_mask = in_bdy_mask;
+    mfile_flow.interp_mask = interp_mask;
+    mfile_flow.diff_mask = diff_mask;
     
     % Get some dummy initial conditions
     if isfield(options, 'chunk')
@@ -150,38 +150,44 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     
     % Save grid - needed for singularity tracking and visualisation
     % Consider saving min max values and step, saves memory
-    mfile_vel.X = X;
-    mfile_vel.Y = Y;
-    mfile_vel.Z = Z;
+    mfile_flow.X = X;
+    mfile_flow.Y = Y;
+    mfile_flow.Z = Z;
     msings_obj
     % Save time and space step 
-    mfile_vel.hx = hx; % mm
-    mfile_vel.hy = hy; % mm
-    mfile_vel.hz = hz; % mm
-    mfile_vel.ht = ht; % ms
+    mfile_flow.hx = hx; % mm
+    mfile_flow.hy = hy; % mm
+    mfile_flow.hz = hz; % mm
+    mfile_flow.ht = ht; % ms
     
     % Save all options in the flow/velocity file 
-    mfile_vel.options = options;
+    mfile_flow.options = options;
     
     % Here is where the magic happens
-    flows3d_estimate_hs3d_flow(mfile_interp, mfile_vel, options)
+    flows3d_estimate_hs3d_flow(mfile_interp, mfile_flow, options)
+
+    % Here we get the flows on defined on the nodes -- It adds 30% to the current runtime because it uses ScatterInterpolant
+    % Also, the file get larger, but having this additional variable help us with visualisations. 
+    % Perhaps consider only returning this file and deleting the gridded flow file.
+
+    [mflow_file] = flows3d_get_scattered_flows_parallel(mflow_file, locs);
     
     % Delete sentinels. If these variable are OnCleanup objects, then the 
     % files will be deleted.
     delete(mfile_interp_sentinel)    
-    delete(mfile_vel_sentinel)
+    delete(mfile_flow_sentinel)
     
 %-------------------------- DETECT NULL FLOWS - CRITICAL POINTS ---------------%    
    if options.sing_analysis.detection
        
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started detection of null flows.'))
-       mfile_sings = singularity3d_detection(mfile_vel);
+       mfile_sings = singularity3d_detection(mfile_flow);
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished detection of null flows.'))
        
 %----------------------------- CLASSIFY SINGULARITIES -------------------------%
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started classification of singularities.'))
        % Calculate jacobian and classify singularities
-       singularity_classification = singularity3d_classify_singularities(mfile_sings.null_points_3d, mfile_vel);
+       singularity_classification = singularity3d_classify_singularities(mfile_sings.null_points_3d, mfile_flow);
        mfile_sings.singularity_classification_list = singularity_classification;
        mfile_sings.options = options;
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished classification of singularities.'))
@@ -196,7 +202,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
    end
 
    if nargout >= 1
-       varargout{1} = mfile_vel;
+       varargout{1} = mfile_flow;
    end
    if nargout == 2
        varargout{2} = mfile_interp;
