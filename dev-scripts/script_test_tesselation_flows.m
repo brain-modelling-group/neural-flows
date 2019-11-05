@@ -5,6 +5,7 @@
 
 % Author: Paula Sanz-Leon, QIMR June 2019
 
+% NOTE: 2019-11-05: to update and test after refactoring of core functions
 % Load surface
 load('neural_flows_cortex_mesh')
 
