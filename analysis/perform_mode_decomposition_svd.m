@@ -82,7 +82,7 @@ if strcmp(data_type, 'grid')
     Z = Z(in_bdy_idx);
 
 else
-     [num_points, ~, nt] = size(mflows_obj.usc_xyz);
+     [num_points, ~, nt] = size(mflows_obj.uxyz_sc);
      xdim = 1;
      ydim = 2;
      zdim = 3;
@@ -91,15 +91,15 @@ else
      uz(num_points, nt) = 0;
 
      for tt=1:nt
-        temp = squeeze(mflows_obj.usc_xyz(:, xdim, tt));
+        temp = squeeze(mflows_obj.uxyz_sc(:, xdim, tt));
+        temp(isnan(temp)) = 0;
         ux(:, tt) = temp;
-        ux(isnan(ux)) = 0;
-        temp = squeeze(mflows_obj.usc_xyz(:, ydim, tt));
+        temp = squeeze(mflows_obj.uxyz_sc(:, ydim, tt));
+        temp(isnan(temp)) = 0;
         uy(:, tt) = temp;
-        uy(isnan(uy)) = 0;
-        temp = squeeze(mflows_obj.usc_xyz(:, zdim, tt));
+        temp = squeeze(mflows_obj.uxyz_sc(:, zdim, tt));
+        temp(isnan(temp)) = 0;
         uz(:, tt) = temp;
-        uz(isnan(uz)) = 0;
     end
 
 

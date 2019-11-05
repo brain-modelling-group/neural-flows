@@ -2,6 +2,7 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, 
 
   fig_spatial_modes = figure('Name', 'nflows-spatial-modes');
 
+    ax = gobjects(num_modes, 1);
     for kk=1:num_modes
        ax(kk) = subplot(2, num_modes, kk, 'Parent', fig_spatial_modes);
        hold(ax(kk), 'on')
