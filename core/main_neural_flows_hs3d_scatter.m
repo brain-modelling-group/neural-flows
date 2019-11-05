@@ -170,8 +170,11 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     % Also, the file get larger, but having this additional variable help us with visualisations. 
     % Perhaps consider only returning this file and deleting the gridded flow file.
 
-    [mflow_file] = flows3d_get_scattered_flows_parallel(mflow_file, locs);
-    
+    [mfile_flow] = flows3d_get_scattered_flows_parallel(mfile_flow, locs);
+
+    % Save original locations, just in case
+    mfile_flow.locs = locs;
+
     % Delete sentinels. If these variable are OnCleanup objects, then the 
     % files will be deleted.
     delete(mfile_interp_sentinel)    
