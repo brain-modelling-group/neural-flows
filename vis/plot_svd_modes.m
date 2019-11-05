@@ -20,6 +20,11 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, 
     z_idx = 2*num_points+1:3*num_points;
     
     Vnorm =  sqrt(V(x_idx, :).^2+ V(y_idx, :).^2+ V(z_idx, :).^2);
+    
+    % Get overall direction along each axis
+    Vx = sign(sum(V(x_idx, :)));
+    Vy = sign(sum(V(y_idx, :)));
+    Vz = sign(sum(V(z_idx, :)));
     % NOTE: maybe enable this check to avoid zero division
     %Vnorm(Vnorm < 2^-9) = 1;
     
@@ -30,6 +35,14 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, 
     xy = 1;
     xz = 2;
     zy = 3;
+    scaling_vxyz = 32;
+    axes_offset = 4;
+    x_lims = [min(X(:))-axes_offset, max(X(:))+axes_offset];
+    y_lims = [min(Y(:))-axes_offset, max(Y(:))+axes_offset];
+    z_lims = [min(Z(:))-axes_offset, max(Z(:))+axes_offset];
+    
+    draw_arrow_fun = @(axh, x,y, z, varargin) vfield3(axh, x(1), y(1), z(1), x(2)-x(1), y(2)-y(1), z(2)-z(1), varargin{:});    
+    
     for imode = 1:num_modes
         quiver3(ax(xy, imode), X, Y, Z, V(x_idx, imode)./Vnorm(:, imode), ...
                                         V(y_idx, imode)./Vnorm(:, imode), ...
@@ -46,12 +59,37 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, 
                                         V(z_idx, imode)./Vnorm(:, imode), ...
                                         quiver_scale_factor, 'Linewidth', 1, ...
                                         'Color', cmap(imode, :));
-
+        % XY
+        draw_arrow_fun(ax(xy, imode), [0 scaling_vxyz*Vx(imode)], [0 0], [0 0], 'color', [1 0 0]);
+        draw_arrow_fun(ax(xy, imode), [0 0], [0 scaling_vxyz*Vy(imode)], [0 0], 'color', [0 1 0]);
+   
+        % XZ
+        draw_arrow_fun(ax(xz, imode), [0 scaling_vxyz*Vx(imode)], [0 0], [0 0], 'color', [1 0 0]);
+        draw_arrow_fun(ax(xz, imode), [0 0], [0 0], [0 scaling_vxyz*Vz(imode)], 'color', [0 0 1]);
+        
+        % ZY
+        draw_arrow_fun(ax(zy, imode), [0 0], [0 0], [0 scaling_vxyz*Vz(imode)], 'color', [0 0 1]);
+        draw_arrow_fun(ax(zy, imode), [0 0], [0 scaling_vxyz*Vy(imode)], [0 0], 'color', [0 1 0]);
+        
         ax(xy, imode).View = [ 0 90];
         ax(xz, imode).View = [ 0  0];
         ax(zy, imode).View = [90  0];
 
         ax(xy, imode).Title.String = sprintf('Mode %i, Var = %0.1f%%', imode, prct_var(imode));
+        
+        % Axis Limits
+        ax(xy, imode).XLim = x_lims;
+        ax(xy, imode).YLim = y_lims;
+        ax(xy, imode).ZLim = z_lims;
+        
+        ax(xz, imode).XLim = x_lims;
+        ax(xz, imode).YLim = y_lims;
+        ax(xz, imode).ZLim = z_lims;
+        
+        ax(zy, imode).XLim = x_lims;
+        ax(zy, imode).YLim = y_lims;
+        ax(zy, imode).ZLim = z_lims;
+        
         axis(ax(xy, imode), 'tight', 'off')
         axis(ax(xz, imode), 'tight', 'off')
         axis(ax(zy, imode), 'tight', 'off')
