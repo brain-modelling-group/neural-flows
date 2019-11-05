@@ -87,13 +87,13 @@ else
      uz(num_points, nt) = 0;
 
      for tt=1:nt
-        temp = squeeze((mflows_obj.usc_xyz(:, xdim, tt));
+        temp = squeeze(mflows_obj.usc_xyz(:, xdim, tt));
         ux(:, tt) = temp;
         ux(isnan(ux)) = 0;
-        temp = squeeze((mflows_obj.usc_xyz(:, ydim, tt));
+        temp = squeeze(mflows_obj.usc_xyz(:, ydim, tt));
         uy(:, tt) = temp;
         uy(isnan(uy)) = 0;
-        temp = squeeze((mflows_obj.usc_xyz(:, zdim, tt));
+        temp = squeeze(mflows_obj.usc_xyz(:, zdim, tt));
         uz(:, tt) = temp;
         uz(isnan(uz)) = 0;
     end
