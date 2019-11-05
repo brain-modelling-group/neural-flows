@@ -1,55 +1,47 @@
-function varargout = main_neural_flows_hs3d_scatter(data, locs, options) 
-    % This function takes as input neural activity recorded from scattered 
-    % points in space (aka an unstructured grid)
-    % This function: 
-    %              1) interpolates the data onto a regular grid (ie, meshgrid).
-    %              2) estimates neural flows (ie, velocity fields).
-    %              3) detects singularities (ie, detects null flows).
-    %              4) classifies singularities.
-    % data: a 2D array of size [timepoints x nodes/points] or 
-    %         4D array of size [timepoints x xcoord x ycoord x zcoord]
-    % locs: a 2D array of size [nodes/points x 3] with coordinates of points in 3D Euclidean space for which data values are known. 
-    %       These corresponds to the centres of gravity: ie, node locations 
-    %       of brain network embedded in 3D dimensional space, or source
-    %       locations from MEG.
-    % options: a struct with structs inside
-    %Basic 'options' structure:
-    %options.data_interpolation.file_exists = false;
-    %options.sing_detection.datamode = 'vel''
-    %options.sing_detection.inexmode = 'linear';
-    %options.flow_calculation.alpha_smooth = 0.125; 
-    %options.flow_calculation.max_iterations = 32;
-    %options.flow_calculation.init_conditions = 'random';
-    %options.hz = 1;
-    %options.hy = 1;
-    %options.hx = 1;
-    %options.ht = 1;
+function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
+
+ % This function takes as input neural activity recorded from scattered 
+ % points in space (aka an unstructured grid)
+ % This function: 
+ %              1) interpolates the data onto a regular grid (ie, meshgrid).
+ %              2) estimates neural flows (ie, velocity fields).
+ %              3) detects singularities (ie, detects null flows).
+ %              4) classifies singularities.
+%
+% ARGUMENTS:
+%            data: a 2D array of size [timepoints x nodes/points] or 
+%
+%            locs: 2D array of size [nodes/points x 3] with coordinates of points in 3D Euclidean space for which data values are known. 
+%                  These corresponds to the centres of gravity: ie, node locations 
+%                  of brain network embedded in 3D dimensional space, or source
+%                  locations from MEG.
+%               
+%            options: a struct with structs inside
+%                    % Basic 'options' structure:
+%                    options.data_interpolation.file_exists = false;
+%                    options.sing_detection.datamode = 'vel''
+%                    options.flow_calculation.alpha_smooth = 0.125; 
+%                    options.flow_calculation.max_iterations = 32;
+%                    options.flow_calculation.init_conditions = 'random';
+%                    options.hz = 1;
+%                    options.hy = 1;
+%                    options.hx = 1;
+%                    options.ht = 1;
+
+%    
+% OUTPUT:
+%      varargout: handles to the files where results are stored
+% 
+% USAGE:
+%{
     
-  
-    % NOTES TO CLEAN UP
-    % TODO:FUTURE: explore around timepoints of interest using the second order temporal
-    % derivative
-    % NOTES: on performance on interpolation sequential for loop with 201 tpts - 8.5 
-    % mins. That means that for the full simulation of 400,000 tpts
-    % We would require 5h per dataset, just to interpolate data with a
-    % resolution of 2mm.
-    % Same dataset with a resolution of 1 mm -- matching fmri resolution
-    % takes 430 s -- 
-     % NOTE: full resolution (eg, approx hx*hy*hz=1mm^3), each interpolation
-    % step takes about 24 seconds. Downsampling to 8mm^3 - side 2mm it takes 3s.
-    
-    
-    
-    % NOTEs on performance optical flow: 
-    % max_iterations=16 
-    % tpts ~ 200
-    % hs = 2mmmain_neural_flows_hs3d_scatter
-    % takes about 35s to calculate vector fields.
-    % hs = 1mm
-    % takes 214 s - 240
+%}
+% AUTHOR:
+%     Paula Sanz-Leon, QIMR Berghofer, November 2018
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
     if isfield(options, 'chunk')
-      rng(options.chunk) % for the cluster environment.
+      rng(options.chunk) 
     else
        options.chunk = 0;
     end
