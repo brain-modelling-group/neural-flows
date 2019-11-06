@@ -16,7 +16,8 @@ function varargout = analyse_singularities(mobj_sings, fig_visibility)
 %        s3d_get_base_singularity_list()
 %        s3d_get_numlabel()
 %        s3d_count_singularities()
-%        plot_singularity_scatter_xyz_vs_time
+%        plot_singularity_scatter_xyz_vs_time()
+%        plot_singularity_count_traces
 %
 % USAGE:
 %{

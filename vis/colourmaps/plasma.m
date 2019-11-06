@@ -20,7 +20,7 @@
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [c] = plasma(m, order)
+function [c] = plasma(m, ordering)
     %% If number of colours (m) not specified, try setting from current colormap.
     if nargin < 1 || isempty(m)
        f = get(groot, 'CurrentFigure');

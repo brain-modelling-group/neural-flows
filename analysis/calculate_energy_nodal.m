@@ -32,11 +32,12 @@ function [energy] = calculate_energy_nodal(flow_field)
 xdim = 1;
 ydim = 2;
 zdim = 3;
+flow_field(isnan(flow_field)) = 0;
 % May use lots of memory
 energy.node = squeeze((((flow_field(:, xdim, :).^2 + flow_field(:, ydim, :).^2 + flow_field(:, zdim, :).^2)/2)));
 
 % 
-energy.sum = sum(energy.node);
+energy.sum = nansum(energy.node);
 
 energy.av = mean(energy.node);
 

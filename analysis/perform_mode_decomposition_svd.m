@@ -47,7 +47,7 @@ if strcmp(data_type, 'grid')
 
     try
         [ny, nx, nz, nt] = size(mflows_obj, 'ux');
-        nt = nt/2;
+        nt = nt;
 
     catch 
         [ny, nx, nz, nt] = size(mflows_obj.ux);
@@ -83,6 +83,7 @@ if strcmp(data_type, 'grid')
 
 else
      [num_points, ~, nt] = size(mflows_obj.uxyz_sc);
+     nt = nt;
      xdim = 1;
      ydim = 2;
      zdim = 3;

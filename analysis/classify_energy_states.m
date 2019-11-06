@@ -76,22 +76,22 @@ maxima = sortrows([-energy(maxima); maxima]').';
 maxima = maxima(2,:);
 
 % Display displacement energy and locations of maxima/minima
-if display_flag
-  hold(ax_handles(1), 'on')
-  plot(ax_handles(1), time_vec, energy, 'color', [0.8 0.8 0.8])
-  xlabel('Time [ms]')
-  ylabel('\partial Energy')
-  ax_handles(1).XLim = [time_vec(1) time_vec(end)];
-  ax_handles(1).YLim = [0.95*min(energy) 1.05*max(energy)];
-  plot(ax_handles(1), time_vec(minima), energy(minima), 'linestyle', 'none', ...
-      'marker', 'v', 'markerfacecolor', [111,203,159]/255, 'markeredgecolor', 'none') 
-  plot(ax_handles(1), time_vec(maxima), energy(maxima), 'linestyle', 'none', ...
-      'marker', '^', 'markerfacecolor', [255,111,105]/255, 'markeredgecolor', 'none');
-  
-  ax_handles(1).XLabel.String = 'time [ms]';
-  ax_handles(1).YLabel.String ='\partial Energy';
-  ax_handles(1).Box = 'on';
-end
+% if display_flag
+%   hold(ax_handles(1), 'on')
+%   plot(ax_handles(1), time_vec, energy, 'color', [0.8 0.8 0.8])
+%   xlabel('Time [ms]')
+%   ylabel('\partial Energy')
+%   ax_handles(1).XLim = [time_vec(1) time_vec(end)];
+%   ax_handles(1).YLim = [0.95*min(energy) 1.05*max(energy)];
+%   plot(ax_handles(1), time_vec(minima), energy(minima), 'linestyle', 'none', ...
+%       'marker', 'v', 'markerfacecolor', [111,203,159]/255, 'markeredgecolor', 'none') 
+%   plot(ax_handles(1), time_vec(maxima), energy(maxima), 'linestyle', 'none', ...
+%       'marker', '^', 'markerfacecolor', [255,111,105]/255, 'markeredgecolor', 'none');
+%   
+%   ax_handles(1).XLabel.String = 'time [ms]';
+%   ax_handles(1).YLabel.String ='\partial Energy';
+%   ax_handles(1).Box = 'on';
+% end
 
 
 % Find transient states
@@ -350,9 +350,9 @@ function extrema = find_local_extrema_peaks(signal, find_max, tStart, tEnd)
 %   extrema           - Locations of local extrema
 
 % Preprocessing: smoothing of signal for initial extrema
-if ~find_max % Local maxima == local minima of negative signal
-    signal = -1.*signal;
-end
+%if ~find_max % Local maxima == local minima of negative signal
+%    signal = -1.*signal;
+%end
 
 smoothingFilter = [0.5 1 0.5]/3;
 s = signal;
@@ -378,7 +378,7 @@ s = conv(s, smoothingFilter, 'same');
 s(tStart) = signal(tStart); 
 s(tEnd) = signal(tEnd);
 
-[~, peak_locs] = findpeaks(s);
+[~, peak_locs] = findpeaks(s, 'MinPeakHeight', 0);
 
 % Don't use first or last time point as extremum
 extrema = peak_locs;
