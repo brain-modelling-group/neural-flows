@@ -21,25 +21,27 @@ function [mflows_obj] = flows3d_get_scattered_flows_parallel(mflows_obj, locs)
 
     % These parameter values are essential
     neighbour_method = 'natural';
-    extrapolation_method = 'none';
-
+    extrapolation_method = 'linear'; % HACK: HACK: TEO REMOVE BOUNDARY FLOW CALCULATION IS FIXED
+    % NOTE: HACK: HACK:  TO REMOVE ONCE I FIXED THE BOUNDARY CALCULATION
+    locs = 0.9*locs;
 
     x_dim = 1;
     y_dim = 2;
     z_dim = 3;
-    tpts = size(mflows_obj, 'ux', 4);
+    tpts = size(mflows_obj, 'ux', 4)/32;
     
     if tpts < 2
         disp('NOTE to self: This will fail because there is only one data point')
     end
     
-    in_bdy_mask_idx = find(double(mflows_obj.interp_mask));
+    %in_bdy_mask_idx = find(double(mflows_obj.in_bdy_mask));
+    in_bdy_mask_idx = 1:numel(mflows_obj.in_bdy_mask);
     X = mflows_obj.X;
-    X = X(in_bdy_mask_idx);
+    X = X(in_bdy_mask_idx).';
     Y = mflows_obj.Y;
-    Y = Y(in_bdy_mask_idx);
+    Y = Y(in_bdy_mask_idx).';
     Z = mflows_obj.Z;
-    Z = Z(in_bdy_mask_idx);
+    Z = Z(in_bdy_mask_idx).';
 
    
     % Write dummy data to disk
@@ -64,16 +66,16 @@ function [mflows_obj] = flows3d_get_scattered_flows_parallel(mflows_obj, locs)
             uz = mflows_obj.uz(:, :, :, idx);
             
             data_interpolant_x = scatteredInterpolant(X, Y, Z , ...
-                                                    ux(in_bdy_mask_idx), ...
+                                                    ux(in_bdy_mask_idx).', ...
                                                     neighbour_method, ...
                                                     extrapolation_method);
             data_interpolant_y = scatteredInterpolant(X, Y, Z , ...
-                                                    uy(in_bdy_mask_idx), ...
+                                                    uy(in_bdy_mask_idx).', ...
                                                     neighbour_method, ...
                                                     extrapolation_method);
                                                 
             data_interpolant_z = scatteredInterpolant(X, Y, Z , ...
-                                                    uz(in_bdy_mask_idx), ...
+                                                    uz(in_bdy_mask_idx).', ...
                                                     neighbour_method, ...
                                                     extrapolation_method);
                                                 
