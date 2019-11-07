@@ -30,8 +30,8 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
     extrapolation_method = 'none';
 
 
-    x_dim = 1;
-    y_dim = 2;
+    x_dim = 2;
+    y_dim = 1;
     z_dim = 3;
     tpts = size(data, 1);
     
@@ -47,7 +47,7 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
     [mfile_interp_obj, mfile_interp_sentinel] = create_temp_file(root_fname, keep_interp_data);
     
     % Write dummy data to disk
-    mfile_interp_obj.data(size(X, x_dim), size(Y, y_dim), size(Z, z_dim), tpts) = 0;          
+    mfile_interp_obj.data(size(Y, y_dim), size(X, x_dim), size(Z, z_dim), tpts) = 0;          
 
     % Open a pallell pool using all available workers
     %percentage_of_workers = 1; % 1 --> all workers, too agressive
