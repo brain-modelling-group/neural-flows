@@ -27,7 +27,7 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
 
     % These parameter values are essential
     neighbour_method = 'natural';
-    extrapolation_method = 'none';
+    extrapolation_method = 'nearest';
 
 
     x_dim = 2;
