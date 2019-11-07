@@ -1,17 +1,16 @@
 function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
-
- % This function takes as input neural activity recorded from scattered 
- % points in space (aka an unstructured grid)
- % This function: 
- %              1) interpolates the data onto a regular grid (ie, meshgrid).
- %              2) estimates neural flows (ie, velocity fields).
- %              3) detects singularities (ie, detects null flows).
- %              4) classifies singularities.
+% This function takes as input neural activity recorded from scattered 
+% points in 3D space (aka an unstructured grid)
+% This function performs all the analysis steps availabe in neural-flows: 
+%              1) interpolates the data onto a regular grid (ie, meshgrid).
+%              2) estimates neural flows (ie, velocity fields).
+%              3) detects singularities (ie, detects null flows).
+%              4) classifies singularities.
 %
 % ARGUMENTS:
-%            data: a 2D array of size [timepoints x nodes/points] or 
+%            data -- a 2D array of size [timepoints x nodes/points] or 
 %
-%            locs: 2D array of size [nodes/points x 3] with coordinates of points in 3D Euclidean space for which data values are known. 
+%            locs -- 2D array of size [nodes/points x 3] with coordinates of points in 3D Euclidean space for which data values are known. 
 %                  These corresponds to the centres of gravity: ie, node locations 
 %                  of brain network embedded in 3D dimensional space, or source
 %                  locations from MEG.
@@ -64,14 +63,18 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     hx = options.hx; 
     hy = options.hy;
     hz = options.hz; 
+    %hr = sqrt(hz.^2 + hy.^y + hx.^2);
   
     % Generate a structured grid 
     scaling_factor = 1.05; % inflate locations a little bit, so the grids have enough blank space around the volume
-    [X, Y, Z, grid_size] = get_structured_grid(scaling_factor*locs, options.hx, options.hy, options.hz);
+    [X, Y, Z, grid_size] = get_structured_grid(scaling_factor*locs, hx, hy, hz);
     
-    % Get a mask with the points that are inside and outside the convex
-    % hull
+    % Get a mask with the gridded-points that are inside and outside the convex hull
+    % NOTE: This mask underestimates the volume occupied by the scattered
+    % points
     [in_bdy_mask, ~] = data3d_calculate_boundary(locs, X(:), Y(:), Z(:), bdy_alpha_radius);
+    %[in_bdy_mask] = data3d_check_boundary_mask(in_bdy_mask, locs, hr);
+
     in_bdy_mask = reshape(in_bdy_mask, grid_size);
     % Get a mask that is slightly larger so we can define a shell with a thickness that will be 
     % the boundary of our domain. 
