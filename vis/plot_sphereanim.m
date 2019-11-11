@@ -54,7 +54,7 @@ plot_sphereanim(data, locs, time)
 % mpeg on other OS
 
 if nargin < 3
-    time = 1:size(data, 1);
+    time = 1:1:size(data, 1);
 end
 
 if nargin < 4
@@ -72,10 +72,6 @@ end
 
 if nargin < 6
     animation_env = 'workspace'; % animates the plot without saving
-end
-
-if isempty(time)
-    time = 1:1:size(data,1);
 end
     
 figure_handle = figure('Name', 'sphere animation'); 

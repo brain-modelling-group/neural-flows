@@ -6,10 +6,10 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
 % ARGUMENTS:
 %           locs: locations of known data
 %           data: scatter data known at locs of size tpts x nodes
-%           X, Y Z: -- grid points to get interpolation out
-%           in_bdy_mask -- indices of points within the
-%                          brain's convex hull boundary. Same size as X,
-%                          Y, or Z.
+%           X, Y Z: -- grid points to get interpolation out, must be 3D
+%                      arrays
+%           mask -- indices of points within the brain's convex hull boundary. 
+%                    Same size as X, Y, or Z.
 %    
 % OUTPUT:
 %       mfile_interp_obj: matfile handle to the file with the interpolated
