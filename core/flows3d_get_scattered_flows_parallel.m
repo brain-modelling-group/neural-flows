@@ -35,12 +35,11 @@ function [mflows_obj] = flows3d_get_scattered_flows_parallel(mflows_obj, locs)
     Y = mflows_obj.Y;
     Z = mflows_obj.Z;
     
-    in_bdy_mask_idx = find(double(mflows_obj.interp_mask));
-    %in_bdy_mask_idx = 1:numel(mflows_obj.in_bdy_mask);
-    %%% HACK HACK HACK
+    in_bdy_mask_idx = find(mflows_obj.in_bdy_mask == true);
+    %%% HACK HACK HACK %%
     %%% HACK HACK HACK %% 
     
-    in_bdy_mask_idx = find(~isnan(mflows_obj.ux(:, :, : , 1)));
+    %in_bdy_mask_idx = find(~isnan(mflows_obj.ux(:, :, : , 1)));
     %for ii=1:size(locs, 1)
     
    %     temp = dis(locs(ii, :).', [X(in_bdy_mask_idx), Y(in_bdy_mask_idx), Z(in_bdy_mask_idx)].');
