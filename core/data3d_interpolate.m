@@ -7,13 +7,13 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate(data, lo
 %  locs: locations of known data
 %  data: scatter data known at locs of size tpts x nodes
 % X, Y Z -- grid points to get interpolation out
-% in_bdy_mask -- indices with points of the grid that are inside the
-% convex hull of the brain/cortex
+% mask -- indices with points of the grid that are inside the
+% convex hull of the brain/cortex, should be interpolating mask
 
 % This is the key step for the optical flow method to work
 % These parameters are essential
     neighbour_method = 'natural';
-    extrapolation_method = 'none';
+    extrapolation_method = 'nearest';
 
 
     x_dim = 1;
