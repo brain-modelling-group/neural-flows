@@ -156,7 +156,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     mfile_flow.X = X;
     mfile_flow.Y = Y;
     mfile_flow.Z = Z;
-    msings_obj
+
     % Save time and space step 
     mfile_flow.hx = hx; % mm
     mfile_flow.hy = hy; % mm
@@ -185,9 +185,9 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     
 %-------------------------- DETECT NULL FLOWS - CRITICAL POINTS ---------------%    
    if options.sing_analysis.detection
-       
+              
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started detection of null flows.'))
-       mfile_sings = singularity3d_detection(mfile_flow);
+       mfile_sings = singularity3d_detection(mfile_flow, options.sing_analysis.detection_threshold);
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished detection of null flows.'))
        
 %----------------------------- CLASSIFY SINGULARITIES -------------------------%
