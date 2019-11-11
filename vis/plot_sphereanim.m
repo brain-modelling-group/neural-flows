@@ -5,6 +5,7 @@ function varargout = plot_sphereanim(data, locs, time, crange, cmap, animation_e
 % ARGUMENTS:
 %        data  -- a 2D array of size [timepoints x nodes/channel/locations]
 %        locs  -- a 2D array of size [nodes/channels/locations x 3] 
+%        time  -- a vector of size [timepoints]
 %        crange -- a vector of size [1 x 2] with the color/data range.
 %        cmap  -- a 2D vector of size [N x 3] with rgb triplets
 %        animation_env -- a string to determine the 'animation' behaviour 
@@ -52,7 +53,11 @@ plot_sphereanim(data, locs, time)
 % 3) 'movie': displays the animation and saves the movie -- avi on Linux,
 % mpeg on other OS
 
-if nargin< 4
+if nargin < 3
+    time = 1:size(data, 1);
+end
+
+if nargin < 4
     % quantiles because MOST points lie in a relatively fixed range, but
     % min and max can be way outside. 
     if length(data)>10000 % downsampling here for speed.
