@@ -1,4 +1,4 @@
-function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate(data, locs, X, Y, Z, in_bdy_mask, keep_interp_data)
+function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate(data, locs, X, Y, Z, mask, keep_interp_data)
 % This is a wrapper function for scattered interpolant. We can interpolate
 % each frame independtly using parfor and save the interpolated data for 
 % later use with optical flow and then just delete the interpolated data
@@ -45,7 +45,7 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate(data, lo
                                                 neighbour_method, ...
                                                 extrapolation_method);
 
-        temp_data(in_bdy_mask) = data_interpolant(X(in_bdy_mask).', Y(in_bdy_mask).', Z(in_bdy_mask).');
+        temp_data(mask) = data_interpolant(X(mask).', Y(mask).', Z(mask).');
 
         % Only get 
         mfile_interp_obj.data(:, :, :, this_tpt) = temp_data;
