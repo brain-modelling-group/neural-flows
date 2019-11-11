@@ -1,7 +1,24 @@
 function [uxo, uyo, uzo] = flows3d_hs3d_get_initial_flows(grid_shape, nan_mask, seed)
+%% This function produces random initial conditions drawn from a uniform distribution
+%
+% ARGUMENTS:
+%      - grid_shape  --    a three element vector with the size of the grid
+%      - nan_mask    --    a 3D logical array with 'true' where nans are
+%      - seed        --    an integer for the random number generator 
+% OUTPUT:
+%   uxo, uyo, uxo -- 3D arrays with rando  velocity components along each of the
+%                     3 orthogonal axes. 
+%
+% AUTHOR:
+%     Paula Sanz-Leon, QIMR Berghofer December 2018
+% USAGE:
+%{
+    
+%}
+%   REFERENCES:
 
-% X: domain shape
-% NAN_MASK: logical mask of the same size as FA
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
+
 if nargin < 3
     seed = 42;
 end
