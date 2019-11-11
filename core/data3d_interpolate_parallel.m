@@ -17,7 +17,7 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
 %       mfile_interp_sentinel: OnCleanUp object. If keep_interp_data is
 %                              true, then this variable is an empty array.
 %
-% AUTHOR:
+% AUTHOR:   
 %     Paula Sanz-Leon
 % USAGE:
 %{

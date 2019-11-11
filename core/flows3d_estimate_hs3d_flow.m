@@ -1,4 +1,4 @@
-function flows3d_estimate_hs3d_flow(mfile_data, mfile_vel, options)
+function flows3d_estimate_hs3d_flow(mfile_data, mfile_flows, options)
 % This function runs the iterative part of the Horn-Schunk algorithm. 
 %
 % ARGUMENTS:
@@ -45,10 +45,10 @@ alpha_smooth   = options.flow_calculation.alpha_smooth;
 max_iterations = options.flow_calculation.max_iterations;
 grid_size      = options.flow_calculation.grid_size;
 
-hx = mfile_vel.hx;
-hy = mfile_vel.hy;
-hz = mfile_vel.hz;
-ht = mfile_vel.ht;
+hx = mfile_flows.hx;
+hy = mfile_flows.hy;
+hz = mfile_flows.hz;
+ht = mfile_flows.ht;
 
 x_dim = 1;
 y_dim = 2;
@@ -56,7 +56,7 @@ z_dim = 3;
 
 if strcmp(options.flow_calculation.init_conditions, 'random')
     seed_init_vel = options.flow_calculation.seed_init_vel;
-    [uxo, uyo, uzo] = flows3d_hs3d_get_initial_flows(grid_size, ~mfile_vel.interp_mask, seed_init_vel);
+    [uxo, uyo, uzo] = flows3d_hs3d_get_initial_flows(grid_size, ~mfile_flows.interp_mask, seed_init_vel);
 
 else
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Using pre-calculated initial velocity conditions.'))
@@ -68,15 +68,15 @@ else
 end
 
 % Create mfile_vel disk
-mfile_vel.ux(size(uxo, x_dim), size(uxo, y_dim), size(uxo, z_dim), dtpts-1) = 0;    
-mfile_vel.uy(size(uyo, x_dim), size(uyo, y_dim), size(uyo, z_dim), dtpts-1) = 0;
-mfile_vel.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
-mfile_vel.un(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
+mfile_flows.ux(size(uxo, x_dim), size(uxo, y_dim), size(uxo, z_dim), dtpts-1) = 0;    
+mfile_flows.uy(size(uyo, x_dim), size(uyo, y_dim), size(uyo, z_dim), dtpts-1) = 0;
+mfile_flows.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
+mfile_flows.un(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
 
 
 % Set velocity field at the points located in shell between inner and outer boundaries to zero
 try 
-    diff_mask = mfile_vel.diff_mask;
+    diff_mask = mfile_flows.diff_mask;
 catch 
     diff_mask = []; % assume we are using a grid and do not need diff_mask
 end
@@ -123,12 +123,12 @@ for this_tpt = 1:dtpts-1
  
     % Save the velocity components
     uno = single(sqrt(uxo.^2 + uyo.^2 + uzo.^2));
-    mfile_vel.ux(:, :, :, this_tpt) = single(uxo);
-    mfile_vel.uy(:, :, :, this_tpt) = single(uyo);
-    mfile_vel.uz(:, :, :, this_tpt) = single(uzo);
-    mfile_vel.un(:, :, :, this_tpt) =  uno;
+    mfile_flows.ux(:, :, :, this_tpt) = single(uxo);
+    mfile_flows.uy(:, :, :, this_tpt) = single(uyo);
+    mfile_flows.uz(:, :, :, this_tpt) = single(uzo);
+    mfile_flows.un(:, :, :, this_tpt) =  uno;
     % Save some other useful information to guesstimate the singularity detection threshold
-    mfile_vel = flows3d_hs3d_flow_stats(mfile_vel, uxo(:), uyo(:), uzo(:), uno(:), this_tpt);
+    mfile_flows = flows3d_hs3d_flow_stats(mfile_flows, uxo(:), uyo(:), uzo(:), uno(:), this_tpt);
 
 end
 end % function flows3d_estimate_hs3d_flow()
