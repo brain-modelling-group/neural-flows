@@ -31,6 +31,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
 %            % Singularity options
 %            options.sing_analysis.detection = true;    
 %            options.sing_analysis.detection_datamode  = 'vel';
+%            options.sing_analysis.detection_datamode = [0 2^-9];
 %%    
 % OUTPUT:
 %      varargout: handles to the files where results are stored
