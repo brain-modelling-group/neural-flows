@@ -1,4 +1,4 @@
-function [ux, uy, uz] = flows3d_hs3d(F1, F2, alpha_smooth, max_iterations, uxo, uyo, uzo, hx, hy, hz, ht)
+function [ux, uy, uz] = flows3d_hs3d(F1, F2, alpha_smooth, max_iterations, uxo, uyo, uzo, hx, hy, hz, ht, boundary_mask)
 %% This function estimates the velocity components between two subsequent 3D 
 % images using the Horn-Schunck optical flow method (HS3D). 
 %
@@ -8,6 +8,8 @@ function [ux, uy, uz] = flows3d_hs3d(F1, F2, alpha_smooth, max_iterations, uxo, 
 %      - max_iterations : max_number of iterations for convergence, default value is 10.
 %      - uxo, uyo, uzo: initial estimates of velocity components
 %      - hx, hy, hz, ht - space step size and time step size.
+%      - boundary_mask  -- a logic 3D array defining the mask so  that we set 
+%                          the derivatives to zero where the mask is true
 % OUTPUT:
 %   ux, uy, ux -- 3D arrays with the velocity components along each of the
 %                 3 orthogonal axes. 
@@ -43,6 +45,15 @@ uz = uzo;
 % Calculate derivatives
 [Ix, Iy, Iz, It] = flows3d_hs3d_calculate_partial_derivatives(F1, F2, hx, hy, hz, ht);
 
+% von Neumann boundary conditions -- set derivatives to zero
+Ix(boundary_mask) = 0;
+Iy(boundary_mask) = 0;
+Iz(boundary_mask) = 0;
+It(boundary_mask) = 0;
+
+
+
+
 %
 avg_filter = vonneumann_neighbourhood_3d();
 % The average should not include the central point
@@ -61,7 +72,7 @@ avg_filter = vonneumann_neighbourhood_3d();
 % penalty/tolerance as in Neuropatt
 
     for tt=1:max_iterations
-       [ux,uy,uz] = horn_schunk_step(ux, uy, uz);
+       [ux, uy, uz] = horn_schunk_step(ux, uy, uz);
                    
     end
      

@@ -95,7 +95,8 @@ for bb=1:burnin_len
     [uxo, uyo, uzo] = flows3d_hs3d(FA, FB, alpha_smooth, ...
                                            max_iterations, ...
                                            uxo, uyo, uzo, ...
-                                           hx, hy, hz, ht);       
+                                           hx, hy, hz, ht, ...
+                                           diff_mask);       
 end
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished burn-in period for random initial velocity conditions.'))
 
@@ -104,12 +105,12 @@ fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started estimati
 
 for this_tpt = 1:dtpts-1
     
-       % Dirichlet Boundary conditions - Make boundary points zero velocity                                   
-    if ~isempty(diff_mask)
-        uxo(diff_mask) = 0;
-        uyo(diff_mask) = 0;
-        uzo(diff_mask) = 0;
-    end
+    % Dirichlet Boundary conditions - Make boundary points zero velocity                                   
+    %if ~isempty(diff_mask)
+    %    uxo(diff_mask) = 0;
+    %    uyo(diff_mask) = 0;
+    %    uzo(diff_mask) = 0;
+    %end
 
     % Read activity data                
     FA = mfile_data.data(:, :, :, this_tpt);
@@ -119,7 +120,8 @@ for this_tpt = 1:dtpts-1
     [uxo, uyo, uzo] = flows3d_hs3d(FA, FB, alpha_smooth, ...
                                            max_iterations, ...
                                            uxo, uyo, uzo, ...
-                                           hx, hy, hz, ht);
+                                           hx, hy, hz, ht, ...
+                                           diff_mask);
  
     % Save the velocity components
     uno = single(sqrt(uxo.^2 + uyo.^2 + uzo.^2));
