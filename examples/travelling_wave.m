@@ -31,17 +31,21 @@ options.sing_analysis.detection_threshold = [0 2^-9];
     
 % Define Parallel Cluster properties for parallel processing
 workers_fraction = 0.8;
-open_parppol(workers_fraction)
+open_parpool(workers_fraction)
 
 % Tic
-tstart = string(datetime('now'));
-fprintf('%s%s\n', ['Started: ' tstart])
+tstart = tik();
 
 % Do the stuff 
-main_neural_flows_hs3d_scatter(data, locs, options);
-    
+[minterp_obj, mflows_obj, msings_obj] = main_neural_flows_hs3d_scatter(data, locs, options);
+     
 % Toc
-tend = string(datetime('now'));
-fprintf('%s%s\n', ['Finished: ' tend])
-tictoc = etime(datevec(tend), datevec(tstart)) / 3600;
-fprintf('%s%s%s\n\n', ['Elapsed time: ' string(tictoc) ' hours'])
+tok(tstart)
+% Analyse singularities -- in this case all the plots will be empty because
+% there are no singularities in a travelling wave.
+analyse_singularities(msings_obj)
+
+% SVD decompostion
+data_type = 'scattered';
+perform_mode_decomposition_svd(mflows_obj, data_type);
+

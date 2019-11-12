@@ -199,16 +199,9 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
        mfile_sings.options = options;
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished classification of singularities.'))
 %------------------------------------------------------------------------------%
-       % Check if we actually want to get the handles to the matfiles
-       minnout = 0;
-       maxnout = 3;
-       % NOTE: not sure this check is ok
-       nargoutchk(minnout, maxnout);
-       
-
    end
       varargout{1} = mfile_interp;
-      varargout{2} = mfile_fows; 
+      varargout{2} = mfile_flow; 
       varargout{3} = mfile_sings;
    
 end % function main_neural_flows_hs3d_scatter()

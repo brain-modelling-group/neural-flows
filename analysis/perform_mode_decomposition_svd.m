@@ -3,7 +3,7 @@ function [U, S, V, varargout] = perform_mode_decomposition_svd(mflows_obj, data_
 % Plots most dominant spatial modes and their time series 
 % ARGUMENTS:
 %            mflows_obj --  a matflab object, a handle to a Matfile or a struct(), with the flows and locations 
-%            data_type  -- a string specifying if it;s gridded data or scattered data
+%            data_type  -- a string specifying if it's gridded data or scattered data
 %
 %            num_modes --  an integer with the maximum number of modes to display
 %            
@@ -35,19 +35,18 @@ if ~exist('quiver_scale_factor', 'var')
 end
 
 if ~exist('visual_debugging', 'var')
-    visual_debugging = false;
+    visual_debugging = true;
 end
 
 
 if strcmp(data_type, 'grid')
-
+   quiver_scale_factor = 2;
 
     in_bdy_idx = find(mflows_obj.in_bdy_mask == true);
     num_points = length(in_bdy_idx);
 
     try
         [ny, nx, nz, nt] = size(mflows_obj, 'ux');
-        nt = nt;
 
     catch 
         [ny, nx, nz, nt] = size(mflows_obj.ux);
@@ -83,7 +82,6 @@ if strcmp(data_type, 'grid')
 
 else
      [num_points, ~, nt] = size(mflows_obj.uxyz_sc);
-     nt = nt;
      xdim = 1;
      ydim = 2;
      zdim = 3;
