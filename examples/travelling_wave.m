@@ -1,7 +1,7 @@
 % This script runs the whole neural-flows workflow on a small epoch of
 % simulated data, that mostly corresponds to a travelling wave.
 
-% Load data and centroids
+% Load data and centroid locations
 load('travelling_wave_W_c1_d1ms_trial1.mat')
 
 % Options for the data interpolation
@@ -30,9 +30,8 @@ options.sing_analysis.detection_threshold = [0 2^-9];
 
     
 % Define Parallel Cluster properties for parallel processing
-local_cluster = parcluster('local');
-local_cluster.NumWorkers = 8;   
-parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
+workers_fraction = 0.8;
+open_parppol(workers_fraction)
 
 % Tic
 tstart = string(datetime('now'));
