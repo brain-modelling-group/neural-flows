@@ -36,7 +36,9 @@ function figure_handle = plot_singularity_count_traces(sing_count, varargin)
         end
 
         for jj=1:numsubplots
-            stairs(ax(jj), log10(sing_count(:, jj)), 'color', cmap_base_list(jj, :), 'linewidth', 2)
+             stem(ax(jj), log10(sing_count(:, jj)), 's', 'markerfacecolor', [0.65 0.65 0.65], ...
+                                                        'markeredgecolor',cmap_base_list(jj, :), ...
+                                                        'color',  cmap_base_list(jj, :), 'markersize', 3.4)
             ax(jj).Title.String = base_list{jj};
             ax(jj).XLabel.String = 'time';
             ax(jj).YLabel.String = [{'log_{10}'}, {'(counts)'}];
