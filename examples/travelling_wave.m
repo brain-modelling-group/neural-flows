@@ -1,15 +1,10 @@
-% This script runs the whole neurla-flows workflow on a small epoch of
+% This script runs the whole neural-flows workflow on a small epoch of
 % simulated data, that mostly corresponds to a travelling wave.
 
-% Load data
+% Load data and centroids
 load('travelling_wave_W_c1_d1ms_trial1.mat')
 
-% Load centroids
-load('513COG.mat');
-locs = COG;
-clear COG
-
-% Options for the flow computation
+% Options for the data interpolation
 options.data_interpolation.file_exists = false;
     
 % Resolution
@@ -18,7 +13,7 @@ options.hy = 3;
 options.hz = 3;
 options.ht = 1;
 
-% Storage
+% Storage options
 options.tempdir = '/home/paula/Work/Code/Networks/neural-flows/scratch';
 cd(options.tempdir)
     

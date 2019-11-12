@@ -4,12 +4,12 @@ function [mflows_obj] = flows3d_get_scattered_flows_parallel(mflows_obj, locs)
 % minimise the errors introduce by different grid resolutions.
 %
 % ARGUMENTS:
-%           mflows_obj -- a MatFile handle to the file with the flows, inlcuding the norm of
-%                        the flows un which we will use here
-%           locs: original locations of known (scattered) data
+%           mflows_obj -- a MatFile handle to the file with the flows
+%           locs --  a [num_nodes x 3 ] array with the original locations of known (scattered) data
 %    
 % OUTPUT:
-%       mflows_obj : the same MatFile handle, but the file will have a new field uxyz_sc
+%           mflows_obj : the same MatFile handle, but the file will have a
+%           new field 'uxyz_sc', which is an array of size [num_nodes x 3 x tpts]
 % 
 % USAGE:
 %{
