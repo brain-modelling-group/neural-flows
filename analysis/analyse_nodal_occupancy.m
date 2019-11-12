@@ -20,7 +20,7 @@ function [nodal_occupancy_matrix, total_nodal_occupancy, transition_matrix, trac
     
 %}
 
-if nargin < 3
+if nargin < 3 || isempty(node_str_lab)
     for nn=1:size(locs, 1)
         nodes_str_lab{nn} = num2str(nn, '%03d');
     end
@@ -63,8 +63,8 @@ for tt=1:tpts
 end
 
 % Some statistics
-% The following matrix gives an idea of how much time a nodes is (close to)
-% a specific singularity. 
+% The following matrix gives an idea of how much time a nodes spends time being or is (close to)
+% a particular singularity. 
 nodal_occupancy_matrix = sum(tracking_matrix, 3);
 
 % Find the singularity that is most frequent (in time) in each region

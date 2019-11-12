@@ -104,7 +104,7 @@ switch animation_env
         title(['Time:' num2str(time(ii), '%.3f') ' s'])
         set(sp_handle, 'cdata', cdata)
         drawnow
-        %pause(0.5)
+        pause(0.1)
     end
     case 'movie'
         try
