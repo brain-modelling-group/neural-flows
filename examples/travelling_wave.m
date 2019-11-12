@@ -41,9 +41,6 @@ tstart = tik();
      
 % Toc
 tok(tstart)
-% Analyse singularities -- in this case all the plots will be empty because
-% there are no singularities in a travelling wave.
-analyse_singularities(msings_obj)
 
 % SVD decompostion
 data_type = 'scattered';
