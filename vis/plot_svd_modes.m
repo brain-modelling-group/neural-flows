@@ -60,22 +60,23 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, 
                                         quiver_scale_factor, 'Linewidth', 1, ...
                                         'Color', cmap(imode, :));
         % XY
-        draw_arrow_fun(ax(xy, imode), [0 scaling_vxyz*Vx(imode)], [0 0], [0 0], 'color', [1 0 0]);
+        draw_arrow_fun(ax(xy, imode), [0 scaling_vxyz*Vx(imode)], [0 0], [z_lims(end) z_lims(end)], 'color', [1 0 0]);
         draw_arrow_fun(ax(xy, imode), [0 0], [0 scaling_vxyz*Vy(imode)], [0 0], 'color', [0 1 0]);
    
         % XZ
-        draw_arrow_fun(ax(xz, imode), [0 scaling_vxyz*Vx(imode)], [0 0], [0 0], 'color', [1 0 0]);
-        draw_arrow_fun(ax(xz, imode), [0 0], [0 0], [0 scaling_vxyz*Vz(imode)], 'color', [0 0 1]);
+        draw_arrow_fun(ax(xz, imode), [0 scaling_vxyz*Vx(imode)], [y_lims(1) y_lims(1)], [0 0], 'color', [1 0 0]);
+        draw_arrow_fun(ax(xz, imode), [0 0], [y_lims(1) y_lims(1)], [0 scaling_vxyz*Vz(imode)], 'color', [0 0 1]);
         
         % ZY
-        draw_arrow_fun(ax(zy, imode), [0 0], [0 0], [0 scaling_vxyz*Vz(imode)], 'color', [0 0 1]);
-        draw_arrow_fun(ax(zy, imode), [0 0], [0 scaling_vxyz*Vy(imode)], [0 0], 'color', [0 1 0]);
+        draw_arrow_fun(ax(zy, imode), [x_lims(end) x_lims(end)], [0 0], [0 scaling_vxyz*Vz(imode)], 'color', [0 0 1]);
+        draw_arrow_fun(ax(zy, imode), [x_lims(end) x_lims(end)], [0 scaling_vxyz*Vy(imode)], [0 0], 'color', [0 1 0]);
         
         ax(xy, imode).View = [ 0 90];
         ax(xz, imode).View = [ 0  0];
         ax(zy, imode).View = [90  0];
 
         ax(xy, imode).Title.String = sprintf('Mode %i, Var = %0.1f%%', imode, prct_var(imode));
+        mode_str{imode} = sprintf('%i', imode);
         
         % Axis Limits
         ax(xy, imode).XLim = x_lims;
@@ -110,6 +111,10 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, 
      line(ax(num_planes+1, 1), ax(num_planes+1, 1).XLim, [0 0], 'Color', 'k', 'LineStyle', '--')
      ax(num_planes+1, 1).XLabel.String = 'Time';
      ax(num_planes+1, 1).YLabel.String = 'Component score';
-
-
+     ax(num_planes+1, 1).Box = 'on';
+     lg_obj = legend(ax(num_planes+1, 1));
+     lg_obj.String = mode_str;
+     lg_obj.Title.String = 'Modes';
+     lg_obj.Orientation = 'horizontal';
+     
  end % function plot_svd_modes()
