@@ -3,32 +3,18 @@
 
 
 
-np3d = msings_obj.null_points_3d;
-singularity_list_num = s3d_str2num_label(msings_obj.singularity_classification_list);
-
-%%
-idx_start = 6100;
-idx_stop = 6700;
-
-time_vec = idx_start:idx_stop;
-
-for tt = 1:length(time_vec)
-    
-    
-    this_frame_sings = singularity_list_num{time_vec(tt)};
-    good_idx = find(this_frame_sings < 9);
-    
-    if ~isempty(good_idx)
-        np3d_cell{tt} = [np3d(time_vec(tt)).x(good_idx) np3d(time_vec(tt)).y(good_idx) np3d(time_vec(tt)).z(good_idx)];
-    else
-        np3d_cell{tt} = [Inf Inf Inf]; % Put a particle at infinity, otherwise the tracker fails
-    end
-end
-
-%% TRacking algorithm
+function s3d_bifurcation_tracking(msings_obj, varargin)
 
 
-[ tracks, adjacency_tracks, A ] = simpletracker(np3d_cell, 'Debug', true, 'MaxLinkingDistance', 25, 'MaxGapClosing', 2);
+np3d_cell = s3d_get_clean_particle_cell(msings_obj)
+
+idx_start_stop = varargin{1};
+max_link_dis = varargin{2};    % in mm or unit of the locations of singularities
+max_gap_closing = varargin{3}; % in time samples
+
+samples = idx_start_stop(1):idx_start_stop(2);
+
+[tracks, adjacency_tracks, A ] = simpletracker(np3d_cell, 'Debug', true, 'MaxLinkingDistance', 25, 'MaxGapClosing', 2);
 
 %%
  all_points = vertcat(np3d_cell{:} );
@@ -57,3 +43,34 @@ for this_track=1:length(tracks)
     
 end
     
+
+end % function s3d_bifurcation_tracking()
+
+
+
+function np3d_cell = s3d_get_clean_particle_cell(msing_obj, idx_start_stop)
+
+np3d = msings_obj.null_points_3d;
+singularity_list_num = s3d_str2num_label(msings_obj.singularity_classification_list);
+
+
+samples = idx_start_stop(1):idx_start_stop(2);
+
+% NOTE: parallel?
+for tt = 1:length(samples)
+    
+    
+    this_frame_sings = singularity_list_num{samples(tt)};
+    good_idx = find(this_frame_sings < 9);
+    
+    if ~isempty(good_idx)
+        np3d_cell{tt} = [np3d(time_vec(tt)).x(good_idx) np3d(time_vec(tt)).y(good_idx) np3d(time_vec(tt)).z(good_idx)];
+    else
+        np3d_cell{tt} = [Inf Inf Inf]; % Put a particle at infinity, otherwise the particle tracker fails
+    end
+end
+
+
+end % function s3d_get_clean_particle_cell()
+
+
