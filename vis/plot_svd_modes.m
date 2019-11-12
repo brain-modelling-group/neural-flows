@@ -42,7 +42,7 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, 
     z_lims = [min(Z(:))-axes_offset, max(Z(:))+axes_offset];
     
     draw_arrow_fun = @(axh, x,y, z, varargin) vfield3(axh, x(1), y(1), z(1), x(2)-x(1), y(2)-y(1), z(2)-z(1), varargin{:});    
-    
+    mode_str = cell(num_nodes, 1);
     for imode = 1:num_modes
         quiver3(ax(xy, imode), X, Y, Z, V(x_idx, imode)./Vnorm(:, imode), ...
                                         V(y_idx, imode)./Vnorm(:, imode), ...
