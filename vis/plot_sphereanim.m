@@ -89,7 +89,7 @@ else
 end
 
 sp_handle = add_sphere_size_internal(locs(:,1),locs(:,2),locs(:,3),sphereradius*ones(nnodes,1),data(1,:));
-set(sp_handle, 'facealpha', 0.3)
+set(sp_handle, 'facealpha', 0.7)
 drawnow
 cdata = get(sp_handle,'cdata');
 

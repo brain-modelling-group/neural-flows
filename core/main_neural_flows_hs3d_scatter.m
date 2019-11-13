@@ -79,7 +79,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     in_bdy_mask = reshape(in_bdy_mask, grid_size);
     % Get a mask that is slightly larger so we can define a shell with a thickness that will be 
     % the boundary of our domain. 
-    thickness_mask = 2;
+    thickness_mask = 3;
     [interp_mask, diff_mask] = data3d_calculate_interpolation_mask(in_bdy_mask, thickness_mask);
     
 %-------------------------- INTERPOLATION OF DATA -----------------------------%    

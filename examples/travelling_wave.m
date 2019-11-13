@@ -3,6 +3,7 @@
 
 % Load data and centroid locations
 load('travelling_wave_W_c1_d1ms_trial1.mat')
+%data = data(1:21, :);
 
 % Options for the data interpolation
 options.data_interpolation.file_exists = false;
@@ -21,7 +22,7 @@ cd(options.tempdir)
 options.flow_calculation.init_conditions = 'random';
 options.flow_calculation.seed_init_vel = 42;
 options.flow_calculation.alpha_smooth   = 0.1;
-options.flow_calculation.max_iterations = 64;
+options.flow_calculation.max_iterations = 128;
 
 % Singularity detection and classification
 options.sing_analysis.detection = true;    
