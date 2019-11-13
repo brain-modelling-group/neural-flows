@@ -87,7 +87,7 @@ this_tpt = 1;
 FA = mfile_data.data(:, :, :, this_tpt);
 FB = mfile_data.data(:, :, :, this_tpt+1);
 
-burnin_len = 4; % for iterations, not much but better than one
+burnin_len = 8; % for iterations, not much but better than one
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started burn-in period for random initial velocity conditions.'))
 
 for bb=1:burnin_len
