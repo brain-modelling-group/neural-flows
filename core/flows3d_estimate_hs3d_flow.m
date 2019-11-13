@@ -133,4 +133,6 @@ for this_tpt = 1:dtpts-1
     mfile_flows = flows3d_hs3d_flow_stats(mfile_flows, uxo(:), uyo(:), uzo(:), uno(:), this_tpt);
 
 end
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished estimation of flows.'))
+
 end % function flows3d_estimate_hs3d_flow()
