@@ -24,6 +24,7 @@ if nargin < 3 || isempty(node_str_lab)
     for nn=1:size(locs, 1)
         nodes_str_lab{nn} = num2str(nn, '%03d');
     end
+end
 if nargin < 4
     dis_th = 50; % mm distance threhsold for a singularity to be considered to happen at(ish) a node.
 end
@@ -41,25 +42,15 @@ num_nodes = size(locs, 1);
 tracking_matrix(num_base_sngs, num_nodes, tpts) = 0;
 transition_matrix(num_nodes, tpts) = 0;
 null_points_3d = msing_obj.null_points_3d;
+n3d_cell=  struct2cell(null_points_3d);
 
 % NOTE: The following nested for loops are surprisingly fast
-for tt=1:tpts
-    for nn=1:size(locs, 1)
-         sings_temp = singularity_list_num{tt};
-         idx = find(sings_temp <= num_base_sngs);
-         base_sings_temp = sings_temp(idx);
-         if ~isempty(idx)
-             xyz_sings = [null_points_3d(tt).x(idx), null_points_3d(tt).y(idx), null_points_3d(tt).z(idx)];
-             for ss=1:length(idx)
-                 [val_dis, nn_idx] = min(dis(xyz_sings(ss), locs.'));
-                 if val_dis <= dis_th
-                     tracking_matrix(base_sings_temp(ss), nn_idx, tt) = 1;
-                     transition_matrix(nn_idx, tt) = base_sings_temp(ss);
-                 end
-             end
-         end
-                
-    end
+parfor tt=1:tpts
+    sings_temp = singularity_list_num{tt};
+    
+    [tracking_matrix(:, :, tt), transition_matrix(:, tt)] = step_nodal_singularity(sings_temp, n3d_cell(:, tt), locs, num_base_sngs, dis_th);
+    
+    
 end
 
 % Some statistics
@@ -93,31 +84,53 @@ sing_type = sing_idx(valid_node_idx);
 
 % TODO: configiure graphics property to handle paper units so we can plot
 % stuff and give figure sizes
-figure_bar = figure('Name', 'nflows-bar-nodal-occupancy');
-ax = subplot(1,1,1, 'Parent', figure_bar);
-
-bh = bar(ax, nodal_occupancy_matrix(:, valid_node_idx).');
-cmap = s3d_get_colours('critical-points');
-
-for ii=1:length(bh)
-    bh(ii).FaceColor = cmap(ii, :);
-end
-ax.XTick = 1:length(valid_node_idx);
-ax.XTickLabel = nodes_str_lab(valid_node_idx);
-ax.XTickLabelRotation = 45;
-ax.YLabel.String = 'occupancy [#frames]';
-base_cp = s3d_get_base_singularity_list();
-lgd_ax = legend(base_cp(1:num_base_sngs));
-lgd_ax.Title.String = 'Singularity Type';
-lgd_ax.Orientation = 'horizontal';
-lgd_ax.Location = 'northwest';
-
-%keyboard
-% Plot xmas balls
-time = 1:tpts;
-crange = [0 num_base_sngs];
-cmap = [0.65 0.65 0.65; cmap];
-plot_sphereanim(transition_matrix.', locs, time, crange, cmap);
+% figure_bar = figure('Name', 'nflows-bar-nodal-occupancy');
+% ax = subplot(1,1,1, 'Parent', figure_bar);
+% 
+% bh = bar(ax, nodal_occupancy_matrix(:, valid_node_idx).');
+% cmap = s3d_get_colours('critical-points');
+% 
+% for ii=1:length(bh)
+%     bh(ii).FaceColor = cmap(ii, :);
+% end
+% ax.XTick = 1:length(valid_node_idx);
+% ax.XTickLabel = nodes_str_lab(valid_node_idx);
+% ax.XTickLabelRotation = 45;
+% ax.YLabel.String = 'occupancy [#frames]';
+% base_cp = s3d_get_base_singularity_list();
+% lgd_ax = legend(base_cp(1:num_base_sngs));
+% lgd_ax.Title.String = 'Singularity Type';
+% lgd_ax.Orientation = 'horizontal';
+% lgd_ax.Location = 'northwest';
+% 
+% %keyboard
+% % Plot xmas balls
+% time = 1:tpts;
+% crange = [0 num_base_sngs];
+% cmap = [0.65 0.65 0.65; cmap];
+% plot_sphereanim(transition_matrix.', locs, time, crange, cmap);
 
 
 end % function analyse_nodal_occupancy()
+
+
+function [tracking_matrix, transition_matrix] = step_nodal_singularity(sings_temp, sing_locs, locs, num_base_sngs, dis_th)
+    num_nodes = size(locs, 1);
+    tracking_matrix(num_base_sngs, num_nodes) = 0;
+    transition_matrix(num_nodes) = 0;
+    for nn=1:size(locs, 1)
+         idx = find(sings_temp <= num_base_sngs);
+         base_sings_temp = sings_temp(idx);
+         if ~isempty(idx)
+             xyz_sings = [sing_locs{2}(idx), sing_locs{3}(idx), sing_locs{4}(idx)];
+             for ss=1:length(idx)
+                 [val_dis, nn_idx] = min(dis(xyz_sings(ss), locs.'));
+                 if val_dis <= dis_th
+                     tracking_matrix(base_sings_temp(ss), nn_idx) = 1;
+                     transition_matrix(nn_idx) = base_sings_temp(ss);
+                 end
+             end
+             
+         end       
+    end
+end
