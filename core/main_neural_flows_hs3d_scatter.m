@@ -198,10 +198,11 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
        mfile_sings.singularity_classification_list = singularity_classification;
        mfile_sings.options = options;
        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished classification of singularities.'))
+       varargout{3} = mfile_sings;
+
 %------------------------------------------------------------------------------%
    end
       varargout{1} = mfile_interp;
       varargout{2} = mfile_flow; 
-      varargout{3} = mfile_sings;
    
 end % function main_neural_flows_hs3d_scatter()
