@@ -61,7 +61,7 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, 
                                         'Color', cmap(imode, :));
         % XY
         draw_arrow_fun(ax(xy, imode), [0 scaling_vxyz*Vx(imode)], [0 0], [z_lims(end) z_lims(end)], 'color', [1 0 0]);
-        draw_arrow_fun(ax(xy, imode), [0 0], [0 scaling_vxyz*Vy(imode)], [0 0], 'color', [0 1 0]);
+        draw_arrow_fun(ax(xy, imode), [0 0], [0 scaling_vxyz*Vy(imode)], [z_lims(end) z_lims(end)], 'color', [0 1 0]);
    
         % XZ
         draw_arrow_fun(ax(xz, imode), [0 scaling_vxyz*Vx(imode)], [y_lims(1) y_lims(1)], [0 0], 'color', [1 0 0]);
@@ -93,17 +93,17 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, 
         
         axis(ax(xy, imode), 'tight', 'off')
         axis(ax(xz, imode), 'tight', 'off')
-        axis(ax(zy, imode), 'tight', 'off')
+        axis(ax(zy, imode), 'equal', 'off')
 
     end
     
-     smooth_window = 8; % number of samples to smooth the envelope
+     smooth_window = 2; % number of samples to smooth the envelope
      [~, Upeak] = envelope(U, smooth_window, 'peak');
      max_u_val = 1.1*max(abs(Upeak(:)));
      ulims = [-max_u_val max_u_val];
      
      for imode=1:num_modes
-         plot(ax(num_planes+1, 1), time_vec, Upeak(:, imode), 'Color', cmap(imode, :))
+         plot(ax(num_planes+1, 1), time_vec, U(:, imode), 'Color', cmap(imode, :))
      end
      ax(num_planes+1, 1).Title.String = sprintf('Modes timeseries');
      ax(num_planes+1, 1).YLim = ulims;
