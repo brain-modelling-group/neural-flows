@@ -24,6 +24,7 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
     
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started interpolating data.'))
 
     % These parameter values are essential
     neighbour_method = 'linear';
@@ -53,6 +54,8 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
     parfun = @interpolate_step;
     interpolation_3d_storage_expression = 'data(:, :, :, jdx)';
     [mfile_interp_obj] = spmd_parfor_with_matfiles(tpts, parfun, mfile_interp_obj, interpolation_3d_storage_expression);
+    
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished interpolating data.'))
 
     
     % Child function with access to local scope variables from parent
@@ -70,4 +73,4 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
             temp_data(mask) = single(data_interpolant(X(mask).', Y(mask).', Z(mask).'));
     end
 
-end
+end % funcyion data3d_interpolate_parallel()
