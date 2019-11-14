@@ -6,17 +6,18 @@ function  [msings_obj] =  singularity3d_classify_singularities_parallel(msings_o
 %                         .null_points_3d        -- a struct of size [1 x no. timepoints]
 %                                                -- .xyz_idx [no. of singularities x 1] -- linear indices 
 %                                                            [no. of singularities x 3] -- subscripts
-%          mvel_obj              -- a MatFile handle pointing to the flows/velocity
+%          mflow_obj       -- a MatFile handle pointing to the flows/velocity
 %                            fields. Needed for the calculation of the
 %                            jacobian matrix. Or a matlab structure with
 %                            the same fields as the matfile produced by the
 %                            code.
 % OUTPUT:
-%         singularity_classification  --  a cell array of size [1 x no. timepoints]
-%                                         where each element is a cell of size
-%                                         [no. of singularities]. The cells
-%                                         have human readable strings with
-%                                         the type of singularity detected. 
+%          msings_obj --  the same matfile handle or struture with a new field:
+%                          singularity_classification  --  a cell array of size [1 x no. timepoints]
+%                                                          where each element is a cell of size
+%                                                          [no. of singularities]. The cells
+%                                                          have human readable strings with
+%                                                          the type of singularity detected. 
 % REQUIRES:
 %          switch_index_mode()
 %          singularity3d_classify_singularities_step()
