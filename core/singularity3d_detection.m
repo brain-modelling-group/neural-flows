@@ -22,6 +22,8 @@ function mfile_sings = singularity3d_detection(mfile_flows, detection_threshold)
 % MODIFICATION HISTORY:
 %  Paula Sanz-Leon -- QIMR December 2018
 
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started detection of null flows.'))
+
 options = mfile_flows.options; 
 
 if nargin < 2
@@ -50,5 +52,7 @@ mfile_sings.null_points_3d = null_points_3d;
 % Save threshold again
 mfile_sings.detection_threshold = detection_threshold;
 delete(mfile_sings_sentinel)
+
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished detection of null flows.'))
        
 end %function singularity3d_detection()
