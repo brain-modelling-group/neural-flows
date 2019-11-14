@@ -13,7 +13,9 @@ function test_flow_estimation__travellingwave3d_scattered_hs3d()
  
  [wave3d, ~] = generate_wave3d_travelling_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'y');
  
- wave3d = [wave3d(end:-1:1, :); wave3d];
+ %Option to generate a travelling wave moving back and forth along the
+ %chose axis
+ %wave3d = [wave3d(end:-1:1, :); wave3d];
  
  options.data_interpolation.file_exists = false;
  options.flow_calculation.init_conditions = 'preset';
@@ -25,9 +27,6 @@ function test_flow_estimation__travellingwave3d_scattered_hs3d()
  options.flow_calculation.uxo = zeros([87, 34, 62]);
  options.flow_calculation.uyo = -4.*ones([87, 34, 62]);
  options.flow_calculation.uzo = zeros([87, 34, 62]);
-
- %
- %wave3d = calculate_insta_phase(wave3d);
 
  % Do the stuff
  [~, mfile_flows] = main_neural_flows_hs3d_scatter(wave3d, locs, options);
