@@ -25,6 +25,7 @@ function [outter_bdy_mask, diff_mask] = data3d_calculate_interpolation_mask(inne
 %
 % AUTHOR: 
 %        Paula Sanz-Leon, QIMR Berghofer 2019-02
+
 if nargin < 2
     shift_steps = 1;
 end
