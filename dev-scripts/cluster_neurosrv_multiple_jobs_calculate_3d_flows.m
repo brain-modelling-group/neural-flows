@@ -69,5 +69,5 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     tictoc = etime(datevec(tend), datevec(tstart)) / 3600;
     fprintf('%s%s%s\n\n', ['Elapsed time: ' string(tictoc) ' hours'])
 
-end % cluster_yossarian_multiple_jobs_calculate_3d_flows()
+end % cluster_neurosrv_multiple_jobs_calculate_3d_flows(()
 
