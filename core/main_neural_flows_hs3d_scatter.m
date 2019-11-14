@@ -70,6 +70,11 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     scaling_factor = 1.05; % inflate locations a little bit, so the grids have enough blank space around the volume
     [X, Y, Z, grid_size] = get_structured_grid(scaling_factor*locs, hx, hy, hz);
     
+    options.xyz_lims{1} = [min(X(:)) max(X(:))];
+    options.xyz_lims{2} = [min(Y(:)) max(Y(:))];
+    options.xyz_lims{3} = [min(Z(:)) max(Z(:))];
+
+    
     % Get a mask with the gridded-points that are inside and outside the convex hull
     % NOTE: This mask underestimates the volume occupied by the scattered
     % points
