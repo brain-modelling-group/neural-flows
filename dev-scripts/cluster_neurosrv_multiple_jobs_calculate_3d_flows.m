@@ -32,16 +32,16 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     clear COG soln
 
     % Cluster properties
-    workers_fraction = 0.8;
-    open_parpool(workers_fraction)
+    %workers_fraction = 0.8;
+    %open_parpool(workers_fraction)
 
-    %local_cluster = parcluster('local');
-    %local_cluster.NumWorkers = 12;   % This should match the requested number of cpus
-    %parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
+    local_cluster = parcluster('local');
+    local_cluster.NumWorkers = 24;   % This should match the requested number of cpus
+    parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
 
     % Change directory to scratch, so temp files will be created there
     % Storage options 
-    options.storedir = '/home/paula/Work/Code/Networks/neural-flows/scratch';
+    options.storedir = '/home/paulasl/scratch';
     cd(options.storedir)
 
     % Options for the flow computation
