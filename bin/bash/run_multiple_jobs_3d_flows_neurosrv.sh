@@ -9,7 +9,7 @@ echo "Job running on: `hostname`"
 echo "in directory:   `pwd`"
 echo "####################################################"
 
-CHUNKS=({18..19} {21..23} {25..25} {27..27} {29..29})
+CHUNKS=({1..51})
 # The variable chunk will be used to index the time slice in the dataset 
 for IDX_CHUNK in "${CHUNKS[@]}"
 do
