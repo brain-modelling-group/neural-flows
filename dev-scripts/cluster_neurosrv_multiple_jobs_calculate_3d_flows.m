@@ -1,7 +1,10 @@
 function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
 % Script to process chunks of simulated data on neurosrv
 
-    load('/home/paulasl/Code/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
+    %load('/home/paulasl/Code/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
+    load('/home/paula/Work/Code/Networks/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
+
+
     %in1 = load('/headnode2/paula123/Code/neural-flows/demo-data/W_c1_d1ms_trial1.mat');
     %soln = in1.nodes.'; 
     load('513COG.mat', 'COG')
@@ -29,7 +32,7 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
 
     % Cluster properties
     local_cluster = parcluster('local');
-    local_cluster.NumWorkers = 24;   % This should match the requested number of cpus
+    local_cluster.NumWorkers = 12;   % This should match the requested number of cpus
     parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
 
     % Change directory to scratch, so temp files will be created there
@@ -56,21 +59,21 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     options.flow_calculation.seed_init_vel = 42;
     options.flow_calculation.alpha_smooth   = 0.1;
     options.flow_calculation.max_iterations = 64;
+
+    % Singularity detection and classification
     options.sing_analysis.detection = true;    
     options.sing_analysis.detection_datamode  = 'vel';
+    options.sing_analysis.detection_threshold = [0 2^-9];
+
 
     % Tic
-    tstart = string(datetime('now'));
-    fprintf('%s%s\n', ['Started: ' tstart])
+    tstart = tik()
 
     % Do the stuff 
     main_neural_flows_hs3d_scatter(data, locs, options);
     
     % Toc
-    tend = string(datetime('now'));
-    fprintf('%s%s\n', ['Finished: ' tend])
-    tictoc = etime(datevec(tend), datevec(tstart)) / 3600;
-    fprintf('%s%s%s\n\n', ['Elapsed time: ' string(tictoc) ' hours'])
+    tend = tok(tstart)
 
 end % cluster_neurosrv_multiple_jobs_calculate_3d_flows(()
 
