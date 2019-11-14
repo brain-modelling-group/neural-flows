@@ -1,4 +1,4 @@
-function figure_handle_xyz = plot_singularity_scatter_xyz_vs_time(singularity_list_num, null_points_3d, cp_type, varargin)
+function figure_handle_xyz = plot_singularity_scatter_xyz_vs_time(singularity_list_num, null_points_3d, cp_type, xyz_lims, varargin)
 % This function plots singularities as a a function of 
 % their position along one axis (X, Y, Z) vs time.
 %
@@ -23,7 +23,7 @@ function figure_handle_xyz = plot_singularity_scatter_xyz_vs_time(singularity_li
 %
 % USAGE:
 %{
-    <example-commands-to-make-this-function-run>
+
 %}
 
 numsubplot = 3; % One for each spatial dimension
@@ -76,12 +76,9 @@ for cc=1:num_sing_to_plot
         % Limits
         offset_factor = 2; % NOTE: this should be a configurable parameter
         [ax_xyz(xplot:zplot).XLim] = deal([1 num_frames]);
-        temp_lim =  ax_xyz(xplot).YLim;
-        ax_xyz(xplot).YLim = [temp_lim(1)-offset_factor temp_lim(2)+offset_factor]; 
-        temp_lim =  ax_xyz(yplot).YLim;
-        ax_xyz(yplot).YLim = [temp_lim(1)-offset_factor temp_lim(2)+offset_factor]; 
-        temp_lim =  ax_xyz(zplot).YLim;
-        ax_xyz(zplot).YLim = [temp_lim(1)-offset_factor temp_lim(2)+offset_factor];
+        ax_xyz(xplot).YLim = [xyz_lims{1}(1)-offset_factor xyz_lims{1}(2)+offset_factor]; 
+        ax_xyz(yplot).YLim = [xyz_lims{1}(2)-offset_factor xyz_lims{2}(2)+offset_factor]; 
+        ax_xyz(zplot).YLim = [xyz_lims{1}(3)-offset_factor xyz_lims{3}(2)+offset_factor];
         
         % Labels
         ax_xyz(xplot).YLabel.String = y_labels{xplot}; 
