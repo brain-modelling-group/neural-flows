@@ -82,4 +82,3 @@ msings_obj.options = options;
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished classification of singularities.'))
 
 end % singularity3d_classify_singularities_parallel()
-
