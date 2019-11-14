@@ -7,8 +7,10 @@ function fig_handles = analyse_singularities(mobj_sings, fig_visibility, to_plot
 % ARGUMENTS:
 %           mobj_sings -- a MatFile or a structure with the same internal
 %                        structure with the singularitiy classification
-%            fig_visibility   -- for the time being a 1 x 2 cell array with
+%           fig_visibility   -- for the time being a 1 x 2 cell array with
 %                         {'Visible', 'off'}, to set figures to invisible;
+%           to_plot -- a string to tell this function what to plot in terms of scatter
+%                     plots over time.
 %
 % OUTPUT:   
 %
