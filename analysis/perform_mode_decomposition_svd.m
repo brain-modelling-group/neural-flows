@@ -91,13 +91,13 @@ else
 
      for tt=1:nt
         temp = squeeze(mflows_obj.uxyz_sc(:, xdim, tt));
-        temp(isnan(temp)) = 0;
+        %temp(isnan(temp)) = 0;
         ux(:, tt) = temp;
         temp = squeeze(mflows_obj.uxyz_sc(:, ydim, tt));
-        temp(isnan(temp)) = 0;
+        %temp(isnan(temp)) = 0;
         uy(:, tt) = temp;
         temp = squeeze(mflows_obj.uxyz_sc(:, zdim, tt));
-        temp(isnan(temp)) = 0;
+        %temp(isnan(temp)) = 0;
         uz(:, tt) = temp;
     end
 
