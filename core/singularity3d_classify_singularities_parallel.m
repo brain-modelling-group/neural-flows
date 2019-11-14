@@ -1,10 +1,11 @@
-function  [singularity_classification_list] =  singularity3d_classify_singularities_parallel(msings_obj, mvel_obj)
+function  [singularity_classification_list] =  singularity3d_classify_singularities_parallel(msings_obj, mflow_obj)
 % 1) calculates jacobian for each critical point, and then 
 % 2) classify type of critical point. 
 % ARGUMENTS:
-%          null_points_3d        -- a struct of size [1 x no. timepoints]
-%                                -- .xyz_idx [no. of singularities x 1] -- linear indices 
-%                                            [no. of singularities x 3] -- subscripts
+%          msings_obj --- a Matfile or structure with fields:
+%                         .null_points_3d        -- a struct of size [1 x no. timepoints]
+%                                                -- .xyz_idx [no. of singularities x 1] -- linear indices 
+%                                                            [no. of singularities x 3] -- subscripts
 %          mvel_obj              -- a MatFile handle pointing to the flows/velocity
 %                            fields. Needed for the calculation of the
 %                            jacobian matrix. Or a matlab structure with
@@ -52,9 +53,9 @@ if size(null_points_3d(1).xyz_idx, 2) < 2
     
 end
 
-hx = mvel_obj.hx; 
-hy = mvel_obj.hy; 
-hz = mvel_obj.hz; 
+hx = mflow_obj.hx; 
+hy = mflow_obj.hy; 
+hz = mflow_obj.hz; 
 
 null_points_cell = struct2cell(null_points_3d);
 null_points_cell = squeeze(null_points_cell(1, 1, :));
@@ -66,9 +67,9 @@ parfor tt=1:tpts
 
        null_points_3d_xyz_idx = null_points_cell{tt};
        % Create temp variables with partial load of a matfile. 
-       ux = mvel_obj.ux(:, :, :, tt);
-       uy = mvel_obj.uy(:, :, :, tt);
-       uz = mvel_obj.uz(:, :, :, tt);
+       ux = mflow_obj.ux(:, :, :, tt);
+       uy = mflow_obj.uy(:, :, :, tt);
+       uz = mflow_obj.uz(:, :, :, tt);
 
        singularity_labels = singularity3d_classify_singularities_step(null_points_3d_xyz_idx, ux, uy, uz, hx, hy, hz)
        singularity_classification_list{tt} = singularity_labels;
