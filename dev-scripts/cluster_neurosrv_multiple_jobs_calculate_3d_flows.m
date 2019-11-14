@@ -31,9 +31,12 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     clear COG soln
 
     % Cluster properties
-    local_cluster = parcluster('local');
-    local_cluster.NumWorkers = 12;   % This should match the requested number of cpus
-    parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
+    workers_fraction = 0.8;
+    open_parpool(workers_fraction)
+
+    %local_cluster = parcluster('local');
+    %local_cluster.NumWorkers = 12;   % This should match the requested number of cpus
+    %parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
 
     % Change directory to scratch, so temp files will be created there
     % Storage options 
@@ -73,7 +76,7 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     main_neural_flows_hs3d_scatter(data, locs, options);
     
     % Toc
-    tend = tok(tstart)
+    tok(tstart)
 
 end % cluster_neurosrv_multiple_jobs_calculate_3d_flows(()
 
