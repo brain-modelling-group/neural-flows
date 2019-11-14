@@ -98,7 +98,6 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
         root_fname_interp = ['temp_interp-' num2str(options.chunk, '%03d')];
     end
     if ~options.data_interpolation.file_exists % Or not necesary because it is fmri data
-        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started interpolating data.'))
         
         % Parallel interpolation with the parallel toolbox
         [mfile_interp, mfile_interp_sentinel] = data3d_interpolate_parallel(data, ...
@@ -121,7 +120,6 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
         mfile_interp.options = options;
         % Make the file read-only file to avoid corruption
         mfile_interp.Properties.Writable = false;
-        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished interpolating data.'))
         
         % Get how many time points we have
         t_dim = 4; % time    
