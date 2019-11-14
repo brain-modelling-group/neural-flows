@@ -77,8 +77,8 @@ for cc=1:num_sing_to_plot
         offset_factor = 2; % NOTE: this should be a configurable parameter
         [ax_xyz(xplot:zplot).XLim] = deal([1 num_frames]);
         ax_xyz(xplot).YLim = [xyz_lims{1}(1)-offset_factor xyz_lims{1}(2)+offset_factor]; 
-        ax_xyz(yplot).YLim = [xyz_lims{1}(2)-offset_factor xyz_lims{2}(2)+offset_factor]; 
-        ax_xyz(zplot).YLim = [xyz_lims{1}(3)-offset_factor xyz_lims{3}(2)+offset_factor];
+        ax_xyz(yplot).YLim = [xyz_lims{2}(1)-offset_factor xyz_lims{2}(2)+offset_factor]; 
+        ax_xyz(zplot).YLim = [xyz_lims{3}(1)-offset_factor xyz_lims{3}(2)+offset_factor];
         
         % Labels
         ax_xyz(xplot).YLabel.String = y_labels{xplot}; 
