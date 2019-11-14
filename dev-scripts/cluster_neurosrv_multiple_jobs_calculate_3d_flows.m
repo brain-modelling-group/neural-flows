@@ -1,8 +1,8 @@
 function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
 % Script to process chunks of simulated data on neurosrv
 
-    %load('/home/paulasl/Code/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
-    load('/home/paula/Work/Code/Networks/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
+    load('/home/paulasl/Code/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
+    %load('/home/paula/Work/Code/Networks/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
     % Remove transient
     soln(:, 1:256) = [];
 
@@ -12,7 +12,7 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     load('513COG.mat', 'COG')
 
     % window size
-    ws = 128;
+    ws = 8193;
     overlap_percentage = 0.0625;
 
     %ws=32;
@@ -48,9 +48,9 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     options.data_interpolation.file_exists = false;
     
     % Resolution
-    options.hx = 4;
-    options.hy = 4;
-    options.hz = 4;
+    options.hx = 3;
+    options.hy = 3;
+    options.hz = 3;
     options.ht = 1;
     
     % Slice of data
@@ -67,7 +67,7 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     % Singularity detection and classification
     options.sing_analysis.detection = true;    
     options.sing_analysis.detection_datamode  = 'vel';
-    options.sing_analysis.detection_threshold = [0 2^-10];
+    options.sing_analysis.detection_threshold = [0 2^-9];
 
 
     % Tic
