@@ -42,11 +42,13 @@ base_list = s3d_get_base_singularity_list();
 cp_base = base_list(1:4);
 cp_saddles = base_list(5:8);
 
+options = mobj_sings.options;
+
 % Plot scatters over time
- fig_xyz_base    = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, cp_base, fig_visibility{:});
- fig_xyz_saddles = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, cp_saddles, fig_visibility{:});
- fig_xyz_po = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, base_list(9:14), fig_visibility{:});
- fig_xyz_all_cp = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, base_list(1:14), fig_visibility{:});
+ fig_xyz_base    = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, cp_base, options.xyz_lims, fig_visibility{:});
+ fig_xyz_saddles = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, cp_saddles, options.xyz_lims, fig_visibility{:});
+ fig_xyz_po = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, base_list(9:14), options.xyz_lims, fig_visibility{:});
+ fig_xyz_all_cp = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, base_list(1:14), options.xyz_lims, fig_visibility{:});
  
  % Return figure handles
  varargout{1} = {fig_xyz_base};
