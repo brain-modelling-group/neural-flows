@@ -2,11 +2,11 @@
 % simulated data, that looks like a rotating wave with a critical point.
 
 % Load data and centroid locations
-%load('rotating-cp_wave_W_c1_d1ms_trial1.mat')
-load('sink-source_wave_W_c1_d1ms_trial1.mat')
+load('rotating-cp_wave_W_c1_d1ms_trial1.mat')
+%load('sink-source_wave_W_c1_d1ms_trial1.mat')
 
-env = envelope(data, 2, 'peak');
-data = env;
+%env = envelope(data, 2, 'peak');
+%data = env;
 
 % Options for the data interpolation
 options.data_interpolation.file_exists = false;
@@ -20,8 +20,8 @@ options.hz = 3;
 options.ht = 0.25;
 
 % Storage options
-options.tempdir = '/home/paula/Work/Code/Networks/neural-flows/scratch';
-cd(options.tempdir)
+options.storedir = '/home/paula/Work/Code/Networks/neural-flows/scratch';
+cd(options.storedir)
     
 % Flow calculation
 options.flow_calculation.init_conditions = 'random';
@@ -52,6 +52,6 @@ tok(tstart)
 analyse_singularities(msings_obj)
 
 % SVD decompostion
-data_type = 'scattered';
-perform_mode_decomposition_svd(mflows_obj, data_type);
+grid_type = 'scattered';
+perform_mode_decomposition_svd(mflows_obj, grid_type);
 
