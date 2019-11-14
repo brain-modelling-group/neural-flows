@@ -1,4 +1,4 @@
-function  [singularity_classification_list] =  singularity3d_classify_singularities_parallel(null_points_3d, mvel_obj)
+function  [singularity_classification_list] =  singularity3d_classify_singularities_parallel(msings_obj, mvel_obj)
 % 1) calculates jacobian for each critical point, and then 
 % 2) classify type of critical point. 
 % ARGUMENTS:
@@ -28,6 +28,14 @@ function  [singularity_classification_list] =  singularity3d_classify_singularit
 %}
 % NOTE: as the timeseries get longer, we can in principle parallelise this
 % function.
+
+
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started classification of singularities.'))
+
+% Calculate jacobian and classify singularities
+
+null_points_3d =  msings_obj.null_points_3d; 
+
 singularity_classification_list = cell(size(null_points_3d));
 tpts = size(null_points_3d, 2);
 
@@ -66,6 +74,11 @@ parfor tt=1:tpts
        singularity_classification_list{tt} = singularity_labels;
 
 end
+
+msings_obj.singularity_classification_list = singularity_classification_list;
+msings_obj.options = options;
+
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished classification of singularities.'))
 
 end % singularity3d_classify_singularities_parallel()
 
