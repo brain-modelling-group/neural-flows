@@ -7,11 +7,12 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     load('513COG.mat', 'COG')
 
     % window size
-    ws = 8193;
+    ws = 128;
+    overlap_percentage = 0.25;
+
     %ws=32;
     % shift step
-    shift_step = ws - 64;
-    %shift_step = ws - 4;
+    shift_step = ws - round(overlap_percentage*ws);
     datalen  = size(soln, 2);
     idx = ws:shift_step:datalen;
     if idx_chunk < length(idx)+1
@@ -32,15 +33,17 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
 
     % Change directory to scratch, so temp files will be created there
-    cd /home/paulasl/scratch
+    % Storage options 
+    options.storedir = '/home/paula/Work/Code/Networks/neural-flows/scratch';
+    cd(options.storedir)
 
     % Options for the flow computation
     options.data_interpolation.file_exists = false;
     
     % Resolution
-    options.hx = 3;
-    options.hy = 3;
-    options.hz = 3;
+    options.hx = 4;
+    options.hy = 4;
+    options.hz = 4;
     options.ht = 1;
     
     % Slice of data
