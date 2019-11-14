@@ -56,8 +56,11 @@ num_sing_to_plot = length(cp_type);
 
 % Anonymous function to get the indices of the singularity we want to plot
 get_idx_cp_type = @(sing_list_frame, num_label_cp_type) find(sing_list_frame == num_label_cp_type);
+workers_fraction = 0.8;
+open_parpool(workers_fraction)
 
-
+marker_size = 10;
+marker_alpha = 0.3;
 for cc=1:num_sing_to_plot
     
     num_label_cp = s3d_get_numlabel(cp_type{cc});
@@ -68,9 +71,20 @@ for cc=1:num_sing_to_plot
         y = null_points_3d(1, tt).y;
         z = null_points_3d(1, tt).z;
         idx_cp_type = get_idx_cp_type(singularity_list_num{tt}, num_label_cp);
+        
         plot(ax_xyz(xplot), tt*ones(length(idx_cp_type), 1), x(idx_cp_type), '.', 'markeredgecolor', cmap_cp)
         plot(ax_xyz(yplot), tt*ones(length(idx_cp_type), 1), y(idx_cp_type), '.', 'markeredgecolor', cmap_cp)
         plot(ax_xyz(zplot), tt*ones(length(idx_cp_type), 1), z(idx_cp_type), '.', 'markeredgecolor', cmap_cp)
+        
+%         scatter(ax_xyz(xplot), tt*ones(length(idx_cp_type), 1), x(idx_cp_type), ...
+%                                marker_size, cmap_cp(ones(length(idx_cp_type), 1), :), ...
+%                                'filled', 'MarkerFaceAlpha', marker_alpha)
+%         scatter(ax_xyz(yplot), tt*ones(length(idx_cp_type), 1), y(idx_cp_type), ...
+%                                marker_size, cmap_cp(ones(length(idx_cp_type), 1), :), ...
+%                                'filled', 'MarkerFaceAlpha', marker_alpha)
+%         scatter(ax_xyz(zplot), tt*ones(length(idx_cp_type), 1), z(idx_cp_type), ...
+%                                marker_size, cmap_cp(ones(length(idx_cp_type), 1), :), ...
+%                                'filled', 'MarkerFaceAlpha', marker_alpha)
 
     end
         % Limits
