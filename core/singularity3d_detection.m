@@ -22,7 +22,6 @@ function mfile_sings = singularity3d_detection(mfile_flows, detection_threshold)
 % MODIFICATION HISTORY:
 %  Paula Sanz-Leon -- QIMR December 2018
 
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started detection of null flows.'))
 
 options = mfile_flows.options; 
 
@@ -36,8 +35,7 @@ if nargin < 2
     end
 end
 
-% Use velocity vector fields
-[null_points_3d]  = flows3d_grid_detect_nullflows_velocities(mfile_flows, detection_threshold);
+
 
 % Save what we just found
 if isfield(options.sing_analysis, 'filename_string')
@@ -48,6 +46,12 @@ end
 
 keep_sings_file = true;
 [mfile_sings, mfile_sings_sentinel] = create_temp_file(root_fname_sings, keep_sings_file);
+
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started detection of null flows.'))
+
+% Use velocity vector fields
+[null_points_3d]  = flows3d_grid_detect_nullflows_velocities(mfile_flows, detection_threshold);
+
 mfile_sings.null_points_3d = null_points_3d;
 % Save threshold again
 mfile_sings.detection_threshold = detection_threshold;
