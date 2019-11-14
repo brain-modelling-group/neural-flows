@@ -31,6 +31,10 @@ if nargin < 2
 
 end
 
+if nargin < 3
+    to_plot = 'all';
+end
+
 
 
 singularity_list_num = s3d_str2num_label(mobj_sings.singularity_classification_list);
