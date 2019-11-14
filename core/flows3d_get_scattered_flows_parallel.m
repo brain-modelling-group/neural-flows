@@ -20,8 +20,8 @@ function [mflows_obj] = flows3d_get_scattered_flows_parallel(mflows_obj, locs)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
     % These parameter values are essential
-    neighbour_method = 'natural';
-    extrapolation_method = 'nearest'; 
+    neighbour_method = 'linear';
+    extrapolation_method = 'linear'; 
     
     x_dim = 1;
     y_dim = 2;
