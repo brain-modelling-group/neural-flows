@@ -42,7 +42,7 @@ singularity_classification_list = cell(size(null_points_3d));
 tpts = size(null_points_3d, 2);
 
 % Load options structure
-options   = mvel_obj.options;
+options   = mflow_obj.options;
 grid_size = options.flow_calculation.grid_size;
 
 % Check if we stored linear indices or subscripts 
