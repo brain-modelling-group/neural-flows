@@ -30,8 +30,6 @@ if nargin < 2
     detection_threshold = guesstimate_nullflows_threshold(mfile_flows.min_un);
 end
 
-
-
 % Save what we just found
 if isfield(options.singularity.file, 'name')
    root_fname_sings = [options.singularity.file.name '-temp_snglrty-' num2str(options.data.slice.id, '%03d')];
