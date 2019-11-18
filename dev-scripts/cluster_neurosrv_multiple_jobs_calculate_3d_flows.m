@@ -1,8 +1,8 @@
 function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
 % Script to process chunks of simulated data on neurosrv
 
-    load('/home/paulasl/Code/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
-    %load('/home/paula/Work/Code/Networks/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
+    %load('/home/paulasl/Code/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
+    load('/home/paula/Work/Code/Networks/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
     % Remove transient
     soln(:, 1:256) = [];
 
@@ -12,7 +12,7 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     load('513COG.mat', 'COG')
 
     % window size
-    ws = 8193;
+    ws = 128;
     overlap_percentage = 0.0625;
 
     %ws=32;
@@ -32,26 +32,30 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     clear COG soln
 
     % Cluster properties
-    %workers_fraction = 0.8;
-    %open_parpool(workers_fraction)
+    workers_fraction = 0.8;
+    open_parpool(workers_fraction)
 
-    local_cluster = parcluster('local');
-    local_cluster.NumWorkers = 24;   % This should match the requested number of cpus
-    parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
+    %local_cluster = parcluster('local');
+    %local_cluster.NumWorkers = 24;   % This should match the requested number of cpus
+    %parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
 
     % Change directory to scratch, so temp files will be created there
     % Storage options 
-    options.storedir = '/home/paulasl/scratch';
+    options.storedir = '/home/paula/Work/Code/Networks/neural-flows/scratch';
+    %options.storedir = '/home/paulasl/scratch';
     cd(options.storedir)
 
+    
+    % Data properties
+    options.data.ht = 1;
+
     % Options for the flow computation
-    options.data_interpolation.file_exists = false;
+    options.interpolation.file_exists = false;
     
     % Resolution
-    options.hx = 3;
-    options.hy = 3;
-    options.hz = 3;
-    options.ht = 1;
+    options.interpolation.hx = 4;
+    options.interpolation.hy = 4;
+    options.interpolation.hz = 4;
     
     % Slice of data
     options.chunk = idx_chunk;
@@ -59,15 +63,16 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     options.chunk_stop  = idx_stop;
     
     % Flow calculation
-    options.flow_calculation.init_conditions = 'random';
-    options.flow_calculation.seed_init_vel = 42;
-    options.flow_calculation.alpha_smooth   = 0.1;
-    options.flow_calculation.max_iterations = 64;
+    options.flows.init_conditions.mode = 'random';
+    options.flows.init_conditions.seed = 42;
+    options.flows.method = 'hs3d';
+    options.flows.estimation.alpha_smooth   = 0.1;
+    options.flows.estimation.max_iterations = 64;
 
     % Singularity detection and classification
-    options.sing_analysis.detection = true;    
-    options.sing_analysis.detection_datamode  = 'vel';
-    options.sing_analysis.detection_threshold = [0 2^-9];
+    options.singularity.detection.enabled = true;    
+    options.singularity.detection.mode  = 'vel';
+    options.singularity.detection.threshold = [0 2^-9];
 
 
     % Tic
