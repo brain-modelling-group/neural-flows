@@ -47,7 +47,7 @@ end
 keep_sings_file = options.singularity.file.keep;
 [mfile_sings, mfile_sings_sentinel] = create_temp_file(root_fname_sings, keep_sings_file);
 
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, ':: Started detection of null flows.'))
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started detection of null flows.'))
 
 % Use velocity vector fields
 [null_points_3d]  = flows3d_grid_detect_nullflows_velocities(mfile_flows, detection_threshold);
@@ -57,6 +57,6 @@ mfile_sings.null_points_3d = null_points_3d;
 mfile_sings.detection_threshold = detection_threshold;
 delete(mfile_sings_sentinel)
 
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, ':: Finished detection of null flows.'))
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished detection of null flows.'))
        
 end %function singularity3d_detection()
