@@ -19,19 +19,33 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
 %            % Basic options 
 %              options.chunk % anumber that could be slice of a long timeseries, or a different trial or recording session, used for filenames
 %            
-%            % Data options
-%             options.data_interpolation.file_exists = false;
-%
-%            % Flow options  
-%            options.flow_calculation.init_conditions = 'random';
-%            options.flow_calculation.seed_init_vel = 42;
-%            options.flow_calculation.alpha_smooth   = 0.1;
-%            options.flow_calculation.max_iterations = 64;
-%
-%            % Singularity options
-%            options.sing_analysis.detection = true;    
-%            options.sing_analysis.detection_datamode  = 'vel';
-%            options.sing_analysis.detection_datamode = [0 2^-9];
+%            % Data properties
+%     options.data.ht = 1;
+% 
+%     % Options for the flow computation
+%     options.interpolation.file_exists = false;
+%     
+%     % Resolution
+%     options.interpolation.hx = 4;
+%     options.interpolation.hy = 4;
+%     options.interpolation.hz = 4;
+%     
+%     % Slice of data
+%     options.chunk = idx_chunk;
+%     options.chunk_start = idx_start;
+%     options.chunk_stop  = idx_stop;
+%     
+%     % Flow calculation
+%     options.flows.init_conditions.mode = 'random';
+%     options.flows.init_conditions.seed = 42;
+%     options.flows.method.name = 'hs3d';
+%     options.flows.method.alpha_smooth   = 0.1;
+%     options.flows.method.max_iterations = 64;
+% 
+%     % Singularity detection and classification
+%     options.singularity.detection.enabled = true;    
+%     options.singularity.detection.mode  = 'vel';
+%     options.singularity.detection.threshold = [0 2^-9];
 %%    
 % OUTPUT:
 %      varargout: handles to the files where results are stored
@@ -44,10 +58,10 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
 %     Paula Sanz-Leon, QIMR Berghofer, November 2018
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
-    if isfield(options, 'chunk')
-      rng(options.chunk) 
+    if isfield(options.data.slice, 'id')
+      rng(options.data.slice.id) 
     else
-       options.chunk = 0;
+       options.data.slice.id = 0;
     end
     
     % Alpha radius has to be adjusted depending on the location data
