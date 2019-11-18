@@ -32,7 +32,7 @@ function  [msings_obj] =  singularity3d_classify_singularities_parallel(msings_o
 % function.
 
 
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Started classification of singularities.'))
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started classification of singularities.'))
 
 % Calculate jacobian and classify singularities
 
@@ -80,6 +80,6 @@ end
 msings_obj.singularity_classification_list = singularity_classification_list;
 msings_obj.options = options;
 
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Finished classification of singularities.'))
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished classification of singularities.'))
 
 end % singularity3d_classify_singularities_parallel()
