@@ -57,6 +57,7 @@ end
 hx = options.interpolation.hx; 
 hy = options.interpolation.hy; 
 hz = options.interpolation.hz; 
+grid_size = options.interpolation.grid_size;
 
 null_points_cell = struct2cell(null_points_3d);
 null_points_cell = squeeze(null_points_cell(1, 1, :));
@@ -72,7 +73,7 @@ for tt=1:tpts
        uy = mflow_obj.uy(:, :, :, tt);
        uz = mflow_obj.uz(:, :, :, tt);
 
-       singularity_classification_list{tt} = singularity3d_classify_singularities_step(null_points_3d_xyz_idx, ux, uy, uz, hx, hy, hz);
+       singularity_classification_list{tt} = singularity3d_classify_singularities_step(null_points_3d_xyz_idx, ux, uy, uz, hx, hy, hz, grid_size);
 
 end
 
