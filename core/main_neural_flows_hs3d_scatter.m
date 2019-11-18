@@ -66,8 +66,8 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     
     % Alpha radius has to be adjusted depending on the location data
     % (mostly, granularity of parcellation).
-    if isfield(options.interpolation, 'bdy_alpha_radius')
-        bdy_alpha_radius = options.interpolation.bdy_alpha_radius;
+    if isfield(options.interpolation.boundary, 'alpha_radius')
+        bdy_alpha_radius = options.interpolation.boundary.alpha_radius;
     else
         bdy_alpha_radius = 30;
     end
@@ -101,8 +101,9 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     in_bdy_mask = reshape(in_bdy_mask, grid_size);
     % Get a mask that is slightly larger so we can define a shell with a thickness that will be 
     % the boundary of our domain. 
-    thickness_mask = 3;
-    [interp_mask, diff_mask] = data3d_calculate_interpolation_mask(in_bdy_mask, thickness_mask);
+    mask_thickness = 3;
+    [interp_mask, diff_mask] = data3d_calculate_interpolation_mask(in_bdy_mask, mask_thickness);
+    options.interpolation.boundary.mask_thickness = mask_thickness;
     
 %-------------------------- INTERPOLATION OF DATA -----------------------------%    
     % Perform interpolation on the data and save in a temp file -- asumme
