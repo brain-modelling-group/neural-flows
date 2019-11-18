@@ -40,31 +40,32 @@ catch
 end
             
 % Get parameters
-dtpts          = options.flow_calculation.dtpts;
-alpha_smooth   = options.flow_calculation.alpha_smooth;
-max_iterations = options.flow_calculation.max_iterations;
-grid_size      = options.flow_calculation.grid_size;
+dtpts          = options.flows.dtpts;
+alpha_smooth   = options.flows.method.alpha_smooth;
+max_iterations = options.flows.method.max_iterations;
+grid_size      = options.flows.grid_size;
 
-hx = mfile_flows.hx;
-hy = mfile_flows.hy;
-hz = mfile_flows.hz;
-ht = mfile_flows.ht;
+
+hx = options.interpolation.hx;
+hy = options.interpolation.hy;
+hz = options.interpolation.hz;
+ht = options.data.ht;
 
 x_dim = 1;
 y_dim = 2;
 z_dim = 3;
 
-if strcmp(options.flow_calculation.init_conditions, 'random')
-    seed_init_vel = options.flow_calculation.seed_init_vel;
+if strcmp(options.flows.init_conditions.mode, 'random')
+    seed_init_vel = options.flows.init_conditions.seed;
     [uxo, uyo, uzo] = flows3d_hs3d_get_initial_flows(grid_size, ~mfile_flows.interp_mask, seed_init_vel);
 
 else
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Using pre-calculated initial velocity conditions.'))
     % NOTE: I'm going to assume that somehow we passed the uxo, uyo, uzo arrays
     % in 'options' structure
-    uxo = options.flow_calculation.uxo;
-    uyo = options.flow_calculation.uyo;
-    uzo = options.flow_calculation.uzo;   
+    uxo = options.flows.init_conditions.uxo;
+    uyo = options.flows.init_conditions.uyo;
+    uzo = options.flows.init_conditions.uzo;   
 end
 
 % Create mfile_vel disk
