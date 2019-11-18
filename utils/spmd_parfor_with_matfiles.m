@@ -73,13 +73,13 @@ function [output_matfile_obj] = spmd_parfor_with_matfiles(number_of_things, parf
         worker_fname = WorkerFname{this_temp_file};
         % Load the worker temp file
         worker_matfile = matfile(worker_fname);
+        
+        valid_idx = find(worker_matfile.got_result);
 
-        for jdx = 1:number_of_things
-            if worker_matfile.got_result(1, jdx)
-                 result = worker_matfile.result(1, jdx);
-                %  This line is meant to be generic and adaptbale
-                eval(['output_matfile_obj.' storage_expression  '= result{1};']);
-            end
+        for jdx = 1:length(valid_idx)
+            result = worker_matfile.result(1, valid_idx(jdx));
+            %This line is meant to be generic and adaptbale
+            eval(['output_matfile_obj.' storage_expression  '= result{1};']);
         end
         delete([worker_fname '.mat'])
     end
