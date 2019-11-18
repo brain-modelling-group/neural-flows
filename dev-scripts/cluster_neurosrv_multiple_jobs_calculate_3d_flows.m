@@ -12,10 +12,8 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     load('513COG.mat', 'COG')
 
     % window size
-    ws = 128;
+    ws = 8193;
     overlap_percentage = 0.0625;
-
-    %ws=32;
     shift_step = ws - round(overlap_percentage*ws);
     datalen  = size(soln, 2);
     idx = ws:shift_step:datalen;
@@ -34,15 +32,17 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     % Cluster properties
     workers_fraction = 0.8;
     open_parpool(workers_fraction)
-
-    %local_cluster = parcluster('local');
-    %local_cluster.NumWorkers = 24;   % This should match the requested number of cpus
-    %parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
+    
+    % Set maximum number of threads for nonparallel stuff
+    maxNumCompThreads(24);
+    local_cluster = parcluster('local');
+    local_cluster.NumWorkers = 24;   % This should match the requested number of cpus
+    parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
 
     % Change directory to scratch, so temp files will be created there
     % Storage options 
-    options.storedir = '/home/paula/Work/Code/Networks/neural-flows/scratch';
-    %options.storedir = '/home/paulasl/scratch';
+    %options.storedir = '/home/paula/Work/Code/Networks/neural-flows/scratch';
+    options.storedir = '/home/paulasl/scratch';
     cd(options.storedir)
 
     
@@ -57,7 +57,7 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     % Options for data interpolaton
     options.interpolation.file.exists = false;
     options.interpolation.file.keep = true;
-    options.interpolation.file.name = 'test';
+    %options.interpolation.file.name = 'test';
     
     % Resolution
     options.interpolation.hx = 4;
@@ -76,9 +76,11 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     options.flows.method.max_iterations = 64;
 
     % Singularity detection and classification
-    options.singularity.detection.enabled = false;    
+    options.singularity.file.keep = true;
+    options.singularity.detection.enabled = true;    
     options.singularity.detection.mode  = 'vel';
     options.singularity.detection.threshold = [0 2^-9];
+    options.singularity.classification.enabled = false;    
 
 
     % Tic
@@ -91,4 +93,3 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     tok(tstart)
 
 end % cluster_neurosrv_multiple_jobs_calculate_3d_flows(()
-
