@@ -52,27 +52,30 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     
     % Alpha radius has to be adjusted depending on the location data
     % (mostly, granularity of parcellation).
-    if isfield(options.data_interpolation, 'bdy_alpha_radius')
-        bdy_alpha_radius = options.data_interpolation.bdy_alpha_radius;
+    if isfield(options.interpolation, 'bdy_alpha_radius')
+        bdy_alpha_radius = options.interpolation.bdy_alpha_radius;
     else
         bdy_alpha_radius = 30;
     end
 
 %-------------------------- GRID AND MASK -------------------------------------%    
 
-    ht = options.ht;
-    hx = options.hx; 
-    hy = options.hy;
-    hz = options.hz; 
+    ht = options.data.ht;
+    hx = options.interpolation.hx; 
+    hy = options.interpolation.hy;
+    hz = options.interpolation.hz; 
     %hr = sqrt(hz.^2 + hy.^y + hx.^2);
   
     % Generate a structured grid 
     scaling_factor = 1.05; % inflate locations a little bit, so the grids have enough blank space around the volume
     [X, Y, Z, grid_size] = get_structured_grid(scaling_factor*locs, hx, hy, hz);
     
-    options.xyz_lims{1} = [min(X(:)) max(X(:))];
-    options.xyz_lims{2} = [min(Y(:)) max(Y(:))];
-    options.xyz_lims{3} = [min(Z(:)) max(Z(:))];
+    % Save the locations
+    options.data.locs = locs;
+    
+    options.interpolation.xyz_lims{1} = [min(X(:)) max(X(:))];
+    options.interpolation.xyz_lims{2} = [min(Y(:)) max(Y(:))];
+    options.interpolation.xyz_lims{3} = [min(Z(:)) max(Z(:))];
 
     
     % Get a mask with the gridded-points that are inside and outside the convex hull
@@ -92,12 +95,12 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     % OS is Linux, cause why would you use anything else?
     % Flag to decide what to do with temp intermediate files
     keep_interp_file = true;
-    if isfield(options.data_interpolation, 'filename_string')
-        root_fname_interp = [options.data_interpolation.filename_string '-temp_interp-' num2str(options.chunk, '%03d')];
+    if isfield(options.interpolation, 'filename_string')
+        root_fname_interp = [options.interpolation.filename_string '-temp_interp-' num2str(options.chunk, '%03d')];
     else       
         root_fname_interp = ['temp_interp-' num2str(options.chunk, '%03d')];
     end
-    if ~options.data_interpolation.file_exists % Or not necesary because it is fmri data
+    if ~options.interpolation.file_exists % Or not necesary because it is fmri data
         
         % Parallel interpolation with the parallel toolbox
         [mfile_interp, mfile_interp_sentinel] = data3d_interpolate_parallel(data, ...
@@ -108,13 +111,13 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
          
         % Clean up parallel pool
         % delete(gcp); % commented because it adds 30s-1min of overhead
-         options.data_interpolation.file_exists = true;
+         options.interpolation.file_exists = true;
         
          % Saves full path to file
-         options.data_interpolation.file_name = mfile_interp.Properties.Source;
+         options.interpolation.file_name = mfile_interp.Properties.Source;
     else
         % Load the data if file already exists
-        mfile_interp = matfile(options.data_interpolation.file_name, 'Writable', true);
+        mfile_interp = matfile(options.interpolation.file_name, 'Writable', true);
         mfile_interp_sentinel = [];
     end
         mfile_interp.options = options;
@@ -131,7 +134,9 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     
     % Save flow calculation parameters
     options.flow_calculation.dtpts  = dtpts;
-    options.flow_calculation.grid_size = grid_size;
+    options.flow_calculation.grid_size = grid_size;    
+    options.interpolation.grid_size = grid_size;
+
         
     % We open a matfile to store output and avoid huge memory usage
     if isfield(options.flow_calculation, 'filename_string')
@@ -161,7 +166,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     mfile_flow.Y = Y;
     mfile_flow.Z = Z;
 
-    % Save time and space step 
+    % Save time and space step -- this seems redundant
     mfile_flow.hx = hx; % mm
     mfile_flow.hy = hy; % mm
     mfile_flow.hz = hz; % mm
@@ -177,7 +182,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     % Also, the file get larger, but having this additional variable help us with visualisations. 
     % Perhaps consider only returning this file and deleting the gridded flow file.
 
-    [mfile_flow] = flows3d_get_scattered_flows_parallel(mfile_flow, locs);
+    mfile_flow = flows3d_get_scattered_flows_parallel(mfile_flow, locs);
     
     % Save original locations, just in case
     mfile_flow.locs = locs;
@@ -188,7 +193,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     delete(mfile_flow_sentinel)
     
 %-------------------------- DETECT NULL FLOWS - CRITICAL POINTS ---------------%    
-   if options.sing_analysis.detection
+   if options.singularity.detection.enabled
               
        mfile_sings = singularity3d_detection(mfile_flow, options.sing_analysis.detection_threshold); 
 %----------------------------- CLASSIFY SINGULARITIES -------------------------%
