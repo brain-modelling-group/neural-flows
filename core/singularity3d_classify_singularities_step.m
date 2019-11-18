@@ -1,4 +1,4 @@
-function singularity_labels = singularity3d_classify_singularities_step(null_pts_3d_xyz_idx, ux, uy, uz, hx, hy, hz)
+function singularity_labels = singularity3d_classify_singularities_step(null_pts_3d_xyz_idx, ux, uy, uz, hx, hy, hz, grid_size)
 
 % This function is for each time point 
 % 1) calculates jacobian for each critical point, and then 
@@ -26,7 +26,6 @@ function singularity_labels = singularity3d_classify_singularities_step(null_pts
            return
        end
        
-       grid_size = size(ux);
        num_critical_points = size(null_pts_3d_xyz_idx, 1);
        singularity_labels  = cell(num_critical_points, 1);
 
@@ -36,12 +35,12 @@ function singularity_labels = singularity3d_classify_singularities_step(null_pts
            point_idx = null_pts_3d_xyz_idx(cc, :);
            
            % Flag points at the boundary
-           boundary_vec = detect_boundary_points(point_idx, grid_size);               
+           %boundary_vec = detect_boundary_points(point_idx, grid_size);               
                             
-           if ~isempty(boundary_vec)
-                singularity_labels{cc} = 'boundary';
-                continue
-           end
+           %if ~isempty(boundary_vec)
+           %     singularity_labels{cc} = 'boundary';
+           %     continue
+           %end
            
            % Calculate the Jacobian at each critical point 
            [J3D] = singularity3d_calculate_jacobian(point_idx, ux, uy, uz, hx, hy, hz);
