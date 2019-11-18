@@ -48,21 +48,24 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     
     % Data properties
     options.data.ht = 1;
-
-    % Options for the flow computation
-    options.interpolation.file_exists = false;
-    
-    % Resolution
-    options.interpolation.hx = 4;
-    options.interpolation.hy = 4;
-    options.interpolation.hz = 4;
     
     % Slice of data
     options.data.slice.id = idx_chunk;
     options.data.slice.start = idx_start;
     options.data.slice.stop  = idx_stop;
     
+    % Options for data interpolaton
+    options.interpolation.file.exists = false;
+    options.interpolation.file.keep = true;
+    options.interpolation.file.name = 'test';
+    
+    % Resolution
+    options.interpolation.hx = 4;
+    options.interpolation.hy = 4;
+    options.interpolation.hz = 4;
+    
     % Flow calculation
+    options.flows.file.keep = true;
     options.flows.init_conditions.mode = 'random';
     options.flows.init_conditions.seed = 42;
     options.flows.method.name = 'hs3d';

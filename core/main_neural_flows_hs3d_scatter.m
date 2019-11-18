@@ -109,13 +109,14 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     % Perform interpolation on the data and save in a temp file -- asumme
     % OS is Linux, cause why would you use anything else?
     % Flag to decide what to do with temp intermediate files
-    keep_interp_file = true;
-    if isfield(options.interpolation, 'filename_string')
-        root_fname_interp = [options.interpolation.filename_string '-temp_interp-' num2str(options.chunk, '%03d')];
+    keep_interp_file = optons.interpolation.file.keep;
+    
+    if isfield(options.interpolation.file, 'name')
+        root_fname_interp = [options.interpolation.file.name '-temp_interp-' num2str(options.data.slice.id, '%03d')];
     else       
-        root_fname_interp = ['temp_interp-' num2str(options.chunk, '%03d')];
+        root_fname_interp = ['temp_interp-' num2str(options.data.slice.id, '%03d')];
     end
-    if ~options.interpolation.file_exists % Or not necesary because it is fmri data
+    if ~options.interpolation.file.exists % Or not necesary because it is fmri data
         
         % Parallel interpolation with the parallel toolbox
         [mfile_interp, mfile_interp_sentinel] = data3d_interpolate_parallel(data, ...
@@ -126,13 +127,13 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
          
         % Clean up parallel pool
         % delete(gcp); % commented because it adds 30s-1min of overhead
-         options.interpolation.file_exists = true;
+         options.interpolation.file.exists = true;
         
          % Saves full path to file
-         options.interpolation.file_name = mfile_interp.Properties.Source;
+         options.interpolation.file.source = mfile_interp.Properties.Source;
     else
         % Load the data if file already exists
-        mfile_interp = matfile(options.interpolation.file_name, 'Writable', true);
+        mfile_interp = matfile(options.interpolation.file.source, 'Writable', true);
         mfile_interp_sentinel = [];
     end
         mfile_interp.options = options;
@@ -145,19 +146,19 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
 
 %----------------------------- FLOW CALCULATION -------------------------------%
     % Parameters for optical flow-- could be changed, could be parameters
-    keep_vel_file    = true; % TODO: probably turn into input parameter
+    keep_vel_file    = options.flows.file.keep; % TODO: probably turn into input parameter
     
     % Save flow calculation parameters
-    options.flow_calculation.dtpts  = dtpts;
-    options.flow_calculation.grid_size = grid_size;    
+    options.flows.dtpts  = dtpts;
+    options.flows.grid_size = grid_size;    
     options.interpolation.grid_size = grid_size;
 
         
     % We open a matfile to store output and avoid huge memory usage
-    if isfield(options.flow_calculation, 'filename_string')
-        root_fname_vel = [options.flow_calculation.filename_string '-temp_flows-' num2str(options.chunk, '%03d')];
+    if isfield(options.flows.file, 'name')
+        root_fname_vel = [options.flows.file.name '-temp_flows-' num2str(options.chunk, '%03d')];
     else
-        root_fname_vel = ['temp_flows-' num2str(options.chunk, '%03d')];
+        root_fname_vel = ['temp_flows-' num2str(options.data.slice.id, '%03d')];
     end
     [mfile_flow, mfile_flow_sentinel] = create_temp_file(root_fname_vel, keep_vel_file); 
     
