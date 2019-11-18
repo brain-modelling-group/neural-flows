@@ -156,7 +156,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
         
     % We open a matfile to store output and avoid huge memory usage
     if isfield(options.flows.file, 'name')
-        root_fname_vel = [options.flows.file.name '-temp_flows-' num2str(options.chunk, '%03d')];
+        root_fname_vel = [options.flows.file.name '-temp_flows-' num2str(options.data.slice.id, '%03d')];
     else
         root_fname_vel = ['temp_flows-' num2str(options.data.slice.id, '%03d')];
     end
@@ -168,12 +168,12 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     mfile_flow.diff_mask = diff_mask;
     
     % Get some dummy initial conditions
-    if isfield(options, 'chunk')
-        seed_init_vel = options.chunk; % for cluster environments
+    if isfield(options.data.slice, 'id')
+        seed_init_vel = options.data.slice.id; % for cluster environments
     else   
         seed_init_vel = 42;
     end
-    options.flow_calculation.seed_init_vel = seed_init_vel;
+    options.flows.init_conditions.seed = seed_init_vel;
     
     
     % Save grid - needed for singularity tracking and visualisation
@@ -211,7 +211,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
 %-------------------------- DETECT NULL FLOWS - CRITICAL POINTS ---------------%    
    if options.singularity.detection.enabled
               
-       mfile_sings = singularity3d_detection(mfile_flow, options.sing_analysis.detection_threshold); 
+       mfile_sings = singularity3d_detection(mfile_flow, options.singularity.detection.threshold); 
 %----------------------------- CLASSIFY SINGULARITIES -------------------------%
        mfile_sings = singularity3d_classify_singularities_parallel(mfile_sings, mfile_flow);             
        varargout{3} = mfile_sings;
