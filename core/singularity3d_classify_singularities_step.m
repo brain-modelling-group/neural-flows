@@ -34,8 +34,7 @@ function singularity_labels = singularity3d_classify_singularities_step(null_pts
            % Check if any subscript is on the boundary of the grid. 
            % This will cause a problem in the jacobian calculation. 
            point_idx = null_pts_3d_xyz_idx(cc, :);
-           % Move points a little
-           %point = rectify_boundary_points(point, grid_size);
+           
            % Flag points at the boundary
            boundary_vec = detect_boundary_points(point_idx, grid_size);               
                             

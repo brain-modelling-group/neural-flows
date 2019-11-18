@@ -43,7 +43,7 @@ tpts = size(null_points_3d, 2);
 
 % Load options structure
 options   = mflow_obj.options;
-grid_size = options.flow_calculation.grid_size;
+grid_size = options.flows.grid_size;
 
 % Check if we stored linear indices or subscripts 
 if size(null_points_3d(1).xyz_idx, 2) < 2
@@ -54,14 +54,14 @@ if size(null_points_3d(1).xyz_idx, 2) < 2
     
 end
 
-hx = mflow_obj.hx; 
-hy = mflow_obj.hy; 
-hz = mflow_obj.hz; 
+hx = options.interpolation.hx; 
+hy = options.interpolation.hy; 
+hz = options.interpolation.hz; 
 
 null_points_cell = struct2cell(null_points_3d);
 null_points_cell = squeeze(null_points_cell(1, 1, :));
 
-parfor tt=1:tpts 
+for tt=1:tpts 
 
        % Check if we have critical points. There are 'frames' for which
        % nothing was detected, we should not attempt to calculate jacobian.
@@ -72,8 +72,7 @@ parfor tt=1:tpts
        uy = mflow_obj.uy(:, :, :, tt);
        uz = mflow_obj.uz(:, :, :, tt);
 
-       singularity_labels = singularity3d_classify_singularities_step(null_points_3d_xyz_idx, ux, uy, uz, hx, hy, hz)
-       singularity_classification_list{tt} = singularity_labels;
+       singularity_classification_list{tt} = singularity3d_classify_singularities_step(null_points_3d_xyz_idx, ux, uy, uz, hx, hy, hz);
 
 end
 

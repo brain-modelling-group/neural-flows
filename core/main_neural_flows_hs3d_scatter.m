@@ -159,6 +159,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
         root_fname_vel = ['temp_flows-' num2str(options.data.slice.id, '%03d')];
     end
     [mfile_flow, mfile_flow_sentinel] = create_temp_file(root_fname_vel, keep_vel_file); 
+    options.flows.file.source = mfile_flow.Properties.Source;
     
     % Save masks with convex hulls of the brain
     mfile_flow.in_bdy_mask = in_bdy_mask;
