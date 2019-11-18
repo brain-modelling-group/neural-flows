@@ -65,9 +65,9 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     % Flow calculation
     options.flows.init_conditions.mode = 'random';
     options.flows.init_conditions.seed = 42;
-    options.flows.method = 'hs3d';
-    options.flows.estimation.alpha_smooth   = 0.1;
-    options.flows.estimation.max_iterations = 64;
+    options.flows.method.name = 'hs3d';
+    options.flows.method.alpha_smooth   = 0.1;
+    options.flows.method.max_iterations = 64;
 
     % Singularity detection and classification
     options.singularity.detection.enabled = true;    
