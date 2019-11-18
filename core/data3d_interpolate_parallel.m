@@ -48,15 +48,14 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
     
     % Write dummy data to disk
     mfile_interp_obj.data(size(Y, y_dim), size(X, x_dim), size(Z, z_dim), tpts) = 0;
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, ':: Started interpolating data.'))          
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started interpolating data.'))          
     
     %spmd_parfor_with_matfiles(number_of_things, parfun, temp_fname_obj, storage_expression)
     parfun = @interpolate_step;
     interpolation_3d_storage_expression = 'data(:, :, :, jdx)';
     [mfile_interp_obj] = spmd_parfor_with_matfiles(tpts, parfun, mfile_interp_obj, interpolation_3d_storage_expression);
     
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, ':: Finished interpolating data.'))
-
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished interpolating data.'))
     
     % Child function with access to local scope variables from parent
     % function
