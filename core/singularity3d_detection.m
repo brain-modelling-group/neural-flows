@@ -46,8 +46,9 @@ fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started detectio
 [null_points_3d]  = flows3d_grid_detect_nullflows_velocities(mfile_flows, detection_threshold);
 
 mfile_sings.null_points_3d = null_points_3d;
-% Save threshold again
-mfile_sings.detection_threshold = detection_threshold;
+% Save used threshold 
+options.singularity.detection.threshold = detection_threshold; 
+mfile_sings.options = options;
 delete(mfile_sings_sentinel)
 
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished detection of null flows.'))
