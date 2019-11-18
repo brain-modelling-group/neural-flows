@@ -58,9 +58,9 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     options.interpolation.hz = 4;
     
     % Slice of data
-    options.chunk = idx_chunk;
-    options.chunk_start = idx_start;
-    options.chunk_stop  = idx_stop;
+    options.data.slice.id = idx_chunk;
+    options.data.slice.start = idx_start;
+    options.data.slice.stop  = idx_stop;
     
     % Flow calculation
     options.flows.init_conditions.mode = 'random';
