@@ -66,8 +66,8 @@ for tt=1:tpts
 
        % Check if we have critical points. There are 'frames' for which
        % nothing was detected, we should not attempt to calculate jacobian.
-
        null_points_3d_xyz_idx = null_points_cell{tt};
+       
        % Create temp variables with partial load of a matfile. 
        ux = mflow_obj.ux(:, :, :, tt);
        uy = mflow_obj.uy(:, :, :, tt);
