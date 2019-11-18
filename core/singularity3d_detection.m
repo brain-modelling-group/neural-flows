@@ -38,13 +38,13 @@ end
 
 
 % Save what we just found
-if isfield(options.sing_analysis, 'filename_string')
-   root_fname_sings = [options.sing_analysis.filename_string '-temp_snglrty-' num2str(options.chunk, '%03d')];
+if isfield(options.singularity.file, 'name')
+   root_fname_sings = [options.singularity.file.name '-temp_snglrty-' num2str(options.data.slice.id, '%03d')];
 else
-   root_fname_sings = ['temp_snglrty-' num2str(options.chunk, '%03d')];
+   root_fname_sings = ['temp_snglrty-' num2str(options.data.slice.id, '%03d')];
 end
 
-keep_sings_file = true;
+keep_sings_file = options.singularity.file.keep;
 [mfile_sings, mfile_sings_sentinel] = create_temp_file(root_fname_sings, keep_sings_file);
 
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, ':: Started detection of null flows.'))
