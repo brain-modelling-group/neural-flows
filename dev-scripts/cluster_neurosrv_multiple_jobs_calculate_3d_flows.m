@@ -65,7 +65,7 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     options.interpolation.hz = 4;
     
     options.interpolation.boundary.alpha_radius = 30;
-    options.interpolation.boudnary.thickness = 3;
+    options.interpolation.boundary.thickness = 3;
     
     % Flow calculation
     options.flows.file.keep = true;

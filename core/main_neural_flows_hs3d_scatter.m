@@ -107,7 +107,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     % Perform interpolation on the data and save in a temp file -- asumme
     % OS is Linux, cause why would you use anything else?
     % Flag to decide what to do with temp intermediate files
-    keep_interp_file = optons.interpolation.file.keep;
+    keep_interp_file = options.interpolation.file.keep;
     
     if isfield(options.interpolation.file, 'name')
         root_fname_interp = [options.interpolation.file.name '-temp_interp-' num2str(options.data.slice.id, '%03d')];
@@ -210,9 +210,11 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
    if options.singularity.detection.enabled
               
        mfile_sings = singularity3d_detection(mfile_flow, options.singularity.detection.threshold); 
+       if options.singularity.classification.enabled
 %----------------------------- CLASSIFY SINGULARITIES -------------------------%
-       mfile_sings = singularity3d_classify_singularities_parallel(mfile_sings, mfile_flow);             
-       varargout{3} = mfile_sings;
+           mfile_sings = singularity3d_classify_singularities_parallel(mfile_sings, mfile_flow);             
+       end 
+      varargout{3} = mfile_sings;
 
 %------------------------------------------------------------------------------%
    end
