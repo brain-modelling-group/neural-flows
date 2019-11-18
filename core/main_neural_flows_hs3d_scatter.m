@@ -15,27 +15,26 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
 %                  of brain network embedded in 3D dimensional space, or source
 %                  locations from MEG.
 %               
-%            options: a struct with structs inside
-%            % Basic options 
-%              options.chunk % anumber that could be slice of a long timeseries, or a different trial or recording session, used for filenames
-%            
-%            % Data properties
+%     % Data properties
 %     options.data.ht = 1;
-% 
-%     % Options for the flow computation
-%     options.interpolation.file_exists = false;
+%     
+%     % Slice of data
+%     options.data.slice.id = idx_chunk;
+%     options.data.slice.start = idx_start;
+%     options.data.slice.stop  = idx_stop;
+%     
+%     % Options for data interpolaton
+%     options.interpolation.file.exists = false;
+%     options.interpolation.file.keep = true;
+%     options.interpolation.file.name = 'test';
 %     
 %     % Resolution
 %     options.interpolation.hx = 4;
 %     options.interpolation.hy = 4;
 %     options.interpolation.hz = 4;
 %     
-%     % Slice of data
-%     options.chunk = idx_chunk;
-%     options.chunk_start = idx_start;
-%     options.chunk_stop  = idx_stop;
-%     
 %     % Flow calculation
+%     options.flows.file.keep = true;
 %     options.flows.init_conditions.mode = 'random';
 %     options.flows.init_conditions.seed = 42;
 %     options.flows.method.name = 'hs3d';
@@ -101,9 +100,8 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     in_bdy_mask = reshape(in_bdy_mask, grid_size);
     % Get a mask that is slightly larger so we can define a shell with a thickness that will be 
     % the boundary of our domain. 
-    mask_thickness = 3;
+    mask_thickness = options.interpolation.boundary.thickness;
     [interp_mask, diff_mask] = data3d_calculate_interpolation_mask(in_bdy_mask, mask_thickness);
-    options.interpolation.boundary.mask_thickness = mask_thickness;
     
 %-------------------------- INTERPOLATION OF DATA -----------------------------%    
     % Perform interpolation on the data and save in a temp file -- asumme

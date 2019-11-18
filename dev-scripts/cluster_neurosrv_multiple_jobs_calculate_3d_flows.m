@@ -64,6 +64,9 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     options.interpolation.hy = 4;
     options.interpolation.hz = 4;
     
+    options.interpolation.boundary.alpha_radius = 30;
+    options.interpolation.boudnary.thickness = 3;
+    
     % Flow calculation
     options.flows.file.keep = true;
     options.flows.init_conditions.mode = 'random';
@@ -73,7 +76,7 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     options.flows.method.max_iterations = 64;
 
     % Singularity detection and classification
-    options.singularity.detection.enabled = true;    
+    options.singularity.detection.enabled = false;    
     options.singularity.detection.mode  = 'vel';
     options.singularity.detection.threshold = [0 2^-9];
 
