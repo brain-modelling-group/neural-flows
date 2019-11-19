@@ -46,13 +46,13 @@ tolerance = 1e-8; % arbitrary tolerance to determine the rank of V
 
 % If the eigenvals of Jacobian are all zero, which is a weird case
 % This check will fail if eigenvals of the Jacobian are complex
-if sum(abs(E)) == 0
-        singularity_type = 'zero';
-        return
+if sum(abs(E)) == 0 || sum(abs(E)) < 1e-17 
+   singularity_type = 'zero';
+   return
 end
 
 % Check if the Jacobian matrix is degenerate
-if rank(J3D, tolerance) < 3
+if rank(J3D, tolerance) == 2
     singularity_type = singularity3d_classify_orbits(E);
     return
 end
