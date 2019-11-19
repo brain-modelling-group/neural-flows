@@ -62,7 +62,7 @@ grid_size = options.interpolation.grid_size;
 null_points_cell = struct2cell(null_points_3d);
 null_points_cell = squeeze(null_points_cell(1, 1, :));
 
-for tt=1:tpts 
+parfor tt=1:tpts 
 
        % Check if we have critical points. There are 'frames' for which
        % nothing was detected, we should not attempt to calculate jacobian.
