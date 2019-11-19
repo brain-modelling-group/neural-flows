@@ -62,8 +62,8 @@ grid_size = options.interpolation.grid_size;
 null_points_cell = struct2cell(null_points_3d);
 null_points_cell = squeeze(null_points_cell(1, 1, :));
 
-parfor tt=1:tpts 
-
+parfor tt=1:tpts sum(abs(E))
+       
        % Check if we have critical points. There are 'frames' for which
        % nothing was detected, we should not attempt to calculate jacobian.
        null_points_3d_xyz_idx = null_points_cell{tt};
@@ -72,7 +72,7 @@ parfor tt=1:tpts
        ux = mflow_obj.ux(:, :, :, tt);
        uy = mflow_obj.uy(:, :, :, tt);
        uz = mflow_obj.uz(:, :, :, tt);
-
+       
        singularity_classification_list{tt} = singularity3d_classify_singularities_step(null_points_3d_xyz_idx, ux, uy, uz, hx, hy, hz, grid_size);
 
 end
