@@ -47,11 +47,14 @@ grid_size = options.flows.grid_size;
 
 % Check if we stored linear indices or subscripts 
 if size(null_points_3d(1).xyz_idx, 2) < 2
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started converting lindear indices into subscripts.'))
+
     for tt=1:tpts
         xyz_subs = switch_index_mode(null_points_3d(tt).xyz_idx, 'subscript', grid_size);
         null_points_3d(tt).xyz_idx = xyz_subs;
     end    
-    
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished converting lindear indices into subscripts.'))
+ 
 end
 
 hx = options.interpolation.hx; 
