@@ -78,8 +78,7 @@ parfor tt=1:tpts
 end
 
 msings_obj.singularity_classification_list = singularity_classification_list;
-msings_obj.options = options;
-
+    
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished classification of singularities.'))
 
 end % singularity3d_classify_singularities_parallel()
