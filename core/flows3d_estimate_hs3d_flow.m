@@ -72,7 +72,7 @@ end
 mfile_flows.ux(size(uxo, x_dim), size(uxo, y_dim), size(uxo, z_dim), dtpts-1) = 0;    
 mfile_flows.uy(size(uyo, x_dim), size(uyo, y_dim), size(uyo, z_dim), dtpts-1) = 0;
 mfile_flows.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
-mfile_flows.un(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
+%mfile_flows.un(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
 
 
 % Set velocity field at the points located in shell between inner and outer boundaries to zero
@@ -125,13 +125,13 @@ for this_tpt = 1:dtpts-1
                                            diff_mask);
  
     % Save the velocity components
-    uno = single(sqrt(uxo.^2 + uyo.^2 + uzo.^2));
+    %uno = single(sqrt(uxo.^2 + uyo.^2 + uzo.^2));
     mfile_flows.ux(:, :, :, this_tpt) = single(uxo);
     mfile_flows.uy(:, :, :, this_tpt) = single(uyo);
     mfile_flows.uz(:, :, :, this_tpt) = single(uzo);
-    mfile_flows.un(:, :, :, this_tpt) =  uno;
+    %mfile_flows.un(:, :, :, this_tpt) =  uno;
     % Save some other useful information to guesstimate the singularity detection threshold
-    mfile_flows = flows3d_hs3d_flow_stats(mfile_flows, uxo(:), uyo(:), uzo(:), uno(:), this_tpt);
+    %mfile_flows = flows3d_hs3d_flow_stats(mfile_flows, uxo(:), uyo(:), uzo(:), uno(:), this_tpt);
 
 end
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished estimation of flows.'))
