@@ -1,33 +1,42 @@
 function test_flow_estimation__travellingwave3d_scattered_hs3d()
 % NOTE: Takes about 110 seconds @ dracarys
 % Generate data with these step sizes
- options.hx = 2;
- options.hy = 2;
- options.hz = 2;
- options.ht = 0.5;
- % With these parameters the wave is moving at 4 m/s along the y-axis
- 
+ options.interpolation.hx = 2;
+ options.interpolation.hy = 2;
+ options.interpolation.hz = 2;
+ options.data.ht = 0.5;
+ options.data.slice.id = 0;
+
+ % With these parameters the wave is moving at 4 m/s along the y-axis 
  load('513COG.mat', 'COG')
  locs = COG(1:256, :);
  
- 
- [wave3d, ~] = generate_wave3d_travelling_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'y');
+ [wave3d, ~] = generate_wave3d_travelling_scattered(locs, 'hxyz',  options.interpolation.hx, 'ht', options.data.ht, 'direction', 'y');
  
  %Option to generate a travelling wave moving back and forth along the
  %chose axis
- %wave3d = [wave3d(end:-1:1, :); wave3d];
+ wave3d = [wave3d(end:-1:1, :); wave3d];
  
- options.data_interpolation.file_exists = false;
- options.flow_calculation.init_conditions = 'preset';
- options.flow_calculation.seed_init_vel = 42;
- options.flow_calculation.alpha_smooth   = 0.1;
- options.flow_calculation.max_iterations = 128;
- options.sing_analysis.detection = false;
+ options.interpolation.file.exists = false;
+ options.interpolation.file.keep = true;
+ options.interpolation.boundary.alpha_radius = 30;
+ options.interpolation.boundary.thickness = 2;
  
- options.flow_calculation.uxo = zeros([87, 34, 62]);
- options.flow_calculation.uyo = -4.*ones([87, 34, 62]);
- options.flow_calculation.uzo = zeros([87, 34, 62]);
-
+ % Flow calculation
+ options.flows.file.keep = true;
+ options.flows.init_conditions.mode = 'preset';
+ options.flows.init_conditions.seed = 42;
+ options.flows.init_conditions.uxo = zeros([87, 34, 62]);
+ options.flows.init_conditions.uyo = -4.*ones([87, 34, 62]);
+ options.flows.init_conditions.uzo = zeros([87, 34, 62]);
+ options.flows.method.name = 'hs3d';
+ options.flows.method.alpha_smooth   = 1;
+ options.flows.method.max_iterations = 128;
+ 
+  % Singularity detection and classification
+ options.singularity.file.keep = false;
+ options.singularity.detection.enabled = false;    
+ 
  % Do the stuff
  [~, mfile_flows] = main_neural_flows_hs3d_scatter(wave3d, locs, options);
 
@@ -48,8 +57,8 @@ function test_flow_estimation__travellingwave3d_scattered_hs3d()
  
  subplot(1, 4, 4, 'Parent', fig_hist)
  histogram(sqrt(mfile_flows.ux(2:end-1, 2:end-1, 2:end-1, :).^2 + ...
-                mfile_flows.uy(2:end-1, 2:end-1, 2:end-1, :).^2 + ...
-                mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :).^2))
+               mfile_flows.uy(2:end-1, 2:end-1, 2:end-1, :).^2 + ...
+               mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :).^2))
  xlabel('u_{norm} [m/s]')
  
 end % function test_flow_estimation__travellingwave3d_scattered_hs3d()

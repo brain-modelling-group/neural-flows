@@ -77,7 +77,6 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     hx = options.interpolation.hx; 
     hy = options.interpolation.hy;
     hz = options.interpolation.hz; 
-    %hr = sqrt(hz.^2 + hy.^y + hx.^2);
   
     % Generate a structured grid 
     scaling_factor = 1.05; % inflate locations a little bit, so the grids have enough blank space around the volume
