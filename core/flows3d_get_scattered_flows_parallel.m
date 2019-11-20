@@ -19,7 +19,7 @@ function [mflows_obj] = flows3d_get_scattered_flows_parallel(mflows_obj, locs)
 %     Paula Sanz-Leon, QIMR Berghofer, October 2019
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
-    % These parameter values are essential
+    %These parameter values are essential
     neighbour_method = 'linear';
     extrapolation_method = 'linear'; 
     
@@ -36,23 +36,6 @@ function [mflows_obj] = flows3d_get_scattered_flows_parallel(mflows_obj, locs)
     Z = mflows_obj.Z;
     
     in_bdy_mask_idx = find(mflows_obj.in_bdy_mask == true);
-    %%% HACK HACK HACK %%
-    %%% HACK HACK HACK %% 
-    
-    %in_bdy_mask_idx = find(~isnan(mflows_obj.ux(:, :, : , 1)));
-    %for ii=1:size(locs, 1)
-    
-   %     temp = dis(locs(ii, :).', [X(in_bdy_mask_idx), Y(in_bdy_mask_idx), Z(in_bdy_mask_idx)].');
-   
-   %     [~, min_idx] = min(temp);
-   
-   %     fake_locs(ii, :) = [X(in_bdy_mask_idx(min_idx)) Y(in_bdy_mask_idx(min_idx)) Z(in_bdy_mask_idx(min_idx))];
-   
-    %end
-    
-    %locs = fake_locs;
-    
-    %%% END OF HACK HACK
     
     
     X = X(in_bdy_mask_idx);
