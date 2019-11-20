@@ -56,16 +56,16 @@ switch to_plot
        fig_counts = plot_singularity_count_traces(sing_count, fig_visibility{:});
        fig_handles{length(fig_handles)+1} = fig_counts;
     case {'foci'}
-        fig_xyz_base = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, cp_base, options.xyz_lims, fig_visibility{:});
+        fig_xyz_base = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, cp_base, options.interpolation.xyz_lims, fig_visibility{:});
         fig_handles{length(fig_handles)+1} = fig_xyz_base;
     case {'saddles'}
-        fig_xyz_saddles = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, cp_saddles, options.xyz_lims, fig_visibility{:});
+        fig_xyz_saddles = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, cp_saddles, options.interpolation.xyz_lims, fig_visibility{:});
         fig_handles{length(fig_handles)+1} = fig_xyz_saddles;
     case {'orbits'}
-        fig_xyz_po = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, base_list(9:14), options.xyz_lims, fig_visibility{:});
+        fig_xyz_po = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, base_list(9:14), options.interpolation.xyz_lims, fig_visibility{:});
         fig_handles{length(fig_handles)+1} = fig_xyz_po;
     case {'combined'}
-       fig_xyz_all_cp = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, base_list(1:14), options.xyz_lims, fig_visibility{:});
+       fig_xyz_all_cp = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, base_list(1:14), options.interpolation.xyz_lims, fig_visibility{:});
        fig_handles{length(fig_handles)+1} = fig_xyz_all_cp;
     case {'all'}
        % We could use recursion, but that means singularity_num_list would
@@ -77,19 +77,19 @@ switch to_plot
        fig_handles{length(fig_handles)+1} = fig_counts;
        
        % FOCI
-       fig_xyz_base = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, cp_base, options.xyz_lims, fig_visibility{:});
+       fig_xyz_base = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, cp_base, options.interpolation.xyz_lims, fig_visibility{:});
        fig_handles{length(fig_handles)+1} = fig_xyz_base;
        
        % SADDLES
-       fig_xyz_saddles = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, cp_saddles, options.xyz_lims, fig_visibility{:});
+       fig_xyz_saddles = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, cp_saddles, options.interpolation.xyz_lims, fig_visibility{:});
        fig_handles{length(fig_handles)+1} = fig_xyz_saddles;
        
        % ORBITS
-       fig_xyz_orbits = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, base_list(9:14), options.xyz_lims, fig_visibility{:});
+       fig_xyz_orbits = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, base_list(9:14), options.interpolation.xyz_lims, fig_visibility{:});
        fig_handles{length(fig_handles)+1} = fig_xyz_orbits;
        
        % COMBINED SINGS
-       fig_xyz_all_cp = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, base_list(1:14), options.xyz_lims, fig_visibility{:});
+       fig_xyz_all_cp = plot_singularity_scatter_xyz_vs_time(singularity_list_num, mobj_sings.null_points_3d, base_list(1:14), options.interpolation.xyz_lims, fig_visibility{:});
        fig_handles{length(fig_handles)+1} = fig_xyz_all_cp;
        
     otherwise
