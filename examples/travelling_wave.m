@@ -3,31 +3,40 @@
 
 % Load data and centroid locations
 load('travelling_wave_W_c1_d1ms_trial1.mat')
-%data = data(1:21, :);
+data = data(1:21, :);
 
 % Options for the data interpolation
-options.data_interpolation.file_exists = false;
+options.interpolation.file.exists = false;
+options.interpolation.file.keep = true;
     
 % Resolution
-options.hx = 3;
-options.hy = 3;
-options.hz = 3;
-options.ht = 1;
+options.interpolation.hx = 4;
+options.interpolation.hy = 4;
+options.interpolation.hz = 4;
+    
+options.interpolation.boundary.alpha_radius = 30;
+options.interpolation.boundary.thickness = 3;
+options.data.ht = 1;
+options.data.slice.id = 0;
 
 % Storage options
-options.tempdir = '/home/paula/Work/Code/Networks/neural-flows/scratch';
-cd(options.tempdir)
-    
+ options.storedir = '/home/paula/Work/Code/Networks/neural-flows/scratch';
+ cd(options.storedir)
+
 % Flow calculation
-options.flow_calculation.init_conditions = 'random';
-options.flow_calculation.seed_init_vel = 42;
-options.flow_calculation.alpha_smooth   = 0.1;
-options.flow_calculation.max_iterations = 128;
+options.flows.file.keep = true;
+options.flows.init_conditions.mode = 'random';
+options.flows.init_conditions.seed = 42;
+options.flows.method.name = 'hs3d';
+options.flows.method.alpha_smooth   = 0.1;
+options.flows.method.max_iterations = 128;
 
 % Singularity detection and classification
-options.sing_analysis.detection = true;    
-options.sing_analysis.detection_datamode  = 'vel';
-options.sing_analysis.detection_threshold = [0 2^-9];
+options.singularity.file.keep = true;
+options.singularity.detection.enabled = true;    
+options.singularity.detection.mode  = 'vel';
+options.singularity.detection.threshold = [0 2^-9];
+options.singularity.classification.enabled = true;    
 
     
 % Define Parallel Cluster properties for parallel processing
