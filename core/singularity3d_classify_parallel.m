@@ -26,10 +26,13 @@ function [msings_obj] = singularity3d_classify_parallel(msings_obj, mflow_obj)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
 
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started classification of singularities.'))
 
 % Calculate jacobian and classify singularities
+
 null_points_3d =  msings_obj.null_points_3d; 
+%singularity_classification_list = cell(size(null_points_3d));
+msings_obj.singularity_classification_list = cell(size(null_points_3d)); 
+
 
 tpts = size(null_points_3d, 2);
 
@@ -57,7 +60,7 @@ grid_size = options.interpolation.grid_size;
 null_points_cell = struct2cell(null_points_3d);
 % Get only relevant data -- subscripts
 null_points_cell = squeeze(null_points_cell(1, 1, :));
-
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started classification of singularities.'))
 for tt=1:tpts 
        % Check if we have critical points. There are 'frames' for which
        % nothing was detected, we should not attempt to calculate jacobian.
@@ -87,6 +90,7 @@ for tt=1:tpts
 
 
 end
+
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished classification of singularities.'))
 
 end % singularity3d_classify_singularities_parallel()
