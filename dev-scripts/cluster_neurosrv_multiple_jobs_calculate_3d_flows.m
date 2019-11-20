@@ -1,8 +1,8 @@
 function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
 % Script to process chunks of simulated data on neurosrv
 
-    load('/home/paulasl/Code/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
-    %load('/home/paula/Work/Code/Networks/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
+    %load('/home/paulasl/Code/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
+    load('/home/paula/Work/Code/Networks/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
     % Remove transient
     soln(:, 1:256) = [];
 
@@ -12,7 +12,7 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     load('513COG.mat', 'COG')
 
     % window size
-    ws = 8193;
+    ws = 128;
     overlap_percentage = 0.0625;
     shift_step = ws - round(overlap_percentage*ws);
     datalen  = size(soln, 2);
@@ -30,19 +30,19 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     clear COG soln
 
     % Cluster properties
-    workers_fraction = 0.8;
+    workers_fraction = 1;
     open_parpool(workers_fraction)
     
     % Set maximum number of threads for nonparallel stuff
-    maxNumCompThreads(24);
-    local_cluster = parcluster('local');
-    local_cluster.NumWorkers = 24;   % This should match the requested number of cpus
-    parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
+    %maxNumCompThreads(24);
+    %local_cluster = parcluster('local');
+    %local_cluster.NumWorkers = 24;   % This should match the requested number of cpus
+    %parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
 
     % Change directory to scratch, so temp files will be created there
     % Storage options 
-    %options.storedir = '/home/paula/Work/Code/Networks/neural-flows/scratch';
-    options.storedir = '/home/paulasl/scratch';
+    options.storedir = '/home/paula/Work/Code/Networks/neural-flows/scratch';
+    %options.storedir = '/home/paulasl/scratch';
     cd(options.storedir)
 
     
@@ -79,8 +79,8 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     options.singularity.file.keep = true;
     options.singularity.detection.enabled = true;    
     options.singularity.detection.mode  = 'vel';
-    options.singularity.detection.threshold = [0 2^-9];
-    options.singularity.classification.enabled = false;    
+    options.singularity.detection.threshold = [0 2^-13];
+    options.singularity.classification.enabled = true;    
 
 
     % Tic
