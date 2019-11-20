@@ -213,7 +213,9 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
        mfile_sings = singularity3d_detection(mfile_flow, options.singularity.detection.threshold); 
        if options.singularity.classification.enabled
 %----------------------------- CLASSIFY SINGULARITIES -------------------------%
-           mfile_sings = singularity3d_classify_singularities_parallel(mfile_sings, mfile_flow);             
+           %mfile_sings = singularity3d_classify_singularities_parallel(mfile_sings, mfile_flow);
+           mfile_sings = singularity3d_classify_parallel(mfile_sings, mfile_flow);             
+
        end 
       varargout{3} = mfile_sings;
 
