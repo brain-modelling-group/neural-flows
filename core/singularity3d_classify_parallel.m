@@ -42,7 +42,7 @@ grid_size = options.flows.grid_size;
 
 % Check if we stored linear indices or subscripts 
 if size(null_points_3d(1).xyz_idx, 2) < 2
-    fprintf('\n %s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started converting lindear indices into subscripts.'))
+    fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started converting lindear indices into subscripts.'))
 
     for tt=1:tpts
         xyz_subs = switch_index_mode(null_points_3d(tt).xyz_idx, 'subscript', grid_size);
@@ -60,7 +60,7 @@ grid_size = options.interpolation.grid_size;
 null_points_cell = struct2cell(null_points_3d);
 % Get only relevant data -- subscripts
 null_points_cell = squeeze(null_points_cell(1, 1, :));
-fprintf('\n %s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started classification of singularities.'))
+fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started classification of singularities.'))
 
 parfor tt=1:tpts 
        % Check if we have critical points. There are 'frames' for which
@@ -95,7 +95,7 @@ parfor tt=1:tpts
 
 end
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished classification of singularities.'))
-fprintf('\n %s \n', strcat('neural-flows:: ', mfilename, '::Info:: Saving classification list to file.'))
+fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Saving classification list to file.'))
 
 msings_obj.singularity_classification_list = singularity_classification_list;
 
