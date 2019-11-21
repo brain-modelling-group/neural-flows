@@ -1,11 +1,13 @@
 % This script runs the whole neural-flows workflow on a small epoch of
-% simulated data, that mostly corresponds to rotating wave.
+% simulated data, that mostly corresponds to a travelling wave that goes
+% back and forth between hemispehres (mostly L->R) and vanishes on the left 
+% hemisphere.
 
 % Performance: This takes about XX minutes to run with 11 workers for parallel
 % functions. Memory usage is approximately 6GB.
 
 % Load data and centroid locations
-load('rotating_wave_W_c1_d1ms_trial1.mat')
+load('travelling-cp_wave_W_c1_d1ms_trial1.mat')
 
 % Options for the data interpolation
 options.interpolation.file.exists = false;
