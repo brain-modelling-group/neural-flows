@@ -19,7 +19,7 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(slice_idx)
     load('513COG.mat', 'COG')
 
     % window size
-    ws = 256;
+    ws = 8193;
     overlap_percentage = 0.0625;
     shift_step = ws - round(overlap_percentage*ws);
     datalen  = size(soln, 2);
