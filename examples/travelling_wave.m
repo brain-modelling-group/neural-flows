@@ -34,12 +34,7 @@ options.flows.method.alpha_smooth   = 0.1;
 options.flows.method.max_iterations = 128;
 
 % Singularity detection and classification
-options.singularity.file.keep = true;
-options.singularity.detection.enabled = true;    
-options.singularity.detection.mode  = 'vel';
-options.singularity.detection.threshold = [0 2^-9];
-options.singularity.classification.enabled = true;    
-
+options.singularity.detection.enabled = false;    
     
 % Define Parallel Cluster properties for parallel processing
 workers_fraction = 0.8;
