@@ -1,7 +1,7 @@
 % This script runs the whole neural-flows workflow on a small epoch of
 % simulated data, that mostly corresponds to rotating wave.
 
-% Performance: This takes about XX minutes to run with 11 workers for parallel
+% Performance: This takes about 5 minutes to run with 11 workers for parallel
 % functions. Memory usage is approximately 6GB.
 
 % Load data and centroid locations
