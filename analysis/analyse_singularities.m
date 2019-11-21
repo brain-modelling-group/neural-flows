@@ -29,8 +29,6 @@ function fig_handles = analyse_singularities(mobj_sings, fig_visibility, to_plot
 
 if nargin < 2
     fig_visibility = {'Visible', 'on'};
-    to_plot = 'all';
-
 end
 
 if nargin < 3
