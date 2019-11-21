@@ -1,27 +1,29 @@
 % This script runs the whole neural-flows workflow on a small epoch of
 % simulated data, that mostly corresponds to a travelling wave.
 
+ % Performance: This takes about 3 minutes to run with 11 workers for parallel
+ % functions.
+
 % Load data and centroid locations
 load('travelling_wave_W_c1_d1ms_trial1.mat')
-data = data(1:21, :);
 
 % Options for the data interpolation
 options.interpolation.file.exists = false;
 options.interpolation.file.keep = true;
     
 % Resolution
-options.interpolation.hx = 4;
-options.interpolation.hy = 4;
-options.interpolation.hz = 4;
+options.interpolation.hx = 3;
+options.interpolation.hy = 3;
+options.interpolation.hz = 3;
     
 options.interpolation.boundary.alpha_radius = 30;
-options.interpolation.boundary.thickness = 3;
-options.data.ht = 1;
+options.interpolation.boundary.thickness = 2;
+options.data.ht = 0.25;
 options.data.slice.id = 0;
 
 % Storage options
- options.storedir = '/home/paula/Work/Code/Networks/neural-flows/scratch';
- cd(options.storedir)
+options.storedir = '/home/paula/Work/Code/Networks/neural-flows/scratch';
+cd(options.storedir)
 
 % Flow calculation
 options.flows.file.keep = true;
