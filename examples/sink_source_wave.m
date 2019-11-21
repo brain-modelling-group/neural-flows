@@ -1,7 +1,6 @@
 % This script runs the whole neural-flows workflow on a small epoch of
-% simulated data, that mostly corresponds to a travelling wave that goes
-% back and forth between hemispehres (mostly L->R) and vanishes on the left 
-% hemisphere.
+% simulated data, that mostly corresponds to a pattern in which two sinks are 
+% prominent, one on each hemisphere
 
 % Performance: This takes about 5 minutes to run with 11 workers for parallel
 % functions. Memory usage is approximately 6GB.
