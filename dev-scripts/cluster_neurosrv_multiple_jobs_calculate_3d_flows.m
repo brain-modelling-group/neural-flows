@@ -1,14 +1,15 @@
-function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
+function cluster_neurosrv_multiple_jobs_calculate_3d_flows(slice_idx)
 % Script to process chunks of simulated data on neurosrv
 
     [~, host_name]  = system('hostname');
     host_name = string(host_name(1:end-1));
     
-    
     if strcmp(host_name, 'dracarys')
             load('/home/paula/Work/Code/Networks/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
-    else
+    elseif strcmp(host_name, 'neurosrv01')
         load('/home/paulasl/Code/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
+    else % artemis?
+        load('/home/psan7097/neural-flows/demo-data/long_cd_ictime50_seg7999_outdt1_d1ms_W_coupling0.6_trial1.mat', 'soln');
     end
     % Remove transient
     soln(:, 1:256) = [];
@@ -24,9 +25,9 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     shift_step = ws - round(overlap_percentage*ws);
     datalen  = size(soln, 2);
     idx = ws:shift_step:datalen;
-    if idx_chunk < length(idx)+1
-        idx_start = idx(idx_chunk)-ws+1; 
-        idx_stop =  idx(idx_chunk);
+    if slice_idx < length(idx)+1
+        idx_start = idx(slice_idx)-ws+1; 
+        idx_stop =  idx(slice_idx);
     else
         idx_start = idx(end);
         idx_stop = datalen;
@@ -59,7 +60,7 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(idx_chunk)
     options.data.ht = 1;
     
     % Slice of data
-    options.data.slice.id = idx_chunk;
+    options.data.slice.id = slice_idx;
     options.data.slice.start = idx_start;
     options.data.slice.stop  = idx_stop;
     
