@@ -20,7 +20,7 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows()
     load('513COG.mat', 'COG')
 
     % window size
-    ws = 128;
+    ws = 8193;
     overlap_percentage = 0.0625;
     shift_step = ws - round(overlap_percentage*ws);
     datalen  = size(soln, 2);
@@ -43,16 +43,20 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows()
         workers_fraction = 1;
         open_parpool(workers_fraction)
         options.storedir = '/home/paula/Work/Code/Networks/neural-flows/scratch';
-
-    else
+    elseif strcmp(host_name, 'neurosrv01')
     % Set maximum number of threads for nonparallel stuff
         maxNumCompThreads(24);
         local_cluster = parcluster('local');
         local_cluster.NumWorkers = 24;   % This should match the requested number of cpus
         parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
         options.storedir = '/home/paulasl/scratch';
+    else
+        maxNumCompThreads(24);
+        local_cluster = parcluster('local');
+        local_cluster.NumWorkers = 24;   % This should match the requested number of cpus
+        parpool(local_cluster.NumWorkers, 'IdleTimeout', 1800);
+        options.storedir = '/scratch/CGMD'; 
     end
-
     % Change directory to scratch, so temp files will be created there
     cd(options.storedir)
     
