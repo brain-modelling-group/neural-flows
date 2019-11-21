@@ -53,3 +53,5 @@ tok(tstart)
 data_type = 'scattered';
 perform_mode_decomposition_svd(mflows_obj, data_type);
 
+% Plot speed distros
+plot1d_speed_distribution(mflows_obj)
