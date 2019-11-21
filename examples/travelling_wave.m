@@ -1,7 +1,7 @@
 % This script runs the whole neural-flows workflow on a small epoch of
 % simulated data, that mostly corresponds to a travelling wave.
 
- % Performance: This takes about 3 minutes to run with 11 workers for parallel
+ % Performance: This takes about 5 minutes to run with 11 workers for parallel
  % functions.
 
 % Load data and centroid locations

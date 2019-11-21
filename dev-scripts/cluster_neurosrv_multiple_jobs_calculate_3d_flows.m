@@ -72,6 +72,7 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows(slice_idx)
     % Resolution
     options.interpolation.hx = 3;
     options.interpolation.hy = 3;
+        strcmp(h
     options.interpolation.hz = 3;
     
     options.interpolation.boundary.alpha_radius = 30;
