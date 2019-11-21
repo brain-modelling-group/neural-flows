@@ -14,7 +14,6 @@ function cluster_neurosrv_multiple_jobs_calculate_3d_flows()
     % Remove transient
     soln(:, 1:256) = [];
 
-
     %in1 = load('/headnode2/paula123/Code/neural-flows/demo-data/W_c1_d1ms_trial1.mat');
     %soln = in1.nodes.'; 
     load('513COG.mat', 'COG')
