@@ -113,6 +113,32 @@ plot(ax(7), yy(75), xx(50), 'kx', 'markersize', 8)
 plot(ax(8), yy(75), xx(50), 'wo', 'markersize', 8, 'markeredgecolor', 'k', 'markerfacecolor', 'w')
 plot(ax(8), yy(75), xx(50), 'kx', 'markersize', 8)
 
+%% Figure 3
+
+
+figure3_handle = figure('Name', 'fig3');
+nr = 4;
+nc = 1;
+
+for kk=1:4
+   ax(kk) = subplot(nr, nc, kk, 'Parent', figure3_handle);
+   hold(ax(kk), 'on')
+end
+
+%%
+fl1 = 42;
+frames = [1 5 10 15];
+
+for kk=1:4
+    data = squeeze(wv(:, 50, frames(kk)));
+    [up1,lo1] = envelope(data, fl1,'analytic');
+    plot(ax(kk), yy, data, 'k')
+    plot(ax(kk), yy, up1, 'r')
+    plot(ax(kk), yy, lo1, 'g')
+
+end
+
+
 %%
 y = hilbert(wv);
 env = abs(y);
