@@ -33,9 +33,6 @@ end
 
 [min_x, min_y, min_z, max_x, max_y, max_z, ~] = get_grid_limits(points_xyz, hx, hy, hz, lim_type);
 
-
-
-
     
 % Create the grid -- THIS IS THE PROBLEM WITH SPACING
 xx = min_x:hx:max_x;
