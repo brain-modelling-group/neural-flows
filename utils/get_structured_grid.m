@@ -1,4 +1,4 @@
-function [X, Y, Z, grid_size] = get_structured_grid(points_xyz, hx, hy, hz)
+function [X, Y, Z, grid_size] = get_structured_grid(points_xyz, hx, hy, hz, lim_type)
 % This function sgenreates a structured grid using meshgrid, from a
 % collection of scatterd points/locationss in 3D space.
 % 
@@ -25,8 +25,16 @@ function [X, Y, Z, grid_size] = get_structured_grid(points_xyz, hx, hy, hz)
 %     Paula Sanz-Leon, QIMR Berghofer February 2019
 
 
+if nargin < 5
+    % round limits to the next integer
+    lim_type = 'ceil';
+end
 
-[min_x, min_y, min_z, max_x, max_y, max_z, ~] = get_grid_limits(points_xyz, hx, hy, hz);
+
+[min_x, min_y, min_z, max_x, max_y, max_z, ~] = get_grid_limits(points_xyz, hx, hy, hz, lim_type);
+
+
+
 
     
 % Create the grid -- THIS IS THE PROBLEM WITH SPACING
