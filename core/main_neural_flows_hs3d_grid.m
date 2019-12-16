@@ -24,10 +24,10 @@ function varargout = main_neural_flows_hs3d_grid(data, X, Y, Z, options)
     t_dim = 1; % time
     dtpts  = size(data, t_dim);
     grid_size = size(X);
-    hx = options.hx; 
-    hy = options.hy;
-    hz = options.hz;   
-    ht = options.ht;
+    hx = options.interpolation.hx; 
+    hy = options.interpolation.hy;
+    hz = options.interpolation.hz;   
+    ht = options.data.ht;
         
     % NOTE: this is a kind of hack. For a structured grids we should not
     % need this. or maybe we do?
@@ -37,8 +37,8 @@ function varargout = main_neural_flows_hs3d_grid(data, X, Y, Z, options)
     % Parameters for optical flow-- could be changed, could be parameters
     
     % Save flow calculation parameters parameters 
-    options.flow_calculation.dtpts          = dtpts;
-    options.flow_calculation.grid_size      = grid_size;
+    options.flows.dtpts          = dtpts;
+    options.flows.grid_size      = grid_size;
         
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started estimation of neural flows.'))
     
@@ -69,6 +69,7 @@ function varargout = main_neural_flows_hs3d_grid(data, X, Y, Z, options)
     % Permute data, it seems we saved the time dimension as the last
     % dimension
     data = permute(data, [2 3 4 1]);
+    mfile_vel.interp_mask = ones(grid_size);
     flows3d_estimate_hs3d_flow(data, mfile_vel, options)
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished estimation of neural flows.'))
     
