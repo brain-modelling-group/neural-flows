@@ -11,10 +11,10 @@ nuc = 2;    % 1/m
 df  = 0.25; % Hz
 dnu = 0.25; % 1/m
 
-w1  = 2*pi*(nuc+df);   %angular frequency rad/s
+w1  = 2*pi*(fc+df);    %angular frequency rad/s
 k1x = 2*pi*(nuc-dnu);  %angular frequency wavenumber rad/m
 k1y = 2*pi*(nuc-dnu);  %angular frequency wavenumber rad/m
-w2  = 2*pi*(nuc-df);   %angular frequency rad/s
+w2  = 2*pi*(fc-df);    %angular frequency rad/s
 k2x = 2*pi*(nuc+dnu);  %angular frequency wavenumber rad/m
 k2y = 2*pi*(nuc+dnu);  %angular frequency wavenumber rad/m
 
@@ -27,9 +27,12 @@ dk = (k2-k1);
 vg = dw / dk;
 
 % Spatiotemporal grid 
-xx = 0:0.02:1;
-yy = 0:0.02:1;
-tt = 0:0.02:5;
+dx = 0.02;
+dy = 0.02;
+dt = 0.02;
+xx = 0:dx:2;
+yy = 0:dy:2;
+tt = 0:dt:5;
 [x, y, t] = meshgrid(xx, yy, tt);
 
 wave1 = cos(w1.*t-k1x.*x+k1y.*y);
@@ -101,6 +104,7 @@ for kk=1:length(frames)
     ax(kk+4).YLabel.String = 'y [m]';
     ax(kk+4).XLabel.String = 'x [m]';
 end
+ locs = COG(1:256, :)/100;
 
 plot(ax(5), xx(50)*ones(length(yy), 1), yy,  'k--')
 
@@ -136,6 +140,7 @@ plot(ax(8), xx(50), yy(75), 'kx', 'markersize', 8)
 %% Figure 3 - plot slice across one dimension and at different time points  
 figure3_handle = figure('Name', 'fig3');
 nr = 4;
+
 nc = 1;
 
 for kk=1:4
@@ -205,10 +210,10 @@ wv_phi = reshape(wv_phi, 51,51, 251);
 colormap(redyellowblue(256, 'rev'))
 %colormap(hsv(256))
 for tpt = 1:length(tt)
-imagesc(yy, xx, env(:, :, tpt))
+%imagesc(yy, xx, env(:, :, tpt))
 %imagesc(yy, xx, env_wv(:, :, tpt))
 
-%imagesc(yy, xx, fliplr(wv(:, :, tpt)))
+imagesc(yy, xx, fliplr(wv(:, :, tpt)))
 %imagesc(yy, xx, wv_phi(:, :, tpt))
 
 %imagesc(wave2(:, :, tt))
