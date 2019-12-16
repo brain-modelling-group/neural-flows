@@ -118,12 +118,12 @@ if nargin < 1
 end
 
 switch direction
-    case 'x'
+    case 'y'
         ky = 0;
         kz = 0;
         kr = 0;
         
-    case 'y'
+    case 'x'
         kx = 0;
         kz = 0;
         kr = 0;
