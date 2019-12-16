@@ -23,7 +23,7 @@ function test_flow_estimation__planewave3d_scattered_hs3d()
  options.interpolation.boundary.thickness = 3;
  options.data.slice.id = 0;
  options.interpolation.boundary.alpha_radius = 30;
- options.flows.file.keep = false;
+ options.flows.file.keep = true;
  options.flows.init_conditions.mode = 'random';
  options.flows.init_conditions.seed = 42;
  options.flows.method.alpha_smooth   = 0.1;
