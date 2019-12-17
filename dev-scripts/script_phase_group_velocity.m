@@ -1,6 +1,19 @@
 % This script explores the differences between using the amplitude, the phase
 % and the unwrapped phase to determine the group velocity of a travelling. 
 % PSL - Dec 2019
+% This script shows, I hope a few things: 
+% 1) that using the phase and amplitude of a (raw) signal can yield different results 
+% 2) that group velocity and phsae velocity are/can be two different quantities
+% 3) that applying the hilbert transfrom mindlessly will get you in trouble
+% 4) that filtering the signal onyl in time does not yield a good
+%    representation of the actual physical wave -- by that I mean that in this
+%    example the temporal frequency of the wave (ie, amplitude modulation)
+%    is approximately 0.5 Hz, but if we calculate the power
+%    spectrum/spectrogram, we only see the individual frequencies of wave1
+%    and wave2. So when we filter we select one of those freq peaks and
+%    probably filter out the frequency of interest. 
+% 5) There is a strong argument to stop considering space and time as
+%    separable.
 
 % Example: phase velocity slower than group velocity and in opposite
 % direction
