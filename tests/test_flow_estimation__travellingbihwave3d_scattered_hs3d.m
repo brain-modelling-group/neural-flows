@@ -34,12 +34,13 @@ function test_flow_estimation__travellingbihwave3d_scattered_hs3d()
  options.singularity.detection.enabled = false;    
  
  
- y   = hilbert(wave3d);
- env = abs(y);
+ wave3d_env = abs(hilbert(wave3d));
 
  
  % Do the stuff
- [~, mfile_flows] = main_neural_flows_hs3d_scatter(env, locs, options);
+ [~, mfile_flows] = main_neural_flows_hs3d_scatter(wave3d, locs, options);
+ [~, mfile_flows_env] = main_neural_flows_hs3d_scatter(wave3d_env, locs, options);
+
 
  % Plot the velocity estimates
  fig_hist = figure('Name', 'nflows-test-travellingwave3d-scattered-hs3d');
@@ -66,4 +67,6 @@ function test_flow_estimation__travellingbihwave3d_scattered_hs3d()
 data_type = 'grid';
 perform_mode_decomposition_svd(mfile_flows, data_type);
 
-end % function test_flow_estimation__travellingwave3d_scattered_hs3d()
+perform_mode_decomposition_svd(mfile_flows_env, data_type);
+
+end % function test_flow_estimation__travellingbihwave3d_scattered_hs3d()
