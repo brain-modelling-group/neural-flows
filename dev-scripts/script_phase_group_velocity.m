@@ -2,7 +2,6 @@
 % and the unwrapped phase to determine the group velocity of a travelling. 
 % PSL - Dec 2019
 
-
 % Example: phase velocity slower than group velocity and in opposite
 % direction
 % Wave parameters
@@ -47,11 +46,12 @@ wv = wave1 + wave2;
 [pdg_sentinel] = set_default_groot({'light', 'medium'});
 save_formats = {'tiff', 'jpeg'};
 output_path = '~/Work/Articles/neural-flows-article/figures';
-%%
+%% Figure 2 -- 2D+t wave
 nr = 3;
 nc = 4;
 figure2_handle = figure('Name', 'fig2');
-figure2_handle.Position = [-35.0838   14.2875 28 19];
+% Assumes figure units are in cm
+figure2_handle.Position = [-35.0838  14.2875 28 19];
 
 for kk=1:8
    ax(kk) = subplot(nr, nc, kk);
@@ -65,17 +65,19 @@ ax(10) = subplot(nr, nc, [10 12]);
 hold(ax(10), 'on')
 
 alpha_data = 0.75;
+x_idx = floor(length(xx)/2);
+y_idx = floor(length(yy)/2);
 
 % First frame -- wave 1
 imagesc(ax(1), xx, yy, wave1(:, :, 1), 'AlphaData', alpha_data);
 ax(1).YLabel.String = 'y [m]';
 ax(1).XLabel.String = 'x [m]';
 
-plot(ax(1), xx(50), yy(75), 'wo', 'markersize', 8, 'markeredgecolor', 'k', 'markerfacecolor', 'w')
-plot(ax(1), xx(50), yy(75), 'kx', 'markersize', 8)
+plot(ax(1), xx(x_idx), yy(y_idx), 'wo', 'markersize', 8, 'markeredgecolor', 'k', 'markerfacecolor', 'w')
+plot(ax(1), xx(x_idx), yy(y_idx), 'kx', 'markersize', 8)
 
 % Time course -- wave 1
-plot(ax(2), tt, squeeze(wave1(75, 50, :)), 'k');
+plot(ax(2), tt, squeeze(wave1(y_idx, x_idx, :)), 'k');
 ax(2).XLim = [0 2];
 ax(2).XLabel.String = 'time [s]';
 ax(2).YLabel.String = 'w_1(x_0, y_0, t)';
@@ -86,12 +88,12 @@ imagesc(ax(3), xx, yy, wave2(:, :, 1), 'AlphaData', alpha_data);
 ax(3).YLabel.String = 'y [m]';
 ax(3).XLabel.String = 'x [m]';
 
-plot(ax(3), xx(50), yy(75), 'w+', 'markersize', 10)
-plot(ax(3), xx(50), yy(75), 'wo', 'markersize', 8, 'markeredgecolor', 'k', 'markerfacecolor', 'w')
-plot(ax(3), xx(50), yy(75), 'kx', 'markersize', 8)
+plot(ax(3), xx(x_idx), yy(y_idx), 'w+', 'markersize', 10)
+plot(ax(3), xx(x_idx), yy(y_idx), 'wo', 'markersize', 8, 'markeredgecolor', 'k', 'markerfacecolor', 'w')
+plot(ax(3), xx(x_idx), yy(y_idx), 'kx', 'markersize', 8)
 
 % Time course -- wave 2
-plot(ax(4), tt, squeeze(wave2(75, 50, :)), 'k');
+plot(ax(4), tt, squeeze(wave2(y_idx, x_idx, :)), 'k');
 ax(4).XLim = [0 2];
 ax(4).XLabel.String = 'time [s]';
 ax(4).YLabel.String  = 'w_2(x_0, y_0, t)';
@@ -106,11 +108,10 @@ for kk=1:length(frames)
 end
  locs = COG(1:256, :)/100;
 
-plot(ax(5), xx(50)*ones(length(yy), 1), yy,  'k--')
+plot(ax(5), xx(x_idx)*ones(length(yy), 1), yy,  'k--')
 
 % Wave in 1D
-data =  wv(:, 50, 1);
-%plot(ax(9), yy, wv(:, 50, 1), 'color', [0.65 0.65 0.65 0.5])
+data =  wv(:, x_idx, 1);
 surf(ax(9), [yy(:) yy(:)], [data(:) data(:)], [data(:) data(:)], ...  % Reshape and replicate data
      'FaceColor', 'none', ...    % Don't bother filling faces with color
      'EdgeColor', 'interp', ...  % Use interpolated color for edges
@@ -121,26 +122,25 @@ ax(9).XLabel.String = 'y [m]';
 ax(9).YLabel.String = 'w(x_0, y, t_0) ';
 
 % Markers
-plot(ax(10), tt, squeeze(wv(75, 50, :)), 'k')
+plot(ax(10), tt, squeeze(wv(y_idx, x_idx, :)), 'k')
 plot(ax(10), tt(frames(2:end)), squeeze(wv(75, 50, frames(2:end))), 'r.', 'markersize', 20)
 ax(10).XLim = [0 5];
 xlabel('time [s]')
 ylabel('w(x_0, y_0, t) ')
 
 
-plot(ax(6), xx(50), yy(75), 'wo', 'markersize', 8, 'markeredgecolor', 'k', 'markerfacecolor', 'w')
-plot(ax(6), xx(50), yy(75), 'kx', 'markersize', 8)
+plot(ax(6), xx(x_idx), yy(y_idx), 'wo', 'markersize', 8, 'markeredgecolor', 'k', 'markerfacecolor', 'w')
+plot(ax(6), xx(x_idx), yy(y_idx), 'kx', 'markersize', 8)
 
-plot(ax(7), xx(50), yy(75), 'wo', 'markersize', 8, 'markeredgecolor', 'k', 'markerfacecolor', 'w')
-plot(ax(7), xx(50), yy(75), 'kx', 'markersize', 8)
+plot(ax(7), xx(x_idx), yy(y_idx), 'wo', 'markersize', 8, 'markeredgecolor', 'k', 'markerfacecolor', 'w')
+plot(ax(7), xx(x_idx), yy(y_idx), 'kx', 'markersize', 8)
 
-plot(ax(8), xx(50), yy(75), 'wo', 'markersize', 8, 'markeredgecolor', 'k', 'markerfacecolor', 'w')
-plot(ax(8), xx(50), yy(75), 'kx', 'markersize', 8)
+plot(ax(8), xx(x_idx), yy(y_idx), 'wo', 'markersize', 8, 'markeredgecolor', 'k', 'markerfacecolor', 'w')
+plot(ax(8), xx(x_idx), yy(y_idx), 'kx', 'markersize', 8)
 
-%% Figure 3 - plot slice across one dimension and at different time points  
+%% Figure 3 - plot slice across one spatal dimension, at 4 different time points  
 figure3_handle = figure('Name', 'fig3');
 nr = 4;
-
 nc = 1;
 
 for kk=1:4
@@ -150,15 +150,12 @@ end
 
 figure3_handle.Position = [ -35.0573   14.2081 13.6 19.2];
 
-%%
-fl1 = 50;
+fl1 = 50; % samples to estimate the envelope
 frames = [1 5 10 15];
 
 for kk=1:4
-    data = squeeze(wv(:, 50, frames(kk)));
+    data = squeeze(wv(:, x_idx, frames(kk)));
     [up1,lo1] = envelope(data, fl1,'analytic');
-    %plot(ax(kk), yy, data, 'k')
-    %scatter(ax(kk), yy,data,[],data,'fill')
     surf(ax(kk), [yy(:) yy(:)], [data(:) data(:)], [data(:) data(:)], ...  % Reshape and replicate data
      'FaceColor', 'none', ...    % Don't bother filling faces with color
      'EdgeColor', 'interp', ...  % Use interpolated color for edges
@@ -176,7 +173,7 @@ end
 
 ax(4).XLabel.String = 'y [m]';
 
-
+% Create lines across subplots
 annotation(figure3_handle,'line',[0.43 0.315], ...
                                  [0.88 0.25],'LineStyle','--');
 
@@ -184,7 +181,9 @@ annotation(figure3_handle,'line',[0.43 0.315], ...
 annotation(figure3_handle,'line',[0.52 0.63],...
                                  [0.84 0.185],'LineStyle','-.');
 
-%%
+%% Figure 4 -- neuropatt amplitude-based estimation
+
+%% Figure 5 -- neuropatt phase-based estimation
 y   = hilbert(fliplr(wv));
 env = abs(y);
 %%
