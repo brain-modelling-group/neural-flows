@@ -80,7 +80,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
   
     % Generate a structured grid 
     scaling_factor = 1.05; % inflate locations a little bit, so the grids have enough blank space around the volume
-    [X, Y, Z, grid_size] = get_structured_grid(scaling_factor*locs, hx, hy, hz);
+    [X, Y, Z, grid_size] = get_structured_grid(scaling_factor*locs, hx, hy, hz, options.interpolation.grid.lim_type);
     
     % Save the locations
     options.data.locs = locs;
@@ -201,7 +201,7 @@ function varargout = main_neural_flows_hs3d_scatter(data, locs, options)
     % Save original locations, just in case
     mfile_flow.locs = locs;
 
-    % Delete sentinels. If these variable are OnCleanup objects, then the 
+    % Delete sentinels. If these variable are OnCleanup objects, theln the 
     % files will be deleted.
     delete(mfile_interp_sentinel)    
     delete(mfile_flow_sentinel)
