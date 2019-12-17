@@ -50,6 +50,13 @@ else
     ht = 1;
 end
 
+tmp = strcmpi(varargin,'lim_type'); 
+if any(tmp)
+    lim_type = varargin{find(tmp)+1}; 
+else
+    lim_type = 'none';
+end
+
 tmp = strcmpi(varargin,'visual_debugging'); % note really a velocity but an integer scaling for circshift
 if any(tmp)
     plot_stuff = varargin{find(tmp)+1}; 
@@ -58,10 +65,9 @@ else
 end
 
 
-[X, Y, Z, ~] = get_structured_grid(locs, hxyz, hxyz, hxyz);
+[X, Y, Z, ~] = get_structured_grid(locs, hxyz, hxyz, hxyz, lim_type);
 
 [wave_temp, time] = genereate_fake_wave(X, Y, Z, ht);
-
 
 % Preallocate memory
 wave3d(length(time), size(locs, 1)) = 0;
@@ -73,7 +79,7 @@ for tt=1:length(time)
 end
 
 if plot_stuff
-    plot_sphereanim(wave3d, locs*100, time);
+    plot_sphereanim(wave3d, locs*1000, time);
 end
 
 
@@ -109,7 +115,7 @@ xx = X(1, :, 1);
 zz = Z(1,1,:);
 
 % NOTE: hardcoded size 
-time = 0:ht:5; % in seconds
+time = 0:ht:4; % in seconds
 
 [x, y, t] = meshgrid(xx, yy, time);
 
