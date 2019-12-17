@@ -70,6 +70,8 @@ y_idx = floor(length(yy)/2);
 
 % First frame -- wave 1
 imagesc(ax(1), xx, yy, wave1(:, :, 1), 'AlphaData', alpha_data);
+ax(1).YDir = 'reverse';
+ax(1).XAxisLocation = 'top';
 ax(1).YLabel.String = 'y [m]';
 ax(1).XLabel.String = 'x [m]';
 
@@ -78,6 +80,7 @@ plot(ax(1), xx(x_idx), yy(y_idx), 'kx', 'markersize', 8)
 
 % Time course -- wave 1
 plot(ax(2), tt, squeeze(wave1(y_idx, x_idx, :)), 'k');
+ax(2).XAxisLocation = 'top';
 ax(2).XLim = [0 2];
 ax(2).XLabel.String = 'time [s]';
 ax(2).YLabel.String = 'w_1(x_0, y_0, t)';
@@ -85,6 +88,8 @@ ax(2).YLabel.String = 'w_1(x_0, y_0, t)';
 
 % First frame -- wave 2
 imagesc(ax(3), xx, yy, wave2(:, :, 1), 'AlphaData', alpha_data);
+ax(3).YDir = 'reverse';
+ax(3).XAxisLocation = 'top';
 ax(3).YLabel.String = 'y [m]';
 ax(3).XLabel.String = 'x [m]';
 
@@ -94,6 +99,7 @@ plot(ax(3), xx(x_idx), yy(y_idx), 'kx', 'markersize', 8)
 
 % Time course -- wave 2
 plot(ax(4), tt, squeeze(wave2(y_idx, x_idx, :)), 'k');
+ax(4).XAxisLocation = 'top';
 ax(4).XLim = [0 2];
 ax(4).XLabel.String = 'time [s]';
 ax(4).YLabel.String  = 'w_2(x_0, y_0, t)';
@@ -103,10 +109,11 @@ frames = [1 20 50 80];
 for kk=1:length(frames)
     colormap(redyellowblue(256, 'rev'))
     imagesc(ax(kk+4), xx, yy, wv(:, :, frames(kk)), 'AlphaData', alpha_data);
+    ax(kk+4).YDir = 'reverse';
+    ax(kk+4).XAxisLocation = 'top';
     ax(kk+4).YLabel.String = 'y [m]';
     ax(kk+4).XLabel.String = 'x [m]';
 end
- locs = COG(1:256, :)/100;
 
 plot(ax(5), xx(x_idx)*ones(length(yy), 1), yy,  'k--')
 
@@ -123,7 +130,7 @@ ax(9).YLabel.String = 'w(x_0, y, t_0) ';
 
 % Markers
 plot(ax(10), tt, squeeze(wv(y_idx, x_idx, :)), 'k')
-plot(ax(10), tt(frames(2:end)), squeeze(wv(75, 50, frames(2:end))), 'r.', 'markersize', 20)
+plot(ax(10), tt(frames(2:end)), squeeze(wv(y_idx, x_idx, frames(2:end))), 'r.', 'markersize', 20)
 ax(10).XLim = [0 5];
 xlabel('time [s]')
 ylabel('w(x_0, y_0, t) ')
@@ -137,6 +144,52 @@ plot(ax(7), xx(x_idx), yy(y_idx), 'kx', 'markersize', 8)
 
 plot(ax(8), xx(x_idx), yy(y_idx), 'wo', 'markersize', 8, 'markeredgecolor', 'k', 'markerfacecolor', 'w')
 plot(ax(8), xx(x_idx), yy(y_idx), 'kx', 'markersize', 8)
+%% Frames - wave sum - amplitude
+vidfile = VideoWriter('wave_velocity.avi');
+phi = angle(hilbert(wv));
+
+open(vidfile);
+
+figure2a_handle = figure('Name', 'fig2a');
+ax_mov = subplot(1,1,1);
+axis equal
+for kk=1:length(tt)
+    colormap(redyellowblue(256, 'rev'))
+    imagesc(ax_mov, xx, yy, wv(:, :, kk), 'AlphaData', alpha_data);
+    ax_mov.YDir = 'reverse';
+    ax_mov.XAxisLocation = 'top';
+    ax_mov.YLabel.String = 'y [m]';
+    ax_mov.XLabel.String = 'x [m]';
+    pause(0.1)
+    drawnow
+    f = getframe(figure2a_handle);
+    writeVideo(vidfile, f);
+end
+ close(vidfile)
+ 
+%% Frames - wave sum - phase
+vidfile = VideoWriter('wave_velocity_phase.avi');
+phi = angle(hilbert(wv));
+
+open(vidfile);
+
+figure2b_handle = figure('Name', 'fig2b');
+ax_mov = subplot(1,1,1);
+axis equal
+cmap = pmkmp_new('ostwald_o', 256);
+for kk=1:length(tt)
+    colormap(cmap) % from neuropatt
+    imagesc(ax_mov, xx, yy, phi(:, :, kk), 'AlphaData', alpha_data);
+    ax_mov.YDir = 'reverse';
+    ax_mov.XAxisLocation = 'top';
+    ax_mov.YLabel.String = 'y [m]';
+    ax_mov.XLabel.String = 'x [m]';
+    pause(0.1)
+    drawnow
+    f = getframe(figure2b_handle);
+    writeVideo(vidfile, f);
+end
+ close(vidfile)
 
 %% Figure 3 - plot slice across one spatal dimension, at 4 different time points  
 figure3_handle = figure('Name', 'fig3');
@@ -181,86 +234,84 @@ annotation(figure3_handle,'line',[0.43 0.315], ...
 annotation(figure3_handle,'line',[0.52 0.63],...
                                  [0.84 0.185],'LineStyle','-.');
 
-%% Figure 4 -- neuropatt amplitude-based estimation
+%% Figure 4 -- neuropatt amplitude-based estimation raw signal
+wv_t = wv(1:35, 1:35, :); 
+NeuroPattGUI(wv_t, 50)
 
-%% Figure 5 -- neuropatt phase-based estimation
-y   = hilbert(fliplr(wv));
-env = abs(y);
+% Get figure handle
+figure_handle = figure(1);
+ax(1) = figure_handle.Children(5);
+ax(2) = figure_handle.Children(3);
+
+ax(1).XLim = [10 30];
+ax(1).YLim = [10 30];
+ax(2).XLim = [10 30];
+ax(2).YLim = [10 30];
+
+ax(1).Children.Color =  [0.5500 0.5500 0.5500];
+ax(2).Children.Color =  [0.5500 0.5500 0.5500];
+figure_handle.Children(4).Children(2).Color = [0.5500 0.5500 0.5500];
+figure_handle.Children(1).Children(2).Color = [0.5500 0.5500 0.5500];
 %%
-wv_lr = fliplr(wv);
+close all
+%% Figure 5 -- neuropatt amplitude-based estimation envelope of signal
+env   = abs(hilbert(wv));
+env   = env(25:65, 25:65, 20:end-20);
 
-%% Envelope
-for kk=1:size(wv_lr, 1)
-    
-    for jj=1:size(wv_lr, 2)
-    [up1, ~] = envelope(squeeze((wv_lr(kk, jj, :))), 60,'analytic');
-    env_wv(kk, jj, :) = up1;
-    end
-end
+NeuroPattGUI(env, 50)
 
-%% Envelope phase
-for tpt = 1:length(tt)
-    data = env_wv(:, :, tpt);
-    wv_phi(:, tpt) = angle(hilbert(data(:)));
-end
-wv_phi = reshape(wv_phi, 51,51, 251);
+figure_handle = figure(1);
+ax(1) = figure_handle.Children(5);
+ax(2) = figure_handle.Children(3);
 
+ax(1).XLim = [10 30];
+ax(1).YLim = [10 30];
+ax(2).XLim = [10 30];
+ax(2).YLim = [10 30];
+
+ax(1).Children.Color =  [0.5500 0.5500 0.5500];
+ax(2).Children.Color =  [0.5500 0.5500 0.5500];
+figure_handle.Children(4).Children(2).Color = [0.5500 0.5500 0.5500];
+figure_handle.Children(1).Children(2).Color = [0.5500 0.5500 0.5500];
+%% 
+close all
+%% Figure 6 -- neuropatt phase-based estimation -- hilbert transform of raw signal
+
+phi_env   = angle(hilbert(wv)); % wrapped phases
+phi_env = phi_env(25:65, 25:65, 20:end-20);
+NeuroPattGUI(phi_env, 50)
+
+figure_handle = figure(1);
+ax(1) = figure_handle.Children(5);
+ax(2) = figure_handle.Children(3);
+
+ax(1).XLim = [10 30];
+ax(1).YLim = [10 30];
+ax(2).XLim = [10 30];
+ax(2).YLim = [10 30];
+
+ax(1).Children.Color =  [0.5500 0.5500 0.5500];
+ax(2).Children.Color =  [0.5500 0.5500 0.5500];
+figure_handle.Children(4).Children(2).Color = [0.5500 0.5500 0.5500];
+figure_handle.Children(1).Children(2).Color = [0.5500 0.5500 0.5500];
 %%
-colormap(redyellowblue(256, 'rev'))
-%colormap(hsv(256))
-for tpt = 1:length(tt)
-%imagesc(yy, xx, env(:, :, tpt))
-%imagesc(yy, xx, env_wv(:, :, tpt))
+close all
+%% Figure 7 -- neuropatt phase-based estimation -- hilbert transform of envelope
+env     = abs(hilbert(wv));
+phi_env = angle(hilbert(env));
+phi_env = phi_env(25:65, 25:65, 20:end-20);
 
-imagesc(yy, xx, fliplr(wv(:, :, tpt)))
-%imagesc(yy, xx, wv_phi(:, :, tpt))
+NeuroPattGUI(phi_env, 50)
+figure_handle = figure(1);
+ax(1) = figure_handle.Children(5);
+ax(2) = figure_handle.Children(3);
 
-%imagesc(wave2(:, :, tt))
-%xlim([1 2])
-%ylim([0.5 1.5])
+ax(1).XLim = [10 30];
+ax(1).YLim = [10 30];
+ax(2).XLim = [10 30];
+ax(2).YLim = [10 30];
 
-drawnow
-pause(0.1)
-end
-
-%%
-
-
-data = permute(wv, [3 1 2]);
-data = reshape(data, 501, 101*101);
-phi = calculate_insta_phase(data);
-phi = reshape(phi, 501, 101, 101);
-
-phi = permute(phi, [2 3 1]);
-
-figure
-plot(squeeze(phi(25, :, 1)))
-
-figure
-plot(squeeze(phi(50, 50, :)))
-
-
-
-%%
-
-%y = hilbert(wv);
-%env = abs(y);
-
-for tpt = 1:length(tt)
-    data = (fliplr(wv(:, :, tpt)));
-    wv_phi(:, tpt) = angle(hilbert(data(:)));
-end
-wv_phi = reshape(wv_phi, 51,51, 251);
-
-%%
-% Wave
-NeuroPattGUI(fliplr(wv), 50)
-
-% Phase
-NeuroPattGUI(wv_phi, 50)
-
-%%
-fl1 = 30;
-[up1,lo1] = envelope(squeeze(wv(50,50,:)), fl1,'analytic');
-
-
+ax(1).Children.Color =  [0.5500 0.5500 0.5500];
+ax(2).Children.Color =  [0.5500 0.5500 0.5500];
+figure_handle.Children(4).Children(2).Color = [0.5500 0.5500 0.5500];
+figure_handle.Children(1).Children(2).Color = [0.5500 0.5500 0.5500];
