@@ -259,8 +259,10 @@ an_h1.Position =  [4.4450    4.0217    2.6988   13.8112];
 an_h2.Position =  [8.4138 5.0800 -1.2700 12.7529];                   
 
 %% Figure 4a -- neuropatt amplitude-based estimation raw signal
+% TODO: automate the following 4 cells. At the momemnbt neuropatt part is
+% handded via gui and it isn't automatic.
 wv_t = wv(25:65, 25:65, 20:end-20); 
-out_wvt = NeuroPattGUI(wv_t, 50);
+NeuroPattGUI(wv_t, 50);
 
 % Get figure handle to SVD plots
 figure_handle = figure(1);
@@ -277,10 +279,9 @@ V2(:, :, 1) =  ax(2).Children.VData;
 %% Clear figures
 close all
 %% Figure 4b -- neuropatt phase-based estimation -- hilbert transform of raw signal
-
-phi_env   = angle(hilbert(wv)); % wrapped phases
-phi_env = phi_env(25:65, 25:65, 20:end-20);
-NeuroPattGUI(phi_env, 50)
+phi   = angle(hilbert(wv));% Frames - wave sum
+phi   = phi(25:65, 25:65, 20:end-20);
+NeuroPattGUI(phi, 50)
 
 figure_handle = figure(1);
 ax(1) = figure_handle.Children(5);
@@ -297,13 +298,11 @@ close all
 %% Figure 4c -- neuropatt amplitude-based estimation envelope of signal
 env   = abs(hilbert(wv));
 env   = env(25:65, 25:65, 20:end-20);
-
 NeuroPattGUI(env, 50)
 
 figure_handle = figure(1);
 ax(1) = figure_handle.Children(5);
 ax(2) = figure_handle.Children(3);
-
 
 % Save data
 U1(:, :, 3) =  ax(1).Children.UData;
@@ -330,3 +329,120 @@ V1(:, :, 4) =  ax(1).Children.VData;
 
 U2(:, :, 4) =  ax(2).Children.UData;
 V2(:, :, 4) =  ax(2).Children.VData;
+
+
+%%
+figure4_handle = figure('Name', 'fig4_comparison');
+% Frames - wave sum
+ds = 5;
+frames = 1:ds:ds*4;
+
+nr = 4;
+nc = 6;
+
+% 
+idx_start = 10;
+idx_stop = 90;
+idx_tstart = 20;
+
+clear waveforms
+waveforms(:, :, :, 1) = wv;
+waveforms(:, :, :, 2) = angle(hilbert(wv));
+waveforms(:, :, :, 3) = abs(hilbert(wv));
+waveforms(:, :, :, 4) = angle(hilbert(abs(hilbert(wv))));
+waveforms = waveforms(idx_start:idx_stop, idx_start:idx_stop, idx_tstart:end-idx_tstart, :);
+
+xv = xx(idx_start:idx_stop);
+yv = yy(idx_start:idx_stop);
+
+for kk=1:nr*nc
+    ax(kk) = subplot(nr, nc, kk);
+    hold(ax(kk), 'on')
+end
+
+cmap_phi = pmkmp_new('ostwald_o', 256);
+cmap_amp = redyellowblue(256, 'rev');
+caxis_phi = [-pi pi];
+caxis_amp = [-2 2];
+
+% Plot frames with input data to neuropatt
+for ww=1:4
+    if mod(ww, 2)
+        cmap = cmap_amp;
+        caxis_val = caxis_amp;
+    else
+        cmap = cmap_phi;
+        caxis_val = caxis_phi;
+    end
+    for kk=1:length(frames)
+        r = ww;
+        c = kk;
+        idx = sub2ind([nc, nr], c, r);
+        imagesc(ax(idx), xv, yv, squeeze(waveforms(:, :, frames(kk), ww)));
+        caxis(caxis_val)
+        ax(idx).YDir = 'reverse';
+        ax(idx).Colormap = cmap;
+        if idx > 1 
+            ax(idx).XTickLabel = [];
+            ax(idx).YTickLabel = [];
+            ax(idx).XLabel.String = [];
+            ax(idx).YLabel.String = [];
+        else
+            ax(idx).XAxisLocation = 'top';
+            ax(idx).YLabel.String = 'y [m]';
+            ax(idx).XLabel.String = 'x [m]';
+        end
+        ax(idx).XLim = [xv(1) xv(end)];
+        ax(idx).YLim = [yv(1) yv(end)];
+        
+    end
+end
+
+
+subp = [19 20 21 22];
+subpl_labels = {'t_0', 't_1', 't_2', 't_3'};
+
+for kk = 1:length(subp)
+  ax(subp(kk)).XLabel.String = subpl_labels{kk};
+end
+
+% Plot SVD modes
+X = x(idx_start:idx_stop, idx_start:idx_stop, 1);
+Y = y(idx_start:idx_stop, idx_start:idx_stop, 1);
+
+idx_st = 35;
+idx_sp = 45;
+
+Y = Y(idx_st:idx_sp, idx_st:idx_sp);
+X = X(idx_st:idx_sp, idx_st:idx_sp);
+
+for ww=1:4
+    for c=5:6
+        r = ww;   
+        idx = sub2ind([nc, nr], c, r);
+
+        if c==5
+          quiver(ax(idx), X, Y, U1(idx_st:idx_sp, idx_st:idx_sp, ww), V1(idx_st:idx_sp, idx_st:idx_sp, ww));
+        else
+          quiver(ax(idx), X, Y, U2(idx_st:idx_sp, idx_st:idx_sp, ww), V2(idx_st:idx_sp, idx_st:idx_sp, ww));
+        end
+                  
+        ax(idx).YDir = 'reverse';
+        ax(idx).XTickLabel = [];
+        ax(idx).YTickLabel = [];
+        ax(idx).XLabel.String = [];
+        ax(idx).YLabel.String = [];
+        
+        ax(idx).XLim = [min(X(:)) max(X(:))];
+        ax(idx).YLim = [min(Y(:)) max(Y(:))];
+    end
+end
+
+ax(nc).XAxisLocation = 'top';
+ax(nc).YAxisLocation = 'right';
+
+ax(nc).XLabel.String = 'x [m]';
+ax(nc).YLabel.String = 'y [m]';
+
+ax(nc).XTick = [min(X(:)) max(X(:))];
+ax(nc).XTickLabel = {num2str(min(X(:)), '%.2f'), num2str(max(X(:)), '%.2f')};
