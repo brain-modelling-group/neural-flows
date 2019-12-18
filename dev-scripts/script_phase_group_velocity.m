@@ -49,8 +49,8 @@ vp = w1 / k1;
 dx = 0.02;
 dy = 0.02;
 dt = 0.02;
-xx = 0:dx:2;
-yy = 0:dy:2;
+xx = 0:dx:1;
+yy = 0:dy:1;
 tt = 0:dt:5;
 [x, y, t] = meshgrid(xx, yy, tt);
 
@@ -260,8 +260,10 @@ an_h2.Position =  [8.4138 5.0800 -1.2700 12.7529];
 
 %% Figure 4a -- neuropatt amplitude-based estimation raw signal
 % TODO: automate the following 4 cells. At the momemnbt neuropatt part is
-% handded via gui and it isn't automatic.
-wv_t = wv(25:65, 25:65, 20:end-20); 
+% handded via gui and it isn't automatic. Unselect filter and baseline
+% substraction. Select phase or amplitude. Select real SVD, top 2 modes.
+tstart = 20;
+wv_t = wv(:, :, tstart:end-tstart); 
 NeuroPattGUI(wv_t, 50);
 
 % Get figure handle to SVD plots
@@ -280,7 +282,7 @@ V2(:, :, 1) =  ax(2).Children.VData;
 close all
 %% Figure 4b -- neuropatt phase-based estimation -- hilbert transform of raw signal
 phi   = angle(hilbert(wv));% Frames - wave sum
-phi   = phi(25:65, 25:65, 20:end-20);
+phi   = phi(:, :, tstart:end-tstart);
 NeuroPattGUI(phi, 50)
 
 figure_handle = figure(1);
@@ -297,7 +299,7 @@ V2(:, :, 2) =  ax(2).Children.VData;
 close all
 %% Figure 4c -- neuropatt amplitude-based estimation envelope of signal
 env   = abs(hilbert(wv));
-env   = env(25:65, 25:65, 20:end-20);
+env   = env(:, :, tstart:end-tstart);
 NeuroPattGUI(env, 50)
 
 figure_handle = figure(1);
@@ -316,7 +318,7 @@ close all
 %% Figure 4d -- neuropatt phase-based estimation -- via hilbert transform of envelope
 env     = abs(hilbert(wv));
 phi_env = angle(hilbert(env));
-phi_env = phi_env(25:65, 25:65, 20:end-20);
+phi_env = phi_env(:,:, tstart:end-tstart);
 
 NeuroPattGUI(phi_env, 50)
 figure_handle = figure(1);
@@ -330,7 +332,6 @@ V1(:, :, 4) =  ax(1).Children.VData;
 U2(:, :, 4) =  ax(2).Children.UData;
 V2(:, :, 4) =  ax(2).Children.VData;
 
-
 %%
 figure4_handle = figure('Name', 'fig4_comparison');
 % Frames - wave sum
@@ -340,17 +341,16 @@ frames = 1:ds:ds*4;
 nr = 4;
 nc = 6;
 
-% 
-idx_start = 10;
-idx_stop = 90;
-idx_tstart = 20;
+% Indices to look at one bit inside the space
+idx_start = 5;
+idx_stop  = 46;
 
 clear waveforms
 waveforms(:, :, :, 1) = wv;
 waveforms(:, :, :, 2) = angle(hilbert(wv));
 waveforms(:, :, :, 3) = abs(hilbert(wv));
 waveforms(:, :, :, 4) = angle(hilbert(abs(hilbert(wv))));
-waveforms = waveforms(idx_start:idx_stop, idx_start:idx_stop, idx_tstart:end-idx_tstart, :);
+waveforms = waveforms(idx_start:idx_stop, idx_start:idx_stop, tstart:end-tstart, :);
 
 xv = xx(idx_start:idx_stop);
 yv = yy(idx_start:idx_stop);
@@ -410,8 +410,9 @@ end
 X = x(idx_start:idx_stop, idx_start:idx_stop, 1);
 Y = y(idx_start:idx_stop, idx_start:idx_stop, 1);
 
-idx_st = 35;
-idx_sp = 45;
+
+idx_st = floor(length(yv)/2)-5;
+idx_sp = floor(length(yv)/2)+5;
 
 Y = Y(idx_st:idx_sp, idx_st:idx_sp);
 X = X(idx_st:idx_sp, idx_st:idx_sp);
@@ -422,9 +423,9 @@ for ww=1:4
         idx = sub2ind([nc, nr], c, r);
 
         if c==5
-          quiver(ax(idx), X, Y, U1(idx_st:idx_sp, idx_st:idx_sp, ww), V1(idx_st:idx_sp, idx_st:idx_sp, ww));
+          quiver(ax(idx), X, Y, U1(idx_st:idx_sp, idx_st:idx_sp, ww), V1(idx_st:idx_sp, idx_st:idx_sp, ww), 'Color', [0.35 0.35 0.35]);
         else
-          quiver(ax(idx), X, Y, U2(idx_st:idx_sp, idx_st:idx_sp, ww), V2(idx_st:idx_sp, idx_st:idx_sp, ww));
+          quiver(ax(idx), X, Y, U2(idx_st:idx_sp, idx_st:idx_sp, ww), V2(idx_st:idx_sp, idx_st:idx_sp, ww), 'Color', [0.35 0.35 0.35]);
         end
                   
         ax(idx).YDir = 'reverse';
@@ -439,10 +440,20 @@ for ww=1:4
 end
 
 ax(nc).XAxisLocation = 'top';
-ax(nc).YAxisLocation = 'right';
+ax(nc).YAxisLocation = 'left';
 
 ax(nc).XLabel.String = 'x [m]';
 ax(nc).YLabel.String = 'y [m]';
 
 ax(nc).XTick = [min(X(:)) max(X(:))];
-ax(nc).XTickLabel = {num2str(min(X(:)), '%.2f'), num2str(max(X(:)), '%.2f')};
+ax(nc).XTickLabel = {num2str(min(X(:)), '%.2f'), num2str(max(Y(:)), '%.2f')};
+ax(nc).YTick = [min(Y(:)) max(Y(:))];
+ax(nc).YTickLabel = {num2str(min(Y(:)), '%.2f'), num2str(max(Y(:)), '%.2f')};
+
+%% Small rectangle to illustarte what part of the field we're visualising
+subp = [4 10 16 22];
+
+for kk=1:4
+    patch(ax(subp(kk)), 'XData', [xv(idx_st) xv(idx_st) xv(idx_sp) xv(idx_sp) xv(idx_st)], ...
+                        'YData', [yv(idx_st) yv(idx_sp) yv(idx_sp) yv(idx_st) xv(idx_st)], 'FaceColor', 'None');
+end
