@@ -423,9 +423,9 @@ for ww=1:4
         idx = sub2ind([nc, nr], c, r);
 
         if c==5
-          quiver(ax(idx), X, Y, U1(idx_st:idx_sp, idx_st:idx_sp, ww), V1(idx_st:idx_sp, idx_st:idx_sp, ww), 'Color', [0.35 0.35 0.35]);
+          quiver(ax(idx), X, Y, U1(idx_st:idx_sp, idx_st:idx_sp, ww), V1(idx_st:idx_sp, idx_st:idx_sp, ww), 'Color', [0.35 0.35 0.35], 'linewidth', 2);
         else
-          quiver(ax(idx), X, Y, U2(idx_st:idx_sp, idx_st:idx_sp, ww), V2(idx_st:idx_sp, idx_st:idx_sp, ww), 'Color', [0.35 0.35 0.35]);
+          quiver(ax(idx), X, Y, U2(idx_st:idx_sp, idx_st:idx_sp, ww), V2(idx_st:idx_sp, idx_st:idx_sp, ww), 'Color', [0.35 0.35 0.35], 'linewidth', 2);
         end
                   
         ax(idx).YDir = 'reverse';
@@ -440,7 +440,7 @@ for ww=1:4
 end
 
 ax(nc).XAxisLocation = 'top';
-ax(nc).YAxisLocation = 'left';
+ax(nc).YAxisLocation = 'right';
 
 ax(nc).XLabel.String = 'x [m]';
 ax(nc).YLabel.String = 'y [m]';
@@ -452,8 +452,15 @@ ax(nc).YTickLabel = {num2str(min(Y(:)), '%.2f'), num2str(max(Y(:)), '%.2f')};
 
 %% Small rectangle to illustarte what part of the field we're visualising
 subp = [4 10 16 22];
-
 for kk=1:4
     patch(ax(subp(kk)), 'XData', [xv(idx_st) xv(idx_st) xv(idx_sp) xv(idx_sp) xv(idx_st)], ...
-                        'YData', [yv(idx_st) yv(idx_sp) yv(idx_sp) yv(idx_st) xv(idx_st)], 'FaceColor', 'None');
+                        'YData', [yv(idx_st) yv(idx_sp) yv(idx_sp) yv(idx_st) xv(idx_st)], 'FaceColor', 'None', 'linewidth', 2);
 end
+%% 
+for kk=1:nc*nr
+    ax(kk).Units = these_units;
+    past_pos = ax(kk).Position;
+    ax(kk).Position = [past_pos(1) past_pos(2) 4.5 4.5];
+end
+
+
