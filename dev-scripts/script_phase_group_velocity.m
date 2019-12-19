@@ -51,7 +51,7 @@ dy = 0.02;
 dt = 0.02;
 xx = 0:dx:1;
 yy = 0:dy:1;
-tt = 0:dt:5;
+tt = 0:dt:10;
 [x, y, t] = meshgrid(xx, yy, tt);
 
 % Wave components
