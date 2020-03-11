@@ -24,7 +24,7 @@ function [spaths, path_weights] = find_fastest_path(W, locs_idx_mask, nnodes)
 
 
 % spaths are the nodes -- in indices of the in_bdy_mask/not_nan_maks - that
-% form the fastest path.
+% form the fastest path between a soure and target nodes.
 % Calculate the average
 
 % AUTHOR: Paula Sanz-Leon, QIMR 2019
