@@ -43,7 +43,7 @@ function [output_matfile_obj] = spmd_parfor_with_matfiles(number_of_things, parf
     % Step 1: create a matfile per worker using SPMD
     spmd
         % NOTE: pass temp directory as an option
-        WorkerFname      = tempname(pwd); % each worker gets a unique filename and writes to disk
+        WorkerFname      = tempname(tempdir); % each worker gets a unique filename and writes to disk
         worker_matfile   = matfile(WorkerFname, 'Writable', true);  
         % Seed the variables in the matfile object
         worker_matfile.result     = cell(1, number_of_things);
