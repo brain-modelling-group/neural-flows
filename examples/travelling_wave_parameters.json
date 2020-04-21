@@ -1,0 +1,24 @@
+{
+  "data_interpolation": {
+    "file_exists": false
+  },
+  "hx": 3,
+  "hy": 3,
+  "hz": 3,
+  "ht": 1,
+  "tempdir": "/home/paula/Work/Code/Networks/neural-flows/scratch",
+  "flow_calculation": {
+    "init_conditions": "random",
+    "seed_init_vel": 42,
+    "alpha_smooth": 0.1,
+    "max_iterations": 128
+  },
+  "sing_analysis": {
+    "detection": true,
+    "detection_datamode": "vel",
+    "detection_threshold": [
+      0,
+      2.0E-9
+    ]
+  }
+}
