@@ -37,7 +37,7 @@ switch rw_mode
     case {'write', 'w', 'W'}
         options_strc = varargin{1}; % Not really necessary but makes the process explicit
         options_json = jsonencode(options_strc);
-        options_file_id = fopen(options_path, 'w');
+        options_file_id = fopen(options_path, 'w+');
         fprintf(options_file_id, options_json);
         fclose(options_file_id);
 
