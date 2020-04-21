@@ -1,10 +1,43 @@
-function tok(tstart)
+function tok(tstart, time_unit)
+%% Gets currrent datetime, calculates and prints elapsed time based on the input datetime string `tsart`
+%  
+% ARGUMENTS:
+%      tsart -- a string generated with function tik()
+% 
+% OUTPUT:
+%      Prints to screen
+%
+% AUTHOR:
+%     Paula Sanz-Leon, QIMR Berghofer December 2019
+% USAGE:
+%{
+    tstart = tik()
+    tok(tsart)
+
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 
     tend = string(datetime('now'));
     fprintf('%s%s\n', ['Finished: ' tend])
-    tictoc = etime(datevec(tend), datevec(tstart));
-    fprintf('%s%s%s\n\n', ['Elapsed time: ' string(tictoc/3600) ' hours'])
-    fprintf('%s%s%s\n\n', ['Elapsed time: ' string(tictoc/60) ' minutes'])
-    fprintf('%s%s%s\n\n', ['Elapsed time: ' string(tictoc) ' seconds'])
+  
+    if nargin < 2
+	    time_unit = 'seconds'
+	    divisor = 1;
+    end
 
-end
+    tik_tok = etime(datevec(tend), datevec(tstart));
+    
+    switch time_unit
+     	case {'seconds', 'sec', 's'}
+     		divisor = 1
+     	case {'minutes', 'min', 'mins', 'm'}
+     		divisor = 60
+
+     	case {'hours', 'hour', 'h', 'hr', 'hrs'}
+     		divisor = 3600
+     	otherwise
+     		disp("Unknown time units")
+     end % switch
+    
+    fprintf('%s%s%s\n\n', ['Elapsed time: ' string(tik_tok/divisor) ' ' time_unit])
+end % function tok()
