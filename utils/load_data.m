@@ -1,4 +1,4 @@
-function [data, locs, params] = load_data(params)
+function [data, params, varargout] = load_data(params)
 % the .mat data file should have
 % ARGUMENTS:
 %            data2d -- a 2D array of size [timepoints x nodes/points] and %
@@ -21,6 +21,7 @@ function [data, locs, params] = load_data(params)
         case 'unstructured'
             params.data.shape.timepoints = params.data.shape.size(1);
             params.data.shape.nodes = params.data.shape.size(2);
+            varargout{1} = data_struct.locs;
         case 'structured'
             params.data.shape.timepoints = params.data.shape.size(1);
             % This may bring problems if x, y are swapped
