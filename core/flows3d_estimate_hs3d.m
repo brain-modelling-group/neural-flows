@@ -56,7 +56,7 @@ function  [params, varargout] = flows3d_hs3d_estimate(params, masks)
     % Also, the file gets large, but having this additional variable help us with visualisations. 
     % Perhaps consider only returning this file and deleting the gridded flow file.
 
-    mfile_flow = flows3d_get_scattered_flows_parallel(mfile_flow, locs);
+    obj_flows = flows3d_get_unstructured_flows_parallel(obj_flows, params);
     
     % Save original locations, just in case
     mfile_flow.locs = locs;
