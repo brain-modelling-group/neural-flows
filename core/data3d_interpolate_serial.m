@@ -12,17 +12,19 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate(data, lo
 
 % This is the key step for the optical flow method to work
 % These parameters are essential
-    neighbour_method = 'natural';
-    extrapolation_method = 'nearest';
+neighbour_method = params.interpolation.neighbour_method;
+extrapolation_method = params.interpolation.extrapolation_method;
 
 
-    x_dim = 1;
-    y_dim = 2;
-    z_dim = 3;
-    tpts = size(data, 1);
+
+x_dim = 1;
+y_dim = 2;
+z_dim = 3;
+
+tpts = size(data, 1);
 
     % Create file for the interpolated data
-    root_fname = 'temp_interp';
+    root_fname = 'tmp_interp';
     [mfile_interp_obj, mfile_interp_sentinel] = create_temp_file(root_fname, keep_interp_data);
     
     % Write dummy data to disk
@@ -52,4 +54,4 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate(data, lo
 
     end
 
-end
+end 

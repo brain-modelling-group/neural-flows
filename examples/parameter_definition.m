@@ -29,6 +29,9 @@ inparams.data.ht = 0.25;
 inparams.data.hx = [];
 inparams.data.hy = [];
 inparams.data.hz = [];
+%params.data.shape.x = params.data.shape.size(2); 
+%params.data.shape.y = params.data.shape.size(3);
+%params.data.shape.z = params.data.shape.size(4);
 inparams.data.units.space = 'mm';
 inparams.data.units.time  = 'ms';
 inparams.data.mode = 'amplitude';
@@ -38,8 +41,9 @@ inparams.data.phase.enabled = true; % calculate phase
 % inparams for the data interpolation
 inparams.interpolation.enabled = true;
 inparams.interpolation.file.exists = false;
-inparams.interpolation.dir.name = [];
-inparams.interpolation.file.name = [];
+inparams.interpolation.dir.name = '';
+inparams.interpolation.file.name = '';
+inparams.interpolation.file.label = '';
 inparams.interpolation.file.keep = true;
     
 % Resolution

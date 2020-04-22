@@ -12,7 +12,7 @@ json_mode = 'read';
 input_params = read_write_json(input_params_filename, input_params_dir, json_mode);
 
 % Run interpolation, estimation and classification, this function writes to a new json file
-output_params = main_neural_flows(input_params); 
+output_params = main(input_params); 
 
 % Analyse and visualise
 perform_mode_decomposition_svd(output_params);
