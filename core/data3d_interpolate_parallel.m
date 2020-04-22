@@ -3,11 +3,15 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
 % each frame of a 4D array independtly using parfor and save the interpolated data for 
 % later use with optical flow. Then, just delete the interpolated data
 % or offer to keep it, because this step is really a time piggy.
+% Vq = F(Xq,Yq) and Vq = F(Xq,Yq,Zq) evaluates F at gridded query
+% points specified in full grid format as 2-D and 3-D arrays created
+% from grid vectors using [Xq,Yq,Zq] = NDGRID(xqg,yqg,zqg).
+
 % ARGUMENTS:
 %           locs: locations of known data
 %           data: scatter data known at locs of size tpts x nodes
 %           X, Y Z: -- grid points to get interpolation out, must be 3D
-%                      arrays
+%                      arrays generated with 
 %           mask -- indices of points within the brain's convex hull boundary. 
 %                    Same size as X, Y, or Z.
 %    
@@ -26,13 +30,14 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
     % These parameter values are essential
-    neighbour_method = 'linear';
-    extrapolation_method = 'linear';
+    neighbour_method = params.interpolation.neighbour_method;
+    extrapolation_method = params.interpolation.extrapolation_method;
 
-
-    x_dim = 2;
-    y_dim = 1;
+    
+    x_dim = 1;
+    y_dim = 2;
     z_dim = 3;
+
     tpts = size(data, 1);
     
     if tpts < 2
