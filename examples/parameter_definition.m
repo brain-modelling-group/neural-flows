@@ -60,9 +60,11 @@ inparams.interpolation.boundary.thickness = 2; % voxels
 inparams.interpolation.visualisation.enabled = true;
 
 % Flow calculation
+inparams.flows.file.exists = false;
 inparams.flows.file.keep = true;
 inparams.flows.file.dir = [];
 inparams.flows.file.name = [];
+inparams.flows.file.label = '';  % Part of the filename for interp data
 
 % Estimation of flows
 inparams.flows.method.data.mode = 'amplitude'; %{'phase', 'amplitude'}
