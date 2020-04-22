@@ -16,9 +16,9 @@ function params = data3d_interpolate(params)
     % Calcualte grids
 
     if params.general.parallel.enabled
-        params = data3d_interpolate_parallel(data, locs, X, Y, Z, params)
+        params = data3d_interpolate_parallel(data, locs, X, Y, Z, mask, params)
     else
-        params = data3d_interpolate_serial(data, locs, X, Y, Z, params)
+        params = data3d_interpolate_serial(data, locs, X, Y, Z, mask, params)
     end
  
 end % function data3d_interpolate()
