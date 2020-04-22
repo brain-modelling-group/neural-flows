@@ -1,6 +1,12 @@
 function ouparams = main(inparams)
 %% Wrapper function to decide which workflow to use
-
+% This function takes as input neural activity recorded from scattered 
+% points in 3D space (aka an unstructured grid)
+% This function performs all the analysis steps availabe in neural-flows: 
+%              1) interpolates the data onto a regular grid (ie, meshgrid).
+%              2) estimates neural flows (ie, velocity fields).
+%              3) detects singularities (ie, detects null flows).
+%              4) classifies singularities.
 % Tic
 tstart = tik();
 

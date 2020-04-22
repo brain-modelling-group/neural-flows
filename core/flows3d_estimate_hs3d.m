@@ -1,50 +1,6 @@
 function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
-% This function takes as input neural activity recorded from scattered 
-% points in 3D space (aka an unstructured grid)
-% This function performs all the analysis steps availabe in neural-flows: 
-%              1) interpolates the data onto a regular grid (ie, meshgrid).
-%              2) estimates neural flows (ie, velocity fields).
-%              3) detects singularities (ie, detects null flows).
-%              4) classifies singularities.
-%
 % ARGUMENTS:
-%            data -- a 2D array of size [timepoints x nodes/points] or 
-%
-%            locs -- 2D array of size [nodes/points x 3] with coordinates of points in 3D Euclidean space for which data values are known. 
-%                  These corresponds to the centres of gravity: ie, node locations 
-%                  of brain network embedded in 3D dimensional space, or source
-%                  locations from MEG.
-%               
-%     % Data properties
-%     inparams.data.ht = 1;
-%     
-%     % Slice of data
-%     inparams.data.slice.id = idx_chunk;
-%     inparams.data.slice.start = idx_start;
-%     inparams.data.slice.stop  = idx_stop;
-%     
-%     % inparams for data interpolaton
-%     inparams.interpolation.file.exists = false;
-%     inparams.interpolation.file.keep = true;
-%     inparams.interpolation.file.name = 'test';
-%     
-%     % Resolution
-%     inparams.interpolation.hx = 4;
-%     inparams.interpolation.hy = 4;
-%     inparams.interpolation.hz = 4;
-%     
-%     % Flow calculation
-%     inparams.flows.file.keep = true;
-%     inparams.flows.init_conditions.mode = 'random';
-%     inparams.flows.init_conditions.seed = 42;
-%     inparams.flows.method.name = 'hs3d';
-%     inparams.flows.method.alpha_smooth   = 0.1;
-%     inparams.flows.method.max_iterations = 64;
-% 
-%     % Singularity detection and classification
-%     inparams.singularity.detection.enabled = true;    
-%     inparams.singularity.detection.mode  = 'vel';
-%     inparams.singularity.detection.threshold = [0 2^-9];
+%           
 %%    
 % OUTPUT:
 %      varargout: handles to the files where results are stored
@@ -57,22 +13,14 @@ function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
 %     Paula Sanz-Leon, QIMR Berghofer, November 2018
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
-    if isfield(inparams.data.slice, 'id')
+    if isfield(params.data.slice, 'id')
       rng(inparams.data.slice.id) 
     else
        inparams.data.slice.id = 0;
     end
-    
-    % Alpha radius has to be adjusted depending on the location data
-    % (mostly, granularity of parcellation).
-    if isfield(inparams.interpolation.boundary, 'alpha_radius')
-        bdy_alpha_radius = inparams.interpolation.boundary.alpha_radius;
  
-%-------------------------- INTERPOLATION OF DATA -----------------------------%    
-    % Perform interpolation on the data and save in a temp file -- asumme
-    % OS is Linux, cause why would you use anything else?
-    % Flag to decide what to do with temp intermediate files
-    keep_interp_file = inparams.interpolation.file.keep;
+ 
+
     
     if isfield(inparams.interpolation.file, 'name')
         root_fname_interp = [inparams.interpolation.file.name '-temp_interp-' num2str(inparams.data.slice.id, '%03d')];
@@ -123,21 +71,12 @@ function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
     else
         root_fname_vel = ['temp_flows-' num2str(inparams.data.slice.id, '%03d')];
     end
-    [mfile_flow, mfile_flow_sentinel] = create_temp_file(root_fname_vel, keep_vel_file); 
+    [mfile_flow, mfile_flow_sentinel] = create_iomat_file(root_fname_vel, keep_vel_file); 
     inparams.flows.file.source = mfile_flow.Properties.Source;
     
     % Save masks with convex hulls of the brain
-    mfile_flow.in_bdy_mask = in_bdy_mask;
-    mfile_flow.interp_mask = interp_mask;
-    mfile_flow.diff_mask = diff_mask;
+    obj_flows.masks = masks;
     
-    % Get some dummy initial conditions
-    if isfield(inparams.data.slice, 'id')
-        seed_init_vel = inparams.data.slice.id; % for cluster environments
-    else   
-        seed_init_vel = 42;
-    end
-    inparams.flows.init_conditions.seed = seed_init_vel;
     
     
     % Save grid - needed for singularity tracking and visualisation
