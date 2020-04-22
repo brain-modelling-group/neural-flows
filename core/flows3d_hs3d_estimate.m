@@ -50,7 +50,7 @@ function  [params, varargout] = flows3d_hs3d_estimate(params, masks)
     obj_flows.Z = Z;
    
     % Here is where the magic happens
-    flows3d_estimate_hs3d_flow(obj_data, obj_flows, params)
+    flows3d_hs3d_loopobj_data, obj_flows, params)
 
     % Here we get the flows on defined on the nodes -- It adds 30% to the current runtime because it uses ScatterInterpolant
     % Also, the file gets large, but having this additional variable help us with visualisations. 
