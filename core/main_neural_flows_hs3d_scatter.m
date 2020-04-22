@@ -1,4 +1,4 @@
-function varargout = flows3d_hs3d(data, locs, inparams)
+function [params, varargout] = flows3d_hs3d(params)
 % This function takes as input neural activity recorded from scattered 
 % points in 3D space (aka an unstructured grid)
 % This function performs all the analysis steps availabe in neural-flows: 
@@ -63,41 +63,7 @@ function varargout = flows3d_hs3d(data, locs, inparams)
        inparams.data.slice.id = 0;
     end
     
-    % Alpha radius has to be adjusted depending on the location data
-    % (mostly, granularity of parcellation).
-    if isfield(inparams.interpolation.boundary, 'alpha_radius')
-        bdy_alpha_radius = inparams.interpolation.boundary.alpha_radius;
 
-%-------------------------- GRID AND MASK -------------------------------------%    
-
-    ht = inparams.data.ht;
-    hx = inparams.interpolation.hx; 
-    hy = inparams.interpolation.hy;
-    hz = inparams.interpolation.hz; 
-  
-    % Generate a structured grid 
-    scaling_factor = 1.05; % inflate locations a little bit, so the grids have enough blank space around the volume
-    [X, Y, Z, grid_size] = get_structured_grid(scaling_factor*locs, hx, hy, hz, inparams.interpolation.grid.lim_type);
-    
-    % Save the locations
-    inparams.data.locs = locs;
-    
-    inparams.interpolation.xyz_lims{1} = [min(X(:)) max(X(:))];
-    inparams.interpolation.xyz_lims{2} = [min(Y(:)) max(Y(:))];
-    inparams.interpolation.xyz_lims{3} = [min(Z(:)) max(Z(:))];
-
-    
-    % Get a mask with the gridded-points that are inside and outside the convex hull
-    % NOTE: This mask underestimates the volume occupied by the scattered
-    % points
-    [in_bdy_mask, ~] = data3d_calculate_boundary(locs, X(:), Y(:), Z(:), bdy_alpha_radius);
-    %[in_bdy_mask] = data3d_check_boundary_mask(in_bdy_mask, locs, hr);
-
-    in_bdy_mask = reshape(in_bdy_mask, grid_size);
-    % Get a mask that is slightly larger so we can define a shell with a thickness that will be 
-    % the boundary of our domain. 
-    mask_thickness = inparams.interpolation.boundary.thickness;
-    [interp_mask, diff_mask] = data3d_calculate_interpolation_mask(in_bdy_mask, mask_thickness);
     
 %-------------------------- INTERPOLATION OF DATA -----------------------------%    
     % Perform interpolation on the data and save in a temp file -- asumme
