@@ -16,10 +16,10 @@ function [obj_interp, obj_interp_sentinel, params] = data3d_interpolate_serial(d
 %                    Same size as X, Y, or Z.
 %    
 % OUTPUT:
-%       mfile_interp_obj: matfile handle to the file with the interpolated
-%                         data.
-%       mfile_interp_sentinel: OnCleanUp object. If keep_interp_data is
-%                              true, then this variable is an empty array.
+%       obj_interp: matfile handle to the file with the interpolated
+%                   data.
+%       obj_interp_sentinel: OnCleanUp object. If params...file.keep is
+%                            true, then this variable is an empty array.
 %       params -- updated parameter structure
 %
 % AUTHOR:   
