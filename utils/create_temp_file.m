@@ -1,4 +1,4 @@
-function [mfile_handle, mfile_sentinel] = create_temp_file(filename, directory, keep_file)
+function [mfile_handle, mfile_sentinel] = create_iomat_file(filename, directory, keep_file)
 %% Creates a matfile object intended as a temporary file with a pseudorandom 
 % filename intended as a temporary file. Optionally, it retutrns an OnCleanup 
 % file sentinel, which will  delete the file upon its destruction. 
@@ -39,7 +39,7 @@ function [mfile_handle, mfile_sentinel] = create_temp_file(filename, directory, 
     
     fprintf('%s \n', 'Creating file:')
     fprintf('\t \t %s \n', mfile_name)
-end % function create_temp_file()
+end % function create_iomat_file()
 
 function remove_temp_file(fname)
 % This action will be performed when
