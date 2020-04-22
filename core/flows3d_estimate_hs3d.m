@@ -15,26 +15,25 @@ function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
 
     % If we are slicing the data
     if params.data.slice.enabled
-        rng(params.data.slice.id 
+        rng(params.data.slice.id
+        params = generate_slice_filename(params, 'flows') 
     else
         rng(2020)
     end
- 
 
-    
-    if isfield(params.interpolation.file, 'name')
-        root_fname_interp = [params.interpolation.file.name '-temp_interp-' num2str(params.data.slice.id, '%03d')];
-    else       
-        root_fname_interp = ['temp_interp-' num2str(params.data.slice.id, '%03d')];
+
+    % Load interpolated data
+    if strcmp(params.data.grid.type, 'unstructured')
+        inparams.interpolation.file.dir  = '';
+        inparams.interpolation.file.name = ''; 
+
     end
+
+
+ 
     if ~params.interpolation.file.exists % Or not necesary because it is fmri data
         
-        % Parallel interpolation with the parallel toolbox
-        [mfile_interp, mfile_interp_sentinel] = data3d_interpolate_parallel(data, ...
-                                                                            locs, X, Y, Z, ...
-                                                                            interp_mask, ...
-                                                                            keep_interp_file, ...
-                                                                            root_fname_interp);
+        
          
         % Clean up parallel pool
         % delete(gcp); % commented because it adds 30s-1min of overhead
@@ -98,7 +97,7 @@ function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
     flows3d_estimate_hs3d_flow(mfile_interp, mfile_flow, params)
 
     % Here we get the flows on defined on the nodes -- It adds 30% to the current runtime because it uses ScatterInterpolant
-    % Also, the file get larger, but having this additional variable help us with visualisations. 
+    % Also, the file gets large, but having this additional variable help us with visualisations. 
     % Perhaps consider only returning this file and deleting the gridded flow file.
 
     mfile_flow = flows3d_get_scattered_flows_parallel(mfile_flow, locs);
@@ -111,21 +110,7 @@ function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
     delete(mfile_interp_sentinel)    
     delete(mfile_flow_sentinel)
     
-%-------------------------- DETECT NULL FLOWS - CRITICAL POINTS ---------------%    
-   if params.singularity.detection.enabled
-              
-       mfile_sings = singularity3d_detection(mfile_flow, params.singularity.detection.threshold); 
-       if params.singularity.classification.enabled
-%----------------------------- CLASSIFY SINGULARITIES -------------------------%
-           %mfile_sings = singularity3d_classify_singularities_parallel(mfile_sings, mfile_flow);
-           mfile_sings = singularity3d_classify_parallel(mfile_sings, mfile_flow);             
 
-       end 
-      varargout{3} = mfile_sings;
-
-%------------------------------------------------------------------------------%
-   end
-      varargout{1} = mfile_interp;
-      varargout{2} = mfile_flow; 
+    varargout{2} = mfile_flow; 
    
-end % function main_neural_flows_hs3d_scatter()
+end % function flows3d_estimate_hs3d()
