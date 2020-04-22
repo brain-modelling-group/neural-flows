@@ -37,6 +37,20 @@ function [data, params, varargout] = load_data(params)
             
     end
 
+    % Use human readable indexing -- this brought me so many headaches because
+    % matlab functions sometime use ngrid and some other times mgrid
+    % Here we will use mgrid order, so that dimensions are Y, X, Z
+
+    % Human readable indexing locs array
+    params.data.x_dim_locs = 1;
+    params.data.y_dim_locs = 2;
+    params.data.z_dim_locs = 3;
+
+    % Human readable indexing grid array
+    params.data.x_dim_mgrid = 2;
+    params.data.y_dim_mgrid = 1;
+    params.data.z_dim_mgrid = 3;
+
     data = data_struct.data;
     % TODO: handle the case of slicing data. Though that can be left as an example rather than something the code handles
 
