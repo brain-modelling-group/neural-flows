@@ -1,4 +1,4 @@
-function [mflows_obj] = flows3d_get_scattered_flows_parallel(mflows_obj, locs)
+function [mflows_obj] = flows3d_get_unstructured_flows_parallel(mflows_obj, locs)
 % This is a wrapper function for Matlab's ScatteredInterpolant, to obtain the 
 % flows values at exactly the centres of gravity of the original brain regions, so as to 
 % minimise the errors introduce by different grid resolutions.
