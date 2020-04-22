@@ -1,0 +1,110 @@
+{
+  "general": {
+    "storage": {
+      "dir": "/path/to/directory/to/store/output/files",
+      "dir_tmp": "/tmp"
+    },
+    "interal_format": "iomat",
+    "parallel": {
+      "enabled": true,
+      "workers_fraction": 0.8
+    }
+  },
+  "data": {
+    "dir": {
+      "name": "/home/paula/Work/Code/matlab-neuro/neural-flows/demo-data"
+    },
+    "file": {
+      "name": "rotating_wave_W_c1_d1ms_trial1.mat"
+    },
+    "slice": {
+      "id": 0
+    },
+    "grid": {
+      "type": "unstructured"
+    },
+    "ht": 0.25,
+    "hx": [],
+    "hy": [],
+    "hz": [],
+    "units": {
+      "space": "mm",
+      "time": "ms"
+    }
+  },
+  "interpolation": {
+    "file": {
+      "exists": false,
+      "name": [],
+      "keep": true
+    },
+    "dir": {
+      "name": []
+    },
+    "hx": 3,
+    "hy": 3,
+    "hz": 3,
+    "ht": 4,
+    "boundary": {
+      "alpha_radius": 30,
+      "thickness": 2
+    },
+    "visualisation": {
+      "enabled": true
+    }
+  },
+  "flows": {
+    "file": {
+      "keep": true,
+      "dir": [],
+      "name": []
+    },
+    "initial_conditions": {
+      "mode": "random",
+      "seed": 42
+    },
+    "method": {
+      "name": "hs3d",
+      "hs3d": {
+        "alpha_smooth": 0.1,
+        "max_iterations": 128
+      }
+    },
+    "visualisation": {
+      "enabled": true
+    },
+    "decomposition": {
+      "svd": {
+        "enabled": true,
+        "modes": 4,
+        "grid": {
+          "type": "unstructured"
+        }
+      }
+    }
+  },
+  "singularity": {
+    "file": {
+      "keep": true,
+      "dir": [],
+      "name": []
+    },
+    "detection": {
+      "enabled": true,
+      "mode": "vel",
+      "threshold": [
+        0,
+        0.015625
+      ]
+    },
+    "classification": {
+      "enabled": true
+    },
+    "quantification": {
+      "enabled": true
+    },
+    "plotting": {
+      "enabled": true
+    }
+  }
+}
