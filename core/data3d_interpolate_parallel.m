@@ -6,7 +6,7 @@ function [obj_interp, obj_interp_sentinel, params] = data3d_interpolate_parallel
 % Vq = F(Xq,Yq) and Vq = F(Xq,Yq,Zq) evaluates F at gridded query
 % points specified in full grid format as 2-D and 3-D arrays created
 % from grid vectors using [Xq,Yq,Zq] = NDGRID(xqg,yqg,zqg).
-
+% NOTE: Only works for iomat files, not structures
 % ARGUMENTS:
 %           locs: locations of known data
 %           data: scatter data known at locs of size tpts x nodes
