@@ -1,14 +1,15 @@
 function [data, locs, params] = load_data(params)
 % the .mat data file should have
-
-% Write some additional infor
 % ARGUMENTS:
-%            data -- a 2D array of size [timepoints x nodes/points] and 
-%
-%            locs -- 2D array of size [nodes/points x 3] with coordinates of points in 3D Euclidean space for which data values are known. 
-%                  These corresponds to the centres of gravity: ie, node locations 
-%                  of brain network embedded in 3D dimensional space, or source
-%                  locations from MEG. 
+%            data2d -- a 2D array of size [timepoints x nodes/points] and %
+%            locs3d -- 2D array of size [nodes/points x 3] with coordinates of points in 3D Euclidean space for which data values are known. 
+%                      These corresponds to the centres of gravity: ie, node locations 
+%                      of brain network embedded in 3D dimensional space, or source
+%                      locations from MEG. 
+
+%            data4d -- a 4D array of size [timepoints, x, y, z]
+%            hx, hy, hz, resolution voxel size
+
 
 
     data_path = fullfile(params.data.dir.name, params.data.file.name);
@@ -26,12 +27,16 @@ function [data, locs, params] = load_data(params)
             params.data.shape.x = params.data.shape.size(2); 
             params.data.shape.y = params.data.shape.size(3);
             params.data.shape.z = params.data.shape.size(4);
+            params.data.hx = data_struct.hx;
+            params.data.hy = data_struct.hy;
+            params.data.hz = data_struct.hz;
         otherwise
             error(['neural-flows:' mfilename ':UnknownCase'], ...
                    'Unknown grid type. Options: {"unstructured", "structured"}');
             
     end
-            
-    % TODO: handle the case of slicing data == althoug that can be left as an example rather than something the code handles
+
+    data = data_struct.data;
+    % TODO: handle the case of slicing data. Though that can be left as an example rather than something the code handles
 
 end % load_data()
