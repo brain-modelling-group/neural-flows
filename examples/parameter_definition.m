@@ -51,6 +51,8 @@ inparams.interpolation.hx = 3;
 inparams.interpolation.hy = 3;
 inparams.interpolation.hz = 3;
 %inparams.interpolation.ht = 4; % Integer multiple of inparams.data.ht
+inparams.interpolation.neighbour_method = '';
+inparams.interpolation.extrapolation_method = '';
 
 % Convex hull boundary for unstructured 3d grids    
 inparams.interpolation.boundary.alpha_radius = 30; % au

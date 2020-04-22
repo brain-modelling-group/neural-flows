@@ -34,7 +34,7 @@ end
 % Check what else we want to do
 if tmp_params.flows.streamlines.enabled
     % Do x
-    %main_streamlines()
+    %streamlines3d_trace()
 end 
 
 if tmp_params.singularity.detection.enabled 
