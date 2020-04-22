@@ -1,4 +1,4 @@
-function flows3d_estimate_hs3d_flow(mfile_data, mfile_flows, options)
+function flows3d_hs3d_loop(mfile_data, mfile_flows, options)
 % This function runs the iterative part of the Horn-Schunk algorithm. 
 %
 % ARGUMENTS:
