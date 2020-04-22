@@ -32,4 +32,6 @@ function [data, locs, params] = load_data(params)
             
     end
             
-end
+    % TODO: handle the case of slicing data == althoug that can be left as an example rather than something the code handles
+
+end % load_data()
