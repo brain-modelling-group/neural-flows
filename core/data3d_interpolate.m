@@ -2,6 +2,7 @@ function params = data3d_interpolate(params)
 % This is a wrapper function for data interpolation step
 
     % Write internal interpolation and extrapolation methods
+    % ::TODO:: this field may not exist in the original json file 
     if strcmp(params.interpolation.neighbour_method, '')
        params.interpolation.neighbour_method = 'linear';
     end
