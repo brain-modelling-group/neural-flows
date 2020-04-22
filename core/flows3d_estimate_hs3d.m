@@ -13,12 +13,12 @@ function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
 %     Paula Sanz-Leon, QIMR Berghofer, November 2018
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
-    if isfield(params.data.slice, 'id')
-      rng(params.data.slice.id) 
+    % If we are slicing the data
+    if params.data.slice.enabled
+        rng(params.data.slice.id 
     else
-       params.data.slice.id = 0;
+        rng(2020)
     end
- 
  
 
     
