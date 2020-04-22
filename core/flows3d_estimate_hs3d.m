@@ -3,6 +3,7 @@ function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
 %           
 %%    
 % OUTPUT:
+%      params:
 %      varargout: handles to the files where results are stored
 % 
 % USAGE:
@@ -15,7 +16,7 @@ function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
 
     % If we are slicing the data
     if params.data.slice.enabled
-        rng(params.data.slice.id
+        rng(params.data.slice.id)
         params = generate_slice_filename(params, 'flows') 
     else
         rng(2020)
@@ -24,35 +25,12 @@ function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
 
     % Load interpolated data
     if strcmp(params.data.grid.type, 'unstructured')
-        inparams.interpolation.file.dir  = '';
-        inparams.interpolation.file.name = ''; 
-
-    end
-
-
- 
-    if ~params.interpolation.file.exists % Or not necesary because it is fmri data
-        
-        
-         
-        % Clean up parallel pool
-        % delete(gcp); % commented because it adds 30s-1min of overhead
-         params.interpolation.file.exists = true;
-        
-         % Saves full path to file
-         params.interpolation.file.source = mfile_interp.Properties.Source;
+        obj_interp = matfile(fullfile(params.interpolation.file.dir, ...
+                                      params.interpolation.file.name, ...
+                                      'Writable', true);
     else
-        % Load the data if file already exists
-        mfile_interp = matfile(params.interpolation.file.source, 'Writable', true);
-        mfile_interp_sentinel = [];
+       continue % TODO: Do something for gridded data
     end
-        mfile_interp.params = params;
-        % Make the file read-only file to avoid corruption
-        mfile_interp.Properties.Writable = false;
-        
-        % Get how many time points we have
-        t_dim = 4; % time    
-        dtpts = size(mfile_interp.data, t_dim);
 
 %----------------------------- FLOW CALCULATION -------------------------------%
     % Parameters for optical flow-- could be changed, could be parameters
