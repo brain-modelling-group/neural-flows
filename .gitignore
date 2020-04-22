@@ -7,6 +7,9 @@ output_data/
 # graohic output
 image_frames/
 
+# generic storage directory
+scratch/
+
 
 # temp files 
 *.m~
