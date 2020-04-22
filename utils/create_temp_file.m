@@ -1,4 +1,4 @@
-function [mfile_obj, temp_file_sentinel] = create_temp_file(fname, keep_file)
+function [mfile_handle, mfile_sentinel] = create_temp_file(filename, directory, keep_file)
 %% Creates a matfile object intended as a temporary file with a pseudorandom 
 % filename intended as a temporary file. Optionally, it retutrns an OnCleanup 
 % file sentinel, which will  delete the file upon its destruction. 
@@ -8,7 +8,7 @@ function [mfile_obj, temp_file_sentinel] = create_temp_file(fname, keep_file)
 %        fname -- string with the 'root' name for that file. Timestamp and
 %                 random string will be appended to it.
 %        keep_file -- a boolean flag. If one intends to keep the file, then 
-%                     temp_file_sentinel is an empty array. 
+%                     mfile_sentinel is an empty array. 
 %
 % OUTPUT: 
 %        mfile_obj     -- a Writable matFile() object. 
@@ -26,24 +26,24 @@ function [mfile_obj, temp_file_sentinel] = create_temp_file(fname, keep_file)
 % AUTHOR: 
 %        Paula Sanz-Leon, QIMR berghofer 2019-02
     
-    temp_fname = generate_temp_filename(fname);
-    temp_fname = [temp_fname, '.mat'];
-    mfile_obj  = matfile(temp_fname, 'Writable', true);
+    mfile_name = generate_temp_filename(filename, 4);
+    mfile_name = [mfile_name, '.mat'];
+    mfile_handle  = matfile(fullfile(directory, mfile_name), 'Writable', true);
 
     % Clean up after ourselves
     if ~keep_file
-        temp_file_sentinel = onCleanup(@() remove_temp_file(temp_fname));
+        mfile_sentinel = onCleanup(@() remove_temp_file(mfile_name));
     else
-        temp_file_sentinel = [];
+        mfile_sentinel = [];
     end
     
     fprintf('%s \n', 'Creating file:')
-    fprintf('\t \t %s \n', temp_fname)
+    fprintf('\t \t %s \n', mfile_name)
 end % function create_temp_file()
 
 function remove_temp_file(fname)
 % This action will be performed when
-% temp_file_sentinel is destroyed
+% mfile_sentinel is destroyed
 
  fprintf('%s \n', 'Removing file:')
  fprintf('\t \t %s \n', fname)
