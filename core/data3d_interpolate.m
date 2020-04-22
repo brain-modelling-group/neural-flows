@@ -16,11 +16,8 @@ function [params, masks] = data3d_interpolate(params)
     % Determine meshgrid for interpolated data.
     [X, Y, Z, params] = data3d_get_interpolation_meshgrid(locs, params);
 
-    % Calculate boundary
+    % Calculate boundary masks
     [masks, params]  = data3d_define_boundary_masks();
-
-
-    % Calculate grids
 
     if params.general.parallel.enabled
         params = data3d_interpolate_parallel(data, locs, X, Y, Z, masks.outties, params)
