@@ -103,7 +103,7 @@
     "quantification": {
       "enabled": true
     },
-    "plotting": {
+    "visualisation": {
       "enabled": true
     }
   }
