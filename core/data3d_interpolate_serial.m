@@ -1,43 +1,76 @@
-function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate(data, locs, X, Y, Z, mask, keep_interp_data)
-% This is a wrapper function for scattered interpolant. We can interpolate
-% each frame independtly using parfor and save the interpolated data for 
-% later use with optical flow and then just delete the interpolated data
-% or offer to keep it.
+function [obj_interp, obj_interp_sentinel, params] = data3d_interpolate_serial(data, locs, X, Y, Z, mask, params)
+% This is a wrapper function for Matlab's ScatteredInterpolant. We can interpolate
+% each frame of a 4D array independtly using parfor and save the interpolated data for 
+% later use with optical flow. Then, just delete the interpolated data
+% or offer to keep it, because this step is really a time piggy.
+% Vq = F(Xq,Yq) and Vq = F(Xq,Yq,Zq) evaluates F at gridded query
+% points specified in full grid format as 2-D and 3-D arrays created
+% from grid vectors using [Xq,Yq,Zq] = NDGRID(xqg,yqg,zqg).
+% NOTE: Only works for iomat files, not structures
+% ARGUMENTS:
+%           locs: locations of known data
+%           data: scatter data known at locs of size tpts x nodes
+%           X, Y Z: -- grid points to get interpolation out, must be 3D
+%                      arrays generated with 
+%           mask -- indices of points within the brain's convex hull boundary. 
+%                    Same size as X, Y, or Z.
+%    
+% OUTPUT:
+%       mfile_interp_obj: matfile handle to the file with the interpolated
+%                         data.
+%       mfile_interp_sentinel: OnCleanUp object. If keep_interp_data is
+%                              true, then this variable is an empty array.
+%       params -- updated parameter structure
+%
+% AUTHOR:   
+%     Paula Sanz-Leon, QIMR Berghofer Feb 2019
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
-%  locs: locations of known data
-%  data: scatter data known at locs of size tpts x nodes
-% X, Y Z -- grid points to get interpolation out
-% mask -- indices with points of the grid that are inside the
-% convex hull of the brain/cortex, should be interpolating mask
+    % These parameter values are essential
+    neighbour_method = params.interpolation.neighbour_method;
+    extrapolation_method = params.interpolation.extrapolation_method;
 
-% This is the key step for the optical flow method to work
-% These parameters are essential
-neighbour_method = params.interpolation.neighbour_method;
-extrapolation_method = params.interpolation.extrapolation_method;
+    x_dim_locs = params.data.x_dim_locs;
+    y_dim_locs = params.data.y_dim_locs;
+    z_dim_locs = params.data.z_dim_locs;
+    tpts = params.data.shape.timepoints;
+
+    % Save size of grid for interpolated data
+    params.interpolation.data.shape = size(X);
+    params.interpolation.data.shape.x = params.interpolation.data.shape(params.data.x_dim_mgrid);
+    params.interpolation.data.shape.y = params.interpolation.data.shape(params.data.y_dim_mgrid);
+    params.interpolation.data.shape.z = params.interpolation.data.shape(params.data.z_dim_mgrid);
 
 
+    
+    if tpts < 2
+        disp('NOTE to self: This will fail because there is only one data point')
+    end
+    
+    if strcmp(params.interpolation.file.label, '')
+        params.interpolation.file.label = 'tmp_interp';
+    end
 
-x_dim = 1;
-y_dim = 2;
-z_dim = 3;
 
-tpts = size(data, 1);
 
     % Create file for the interpolated data
-    root_fname = 'tmp_interp';
-    [mfile_interp_obj, mfile_interp_sentinel] = create_temp_file(root_fname, keep_interp_data);
-    
-    % Write dummy data to disk
-    mfile_interp_obj.data(size(X, x_dim), size(Y, y_dim), size(Z, z_dim), tpts) = 0;
-    
-    temp_data = nan(size(X));
-    
-    
-    %  Here we should put the function that handles multiple 
-    
+    [obj_interp, obj_interp_sentinel] = create_iomat_file(params.interpolation.file.label, ...
+                                                          params.general.storage.dir, 
+                                                          params.interpolation.file.keep);
 
-    % NOTE: We could do this with a parfor loop but at the expense of RAM memory
-    %       Also, with a parfor we can't use the matfile object
+    obj_interp_cell = strsplit(obj_interp.Properties.Source, filesep);
+    % Save properties of file
+    params.interpolation.file.exists = false;
+    params.interpolation.dir.name  = params.general.storage.dir;
+    params.interpolation.file.name = obj_interp_cell{end};
+
+    % Write dummy data to disk to create matfile
+    obj_interp.data(params.interpolation.data.shape.y, ...
+                    params.interpolation.data.shape.x, ...
+                    params.interpolation.data.shape.z) = 0;
+
+
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started interpolating data.'))              
     for this_tpt=1:tpts
 
         data_interpolant = scatteredInterpolant(locs(:, x_dim), ...
@@ -50,8 +83,9 @@ tpts = size(data, 1);
         temp_data(mask) = data_interpolant(X(mask).', Y(mask).', Z(mask).');
 
         % Only get 
-        mfile_interp_obj.data(:, :, :, this_tpt) = temp_data;
+        interp_obj.data(:, :, :, this_tpt) = temp_data;
 
-    end
+    end % for 
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished interpolating data.'))
 
-end 
+end % function data3d_interpolate_serial()
