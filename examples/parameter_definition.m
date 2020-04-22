@@ -35,7 +35,7 @@ inparams.data.hz = [];
 inparams.data.units.space = 'mm';
 inparams.data.units.time  = 'ms';
 inparams.data.mode = 'amplitude';
-inparams.data.phase.enabled = true; % calculate phase
+??????inparams.data.phase.enabled = true; % calculate phase
 
 
 % inparams for the data interpolation
