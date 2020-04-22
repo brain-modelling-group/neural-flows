@@ -41,8 +41,6 @@ function [obj_interp, obj_interp_sentinel, params] = data3d_interpolate_parallel
     params.interpolation.data.shape.y = params.interpolation.data.shape(params.data.y_dim_mgrid);
     params.interpolation.data.shape.z = params.interpolation.data.shape(params.data.z_dim_mgrid);
 
-
-    
     if tpts < 2
         disp('NOTE to self: This will fail because there is only one data point')
     end
@@ -50,8 +48,6 @@ function [obj_interp, obj_interp_sentinel, params] = data3d_interpolate_parallel
     if strcmp(params.interpolation.file.label, '')
         params.interpolation.file.label = 'tmp_interp';
     end
-
-
 
     % Create file for the interpolated data
     [obj_interp, obj_interp_sentinel] = create_iomat_file(params.interpolation.file.label, ...
