@@ -1,4 +1,4 @@
-function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
+function  [params, varargout] = flows3d_hs3d_estimate(params, masks)
 % ARGUMENTS:
 %           
 %%    
@@ -14,6 +14,15 @@ function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
 %     Paula Sanz-Leon, QIMR Berghofer, November 2018
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
+    % Load interpolated data
+    if strcmp(params.data.grid.type, 'unstructured')
+        obj_data = matfile(fullfile(params.interpolation.file.dir, ...
+                                    params.interpolation.file.name, ...
+                                      'Writable', true);
+    else
+       continue % TODO: Do something for gridded data
+    end
+%----------------------------- FLOW CALCULATION -------------------------------%
     % If we are slicing the data
     if params.data.slice.enabled
         rng(params.data.slice.id)
@@ -21,58 +30,27 @@ function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
     else
         rng(2020)
     end
-
-
-    % Load interpolated data
-    if strcmp(params.data.grid.type, 'unstructured')
-        obj_interp = matfile(fullfile(params.interpolation.file.dir, ...
-                                      params.interpolation.file.name, ...
-                                      'Writable', true);
-    else
-       continue % TODO: Do something for gridded data
-    end
-
-%----------------------------- FLOW CALCULATION -------------------------------%
-    % Parameters for optical flow-- could be changed, could be parameters
-    keep_vel_file    = params.flows.file.keep; % TODO: probably turn into input parameter
     
     % Save flow calculation parameters
-    params.flows.dtpts  = dtpts;
-    params.flows.grid_size = grid_size;    
-    params.interpolation.grid_size = grid_size;
+    %params.flows.dtpts  = dtpts;
+    %params.flows.grid_size = grid_size;    
+    %params.interpolation.grid_size = grid_size;
 
-        
-    % We open a matfile to store output and avoid huge memory usage
-    if isfield(params.flows.file, 'name')
-        root_fname_vel = [params.flows.file.name '-temp_flows-' num2str(params.data.slice.id, '%03d')];
-    else
-        root_fname_vel = ['temp_flows-' num2str(params.data.slice.id, '%03d')];
-    end
-    [mfile_flow, mfile_flow_sentinel] = create_iomat_file(root_fname_vel, keep_vel_file); 
-    params.flows.file.source = mfile_flow.Properties.Source;
+    [obj_flows, obj_flows_sentinel] = create_iomat_file(params.flows.file.label, ...
+                                                        params.general.storage.dir, ...
+                                                        params.flows.file.keep); 
     
     % Save masks with convex hulls of the brain
     obj_flows.masks = masks;
     
-    
-    
     % Save grid - needed for singularity tracking and visualisation
     % Consider saving min max values and step, saves memory
-    mfile_flow.X = X;
-    mfile_flow.Y = Y;
-    mfile_flow.Z = Z;
-
-    % Save time and space step -- this seems redundant
-    mfile_flow.hx = hx; % mm
-    mfile_flow.hy = hy; % mm
-    mfile_flow.hz = hz; % mm
-    mfile_flow.ht = ht; % ms
-    
-    % Save all params in the flow/velocity file 
-    mfile_flow.params = params;
-    
+    obj_flows.X = X;
+    obj_flows.Y = Y;
+    obj_flows.Z = Z;
+   
     % Here is where the magic happens
-    flows3d_estimate_hs3d_flow(mfile_interp, mfile_flow, params)
+    flows3d_estimate_hs3d_flow(obj_data, obj_flows, params)
 
     % Here we get the flows on defined on the nodes -- It adds 30% to the current runtime because it uses ScatterInterpolant
     % Also, the file gets large, but having this additional variable help us with visualisations. 
