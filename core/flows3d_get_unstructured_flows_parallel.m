@@ -1,14 +1,14 @@
-function [mflows_obj] = flows3d_get_unstructured_flows_parallel(mflows_obj, locs)
+function [obj_flows] = flows3d_hs3d_get_unstructured_flows_parallel(obj_flows, locs)
 % This is a wrapper function for Matlab's ScatteredInterpolant, to obtain the 
 % flows values at exactly the centres of gravity of the original brain regions, so as to 
 % minimise the errors introduce by different grid resolutions.
 %
 % ARGUMENTS:
-%           mflows_obj -- a MatFile handle to the file with the flows
+%           obj_flows -- a MatFile handle to the file with the flows
 %           locs --  a [num_nodes x 3 ] array with the original locations of known (scattered) data
 %    
 % OUTPUT:
-%           mflows_obj : the same MatFile handle, but the file will have a
+%           obj_flows : the same MatFile handle, but the file will have a
 %           new field 'uxyz_sc', which is an array of size [num_nodes x 3 x tpts]
 % 
 % USAGE:
@@ -26,16 +26,16 @@ function [mflows_obj] = flows3d_get_unstructured_flows_parallel(mflows_obj, locs
     x_dim = 1;
     y_dim = 2;
     z_dim = 3;
-    tpts = size(mflows_obj, 'ux', 4);
+    tpts = size(obj_flows, 'ux', 4);
     
     if tpts < 2
         disp('NOTE to self: This will fail because there is only one data point')
     end
-    X = mflows_obj.X;
-    Y = mflows_obj.Y;
-    Z = mflows_obj.Z;
+    X = obj_flows.X;
+    Y = obj_flows.Y;
+    Z = obj_flows.Z;
     
-    in_bdy_mask_idx = find(mflows_obj.in_bdy_mask == true);
+    in_bdy_mask_idx = find(obj_flows.in_bdy_mask == true);
     
     
     X = X(in_bdy_mask_idx);
@@ -44,7 +44,7 @@ function [mflows_obj] = flows3d_get_unstructured_flows_parallel(mflows_obj, locs
 
    
     % Write dummy data to disk
-    mflows_obj.uxyz_sc  = zeros([size(locs), tpts]);     
+    obj_flows.uxyz_sc  = zeros([size(locs), tpts]);     
 
     %Open a pallell pool using all available workers
     %percentage_of_workers = 0.5; % 1 --> all workers, too agressive
@@ -54,15 +54,15 @@ function [mflows_obj] = flows3d_get_unstructured_flows_parallel(mflows_obj, locs
     interpolation_3d_storage_expression = 'uxyz_sc(:, :, jdx)';
     %spmd_parfor_with_matfiles(number_of_things, parfun, temp_fname_obj, storage_expression)
     parfun = @interpolate_step;
-    [mflows_obj] = spmd_parfor_with_matfiles(tpts, parfun, mflows_obj, interpolation_3d_storage_expression);
+    [obj_flows] = spmd_parfor_with_matfiles(tpts, parfun, obj_flows, interpolation_3d_storage_expression);
     
     % Child function with access to local scope variables from parent
     % function
     function temp_data = interpolate_step(idx)
             % Create nan array so the output is in the right shape
-            ux = mflows_obj.ux(:, :, :, idx);
-            uy = mflows_obj.uy(:, :, :, idx);
-            uz = mflows_obj.uz(:, :, :, idx);
+            ux = obj_flows.ux(:, :, :, idx);
+            uy = obj_flows.uy(:, :, :, idx);
+            uz = obj_flows.uz(:, :, :, idx);
             
             data_interpolant_x = scatteredInterpolant(X, Y, Z , ...
                                                     ux(in_bdy_mask_idx), ...
