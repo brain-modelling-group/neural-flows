@@ -1,4 +1,4 @@
-function [uxo, uyo, uzo] = flows3d_hs3d_get_initial_flows(grid_shape, nan_mask, seed)
+function [uxo, uyo, uzo] = flows3d_hs3d_set_initial_flows(grid_shape, nan_mask, seed)
 %% This function produces random initial conditions drawn from a uniform distribution
 %
 % ARGUMENTS:
