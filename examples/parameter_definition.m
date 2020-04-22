@@ -5,12 +5,14 @@ inparams_dir  = '/home/paula/Work/Code/matlab-neuro/neural-flows/examples';
 inparams_mode = 'write';
 
 % Output storage inparams
+inparams.general.storage.time_stamp = [];
 inparams.general.storage.dir = '/home/paula/Work/Code/matlab-neuro/neural-flows/scratch'; % Final location for output
 inparams.general.storage.dir_tmp = '/tmp'; % temporary directory for intermediate results parallel calculations
 inparams.general.storage.params.input.filename = inparams_filename;
 inparams.general.storage.params.input.dir = inparams_dir;
 inparams.general.storage.params.output.filename = ouparams_filename;        
 inparams.general.storage.params.output.dir = inparams_dir; 
+
 
 % Internal inparams, datatypes to use, use parallel computing toolbox. 
 inparams.general.storage.format = 'iomat'; %{'iomat', 'mat'}
@@ -20,6 +22,7 @@ inparams.general.parallel.workers_fraction = 0.8;
 % Properties of input data, data file should come with data and locations
 inparams.data.dir.name = '/home/paula/Work/Code/matlab-neuro/neural-flows/demo-data';
 inparams.data.file.name = 'rotating_wave_W_c1_d1ms_trial1.mat';
+inparams.data.slice.enabled = false; 
 inparams.data.slice.id = 0;
 inparams.data.grid.type = 'unstructured';
 inparams.data.ht = 0.25;
@@ -28,6 +31,8 @@ inparams.data.hy = [];
 inparams.data.hz = [];
 inparams.data.units.space = 'mm';
 inparams.data.units.time  = 'ms';
+inparams.data.mode = 'amplitude';
+inparams.data.phase.enabled = true; % calculate phase
 
 
 % inparams for the data interpolation
@@ -41,11 +46,11 @@ inparams.interpolation.file.keep = true;
 inparams.interpolation.hx = 3;
 inparams.interpolation.hy = 3;
 inparams.interpolation.hz = 3;
-inparams.interpolation.ht = 4; % Integer multiple of inparams.data.ht
+%inparams.interpolation.ht = 4; % Integer multiple of inparams.data.ht
 
 % Convex hull boundary for unstructured 3d grids    
-inparams.interpolation.boundary.alpha_radius = 30;
-inparams.interpolation.boundary.thickness = 2;
+inparams.interpolation.boundary.alpha_radius = 30; % au
+inparams.interpolation.boundary.thickness = 2; % voxels
 inparams.interpolation.visualisation.enabled = true;
 
 % Flow calculation
