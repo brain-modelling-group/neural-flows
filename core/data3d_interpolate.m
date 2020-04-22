@@ -1,5 +1,6 @@
-function params = data3d_interpolate(params)
+function [params, masks] = data3d_interpolate(params)
 % This is a wrapper function for data interpolation step
+% works only for unstructured data
 
     % Write internal interpolation and extrapolation methods
     % ::TODO:: this field may not exist in the original json file 
@@ -10,16 +11,21 @@ function params = data3d_interpolate(params)
        params.interpolation.extrapolation_method = 'linear';
     end
     % Load data
-    [data, params] = load_data(params); 
+    [data, params, locs] = load_data(params); 
+
+    % Determine meshgrid for interpolated data.
+    [X, Y, Z, params] = data3d_get_interpolation_meshgrid(locs, params);
 
     % Calculate boundary
+    [masks, params]  = data3d_define_boundary_masks();
 
-    % Calcualte grids
+
+    % Calculate grids
 
     if params.general.parallel.enabled
-        params = data3d_interpolate_parallel(data, locs, X, Y, Z, mask, params)
+        params = data3d_interpolate_parallel(data, locs, X, Y, Z, masks.outties, params)
     else
-        params = data3d_interpolate_serial(data, locs, X, Y, Z, mask, params)
+        params = data3d_interpolate_serial(data, locs, X, Y, Z, masks.outties, params)
     end
  
 end % function data3d_interpolate()
