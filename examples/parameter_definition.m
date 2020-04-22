@@ -41,10 +41,10 @@ inparams.data.mode = 'amplitude';
 % inparams for the data interpolation
 inparams.interpolation.enabled = true;
 inparams.interpolation.file.exists = false;
-inparams.interpolation.dir.name = '';
-inparams.interpolation.file.name = '';
-inparams.interpolation.file.label = '';
-inparams.interpolation.file.keep = true;
+inparams.interpolation.file.dir = '';
+inparams.interpolation.file.name = '';   % Where interp data will be saved
+inparams.interpolation.file.label = '';  % Part of the filename for interp data
+inparams.interpolation.file.keep = true; % Keep file or not
     
 % Resolution
 inparams.interpolation.hx = 3;
