@@ -20,4 +20,3 @@ perform_mode_decomposition_svd(output_params);
 analyse_singularities(output_params)
 
 plot1d_speed_distribution(output_params)
-
