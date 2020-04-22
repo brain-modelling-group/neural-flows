@@ -14,20 +14,20 @@ function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
     if isfield(params.data.slice, 'id')
-      rng(inparams.data.slice.id) 
+      rng(params.data.slice.id) 
     else
-       inparams.data.slice.id = 0;
+       params.data.slice.id = 0;
     end
  
  
 
     
-    if isfield(inparams.interpolation.file, 'name')
-        root_fname_interp = [inparams.interpolation.file.name '-temp_interp-' num2str(inparams.data.slice.id, '%03d')];
+    if isfield(params.interpolation.file, 'name')
+        root_fname_interp = [params.interpolation.file.name '-temp_interp-' num2str(params.data.slice.id, '%03d')];
     else       
-        root_fname_interp = ['temp_interp-' num2str(inparams.data.slice.id, '%03d')];
+        root_fname_interp = ['temp_interp-' num2str(params.data.slice.id, '%03d')];
     end
-    if ~inparams.interpolation.file.exists % Or not necesary because it is fmri data
+    if ~params.interpolation.file.exists % Or not necesary because it is fmri data
         
         % Parallel interpolation with the parallel toolbox
         [mfile_interp, mfile_interp_sentinel] = data3d_interpolate_parallel(data, ...
@@ -38,16 +38,16 @@ function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
          
         % Clean up parallel pool
         % delete(gcp); % commented because it adds 30s-1min of overhead
-         inparams.interpolation.file.exists = true;
+         params.interpolation.file.exists = true;
         
          % Saves full path to file
-         inparams.interpolation.file.source = mfile_interp.Properties.Source;
+         params.interpolation.file.source = mfile_interp.Properties.Source;
     else
         % Load the data if file already exists
-        mfile_interp = matfile(inparams.interpolation.file.source, 'Writable', true);
+        mfile_interp = matfile(params.interpolation.file.source, 'Writable', true);
         mfile_interp_sentinel = [];
     end
-        mfile_interp.inparams = inparams;
+        mfile_interp.params = params;
         % Make the file read-only file to avoid corruption
         mfile_interp.Properties.Writable = false;
         
@@ -57,22 +57,22 @@ function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
 
 %----------------------------- FLOW CALCULATION -------------------------------%
     % Parameters for optical flow-- could be changed, could be parameters
-    keep_vel_file    = inparams.flows.file.keep; % TODO: probably turn into input parameter
+    keep_vel_file    = params.flows.file.keep; % TODO: probably turn into input parameter
     
     % Save flow calculation parameters
-    inparams.flows.dtpts  = dtpts;
-    inparams.flows.grid_size = grid_size;    
-    inparams.interpolation.grid_size = grid_size;
+    params.flows.dtpts  = dtpts;
+    params.flows.grid_size = grid_size;    
+    params.interpolation.grid_size = grid_size;
 
         
     % We open a matfile to store output and avoid huge memory usage
-    if isfield(inparams.flows.file, 'name')
-        root_fname_vel = [inparams.flows.file.name '-temp_flows-' num2str(inparams.data.slice.id, '%03d')];
+    if isfield(params.flows.file, 'name')
+        root_fname_vel = [params.flows.file.name '-temp_flows-' num2str(params.data.slice.id, '%03d')];
     else
-        root_fname_vel = ['temp_flows-' num2str(inparams.data.slice.id, '%03d')];
+        root_fname_vel = ['temp_flows-' num2str(params.data.slice.id, '%03d')];
     end
     [mfile_flow, mfile_flow_sentinel] = create_iomat_file(root_fname_vel, keep_vel_file); 
-    inparams.flows.file.source = mfile_flow.Properties.Source;
+    params.flows.file.source = mfile_flow.Properties.Source;
     
     % Save masks with convex hulls of the brain
     obj_flows.masks = masks;
@@ -91,11 +91,11 @@ function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
     mfile_flow.hz = hz; % mm
     mfile_flow.ht = ht; % ms
     
-    % Save all inparams in the flow/velocity file 
-    mfile_flow.inparams = inparams;
+    % Save all params in the flow/velocity file 
+    mfile_flow.params = params;
     
     % Here is where the magic happens
-    flows3d_estimate_hs3d_flow(mfile_interp, mfile_flow, inparams)
+    flows3d_estimate_hs3d_flow(mfile_interp, mfile_flow, params)
 
     % Here we get the flows on defined on the nodes -- It adds 30% to the current runtime because it uses ScatterInterpolant
     % Also, the file get larger, but having this additional variable help us with visualisations. 
@@ -112,10 +112,10 @@ function  [params, varargout] = flows3d_estimate_hs3d(params, masks)
     delete(mfile_flow_sentinel)
     
 %-------------------------- DETECT NULL FLOWS - CRITICAL POINTS ---------------%    
-   if inparams.singularity.detection.enabled
+   if params.singularity.detection.enabled
               
-       mfile_sings = singularity3d_detection(mfile_flow, inparams.singularity.detection.threshold); 
-       if inparams.singularity.classification.enabled
+       mfile_sings = singularity3d_detection(mfile_flow, params.singularity.detection.threshold); 
+       if params.singularity.classification.enabled
 %----------------------------- CLASSIFY SINGULARITIES -------------------------%
            %mfile_sings = singularity3d_classify_singularities_parallel(mfile_sings, mfile_flow);
            mfile_sings = singularity3d_classify_parallel(mfile_sings, mfile_flow);             
