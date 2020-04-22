@@ -4,7 +4,7 @@
 % Performance: This takes about 5 minutes to run with 11 workers for parallel
 % functions. Memory usage is approximately 6GB.
 
-input_params_filename = 'rotating_wave.json';
+input_params_filename = 'rotating_wave_i.json';
 input_params_dir  = '/home/paula/Work/Code/matlab-neuro/neural-flows/examples';
 json_mode = 'read';
 
