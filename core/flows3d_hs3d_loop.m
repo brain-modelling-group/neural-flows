@@ -57,7 +57,7 @@ z_dim = 3;
 
 if strcmp(options.flows.init_conditions.mode, 'random')
     seed_init_vel = options.flows.init_conditions.seed;
-    [uxo, uyo, uzo] = flows3d_hs3d_get_initial_flows(grid_size, ~mfile_flows.interp_mask, seed_init_vel);
+    [uxo, uyo, uzo] = flows3d_hs3d_set_initial_flows(grid_size, ~mfile_flows.interp_mask, seed_init_vel);
 
 else
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Using pre-calculated initial velocity conditions.'))
@@ -93,7 +93,7 @@ fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started burn-in 
 
 for bb=1:burnin_len
     % Calculate the velocity components
-    [uxo, uyo, uzo] = flows3d_hs3d(FA, FB, alpha_smooth, ...
+    [uxo, uyo, uzo] = flows3d_hs3d_step(FA, FB, alpha_smooth, ...
                                            max_iterations, ...
                                            uxo, uyo, uzo, ...
                                            hx, hy, hz, ht, ...
