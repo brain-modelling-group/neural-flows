@@ -43,6 +43,11 @@ function [obj_interp, obj_interp_sentinel, params] = data3d_interpolate_parallel
         params.interpolation.file.label = 'tmp_interp';
     end
 
+    % If we are slicing the data
+    if params.data.slice.enabled
+        params = generate_slice_filename(params, 'interpolation'); 
+    end
+
     % Create file for the interpolated data
     [obj_interp, obj_interp_sentinel] = create_iomat_file(params.interpolation.file.label, ...
                                                           params.general.storage.dir, 
