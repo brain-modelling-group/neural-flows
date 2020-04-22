@@ -34,14 +34,6 @@ function [obj_interp, obj_interp_sentinel, params] = data3d_interpolate_serial(d
     y_dim_locs = params.data.y_dim_locs;
     z_dim_locs = params.data.z_dim_locs;
     tpts = params.data.shape.timepoints;
-
-    % Save size of grid for interpolated data
-    params.interpolation.data.shape = size(X);
-    params.interpolation.data.shape.x = params.interpolation.data.shape(params.data.x_dim_mgrid);
-    params.interpolation.data.shape.y = params.interpolation.data.shape(params.data.y_dim_mgrid);
-    params.interpolation.data.shape.z = params.interpolation.data.shape(params.data.z_dim_mgrid);
-
-
     
     if tpts < 2
         disp('NOTE to self: This will fail because there is only one data point')
