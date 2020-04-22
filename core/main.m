@@ -18,9 +18,9 @@ end
 switch inparams.flows.method.name
     case {'hs3d', 'horn-schunk', 'hs'}
         %
-        tmp_params = main_flows_hs3d(data, locs, inparams);
+        tmp_params = flows3d_estimate_hs3d(inparams);
     case {'cnem'}
-        % main_flows_cnem()
+        % temp_params = flows3d_estimate_cnem(inparams)
         error(['neural-flows:' mfilename ':NotTested'], ...
                'Sorry mate, have not tested this one yet.');
     otherwise
