@@ -1,33 +1,35 @@
-function varargout = main_neural_flows_hs3d_grid(data, X, Y, Z, options) 
+function varargout = main_neural_flows_hs3d_grid(data, X, Y, Z, params) 
  % This function is mainly for testing purposes of flow calculations
  % Compute neural flows from synthetic data defined on a structured grid.
  % [wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured('x');
- % options.chunk = 42;  
- % options.hx = 1;
- % options.hy = 1;
- % options.hz = 1;
- % options.ht = 1;
- % options.flow_calculation.init_conditions = 'random';
- % flows3d_compute_structured_grid(wave3d, X, Y, Z, time, options);
+ % params.chunk = 42;  
+ % params.hx = 1;
+ % params.hy = 1;
+ % params.hz = 1;
+ % params.ht = 1;
+ % params.flow_calculation.init_conditions = 'random';
+ % flows3d_compute_structured_grid(wave3d, X, Y, Z, time, params);
  % 
  % This function only calculates velocity/flow fields
  %              
  % data: 
- %          4D array of size [timepoints x xcoord x ycoord x zcoord]
- % X, Y, Z: 3D arrays of size [Nx, Ny, Nz] produced with meshgrid
- % options.chunk to set random initial conditions
+ %          4D array of size [timepoints x ycoord x xcoord x zcoord], so as to be consistent with meshgrid size for a 3d slice
+ % X, Y, Z: 3D arrays of size [Ny, Nz, Nz] produced with meshgrid
+ % params.chunk to set random initial conditions
    
-    if isfield(options, 'chunk')
-      rng(options.chunk) % for the cluster environment.
+    if isfield(params, 'chunk')
+      rng(params.chunk) % for the cluster environment.
     end
     
     t_dim = 1; % time
     dtpts  = size(data, t_dim);
     grid_size = size(X);
-    hx = options.interpolation.hx; 
-    hy = options.interpolation.hy;
-    hz = options.interpolation.hz;   
-    ht = options.data.ht;
+
+
+    hx = params.interpolation.hx; 
+    hy = params.interpolation.hy;
+    hz = params.interpolation.hz;   
+    ht = params.data.ht;
         
     % NOTE: this is a kind of hack. For a structured grids we should not
     % need this. or maybe we do?
@@ -37,8 +39,8 @@ function varargout = main_neural_flows_hs3d_grid(data, X, Y, Z, options)
     % Parameters for optical flow-- could be changed, could be parameters
     
     % Save flow calculation parameters parameters 
-    options.flows.dtpts          = dtpts;
-    options.flows.grid_size      = grid_size;
+    params.flows.dtpts          = dtpts;
+    params.flows.grid_size      = grid_size;
         
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started estimation of neural flows.'))
     
@@ -70,10 +72,10 @@ function varargout = main_neural_flows_hs3d_grid(data, X, Y, Z, options)
     % dimension
     data = permute(data, [2 3 4 1]);
     mfile_vel.interp_mask = ones(grid_size);
-    flows3d_estimate_hs3d_flow(data, mfile_vel, options)
+    flows3d_estimate_hs3d_flow(data, mfile_vel, params)
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished estimation of neural flows.'))
     
-    mfile_vel.options = options;
+    mfile_vel.params = params;
     % Delete sentinels. If these varibales are OnCleanup objects, then the 
     % files will be deleted.
     delete(mfile_vel_sentinel)
