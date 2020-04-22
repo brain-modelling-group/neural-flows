@@ -14,16 +14,16 @@ elseif strcmp(tmp_paramss.data.grid.type, 'unstructured') && ~tmp_params.interpo
    warning(['neural-flows:' mfilename ':NoInterpolation'], 'Skipping interpolation ...')
 elseif strcmp(tmp_params.data.grid.type, 'unstructured') && tmp_params.interpolation.enabled
    % Do the interpolation  
-   tmp_params = data3d_interpolate(tmp_params)
+   [tmp_params, masks] = data3d_interpolate(tmp_params)
 end
 
 % Check which method we want to use - hsd3 only works with interpolate data, while cnem
 switch tmp_params.flows.method.name
     case {'hs3d', 'horn-schunk', 'hs'}
         %
-        tmp_params = flows3d_estimate_hs3d(tmp_params);
+        tmp_params = flows3d_estimate_hs3d(tmp_params, masks);
     case {'cnem'}
-        % temp_params = flows3d_estimate_cnem(inparams)
+        % temp_params = flows3d_estimate_cnem(params, masks)
         error(['neural-flows:' mfilename ':NotTested'], ...
                'Sorry mate, have not tested this one yet.');
     otherwise
