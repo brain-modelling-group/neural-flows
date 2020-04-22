@@ -1,4 +1,4 @@
-function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel(data, locs, X, Y, Z, mask, keep_interp_data, root_fname)
+function [obj_interp, obj_interp_sentinel, params] = data3d_interpolate_parallel(data, locs, X, Y, Z, mask, params)
 % This is a wrapper function for Matlab's ScatteredInterpolant. We can interpolate
 % each frame of a 4D array independtly using parfor and save the interpolated data for 
 % later use with optical flow. Then, just delete the interpolated data
@@ -20,13 +20,10 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
 %                         data.
 %       mfile_interp_sentinel: OnCleanUp object. If keep_interp_data is
 %                              true, then this variable is an empty array.
+%       params -- updated parameter structure
 %
 % AUTHOR:   
-%     Paula Sanz-Leon
-% USAGE:
-%{
-    
-%}
+%     Paula Sanz-Leon, QIMR Berghofer Feb 2019
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
     % These parameter values are essential
@@ -36,8 +33,15 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
     x_dim_locs = params.data.x_dim_locs;
     y_dim_locs = params.data.y_dim_locs;
     z_dim_locs = params.data.z_dim_locs;
-
     tpts = params.data.shape.timepoints;
+
+    % Save size of grid for interpolated data
+    params.interpolation.data.shape = size(X);
+    params.interpolation.data.shape.x = params.interpolation.data.shape(params.data.x_dim_mgrid);
+    params.interpolation.data.shape.y = params.interpolation.data.shape(params.data.y_dim_mgrid);
+    params.interpolation.data.shape.z = params.interpolation.data.shape(params.data.z_dim_mgrid);
+
+
     
     if tpts < 2
         disp('NOTE to self: This will fail because there is only one data point')
@@ -48,17 +52,29 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
     end
 
 
+
     % Create file for the interpolated data
-    [mfile_interp_obj, mfile_interp_sentinel] = create_temp_file(params.interpolation.file.label, params.interpolation.file.keep);
-    
+    [obj_interp, obj_interp_sentinel] = create_iomat_file(params.interpolation.file.label, ...
+                                                          params.general.storage.dir, 
+                                                          params.interpolation.file.keep);
+
+    obj_interp_cell = strsplit(obj_interp.Properties.Source, filesep);
+    % Save properties of file
+    params.interpolation.file.exists = false;
+    params.interpolation.dir.name  = params.general.storage.dir;
+    params.interpolation.file.name = obj_interp_cell{end};
+
     % Write dummy data to disk to create matfile
-    mfile_interp_obj.data(, size(X, x_dim), size(Z, z_dim), tpts) = 0;
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started interpolating data.'))          
-    
+    obj_interp.data(params.interpolation.data.shape.y, ...
+                    params.interpolation.data.shape.x, ...
+                    params.interpolation.data.shape.z) = 0;
+
+
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started interpolating data.'))              
     %spmd_parfor_with_matfiles(number_of_things, parfun, temp_fname_obj, storage_expression)
     parfun = @interpolate_step;
     interpolation_3d_storage_expression = 'data(:, :, :, jdx)';
-    [mfile_interp_obj] = spmd_parfor_with_matfiles(tpts, parfun, mfile_interp_obj, interpolation_3d_storage_expression);
+    [obj_interp] = spmd_parfor_with_matfiles(tpts, parfun, obj_interp, interpolation_3d_storage_expression);
     
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished interpolating data.'))
     
@@ -75,6 +91,6 @@ function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate_parallel
                                                     extrapolation_method);
 
             temp_data(mask) = single(data_interpolant(X(mask).', Y(mask).', Z(mask).'));
-    end
+    end % interpolate_step()
 
-end % funcyion data3d_interpolate_parallel()
+end % function data3d_interpolate_parallel()
