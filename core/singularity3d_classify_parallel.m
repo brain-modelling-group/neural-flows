@@ -30,80 +30,51 @@ function classification_cell = singularity3d_classify_parallel(nullflow_points3d
     hy = params.flows.data.hy; 
     hz = params.flows.data.hz; 
 
-% Calculate jacobian and classify singularities
-singularity_classification_list = cell(size(nullflow_points3d));
+    % Calculate jacobian and classify singularities
+    classification_cell = cell(size(nullflow_points3d));
 
-nullflow_points3d =  msings_obj.nullflow_points3d; 
-msings_obj.singularity_classification_list = cell(size(nullflow_points3d)); 
+    % TODO: CHECK THIS STILL WORKS
+    null_points_cell = struct2cell(nullflow_points3d);
+    % Get only relevant data -- subscripts
+    null_points_cell = squeeze(null_points_cell(1, 1, :));
 
+     fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started classification of singularities.'))
 
-tpts = size(nullflow_points3d, 2);
+    parfor tt=1:tpts 
+           % Check if we have critical points. There are 'frames' for which
+           % nothing was detected, we should not attempt to calculate jacobian.
+           nullflow_points3d_subscripts = null_points_cell{tt};
 
-% Load options structure
-options   = mflow_obj.options;
-grid_size = options.flows.grid_size;
+           if isempty(nullflow_points3d_subscripts)
+               singularity_labels = {'empty'};
+               %msings_obj.classification_cell(1, tt) = {singularity_labels};
+               classification_cell{1, tt} = singularity_labels;
 
-% Check if we stored linear indices or subscripts 
-if size(nullflow_points3d(1).xyz_idx, 2) < 2
-    fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started converting lindear indices into subscripts.'))
+               continue
+           end
+           
+           num_critical_points = size(nullflow_points3d_subscripts, 1);
+           singularity_labels  = cell(num_critical_points, 1);
 
-    for tt=1:tpts
-        xyz_subs = switch_index_mode(nullflow_points3d(tt).xyz_idx, 'subscript', grid_size);
-        nullflow_points3d(tt).xyz_idx = xyz_subs;
-    end    
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished converting lindear indices into subscripts.'))
- 
-end
+           [boundary_vec_idx, in_bdy_vec_idx] = detect_boundary_points(nullflow_points3d_subscripts, grid_size);
 
-hx = options.interpolation.hx; 
-hy = options.interpolation.hy; 
-hz = options.interpolation.hz; 
-grid_size = options.interpolation.grid_size;
-
-null_points_cell = struct2cell(nullflow_points3d);
-% Get only relevant data -- subscripts
-null_points_cell = squeeze(null_points_cell(1, 1, :));
-
-fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started classification of singularities.'))
-
-parfor tt=1:tpts 
-       % Check if we have critical points. There are 'frames' for which
-       % nothing was detected, we should not attempt to calculate jacobian.
-       nullflow_points3d_xyz_idx = null_points_cell{tt};
-
-       if isempty(nullflow_points3d_xyz_idx)
-           singularity_labels = {'empty'};
-           %msings_obj.singularity_classification_list(1, tt) = {singularity_labels};
-           singularity_classification_list{1, tt} = singularity_labels;
-
-           continue
-       end
-       
-       num_critical_points = size(nullflow_points3d_xyz_idx, 1);
-       singularity_labels  = cell(num_critical_points, 1);
-
-       [boundary_vec_idx, in_bdy_vec_idx] = detect_boundary_points(nullflow_points3d_xyz_idx, grid_size);
-
-       % Create temp variables with partial load of a matfile. 
-       ux = mflow_obj.ux(:, :, :, tt);
-       uy = mflow_obj.uy(:, :, :, tt);
-       uz = mflow_obj.uz(:, :, :, tt);
-       
-       temp_labels = classify_points(nullflow_points3d_xyz_idx, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz);
-       singularity_labels(in_bdy_vec_idx) = temp_labels;
-       singularity_labels(boundary_vec_idx) = {'boundary'};
-       
-       %msings_obj.singularity_classification_list(1, tt) = {singularity_labels};
-       singularity_classification_list{1, tt} = singularity_labels;
+           % Create temp variables with partial load of a matfile. 
+           ux = mflow_obj.ux(:, :, :, tt);
+           uy = mflow_obj.uy(:, :, :, tt);
+           uz = mflow_obj.uz(:, :, :, tt);
+           
+           temp_labels = classify_points(nullflow_points3d_xyz_idx, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz);
+           singularity_labels(in_bdy_vec_idx) = temp_labels;
+           singularity_labels(boundary_vec_idx) = {'boundary'};
+           
+           %msings_obj.classification_cell(1, tt) = {singularity_labels};
+           classification_cell{1, tt} = singularity_labels;
 
 
-end
+    end
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished classification of singularities.'))
-fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Saving classification list to file.'))
 
-msings_obj.singularity_classification_list = singularity_classification_list;
-
-end % singularity3d_classify_singularities_parallel()
+end % singularity3d_classify_parallel()
 
    
 function label = classify_points(nullflow_points3d_xyz_idx, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz)
