@@ -49,8 +49,8 @@ end
 
 % Check what else we want to do
 if tmp_params.flows.streamlines.enabled
-    % Do x
-    %streamlines3d_trace()
+     error(['neural-flows:' mfilename ':NotImplemented'], ...
+               'This feature has not been implemented yet. Next!');
 end 
 
 if tmp_params.singularity.detection.enabled 
