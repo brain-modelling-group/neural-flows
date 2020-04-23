@@ -10,8 +10,6 @@ function [data, params, varargout] = load_data(params)
 %            data4d -- a 4D array of size [timepoints, x, y, z]
 %            hx, hy, hz, resolution voxel size
 
-
-
     data_path = fullfile(params.data.dir.name, params.data.file.name);
     data_struct = load(data_path);
     params.data.shape.size = size(data_struct.data);
@@ -37,9 +35,9 @@ function [data, params, varargout] = load_data(params)
             
     end
 
-    % Use human readable indexing -- this brought me so many headaches because
-    % matlab functions sometime use ngrid and some other times mgrid
-    % Here we will use mgrid order, so that dimensions are Y, X, Z
+    % NOTE: Use human readable indexing, defined only once. This brought me so 
+    % many headaches because matlab functions sometime use ngrid and some 
+    % other times mgrid. Here we will use mgrid order, so that dimensions are Y, X, Z
 
     % Human readable indexing locs array
     params.data.x_dim_locs = 1;
