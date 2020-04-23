@@ -85,6 +85,14 @@ inparams.flows.method.hs3d.initial_conditions.mode = 'random';
 inparams.flows.method.hs3d.initial_conditions.seed = 42;
 %inparams.flows.method.hs3d.burnin.length = 8; % in time steps
 
+% CNEM
+%inparams.flows.method.name = 'cnem';
+%inparams.flows.method.cnem.alpha_smooth   = 0.1;
+%inparams.flows.method.cnem.max_iterations = 128;
+%inparams.flows.method.cnem.initial_conditions.mode = 'random';
+%inparams.flows.method.cnem.initial_conditions.seed = 42;
+%inparams.flows.method.cnem.burnin.length = 8; % in time steps
+
 %params.flows.data.shape.x = params.data.shape.size(2); 
 %params.flows.data.shape.y = params.data.shape.size(3);
 %params.flows.data.shape.z = params.data.shape.size(4);
