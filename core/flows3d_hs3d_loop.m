@@ -53,6 +53,12 @@ hy = params.data.hy;
 hz = params.data.hz;
 ht = params.data.ht;
 
+% Save it in flows -- 
+params.flows.data.hx = hx;
+params.flows.data.hy = hy;
+params.flows.data.hz = hz;
+params.flows.data.ht = ht;
+
 % Human-readable labels 
 x_dim_mgrid = params.data.x_dim_mgrid;
 y_dim_mgrid = params.data.y_dim_mgrid;
