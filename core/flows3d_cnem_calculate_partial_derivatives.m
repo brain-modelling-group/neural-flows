@@ -31,7 +31,7 @@ function [Ix, Iy, Iz, It] = flows3d_cnem_calculate_partial_derivatives(F1, F2, h
     Iz = (0.5*(get_derivative(F1, zdim, B) + get_derivative(F2, zdim, B)))/hz;
     It = (F1 - F2)/ht;
 
-end % function flows3d_calculate_partialderivatives_hsd3()
+end % flows3d_cnem_calculate_partial_derivatives()
 
 
 function I = get_derivative(F, dim, B)
