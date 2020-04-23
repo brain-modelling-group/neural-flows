@@ -23,7 +23,7 @@ function  [params, varargout] = flows3d_hs3d_estimate(params, masks)
        continue % TODO: Do something for gridded data
     end
 %----------------------------- FLOW CALCULATION -------------------------------%
-    % If we are slicing the data
+    % Check if we are receiving one slice of the data
     if params.data.slice.enabled
         rng(params.data.slice.id)
         params = generate_slice_filename(params, 'flows') 
@@ -32,10 +32,6 @@ function  [params, varargout] = flows3d_hs3d_estimate(params, masks)
     end
     
     % Save flow calculation parameters
-    %params.flows.dtpts  = dtpts;
-    %params.flows.grid_size = grid_size;    
-    %params.interpolation.grid_size = grid_size;
-
     [obj_flows, obj_flows_sentinel] = create_iomat_file(params.flows.file.label, ...
                                                         params.general.storage.dir, ...
                                                         params.flows.file.keep); 
