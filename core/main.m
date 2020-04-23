@@ -14,7 +14,7 @@ tstart = tik();
 
 % Copy structure
 tmp_params = inparams;
-
+%---------------------------------INTERPOLATION--------------------------------%
 % Check if we need to interpolate data
 if strcmp(tmp_params.data.grid.type, 'structured') && tmp_params.interpolation.enabled
    error(['neural-flows:' mfilename ':IncompatibleOptions'], ...
@@ -30,7 +30,9 @@ elseif strcmp(tmp_params.data.grid.type, 'unstructured') && tmp_params.interpola
 else
   % Presumably structured data
 end
+%---------------------------------INTERPOLATION--------------------------------%
 
+%---------------------------------FLOWS----------------------------------------%
 % Check which method we want to use - hsd3 only works with interpolated data, while cnem
 switch tmp_params.flows.method.name
     case {'hs3d', 'horn-schunk', 'hs'}
@@ -44,23 +46,30 @@ switch tmp_params.flows.method.name
         error(['neural-flows:' mfilename ':UnknownMethod'], ...
                'Unknown method. Options: {"hs3d", "cnem", "hours"}');
 end
+%---------------------------------FLOWS----------------------------------------%
 
-% Remove interpolated data
+%---------------------------------STREAMLINES----------------------------------%
 
 % Check what else we want to do
 if tmp_params.flows.streamlines.enabled
      error(['neural-flows:' mfilename ':NotImplemented'], ...
                'This feature has not been implemented yet. Next!');
 end 
+%---------------------------------STREAMLINES----------------------------------%
 
+%---------------------------------SINGULARITY----------------------------------%
+% DETECTION
 if tmp_params.singularity.detection.enabled 
-    tmp_params = singularity3d_detect(tmp_params)
+    [tmp_params, obj_singularity, obj_singularity_sentinel] = singularity3d_detect(tmp_params)
 end
 
-if tmp_params.singularity.detection.enabled 
-    tmp_params = singularity3d_detect(tmp_params)
+% CLASSIFICATION
+if tmp_params.singularity.classification.enabled 
+   tmp_params = singularity3d_classify(tmp_params)
 end
 
+%TRACKING
+%---------------------------------SINGULARITY----------------------------------%
 ouparams = tmp_params;
 
 % Toc
