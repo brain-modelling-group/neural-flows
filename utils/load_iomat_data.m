@@ -1,10 +1,12 @@
-function obj_data = load_io_mat_file(params)
+function [obj_data, obj_data_sentinel] = load_io_mat_file(params)
 % Load interpolated data iomat or put regular data into an appropriate structure?
 % or make a temporary iomatfile??
+% TODO: make a sentinel, delete object handle or file? 
+% Delete handle for interpolated data file but delete file for noninterpolated data
 
  % Load interpolated data
     if strcmp(params.data.grid.type, 'unstructured')
-        % Load data file
+        % Load file with interpolated datafile
         obj_data = matfile(fullfile(params.interpolation.file.dir, ...
                                     params.interpolation.file.name), ...
                                     'Writable', false);
