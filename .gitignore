@@ -4,6 +4,9 @@ dir_to_ignore/
 # output data
 output_data/
 
+# output data
+dev-scripts/
+
 # graohic output
 image_frames/
 
