@@ -1,4 +1,4 @@
-function [ux, uy, uz] = flows3d_cnem(F1, F2, alpha_smooth, max_iterations, uxo, uyo, uzo, hx, hy, hz, ht)
+function [ux, uy, uz] = flows3d_cnem_step(F1, F2, alpha_smooth, max_iterations, uxo, uyo, uzo, inner_tiangles)
 %% NOTE: NOT WORKING ATM --- This function estimates the velocity components between two subsequent 3D 
 % images using the Horn-Schunck optical flow method (HS3D), but using CNEM. 
 %
