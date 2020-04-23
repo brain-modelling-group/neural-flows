@@ -24,8 +24,8 @@ function[params, obj_sings, obj_sings_sentinel] = singularity3d_detect(params)
 
 
 
-     % Load flows data
-    obj_flows = load_iomat_data(params);
+    % Load flows data
+    obj_flows = load_iomat_flows(params);
 
     if isempty(params.singularity.detection.threshold)
         % Dodgy way of setting a threshold
