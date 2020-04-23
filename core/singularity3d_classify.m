@@ -1,10 +1,10 @@
-function  [singularity_classification_list] =  singularity3d_classify(nullflow_points3d, mvel_obj)
+function singularity3d_classify(params)
 % 1) calculates jacobian for each critical point, and then 
 % 2) classify type of critical point. 
 % ARGUMENTS:
-%          nullflow_points3d        -- a struct of size [1 x no. timepoints]
-%                                -- .xyz_idx [no. of singularities x 1] -- linear indices 
-%                                            [no. of singularities x 3] -- subscripts
+%          nullflow_points3d     -- a struct of size [1 x no. timepoints]
+%                                -- locs.linear_idx [no. of singularities x 1] -- linear indices 
+%                                -- locs.subscripts [no. of singularities x 3] -- subscripts
 %          mvel_obj              -- a MatFile handle pointing to the flows/velocity
 %                            fields. Needed for the calculation of the
 %                            jacobian matrix. Or a matlab structure with
@@ -26,68 +26,73 @@ function  [singularity_classification_list] =  singularity3d_classify(nullflow_p
 %}
 % NOTE: as the timeseries get longer, we can in principle parallelise this
 % function.
-singularity_classification_list = cell(size(nullflow_points3d));
-tpts = size(nullflow_points3d, 2);
 
-% Load options structure
-options = mvel_obj.options;
-grid_size = options.flow_calculation.grid_size;
+    % Load flows data - nonwritable
+    obj_flows = load_iomat_flows(params);
 
-% Check if we stored linear indices or subscripts 
-if size(nullflow_points3d(1).xyz_idx, 2) < 2
-    for tt=1:tpts
-        xyz_subs = switch_index_mode(nullflow_points3d(tt).xyz_idx, 'subscript', grid_size);
-        nullflow_points3d(tt).xyz_idx = xyz_subs;
-    end    
-    
-end
+    % Load singularity data- writable
+    obj_singularity = load_iomat_singularity(params);
 
-hx = mvel_obj.hx; 
-hy = mvel_obj.hy; 
-hz = mvel_obj.hz; 
+    tpts = params.flows.data.shape.t;
+    grid_size = [params.flows.data.shape.y, params.flows.data.shape.x, params.flows.data.shape.z]; 
 
 
-for tt=1:tpts % parallizable stuff but the classification runs very fast
+    singularity_classification_list = cell(size(nullflow_points3d));
+
+    % Check if we stored linear indices or subscripts 
+    if ~isfield(nullflow_points3d(1).locs, 'subscripts')
+        for tt=1:tpts
+            nullflow_points3d(tt).locs.subscripts = switch_index_mode(nullflow_points3d(tt).xyz_idx, 'subscript', grid_size);;
+        end    
+        
+    end
+
+    hx = params.flows.data.hx; 
+    hy = params.flows.data.hy; 
+    hz = params.flows.data.hz; 
+
+
+for tt=1:tpts % parallizable stuff but the classification runs very fast if the detection threshold is stringent
 
        % Check if we have critical points. There are 'frames' for which
        % nothing was detected, we should not attempt to calculate jacobian.
-       if isempty(nullflow_points3d(tt).xyz_idx)
+       if isempty(nullflow_points3d(tt).locs.linear_idx)
            singularity_labels = {'empty'};
            singularity_classification_list{tt} = singularity_labels;
            continue
        end
        
        % Create temp variables with partial load of a matfile. 
-       ux = mvel_obj.ux(:, :, :, tt);
-       uy = mvel_obj.uy(:, :, :, tt);
-       uz = mvel_obj.uz(:, :, :, tt);
+       ux = obj_flows.ux(:, :, :, tt);
+       uy = obj_flows.uy(:, :, :, tt);
+       uz = obj_flows.uz(:, :, :, tt);
        
-       num_critical_points = size(nullflow_points3d(tt).xyz_idx, 1);
+       num_critical_points = size(nullflow_points3d(tt).locs.subscripts, 1);
        singularity_labels  = cell(num_critical_points, 1);
 
-       for ss=1:num_critical_points
+       for this_cp=1:num_critical_points
            % Check if any subscript is on the boundary of the grid. 
            % This will cause a problem in the jacobian calculation. 
-           point_idx = nullflow_points3d(tt).xyz_idx(ss, :);
-           % Move points a little
-           %point = rectify_boundary_points(point, grid_size);
+           point_idx = nullflow_points3d(tt).locs.subscripts(this_cp, :);
+           
            % Flag points at the boundary
            boundary_vec = detect_boundary_points(point_idx, grid_size);               
                             
            if ~isempty(boundary_vec)
-                singularity_labels{ss} = 'boundary';
+                singularity_labels{this_cp} = 'boundary';
             continue
            end
            
            % Calculate the Jacobian at each critical point 
-           [J3D] = singularity3d_calculate_jacobian(point_idx, ux, uy, uz, hx, hy, hz);
-           singularity_labels{ss} = singularity3d_classify_critical_points(J3D);
+           [J3D] = singularity3d_jacobian(point_idx, ux, uy, uz, hx, hy, hz);
+           singularity_labels{this_cp} = singularity3d_classify_critical_points(J3D);
        end
 
        singularity_classification_list{tt} = singularity_labels;
 end
+obj_singularity.classification_list = singularity_classification_list;
 
-end % singularity3d_classify_singularities()
+end % singularity3d_classify()
 
 function boundary_vec = detect_boundary_points(point_idx, grid_size)
 % This function only detects points on the faces of the grid.
