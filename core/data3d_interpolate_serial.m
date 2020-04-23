@@ -65,7 +65,11 @@ function [obj_interp, obj_interp_sentinel, params] = data3d_interpolate_serial(d
                     params.interpolation.data.shape.x, ...
                     params.interpolation.data.shape.z) = 0;
 
-
+    % Write grids to disk
+    obj_interp.X = X;
+    obj_interp.Y = Y;
+    obj_interp.Z = Z;
+    
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started interpolating data.'))              
     for this_tpt=1:tpts
 
