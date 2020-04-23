@@ -1,17 +1,18 @@
-function out = s3d_count_singularities(singularity_classification_num_list)
+function singularity_count = singularity3d_count(classification_cell)
 % A wrapper function to count how many singularities of each type
 % we have in the input structure.
 % s3d_count_singularities
 %
 % ARGUMENTS:
-%        singularity_classification_num_list -- a cell array of siz 1 x tpts
+%        classification_cell -- a cell array of siz 1 x tpts
 %
 % OUTPUT: 
-%        <output1> -- <description>
+%        
 %        <output2> -- <description>
 %
 % REQUIRES: 
-%        s3d_get_singularity_list()
+%        s3d_get_numlabel()
+%        s3d_get_base_singularity_list()
 %
 % USAGE:
 %{
@@ -20,12 +21,11 @@ function out = s3d_count_singularities(singularity_classification_num_list)
 %
 
 base_singularity_num_list = cellfun(@(x) s3d_get_numlabel(x), s3d_get_base_singularity_list());
+singularity_count = zeros(length(classification_cell), length(base_singularity_num_list));
 
-out = zeros(length(singularity_classification_num_list), length(base_singularity_num_list));
-
-for tt=1:length(singularity_classification_num_list)
-    [counts, ~] = hist(singularity_classification_num_list{tt}, base_singularity_num_list);
-    out(tt, :) = counts;
+for tt=1:length(classification_cell)
+    [counts, ~] = hist(classification_cell{tt}, base_singularity_num_list);
+    singularity_count(tt, :) = counts;
 end
 
-end % s3d_count_singularities()
+end % singularity3d_count
