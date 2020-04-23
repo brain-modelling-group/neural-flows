@@ -1,20 +1,20 @@
-function flows3d_hs3d_loop(mfile_data, mfile_flows, options)
+function flows3d_hs3d_loop(obj_data, obj_flows, params)
 % This function runs the iterative part of the Horn-Schunk algorithm. 
 %
 % ARGUMENTS:
-%           mfile_data --- is the MatFile file with the data (interpolated
-%                           or not), or  a 4D [x,y,z,t] array with all the
-%                           data.
-%          mfile_vel   -- a handle to the MatFile 
+%          obj_data --- is the MatFile file with the data (interpolated
+%                       or not), or a 4D [x,y,z,t] array with all the
+%                       data.
+%          obj_vel  -- a handle to the MatFile 
 %
 % OUTPUT: 
 %          None
 %
 % REQUIRES: 
-%           flows3d_hs3d_get_initial_flows()
-%           flows3d_hs3d()
+%           flows3d_hs3d_set_initial_flows()
+%           flows3d_hs3d_step()
 %           flows3d_hs3d_flow_stats()
-%           normalise_vector_field()
+%           normalise_3dvector_field()
 % USAGE:
 %{     
 
@@ -25,47 +25,34 @@ function flows3d_hs3d_loop(mfile_data, mfile_flows, options)
 %     Paula Sanz-Leon -- QIMR December 2018
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-try 
-    % check if we can get the size, if yes, it means this var is a 4D array
-    if length(size(mfile_data)) == 4
-        data = mfile_data;
-        clear mfile_data
-        mfile_data.data = data;
-        clear data
-        disp(['neural-flows::', mfilename, '::Info:: Input data is stored in an array.'])
-    end
-catch
-        disp(['neural-flows::', mfilename,'::Info:: Input data is stored in a MatFile.'])
-end
-            
+     
 % Get parameters
-dtpts          = options.flows.dtpts;
-alpha_smooth   = options.flows.method.alpha_smooth;
-max_iterations = options.flows.method.max_iterations;
-grid_size      = options.flows.grid_size;
+dtpts          = params.flows.dtpts;
+alpha_smooth   = params.flows.method.alpha_smooth;
+max_iterations = params.flows.method.max_iterations;
+grid_size      = params.flows.grid_size;
 
 
-hx = options.interpolation.hx;
-hy = options.interpolation.hy;
-hz = options.interpolation.hz;
-ht = options.data.ht;
+hx = params.interpolation.hx;
+hy = params.interpolation.hy;
+hz = params.interpolation.hz;
+ht = params.data.ht;
 
 x_dim = 1;
 y_dim = 2;
 z_dim = 3;
 
-if strcmp(options.flows.init_conditions.mode, 'random')
-    seed_init_vel = options.flows.init_conditions.seed;
+if strcmp(params.flows.init_conditions.mode, 'random')
+    seed_init_vel = params.flows.init_conditions.seed;
     [uxo, uyo, uzo] = flows3d_hs3d_set_initial_flows(grid_size, ~mfile_flows.interp_mask, seed_init_vel);
 
 else
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Using pre-calculated initial velocity conditions.'))
     % NOTE: I'm going to assume that somehow we passed the uxo, uyo, uzo arrays
-    % in 'options' structure
-    uxo = options.flows.init_conditions.uxo;
-    uyo = options.flows.init_conditions.uyo;
-    uzo = options.flows.init_conditions.uzo;   
+    % in 'params' structure
+    uxo = params.flows.init_conditions.uxo;
+    uyo = params.flows.init_conditions.uyo;
+    uzo = params.flows.init_conditions.uzo;   
 end
 
 % Create mfile_vel disk
