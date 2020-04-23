@@ -72,8 +72,8 @@ switch sing_str_label
     case {'empty'}
         sing_numeric_label = 18;
     otherwise
-        error(['neuralflows:' mfilename ':BadInput'], ...
-           'Unrecognised singularity type');
+        error(['neural-flows::' mfilename '::BadInput'], ...
+               'Unrecognised singularity type');
 end
 end
 % function s3d_get_numlabell()
