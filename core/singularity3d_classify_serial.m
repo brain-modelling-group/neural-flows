@@ -1,8 +1,15 @@
 function classification_cell = singularity3d_classify_serial(nullflow_points3d, params)
 % ARGUMENTS: XXXX: Document
 %           
-%    
+%     .null_points_3d        -- a struct of size [1 x no. timepoints]
+%                                                -- .xyz_idx [no. of singularities x 1] -- linear indices 
+%                                                            [no. of singularities x 3] -- subscripts
 % OUTPUT
+% classification_cell  --  a cell array of size [1 x no. timepoints]
+%                                                          where each element is a cell of size
+%                                                          [no. of singularities]. The cells
+%                                                          have human readable strings with
+%                                                          the type of singularity detected. 
 %
 % AUTHOR:   
 %     Paula Sanz-Leon
