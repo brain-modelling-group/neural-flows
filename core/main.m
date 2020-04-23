@@ -24,7 +24,7 @@ elseif strcmp(tmp_params.data.grid.type, 'unstructured') && ~tmp_params.interpol
 
 elseif strcmp(tmp_params.data.grid.type, 'unstructured') && tmp_params.interpolation.enabled
    % Do the interpolation  
-   [tmp_params, masks] = data3d_interpolate(tmp_params)
+   [tmp_params, masks, obj_data, obj_interp_sentinel] = data3d_interpolate(tmp_params)
 else
   % Presumably structured data
 end
@@ -42,6 +42,8 @@ switch tmp_params.flows.method.name
         error(['neural-flows:' mfilename ':UnknownMethod'], ...
                'Unknown method. Options: {"hs3d", "cnem", "hours"}');
 end
+
+% Remove interpolated data
 
 % Check what else we want to do
 if tmp_params.flows.streamlines.enabled
@@ -70,4 +72,9 @@ read_write_json(tmp_params.general.storage.params.output.filename, ...
                 'write', ...
                 ouparams)
 
+% Delete files if we don't want to keep them
+delete(obj_interp_sentinel)
+delete(obj_flows_sentinel)
+%delete(obj_streamline_sentinel)
+%delete(obj_singularity_sentinel)
 end % function main()
