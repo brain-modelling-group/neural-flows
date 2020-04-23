@@ -56,15 +56,15 @@ function classification_cell = singularity3d_classify_parallel(nullflow_points3d
            num_critical_points = size(nullflow_points3d_subscripts, 1);
            singularity_labels  = cell(num_critical_points, 1);
 
-           [boundary_vec_idx, in_bdy_vec_idx] = detect_boundary_points(nullflow_points3d_subscripts, grid_size);
+           [boundary_vec_idx, innies_vec_idx] = detect_boundary_points(nullflow_points3d_subscripts, grid_size);
 
            % Create temp variables with partial load of a matfile. 
-           ux = mflow_obj.ux(:, :, :, tt);
-           uy = mflow_obj.uy(:, :, :, tt);
-           uz = mflow_obj.uz(:, :, :, tt);
+           ux = obj_flows.ux(:, :, :, tt);
+           uy = obj_flows.uy(:, :, :, tt);
+           uz = obj_flows.uz(:, :, :, tt);
            
-           temp_labels = classify_points(nullflow_points3d_xyz_idx, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz);
-           singularity_labels(in_bdy_vec_idx) = temp_labels;
+           temp_labels = classify_points(subscripts, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz);
+           singularity_labels(innies_vec_idx) = temp_labels;
            singularity_labels(boundary_vec_idx) = {'boundary'};
            
            %msings_obj.classification_cell(1, tt) = {singularity_labels};
@@ -86,7 +86,7 @@ function label = classify_points(nullflow_points3d_xyz_idx, in_bdy_vec_idx, ux, 
 
 end % function data3d_interpolate_parallel()
 
-function [boundary_vec_idx, in_bdy_vec_idx] = detect_boundary_points(points_idx, grid_size)
+function [boundary_vec_idx, innies_vec_idx] = detect_boundary_points(points_idx, grid_size)
 % This function only detects points on the faces of the grid.
 % It does not handle an irregular domain.
 
@@ -100,7 +100,7 @@ function [boundary_vec_idx, in_bdy_vec_idx] = detect_boundary_points(points_idx,
     bv = bv_x + bv_y + bv_z;
     
     boundary_vec_idx = find(bv > 0);
-    in_bdy_vec_idx = find(bv ==0);
+    innies_vec_idx = find(bv ==0);
 
 end % function detect_boundary_points()
 
