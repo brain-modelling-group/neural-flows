@@ -29,7 +29,7 @@ function classification_cell = singularity3d_classify_serial(nullflow_points3d, 
          % nothing was detected, we should not attempt to calculate jacobian.
          if isempty(nullflow_points3d(tt).locs.linear_idx)
              singularity_labels = {'empty'};
-             singularity_classification_list{tt} = singularity_labels;
+             classification_cell{tt} = singularity_labels;
              continue
          end
          
@@ -50,7 +50,7 @@ function classification_cell = singularity3d_classify_serial(nullflow_points3d, 
              boundary_point = detect_boundary_points(point_idx, grid_size);               
                               
              if boundary_point
-                  singularity_labels{this_cp} = 'boundary';
+                  singularity_labels{this_cp} = {'boundary'};
               continue
              end
              
@@ -59,7 +59,7 @@ function classification_cell = singularity3d_classify_serial(nullflow_points3d, 
              singularity_labels{this_cp} = singularity3d_classify_critical_points(J3D);
          end
 
-         singularity_classification_list{tt} = singularity_labels;
+         classification_cell{tt} = singularity_labels;
   end
 
 end  % function singularity3d_classify_serial()
