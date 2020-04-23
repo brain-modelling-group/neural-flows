@@ -1,4 +1,4 @@
-function flows3d_hs3d_loop(obj_data, obj_flows, params, varargin)
+function [params] = flows3d_hs3d_loop(obj_data, obj_flows, params, varargin)
 % This function runs the iterative part of the Horn-Schunk algorithm. 
 %
 % ARGUMENTS:
@@ -35,12 +35,17 @@ if nargin > 3
 end
      
 % Get parameters
-tpts           = params.data.shape.timepoint;
+tpts           = params.data.shape.timepoints;
 alpha_smooth   = params.flows.method.hs3d.alpha_smooth;
 max_iterations = params.flows.method.hs3d.max_iterations;
 grid_size      = [params.interpolation.data.shape.y, ...
                   params.interpolation.data.shape.x, ...
                   params.interpolation.data.shape.z]];
+% Save parameters for flows
+params.flows.data.shape.x = params.interpolation.data.shape.x; 
+params.flows.data.shape.y = params.interpolation.data.shape.y;
+params.flows.data.shape.z = params.interpolation.data.shape.z;
+params.flows.data.shape.t = params.data.shape.timepoints-1;
 
 % Resolution
 hx = params.interpolation.hx;
@@ -48,6 +53,7 @@ hy = params.interpolation.hy;
 hz = params.interpolation.hz;
 ht = params.data.ht;
 
+% 
 x_dim_mgrid = params.data.x_dim_mgrid;
 y_dim_mgrid = params.data.y_dim_mgrid;
 z_dim_mgrid = params.data.z_dim_mgrid;
@@ -66,52 +72,55 @@ switch params.flows.method.hs3d.initial_conditions.mode
          error(['neural-flows:' mfilename ':UnknownCase'], ...
                 'Unknown grid type. Options: {"random", "precalculated"}');
 end
-    
-else
-    
-end
 
 % Write to disk 
 mfile_flows.ux(params.interpolation.data.shape.y, ...
                params.interpolation.data.shape.x, ...
                params.interpolation.data.shape.z, ...
-               params.data.ht-1) = 0;    
+               tpts-1) = 0;    
 
-mfile_flows.uy(size(uyo, x_dim), size(uyo, y_dim), size(uyo, z_dim), dtpts-1) = 0;
-mfile_flows.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
-%mfile_flows.un(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
+mfile_flows.uy(params.interpolation.data.shape.y, ...
+               params.interpolation.data.shape.x, ...
+               params.interpolation.data.shape.z, ...
+               tpts-1) = 0;
+mfile_flows.uz(params.interpolation.data.shape.y, ...
+               params.interpolation.data.shape.x, ...
+               params.interpolation.data.shape.z, ...
+               tpts-1) = 0;
 
-
-% Set velocity field at the points located in shell between inner and outer boundaries to zero
+% Set value of flows within the inner and outer boundaries, to zero. 
 try 
-    diff_mask = mfile_flows.diff_mask;
+    mask_betweenies = obj_flows.masks.betweenies;
 catch 
-    diff_mask = []; % assume we are using a grid and do not need diff_mask
+    mask_betweenies = []; % assume we are using a grid and do not need diff_mask
 end
 
-
+%---------------------------------BURN-IN--------------------------------------%
 % Do a burn-in period for the first frame (eg, two time points of data)
 this_tpt = 1;
-FA = mfile_data.data(:, :, :, this_tpt);
-FB = mfile_data.data(:, :, :, this_tpt+1);
+FA = obj_data.data(:, :, :, this_tpt);
+FB = obj_data.data(:, :, :, this_tpt+1);
 
-burnin_len = 8; % for iterations, not much but better than one
+if ~isfield(inparams.flows.method.hs3d.burnin, 'length')
+    burnin_length = 8; % for iterations, not much but better than one
+    inparams.flows.method.hs3d.burnin.length = burnin_length;
+end
+
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started burn-in period for random initial velocity conditions.'))
-
 for bb=1:burnin_len
     % Calculate the velocity components
     [uxo, uyo, uzo] = flows3d_hs3d_step(FA, FB, alpha_smooth, ...
                                         max_iterations, ...
                                         uxo, uyo, uzo, ...
                                         hx, hy, hz, ht, ...
-                                        diff_mask);       
+                                        mask_betweenies);       
 end
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished burn-in period for random initial velocity conditions.'))
-
+%---------------------------------BURN-IN--------------------------------------%
 
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started estimation of flows.'))
 
-for this_tpt = 1:dtpts-1
+for this_tpt = 1:tpts-1
     
     % Dirichlet Boundary conditions - Make boundary points zero velocity                                   
     %if ~isempty(diff_mask)
@@ -125,11 +134,11 @@ for this_tpt = 1:dtpts-1
     FB = mfile_data.data(:, :, :, this_tpt+1);
 
     % Calculate the velocity components
-    [uxo, uyo, uzo] = flows3d_hs3d(FA, FB, alpha_smooth, ...
-                                           max_iterations, ...
-                                           uxo, uyo, uzo, ...
-                                           hx, hy, hz, ht, ...
-                                           diff_mask);
+    [uxo, uyo, uzo] = flows3d_hs3d_step(FA, FB, alpha_smooth, ...
+                                        max_iterations, ...
+                                        uxo, uyo, uzo, ...
+                                        hx, hy, hz, ht, ...
+                                        mask_betweenies);
  
     % Save the velocity components
     %uno = single(sqrt(uxo.^2 + uyo.^2 + uzo.^2));
@@ -143,4 +152,4 @@ for this_tpt = 1:dtpts-1
 end
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished estimation of flows.'))
 
-end % function flows3d_estimate_hs3d_flow()
+end % function flows3d_hs3d_loop()
