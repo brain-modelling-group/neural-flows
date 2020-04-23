@@ -1,11 +1,13 @@
-function null_points_3d = flows3d_grid_detect_nullflows_velocities(mvel_obj, detection_threshold)
+function flows3d_detect_null_flow_field(obj_singularity, obj_flows, params)
 % This evaluates the singularity detection functions, and the effect of the 
 % threshold currently used.
 %
 % ARGUMENTS:
-%          mvel_obj -- a MatFile or structure with an unsteady flow 
+%          obj_singularity, where we need to store stuff 
+%          obj_flows, data we need
+%          params, almight structure
 %                         
-% OUTPUT: 
+% OUTPUT: None
 %          null_points_3d -- a struture of length tpts, with the following
 %                            fields:
 %                                   xyz_idx -- linear indices, with respect
@@ -27,13 +29,9 @@ function null_points_3d = flows3d_grid_detect_nullflows_velocities(mvel_obj, det
 % MODIFICATION HISTORY:
 %     Paula Sanz-Leon -- QIMR February 2019
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-try
-    % If MatFile
-    tpts = size(mvel_obj, 'ux', 4); %#ok<GTARG>
-catch
-    % if struct
-    tpts = size(mvel_obj.ux, 4);
-end
+
+tpts = params.flows.data.shape.t; 
+
     
 null_points_3d = struct([]); 
 X = mvel_obj.X;
