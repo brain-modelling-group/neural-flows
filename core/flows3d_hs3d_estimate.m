@@ -16,11 +16,14 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params
 
     % Load interpolated data
     if strcmp(params.data.grid.type, 'unstructured')
+        % Load data file
         obj_data = matfile(fullfile(params.interpolation.file.dir, ...
                                     params.interpolation.file.name, ...
                                     'Writable', true);
     else
-       continue % TODO: Do something for gridded data
+        obj_data = matfile(fullfile(params.interpolation.file.dir, ...
+                                    params.interpolation.file.name, ...
+                                    'Writable', true);
     end
 %----------------------------- FLOW CALCULATION -------------------------------%
     % Check if we are receiving one slice of the data
