@@ -1,4 +1,4 @@
-function [ux, uy, uz] = flows3d_cnem_step(F1, F2, alpha_smooth, max_iterations, uxo, uyo, uzo, inner_tiangles)
+function [ux, uy, uz] = flows3d_cnem_step(F1, F2, alpha_smooth, max_iterations, ux, uy, uz, inner_triangles, cnem_B)
 %% NOTE: NOT WORKING ATM --- This function estimates the velocity components between two subsequent 3D 
 % images using the Horn-Schunck optical flow method (HS3D), but using CNEM. 
 %
@@ -7,7 +7,7 @@ function [ux, uy, uz] = flows3d_cnem_step(F1, F2, alpha_smooth, max_iterations, 
 %      - alpha_smooth :    HS smoothness parameter, default value is 1.
 %      - max_iterations : max_number of iterations for convergence, default value is 10.
 %      - uxo, uyo, uzo: initial estimates of velocity components
-%      - hx, hy, hz, ht - space step size and time step size.
+%      - inner_triangles: list
 % OUTPUT:
 %   ux, uy, ux -- 3D arrays with the velocity components along each of the
 %                 3 orthogonal axes. 
@@ -31,30 +31,11 @@ elseif nargin < 4
     
 end
 
-if ~exist('uxo', 'var') % assume the other do not exist either
-  [uxo, uyo, uzo] = flows3d_hs3d_get_initial_flows(F1, isnan(F1));
-end
-
-% Intial conditions; 
-ux = uxo; 
-uy = uyo; 
-uz = uzo;
-
-
-%%%%%%%%%%%%%%%%%%% Create alpha shapes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% TODO: pass as parameters because they only need to be calulated once
-shpalpha = opts.alpha_radius; % alpha radius; may need tweaking depending on geometry and number of scattered points. 
-shp      = alphaShape(locs, shpalpha);
-
-% The boundary of the centroids is an approximation of the cortex
-bdy = shp.boundaryFacets;
-
-% Calculate matrix B of cnem
-B = flows3d_cnem_get_B_mat(locs, bdy);
 
 % Calculate derivatives -- hx, hy, hz not used 
-[Ix, Iy, Iz, It] = flows3d_cnem_calculate_partial_derivatives(F1, F2, hx, hy, hz, ht, B);
+[Ix, Iy, Iz, It] = flows3d_cnem_calculate_partial_derivatives(F1, F2, ht, cnem_B);
 
+% one_ring_neighbours_matrix = nodes x 6 or 5
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIND A WAY TO CALCULATE AVERAGE OF NEIGHBOURS
@@ -63,9 +44,9 @@ B = flows3d_cnem_get_B_mat(locs, bdy);
         % NOTE: averaging may be useful if interpolation is not peformed, 
         % or if the data are noisy. For narrowband signals, the
         % averaging introduces artifacts.
-        %ux_avg = nanconvn(ux, avg_filter,'same', edge_corrected_image);
-        %uy_avg = nanconvn(uy, avg_filter,'same', edge_corrected_image);
-        %uz_avg = nanconvn(uz, avg_filter,'same', edge_corrected_image);
+        ux_avg = calculate_local_average(ux, neighbours_matrix);
+        uy_avg = calculate_local_average(uy, neighbours_matrix);
+        uz_avg = calculate_local_average(uz, neighbours_matrix);
 
 
 

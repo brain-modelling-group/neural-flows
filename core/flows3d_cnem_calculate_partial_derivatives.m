@@ -1,4 +1,4 @@
-function [Ix, Iy, Iz, It] = flows3d_cnem_calculate_partial_derivatives(F1, F2, hx, hy, hz, ht, B)
+function [Ix, Iy, Iz, It] = flows3d_cnem_calculate_partial_derivatives(F1, F2, ht, B)
 % This fuction computes 3D+t partial derivatives between two 3D image frames,
 % and is meant to be used by the Horn-Schunck algotithm, except that it
 % uses cnem.
@@ -26,9 +26,9 @@ function [Ix, Iy, Iz, It] = flows3d_cnem_calculate_partial_derivatives(F1, F2, h
     % Spatial derivatives are computed as the average of 
     % the two image/frame gradients along each direction,
     % thus the magic number 0.5 in front of Ix, Iy, Iz
-    Ix = (0.5*(get_derivative(F1, xdim, B) + get_derivative(F2, xdim, B)))/hx;
-    Iy = (0.5*(get_derivative(F1, ydim, B) + get_derivative(F2, ydim, B)))/hy;
-    Iz = (0.5*(get_derivative(F1, zdim, B) + get_derivative(F2, zdim, B)))/hz;
+    Ix = (0.5*(get_derivative(F1, xdim, B) + get_derivative(F2, xdim, B)));
+    Iy = (0.5*(get_derivative(F1, ydim, B) + get_derivative(F2, ydim, B)));
+    Iz = (0.5*(get_derivative(F1, zdim, B) + get_derivative(F2, zdim, B)));
     It = (F1 - F2)/ht;
 
 end % flows3d_cnem_calculate_partial_derivatives()

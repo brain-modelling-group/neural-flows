@@ -41,11 +41,17 @@ grid_size      = params.data.shape.nodes;
 % Save parameters for flows
 params.flows.data.shape.n = params.data.shape.nodes;
 params.flows.data.shape.t = params.data.shape.timepoints-1;
+ht = params.data.ht;
+params.flows.data.ht = ht;
 
 masks = obj_data.masks;
+locs  = obj_data.locs;
 
 % Save masks
 obj_flows.masks = masks;
+
+B = flows3d_cnem_get_B_mat(locs, masks.innies_triangles);
+
 
 switch params.flows.method.cnem.initial_conditions.mode
      case {'random', 'rand'}
