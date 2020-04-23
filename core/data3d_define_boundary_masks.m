@@ -18,6 +18,6 @@ function [masks, params] = data3d_define_boundary_masks(locs, X, Y, Z, params)
 
     masks.innies = mask_innies;
     masks.outties = mask_outties;
-    masks.mask_betweenies = mask_betweenies;
+    masks.betweenies = mask_betweenies;
 
 end % function data3d_define_boundary_masks()
