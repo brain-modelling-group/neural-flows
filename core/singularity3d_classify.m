@@ -50,6 +50,11 @@ function singularity3d_classify(params)
     end
 
     % Allocate output and save to file
-    obj_singularity.classification_list = singularity_classify_fun(nullflow_points3d, params);
-
+    classification_cell = singularity_classify_fun(nullflow_points3d, params);
+    counts = singularity3d_count(classification_cell);
+    
+    % XXXX: temporary
+    obj_singularity.classification = classification_cell;
+    obj_singularity.count = counts;
+    
 end % function singularity3d_classify()
