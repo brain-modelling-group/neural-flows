@@ -1,4 +1,4 @@
-function mfile_sings = singularity3d_detect(obj_flows, params)
+function[params, obj_sings, obj_sings_sentinel] = singularity3d_detect(params)
 % This function runs the detection of null flows and saves the points in a new
 % matfile. 
 %
@@ -24,36 +24,47 @@ function mfile_sings = singularity3d_detect(obj_flows, params)
 
 
 
-detection_threshold = params.singularity.detection.threshold.
+     % Load flows data
+    obj_flows = load_iomat_data(params);
+
+    if isempty(params.singularity.detection.threshold)
+        % Dodgy way of setting a threshold
+        un_min = sqrt(obj_flows.ux_min.^2 + obj_flows.uy_min.^2 + obj_flows.uz_min.^2);
+        params.singularity.detection.threshold = guesstimate_nullflows_threshold(un);
+    end
+    % Check if we are receiving one slice of the data
+    if params.data.slice.enabled
+        rng(params.data.slice.id)
+        params = generate_slice_filename(params, 'singularity') 
+    else
+        rng(2020)
+    end
+    
+    % Save flow calculation parameters
+    [obj_singularity, obj_singularity_sentinel] = create_iomat_file(params.singularity.file.label, ...
+                                                                    params.general.storage.dir, ...
+                                                                    params.singularity.file.keep); 
 
 
+    switch inparams.singularity.detection.mode
+        case {'null-flow-field', 'vel', 'flowfield', 'vectorfield'}
 
-if nargin < 2
-    % Newer version
-    detection_threshold = guesstimate_nullflows_threshold(mfile_flows.min_un);
-end
+        case {'surf', 'null-flow-surf', 'null-flow-isosurf'}
+            error(['neural-flows:' mfilename ':NotImplemented'], ...
+                   'This feature is not fully implemented.');
+        otherwise
+            error(['neural-flows:' mfilename ':UnknownCase'], ...
+                   'Available detection methods: {"null-flow-field"}.');
+            
+    end
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started detection of null flows.'))
 
-% Save what we just found
-if isfield(params.singularity.file, 'name')
-   root_fname_sings = [params.singularity.file.name '-temp_snglrty-' num2str(params.data.slice.id, '%03d')];
-else
-   root_fname_sings = ['temp_snglrty-' num2str(params.data.slice.id, '%03d')];
-end
+    % Use velocity vector fields
+    [null_points_3d]  = flows3d_grid_detect_nullflows_velocities(mfile_flows, detection_threshold);
 
-keep_sings_file = params.singularity.file.keep;
-[mfile_sings, mfile_sings_sentinel] = create_temp_file(root_fname_sings, keep_sings_file);
+    mfile_sings.null_points_3d = null_points_3d;
 
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started detection of null flows.'))
 
-% Use velocity vector fields
-[null_points_3d]  = flows3d_grid_detect_nullflows_velocities(mfile_flows, detection_threshold);
-
-mfile_sings.null_points_3d = null_points_3d;
-% Save used threshold 
-params.singularity.detection.threshold = detection_threshold; 
-mfile_sings.params = params;
-delete(mfile_sings_sentinel)
-
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished detection of null flows.'))
-       
-end %function singularity3d_detection()
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished detection of null flows.'))
+           
+end %function singularity3d_detect()
