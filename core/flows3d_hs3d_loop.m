@@ -1,4 +1,4 @@
-function flows3d_hs3d_loop(obj_data, obj_flows, params)
+function flows3d_hs3d_loop(obj_data, obj_flows, params, varargin)
 % This function runs the iterative part of the Horn-Schunk algorithm. 
 %
 % ARGUMENTS:
@@ -6,6 +6,11 @@ function flows3d_hs3d_loop(obj_data, obj_flows, params)
 %                       or not), or a 4D [x,y,z,t] array with all the
 %                       data.
 %          obj_vel  -- a handle to the MatFile 
+%          params   -- almighty structure with everything
+%          varargin -- if intiail flows are precalculated, then pass them here
+%                   -- a structure with initial_conditions.uxo
+%                                                         .uyo
+%                                                         .uzo
 %
 % OUTPUT: 
 %          None
@@ -25,38 +30,53 @@ function flows3d_hs3d_loop(obj_data, obj_flows, params)
 %     Paula Sanz-Leon -- QIMR December 2018
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+if nargin > 3
+    intial_conditions = varargin{1};
+end
      
 % Get parameters
-dtpts          = params.flows.dtpts;
-alpha_smooth   = params.flows.method.alpha_smooth;
-max_iterations = params.flows.method.max_iterations;
-grid_size      = params.flows.grid_size;
+tpts           = params.data.shape.timepoint;
+alpha_smooth   = params.flows.method.hs3d.alpha_smooth;
+max_iterations = params.flows.method.hs3d.max_iterations;
+grid_size      = [params.interpolation.data.shape.y, ...
+                  params.interpolation.data.shape.x, ...
+                  params.interpolation.data.shape.z]];
 
-
+% Resolution
 hx = params.interpolation.hx;
 hy = params.interpolation.hy;
 hz = params.interpolation.hz;
 ht = params.data.ht;
 
-x_dim = 1;
-y_dim = 2;
-z_dim = 3;
+x_dim_mgrid = params.data.x_dim_mgrid;
+y_dim_mgrid = params.data.y_dim_mgrid;
+z_dim_mgrid = params.data.z_dim_mgrid;
 
-if strcmp(params.flows.init_conditions.mode, 'random')
-    seed_init_vel = params.flows.init_conditions.seed;
-    [uxo, uyo, uzo] = flows3d_hs3d_set_initial_flows(grid_size, ~mfile_flows.interp_mask, seed_init_vel);
-
+switch params.flows.method.hs3d.initial_conditions.mode
+     case {'random', 'rand'}
+         seed_init = params.flows.method.hs3d.initial_conditions.seed;
+         [uxo, uyo, uzo] = flows3d_hs3d_set_initial_flows(grid_size, ~mfile_flows.interp_mask, seed_init_vel);
+     case {'precal', 'precalculated', 'prev', 'user'}
+        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Using pre-calculated initial velocity conditions.'))
+        % NOTE: I need to pass initial conditions in the flow files 
+        uxo = initial_conditions.uxo;
+        uyo = initial_conditions.uyo;
+        uzo = initial_conditions.uzo;   
+     otherwise
+         error(['neural-flows:' mfilename ':UnknownCase'], ...
+                'Unknown grid type. Options: {"random", "precalculated"}');
+end
+    
 else
-   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Using pre-calculated initial velocity conditions.'))
-    % NOTE: I'm going to assume that somehow we passed the uxo, uyo, uzo arrays
-    % in 'params' structure
-    uxo = params.flows.init_conditions.uxo;
-    uyo = params.flows.init_conditions.uyo;
-    uzo = params.flows.init_conditions.uzo;   
+    
 end
 
-% Create mfile_vel disk
-mfile_flows.ux(size(uxo, x_dim), size(uxo, y_dim), size(uxo, z_dim), dtpts-1) = 0;    
+% Write to disk 
+mfile_flows.ux(params.interpolation.data.shape.y, ...
+               params.interpolation.data.shape.x, ...
+               params.interpolation.data.shape.z, ...
+               params.data.ht-1) = 0;    
+
 mfile_flows.uy(size(uyo, x_dim), size(uyo, y_dim), size(uyo, z_dim), dtpts-1) = 0;
 mfile_flows.uz(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
 %mfile_flows.un(size(uzo, x_dim), size(uzo, y_dim), size(uzo, z_dim), dtpts-1) = 0;
@@ -81,10 +101,10 @@ fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started burn-in 
 for bb=1:burnin_len
     % Calculate the velocity components
     [uxo, uyo, uzo] = flows3d_hs3d_step(FA, FB, alpha_smooth, ...
-                                           max_iterations, ...
-                                           uxo, uyo, uzo, ...
-                                           hx, hy, hz, ht, ...
-                                           diff_mask);       
+                                        max_iterations, ...
+                                        uxo, uyo, uzo, ...
+                                        hx, hy, hz, ht, ...
+                                        diff_mask);       
 end
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished burn-in period for random initial velocity conditions.'))
 
