@@ -58,10 +58,24 @@ x_dim_mgrid = params.data.x_dim_mgrid;
 y_dim_mgrid = params.data.y_dim_mgrid;
 z_dim_mgrid = params.data.z_dim_mgrid;
 
+
+
+% Set value of flows within the inner and outer boundaries, to zero. 
+try 
+    masks = obj_data.masks;
+catch 
+    masks.innies = [];
+    masks.betweenies = []; % assume we are using a grid and do not need diff_mask
+    masks.outties = [];
+end
+
+% Save masks
+obj_flows.masks = masks;
+
 switch params.flows.method.hs3d.initial_conditions.mode
      case {'random', 'rand'}
          seed_init = params.flows.method.hs3d.initial_conditions.seed;
-         [uxo, uyo, uzo] = flows3d_hs3d_set_initial_flows(grid_size, ~obj_flows.outties, seed_init_vel);
+         [uxo, uyo, uzo] = flows3d_hs3d_set_initial_flows(grid_size, ~masks.outties, seed_init_vel);
      case {'precal', 'precalculated', 'prev', 'user'}
         fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Using pre-calculated initial velocity conditions.'))
         % NOTE: I need to pass initial conditions in the flow files 
@@ -75,25 +89,18 @@ end
 
 % Write to disk 
 obj_flows.ux(params.data.shape.y, ...
-               params.data.shape.x, ...
-               params.data.shape.z, ...
-               tpts-1) = 0;    
+             params.data.shape.x, ...
+             params.data.shape.z, ...
+             tpts-1) = 0;    
 
 obj_flows.uy(params.data.shape.y, ...
-               params.data.shape.x, ...
-               params.data.shape.z, ...
-               tpts-1) = 0;
+             params.data.shape.x, ...
+             params.data.shape.z, ...
+             tpts-1) = 0;
 obj_flows.uz(params.data.shape.y, ...
-               params.data.shape.x, ...
-               params.data.shape.z, ...
-               tpts-1) = 0;
-
-% Set value of flows within the inner and outer boundaries, to zero. 
-try 
-    mask_betweenies = obj_data.masks.betweenies;
-catch 
-    mask_betweenies = []; % assume we are using a grid and do not need diff_mask
-end
+             params.data.shape.x, ...
+             params.data.shape.z, ...
+             tpts-1) = 0;
 
 %---------------------------------BURN-IN--------------------------------------%
 % Do a burn-in period for the first frame (eg, two time points of data)
@@ -113,7 +120,7 @@ for bb=1:burnin_len
                                         max_iterations, ...
                                         uxo, uyo, uzo, ...
                                         hx, hy, hz, ht, ...
-                                        mask_betweenies);       
+                                        masks.betweenies);       
 end
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished burn-in period for random initial velocity conditions.'))
 %---------------------------------BURN-IN--------------------------------------%
@@ -138,7 +145,7 @@ for this_tpt = 1:tpts-1
                                         max_iterations, ...
                                         uxo, uyo, uzo, ...
                                         hx, hy, hz, ht, ...
-                                        mask_betweenies);
+                                        masks.betweenies);
  
     % Save the velocity components and norm
     obj_flows.ux(:, :, :, this_tpt) = single(uxo);
