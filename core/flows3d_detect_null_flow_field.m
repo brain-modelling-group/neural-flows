@@ -8,15 +8,15 @@ function flows3d_detect_null_flow_field(obj_singularity, obj_flows, params)
 %          params, almight structure
 %                         
 % OUTPUT: None
-%          null_points_3d -- a struture of length tpts, with the following
+%          nullflow_points3d -- a struture of length tpts, with the following
 %                            fields:
-%                                   xyz_idx -- linear indices, with respect
+%                                   locas.linear_idx -- linear indices, with respect
 %                                              to the grid size of the detected
 %                                              singularities. 
-%                                   x, y, z -- a float with the best approximation of the
-%                                              coordinates of the singularities. 
-%                                              Values wiill depend on the
-%                                              resolution of the grid.
+%                                   locs.x, .y, .z -- a float with the best approximation of the
+%                                                     coordinates of the singularities. 
+%                                                     Values wiill depend on the
+%                                                     resolution of the grid.
 %
 % REQUIRES: 
 %           
@@ -30,36 +30,35 @@ function flows3d_detect_null_flow_field(obj_singularity, obj_flows, params)
 %     Paula Sanz-Leon -- QIMR February 2019
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-tpts = params.flows.data.shape.t; 
+% Get parameters
+    tpts = params.flows.data.shape.t; 
+    detection_threshold = params.singularity.detection.detection_threshold;
+        
+    nullflow_points3d = struct([]); 
+    X = obj_flows.X;
+    Y = obj_flows.Y;
+    Z = obj_flows.Z;
 
-    
-null_points_3d = struct([]); 
-X = mvel_obj.X;
-Y = mvel_obj.Y;
-Z = mvel_obj.Z;
-
-    for tt=1:tpts
-        % TODO: remove in the future as we now calculate the norm by
-        % default
-         un = sqrt(mvel_obj.ux(:, :, :, tt).^2 + mvel_obj.uy(:, :, :, tt).^2 +mvel_obj.uz(:, :, :, tt).^2);
-         null_points_3d(tt).xyz_idx = locate_null_velocity_coordinates(un, detection_threshold);      
-         null_points_3d(tt).x = locate_points(X, null_points_3d(tt).xyz_idx);
-         null_points_3d(tt).y = locate_points(Y, null_points_3d(tt).xyz_idx);
-         null_points_3d(tt).z = locate_points(Z, null_points_3d(tt).xyz_idx);
+    for tt=1:tpts     % hard to parallelise because obj_flows is a file or a structure
+         un = obj_flows.un(:, :, :, tt);
+         nullflow_points3d(tt).locs.linear_idx = locate_null_flow_index(un, detection_threshold);      
+         nullflow_points3d(tt).locs.x = locate_points(X, nullflow_points3d(tt).locs.linear_idx);
+         nullflow_points3d(tt).locs.y = locate_points(Y, nullflow_points3d(tt).locs.linear_idx);
+         nullflow_points3d(tt).locs.z = locate_points(Z, nullflow_points3d(tt).locs.linear_idx);
     end 
+
+    obj_singularity.nullflow_points3d = nullflow_points3d;
     
-end
+end % function flows3d_detect_null_flow_field()
 
 % Uses the vector fields to locate singularities
-function xyz_idx = locate_null_velocity_coordinates(un, detection_threshold)
+function idx = locate_null_flow_index(un, detection_threshold)
         
         % NOTE: need to come up with better ways to detect these points
-        xyz_idx = find(un >= detection_threshold(1) & un < detection_threshold(2));
+        idx = find(un >= detection_threshold(1) & un < detection_threshold(2));
 
-end
+end % function locate_null_flow_index()
 
-function p = locate_points(XX, idx)
+function p = get_coordinate(XX, idx)
     p = XX(idx);
-end
-
-
+end % function get_coordinate()
