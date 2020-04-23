@@ -1,4 +1,4 @@
-function mfile_sings = singularity3d_detect(mfile_flows, detection_threshold)
+function mfile_sings = singularity3d_detect(obj_flows, params)
 % This function runs the detection of null flows and saves the points in a new
 % matfile. 
 %
@@ -23,7 +23,10 @@ function mfile_sings = singularity3d_detect(mfile_flows, detection_threshold)
 %  Paula Sanz-Leon -- QIMR December 2018
 
 
-options = mfile_flows.options; 
+
+detection_threshold = params.singularity.detection.threshold.
+
+
 
 if nargin < 2
     % Newer version
@@ -31,13 +34,13 @@ if nargin < 2
 end
 
 % Save what we just found
-if isfield(options.singularity.file, 'name')
-   root_fname_sings = [options.singularity.file.name '-temp_snglrty-' num2str(options.data.slice.id, '%03d')];
+if isfield(params.singularity.file, 'name')
+   root_fname_sings = [params.singularity.file.name '-temp_snglrty-' num2str(params.data.slice.id, '%03d')];
 else
-   root_fname_sings = ['temp_snglrty-' num2str(options.data.slice.id, '%03d')];
+   root_fname_sings = ['temp_snglrty-' num2str(params.data.slice.id, '%03d')];
 end
 
-keep_sings_file = options.singularity.file.keep;
+keep_sings_file = params.singularity.file.keep;
 [mfile_sings, mfile_sings_sentinel] = create_temp_file(root_fname_sings, keep_sings_file);
 
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started detection of null flows.'))
@@ -47,8 +50,8 @@ fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started detectio
 
 mfile_sings.null_points_3d = null_points_3d;
 % Save used threshold 
-options.singularity.detection.threshold = detection_threshold; 
-mfile_sings.options = options;
+params.singularity.detection.threshold = detection_threshold; 
+mfile_sings.params = params;
 delete(mfile_sings_sentinel)
 
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished detection of null flows.'))
