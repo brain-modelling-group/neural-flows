@@ -38,7 +38,6 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params
     obj_flows.X = obj_data.X;
     obj_flows.Y = obj_data.Y;
     obj_flows.Z = obj_data.Z;
-    obj_flows.masks = obj_data.masks;
    
     % Here is where the magic happens
     params = flows3d_hs3d_loop(obj_data, obj_flows, params)
