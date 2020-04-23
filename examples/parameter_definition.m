@@ -20,7 +20,7 @@ inparams.general.parallel.enabled = true;
 inparams.general.parallel.workers_fraction = 0.8;
 
 % Properties of input data, data file should come with data and locations
-inparams.data.dir.name = '/home/paula/Work/Code/matlab-neuro/neural-flows/demo-data';
+inparams.data.file.dir = '/home/paula/Work/Code/matlab-neuro/neural-flows/demo-data';
 inparams.data.file.name = 'rotating_wave_W_c1_d1ms_trial1.mat';
 inparams.data.slice.enabled = false; 
 inparams.data.slice.id = 0;
