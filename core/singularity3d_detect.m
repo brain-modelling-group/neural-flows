@@ -50,7 +50,7 @@ function[params, obj_sings, obj_sings_sentinel] = singularity3d_detect(params)
     switch inparams.singularity.detection.mode
         case {'null-flow-field', 'vel', 'flowfield', 'vectorfield'}
              % Use velocity vector fields
-             flows3d_grid_detect_null_flow_field(obj_singularity, obj_flows, params);
+             flows3d_detect_null_flow_field(obj_singularity, obj_flows, params);
         
         case {'surf', 'null-flow-surf', 'null-flow-isosurf'}
             error(['neural-flows:' mfilename ':NotImplemented'], ...
