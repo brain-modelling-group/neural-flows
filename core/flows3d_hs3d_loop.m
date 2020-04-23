@@ -53,11 +53,10 @@ hy = params.data.hy;
 hz = params.data.hz;
 ht = params.data.ht;
 
-% 
+% Human-readable labels 
 x_dim_mgrid = params.data.x_dim_mgrid;
 y_dim_mgrid = params.data.y_dim_mgrid;
 z_dim_mgrid = params.data.z_dim_mgrid;
-
 
 
 % Set value of flows within the inner and outer boundaries, to zero. 
