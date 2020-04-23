@@ -88,7 +88,10 @@ inparams.flows.method.hs3d.initial_conditions.seed = 42;
 %params.flows.data.shape.x = params.data.shape.size(2); 
 %params.flows.data.shape.y = params.data.shape.size(3);
 %params.flows.data.shape.z = params.data.shape.size(4);
-%params.flows.data.shape.t = params.data.shape.size(4);
+%params.flows.data.shape.t = params.data.shape.size(1);
+
+%params.flows.method.hs3d.nodal_flows.enabled = true
+
 
 % CNEM
 inparams.flows.method.name = 'cnem';
