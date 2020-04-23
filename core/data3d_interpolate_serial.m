@@ -1,4 +1,4 @@
-function [obj_interp, obj_interp_sentinel, params] = data3d_interpolate_serial(data, locs, X, Y, Z, mask, params)
+function [params, obj_interp, obj_interp_sentinel] = data3d_interpolate_serial(data, locs, X, Y, Z, mask, params)
 % This is a wrapper function for Matlab's ScatteredInterpolant. We can interpolate
 % each frame of a 4D array independtly using parfor and save the interpolated data for 
 % later use with optical flow. Then, just delete the interpolated data
@@ -83,7 +83,7 @@ function [obj_interp, obj_interp_sentinel, params] = data3d_interpolate_serial(d
         temp_data(mask) = data_interpolant(X(mask).', Y(mask).', Z(mask).');
 
         % Only get 
-        interp_obj.data(:, :, :, this_tpt) = temp_data;
+        obj_interp.data(:, :, :, this_tpt) = temp_data;
 
     end % for 
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished interpolating data.'))
