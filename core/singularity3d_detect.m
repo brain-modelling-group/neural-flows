@@ -45,10 +45,13 @@ function[params, obj_sings, obj_sings_sentinel] = singularity3d_detect(params)
                                                                     params.general.storage.dir, ...
                                                                     params.singularity.file.keep); 
 
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started detection of null flows.'))
 
     switch inparams.singularity.detection.mode
         case {'null-flow-field', 'vel', 'flowfield', 'vectorfield'}
-
+             % Use velocity vector fields
+             flows3d_grid_detect_null_flow_field(obj_singularity, obj_flows, params);
+        
         case {'surf', 'null-flow-surf', 'null-flow-isosurf'}
             error(['neural-flows:' mfilename ':NotImplemented'], ...
                    'This feature is not fully implemented.');
@@ -56,14 +59,7 @@ function[params, obj_sings, obj_sings_sentinel] = singularity3d_detect(params)
             error(['neural-flows:' mfilename ':UnknownCase'], ...
                    'Available detection methods: {"null-flow-field"}.');
             
-    end
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started detection of null flows.'))
-
-    % Use velocity vector fields
-    [null_points_3d]  = flows3d_grid_detect_nullflows_velocities(mfile_flows, detection_threshold);
-
-    mfile_sings.null_points_3d = null_points_3d;
-
+    end  
 
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished detection of null flows.'))
            
