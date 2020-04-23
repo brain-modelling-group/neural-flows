@@ -1,4 +1,4 @@
-function  [params, varargout] = flows3d_hs3d_estimate(params, masks)
+function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params, masks)
 % ARGUMENTS:
 %           
 %%    
@@ -18,7 +18,7 @@ function  [params, varargout] = flows3d_hs3d_estimate(params, masks)
     if strcmp(params.data.grid.type, 'unstructured')
         obj_data = matfile(fullfile(params.interpolation.file.dir, ...
                                     params.interpolation.file.name, ...
-                                      'Writable', true);
+                                    'Writable', true);
     else
        continue % TODO: Do something for gridded data
     end
@@ -39,30 +39,26 @@ function  [params, varargout] = flows3d_hs3d_estimate(params, masks)
     % Save masks with convex hulls of the brain
     obj_flows.masks = masks;
     
-    % Save grid - needed for singularity tracking and visualisation
+    % Save grid and masks - needed for singularity tracking and visualisation
     % Consider saving min max values and step, saves memory
-    obj_flows.X = X;
-    obj_flows.Y = Y;
-    obj_flows.Z = Z;
+    obj_flows.X = obj_data.X;
+    obj_flows.Y = obj_data.Y;
+    obj_flows.Z = obj_data.Z;
+    obj_flows.masks = obj_data.masks;
    
     % Here is where the magic happens
-    flows3d_hs3d_loop(obj_data, obj_flows, params)
+    params = flows3d_hs3d_loop(obj_data, obj_flows, params)
+    % Alternative for using structures
+    % [params, varargout(obj_flows)] = ..... 
 
-    % Here we get the flows on defined on the nodes -- It adds 30% to the current runtime because it uses ScatterInterpolant
-    % Also, the file gets large, but having this additional variable help us with visualisations. 
-    % Perhaps consider only returning this file and deleting the gridded flow file.
-
-    obj_flows = flows3d_get_unstructured_flows_parallel(obj_flows, params);
-    
-    % Save original locations, just in case
-    mfile_flow.locs = locs;
-
-    % Delete sentinels. If these variable are OnCleanup objects, theln the 
-    % files will be deleted.
-    delete(mfile_interp_sentinel)    
-    delete(mfile_flow_sentinel)
-    
-
-    varargout{2} = mfile_flow; 
-   
+    if params.flows.method.hs3d.nodal_flows.enabled
+        % Here we get the flows on defined on the nodes -- It adds 30% to the current runtime because it uses ScatterInterpolant
+        % Also, the file gets large, but having this additional variable help us with visualisations. 
+        % Perhaps consider only returning this file and deleting the gridded flow file.
+        flows3d_get_unstructured_flows_parallel(obj_flows, obj_data.locs, params);
+        % Alternative for working with structures
+        % [varargout(obj_flows)] = ...
+        % Save original locations, just in case
+        obj_flows.locs = obj_data.locs;
+    end
 end % function flows3d_estimate_hs3d()
