@@ -4,9 +4,11 @@ function ouparams = main(inparams)
 % points in 3D space (aka an unstructured grid)
 % This function performs all the analysis steps availabe in neural-flows: 
 %              1) interpolates the data onto a regular grid (ie, meshgrid).
-%              2) estimates neural flows (ie, velocity fields).
+%              2a) estimates neural flows (ie, velocity fields).
+%              2b) estimates neural flows (ie, velocity fields).
 %              3) detects singularities (ie, detects null flows).
 %              4) classifies singularities.
+%              5) Track singularities
 % Tic
 tstart = tik();
 
