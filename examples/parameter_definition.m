@@ -114,8 +114,8 @@ inparams.singularity.file.keep = true;
 inparams.singularity.file.dir = [];  % or false
 inparams.singularity.file.name = []; % or false
 inparams.singularity.detection.enabled = true;    
-inparams.singularity.detection.mode  = 'vel';
-inparams.singularity.detection.threshold = [0 2^-6];
+inparams.singularity.detection.mode  = 'null-flow-field';
+inparams.singularity.detection.threshold = [0 2^-6]; % or empty
 
 inparams.singularity.classification.enabled = true;
 inparams.singularity.quantification.enabled = true;    
