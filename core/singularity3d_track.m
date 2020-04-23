@@ -75,4 +75,4 @@ end
 end % function s3d_get_clean_particle_cell()
 
 
-end %function singularity3d_detect()
+end %function singularity3d_track()
