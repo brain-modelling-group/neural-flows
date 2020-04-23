@@ -10,7 +10,7 @@ function flows3d_detect_null_flow_field(obj_singularity, obj_flows, params)
 % OUTPUT: None
 %          nullflow_points3d -- a struture of length tpts, with the following
 %                            fields:
-%                                   locas.linear_idx -- linear indices, with respect
+%                                   locs.linear_idx -- linear indices, with respect
 %                                              to the grid size of the detected
 %                                              singularities. 
 %                                   locs.x, .y, .z -- a float with the best approximation of the
@@ -30,7 +30,7 @@ function flows3d_detect_null_flow_field(obj_singularity, obj_flows, params)
 %     Paula Sanz-Leon -- QIMR February 2019
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Get parameters
+    % Get parameters
     tpts = params.flows.data.shape.t; 
     detection_threshold = params.singularity.detection.detection_threshold;
         
@@ -46,7 +46,7 @@ function flows3d_detect_null_flow_field(obj_singularity, obj_flows, params)
          nullflow_points3d(tt).locs.y = locate_points(Y, nullflow_points3d(tt).locs.linear_idx);
          nullflow_points3d(tt).locs.z = locate_points(Z, nullflow_points3d(tt).locs.linear_idx);
     end 
-
+    % Save
     obj_singularity.nullflow_points3d = nullflow_points3d;
     
 end % function flows3d_detect_null_flow_field()
