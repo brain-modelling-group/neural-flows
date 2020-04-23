@@ -152,26 +152,6 @@ end
 
 function flow_stats(this_tpt)
 % Get basic info of a velocity vector field
-% ARGUMENTS:
-%   mfile_vel  -- an MatFile handle to the file where the data will be stored 
-%   ux, uy, uz, un -- arrays with the componentns of the velocity vector field
-%   this_tpt       -- index to store the info.
-% OUTPUT       
-%  mfile_vel  -- an mFile handle to the file where the new data fields will be stored 
-% REQUIRES: 
-%        None
-%
-% USAGE:
-%{     
-
-
-%}
-%
-% MODIFICATION HISTORY:
-%     Paula Sanz-Leon, QIMR Berghofer December 2018
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
     obj_flows.ux_min(1, this_tpt) = nanmin(uxo(:));
     obj_flows.ux_max(1, this_tpt) = nanmax(uxo(:));
 
