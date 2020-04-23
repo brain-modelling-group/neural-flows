@@ -1,6 +1,7 @@
 function [J3D] = singularity3d_jacobian(critical_xyz_idx, ux, uy, uz, hx, hy, hz)
 % Estimates the 3 x 3 Jacobian of ux, uy, uz around the estimated critical points
 % critical_xyz_idx are the subscripts of the guesstimated critical points
+% XXXX: Document
 % ARGUMENTS:
 %           critical
 % The Jacobian matrix of a 3D vector field is
