@@ -32,6 +32,14 @@ inparams.data.hz = [];
 %params.data.shape.x = params.data.shape.size(2); 
 %params.data.shape.y = params.data.shape.size(3);
 %params.data.shape.z = params.data.shape.size(4);
+%params.data.x_dim_locs = 1;
+%params.data.y_dim_locs = 2;
+%params.data.z_dim_locs = 3;
+
+% Human readable indexing grid array
+%params.data.x_dim_mgrid = 2;
+%params.data.y_dim_mgrid = 1;
+%params.data.z_dim_mgrid = 3;
 inparams.data.units.space = 'mm';
 inparams.data.units.time  = 'ms';
 inparams.data.mode = 'amplitude';
@@ -75,6 +83,12 @@ inparams.flows.method.hs3d.alpha_smooth   = 0.1;
 inparams.flows.method.hs3d.max_iterations = 128;
 inparams.flows.method.hs3d.initial_conditions.mode = 'random';
 inparams.flows.method.hs3d.initial_conditions.seed = 42;
+%inparams.flows.method.hs3d.burnin.length = 8; % in time steps
+
+%params.flows.data.shape.x = params.data.shape.size(2); 
+%params.flows.data.shape.y = params.data.shape.size(3);
+%params.flows.data.shape.z = params.data.shape.size(4);
+%params.flows.data.shape.t = params.data.shape.size(4);
 
 % CNEM
 inparams.flows.method.name = 'cnem';
