@@ -10,7 +10,7 @@ function [data, params, varargout] = load_data(params)
 %            data4d -- a 4D array of size [timepoints, x, y, z]
 %            hx, hy, hz, resolution voxel size
 
-    data_path = fullfile(params.data.dir.name, params.data.file.name);
+    data_path = fullfile(params.data.file.dir, params.data.file.name);
     data_struct = load(data_path);
     params.data.shape.size = size(data_struct.data);
     params.data.shape.dims = length(params.data.shape.size);
