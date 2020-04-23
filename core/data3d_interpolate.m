@@ -1,4 +1,4 @@
-function [params, masks] = data3d_interpolate(params)
+function [params, masks, obj_interp, obj_interp_sentinel] = data3d_interpolate(params)
 % This is a wrapper function for data interpolation step
 % works only for unstructured data
 
@@ -20,9 +20,11 @@ function [params, masks] = data3d_interpolate(params)
     [masks, params]  = data3d_define_boundary_masks();
 
     if params.general.parallel.enabled
-        params = data3d_interpolate_parallel(data, locs, X, Y, Z, masks.outties, params)
+        data3d_interpolate_fun = @data3d_interpolate_parallel
     else
-        params = data3d_interpolate_serial(data, locs, X, Y, Z, masks.outties, params)
+        data3d_interpolate_fun = @data3d_interpolate_serial
     end
+    % Interpolate data
+    [params, obj_interp, obj_interp_sentinel] = data3d_interpolate_fun(data, locs, X, Y, Z, masks.outties, params)
  
 end % function data3d_interpolate()
