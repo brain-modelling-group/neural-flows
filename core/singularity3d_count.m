@@ -28,4 +28,4 @@ for tt=1:length(classification_cell)
     singularity_count(tt, :) = counts;
 end
 
-end % singularity3d_count
+end % singularity3d_count()
