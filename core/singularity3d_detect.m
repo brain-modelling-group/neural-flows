@@ -4,18 +4,18 @@ function[params, obj_sings, obj_sings_sentinel] = singularity3d_detect(params)
 %
 % ARGUMENTS:
 %          
-%          mfile_flows   -- a handle to the MatFile 
+%          params   -- almighty structure 
 %
 % OUTPUT: 
-%          mfile_sings   -- a handle to a Matfile with the singulrities
+%          obj_sings, obj_sings_sentinel
 %
 % REQUIRES: 
 %           guesstimate_nullflows_threshold()
-%           flows3d_grid_detect_nullflows_parallel()
-%           create_temp_file()
+%           flows3d_grid_detect_null_flow_field()
+%           create_iomat_file()
+%           generate_slice_filename
 % USAGE:
 %{     
-
 
 %}
 %
