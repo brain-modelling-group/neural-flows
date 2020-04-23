@@ -14,17 +14,8 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params
 %     Paula Sanz-Leon, QIMR Berghofer, November 2018
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
-    % Load interpolated data
-    if strcmp(params.data.grid.type, 'unstructured')
-        % Load data file
-        obj_data = matfile(fullfile(params.interpolation.file.dir, ...
-                                    params.interpolation.file.name, ...
-                                    'Writable', true);
-    else
-        obj_data = matfile(fullfile(params.interpolation.file.dir, ...
-                                    params.interpolation.file.name, ...
-                                    'Writable', true);
-    end
+    % Load interpolated data, or regular data
+    obj_data = load_iomat_data(params);
 %----------------------------- FLOW CALCULATION -------------------------------%
     % Check if we are receiving one slice of the data
     if params.data.slice.enabled
