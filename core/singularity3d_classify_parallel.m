@@ -84,7 +84,7 @@ function label = classify_points(nullflow_points3d_xyz_idx, in_bdy_vec_idx, ux, 
          label{idx} = tmp;
      end
 
-end % function data3d_interpolate_parallel()
+end % function classify_points()
 
 function [boundary_vec_idx, innies_vec_idx] = detect_boundary_points(points_idx, grid_size)
 % This function only detects points on the faces of the grid.
@@ -105,13 +105,13 @@ function [boundary_vec_idx, innies_vec_idx] = detect_boundary_points(points_idx,
 end % function detect_boundary_points()
 
 
-function temp_data = classification_step(idx, nullflow_points3d_xyz_idx, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz)
+function temp_data = classification_step(idx, nullflow_points3d_subscripts, innies_vec_idx, ux, uy, uz, hx, hy, hz)
 
            % Check if any subscript is on the boundary of the grid. 
            % This will cause a problem in the jacobian calculation. 
-           point_idx = nullflow_points3d_xyz_idx(in_bdy_vec_idx(idx), :);
+           point_idx = nullflow_points3d_subscripts(innies_vec_idx(idx), :);
  
            % Calculate the Jacobian at each critical point 
-           [J3D] = singularity3d_calculate_jacobian(point_idx, ux, uy, uz, hx, hy, hz);
+           [J3D] = singularity3d_jacobian(point_idx, ux, uy, uz, hx, hy, hz);
            temp_data = singularity3d_classify_critical_points(J3D);
-end
+end % function classification_step()
