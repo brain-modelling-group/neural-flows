@@ -1,4 +1,4 @@
-function [ux, uy, uz] = flows3d_hs3d(F1, F2, alpha_smooth, max_iterations, uxo, uyo, uzo, hx, hy, hz, ht, boundary_mask)
+function [ux, uy, uz] = flows3d_hs3d(F1, F2, alpha_smooth, max_iterations, ux, uy, uz, hx, hy, hz, ht, boundary_mask)
 %% This function estimates the velocity components between two subsequent 3D 
 % images using the Horn-Schunck optical flow method (HS3D). 
 %
@@ -33,15 +33,6 @@ elseif nargin < 4
     
 end
 
-if ~exist('uxo', 'var') % assume the other do not exist either
-  [uxo, uyo, uzo] = flows3d_hs3d_get_initial_flows(F1, isnan(F1));
-end
-
-% Intial conditions; 
-ux = uxo; 
-uy = uyo; 
-uz = uzo;
-
 % Calculate derivatives
 [Ix, Iy, Iz, It] = flows3d_hs3d_calculate_partial_derivatives(F1, F2, hx, hy, hz, ht);
 
@@ -69,8 +60,7 @@ avg_filter = vonneumann_neighbourhood_3d();
 % penalty/tolerance as in Neuropatt
 
     for tt=1:max_iterations
-       [ux, uy, uz] = horn_schunk_step(ux, uy, uz);
-                   
+       [ux, uy, uz] = horn_schunk_step(ux, uy, uz);         
     end
      
     
