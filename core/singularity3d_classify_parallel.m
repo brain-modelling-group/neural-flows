@@ -38,7 +38,7 @@ function classification_cell = singularity3d_classify_parallel(nullflow_points3d
     % Get only relevant data -- subscripts
     null_points_cell = squeeze(null_points_cell(1, 1, :));
 
-     fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started classification of singularities.'))
+    fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started classification of singularities.'))
 
     parfor tt=1:tpts 
            % Check if we have critical points. There are 'frames' for which
