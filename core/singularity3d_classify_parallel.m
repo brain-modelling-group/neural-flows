@@ -1,17 +1,9 @@
 function classification_cell = singularity3d_classify_parallel(nullflow_points3d, params)
-% ARGUMENTS:
-%           locs: locations of known data
-%           data: scatter data known at locs of size tpts x nodes
-%           X, Y Z: -- grid points to get interpolation out, must be 3D
-%                      arrays
-%           mask -- indices of points within the brain's convex hull boundary. 
-%                    Same size as X, Y, or Z.
+% ARGUMENTS: XXXX Document
+%           
 %    
 % OUTPUT:
-%       mfile_interp_obj: matfile handle to the file with the interpolated
-%                         data.
-%       mfile_interp_sentinel: OnCleanUp object. If keep_interp_data is
-%                              true, then this variable is an empty array.
+%       
 %
 % AUTHOR:   
 %     Paula Sanz-Leon
