@@ -85,6 +85,6 @@ end
             temp_data = single([data_interpolant_x(locs(:, x_dim_locs), locs(:, y_dim_locs), locs(:, z_dim_locs)), ...
                                 data_interpolant_y(locs(:, x_dim_locs), locs(:, y_dim_locs), locs(:, z_dim_locs)), ...
                                 data_interpolant_z(locs(:, x_dim_locs), locs(:, y_dim_locs), locs(:, z_dim_locs))]);
-    end
+    end % function interpolate_flow_step()
 
-end %flows3d_get_unstructured_flows_parallel()
+end %function flows3d_get_unstructured_flows_parallel()
