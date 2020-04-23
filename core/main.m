@@ -43,8 +43,8 @@ switch tmp_params.flows.method.name
         error(['neural-flows:' mfilename ':NotTested'], ...
                'Sorry mate, have not tested this one yet.');
     otherwise
-        error(['neural-flows:' mfilename ':UnknownMethod'], ...
-               'Unknown method. Options: {"hs3d", "cnem", "hours"}');
+        error(['neural-flows:' mfilename ':UnknownCase'], ...
+               'Requested unknown method. Options: {"hs3d", "cnem"}');
 end
 %---------------------------------FLOWS----------------------------------------%
 
