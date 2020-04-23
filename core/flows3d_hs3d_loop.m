@@ -59,7 +59,8 @@ y_dim_mgrid = params.data.y_dim_mgrid;
 z_dim_mgrid = params.data.z_dim_mgrid;
 
 
-% Set value of flows within the inner and outer boundaries, to zero. 
+% Set value of flows within the inner and outer boundaries, to zero.\
+% XXX: TODO: UPDATE:
 try 
     masks = obj_data.masks;
 catch 
