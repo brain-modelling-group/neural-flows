@@ -1,4 +1,4 @@
-function [in_bdy_mask, bdy] = data3d_calculate_boundary(locs, xq, yq, zq, alpha_radius)
+function [in_bdy_mask, bdy] = data3d_boundary_mask_inner(locs, xq, yq, zq, alpha_radius)
 %% This function calculates the alpha shape of scattered points in 3D, defined in locs.
 %  It also returns the in/out status of the query points xq, yq, zq with respect 
 %  to the 3D alpha shape; and, the list of triangles of the boundary/convex

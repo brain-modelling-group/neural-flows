@@ -1,4 +1,4 @@
-function [outter_bdy_mask, diff_mask] = data3d_calculate_interpolation_mask(inner_bdy_mask, shift_steps)
+function [outter_bdy_mask, diff_mask] = data3d_boundary_mask_outter_between(inner_bdy_mask, shift_steps)
 %% This function calculates the alpha shape of scattered points in 3D, defined in locs.
 %  It also returns the in/out status of the query points xq, yq, zq with respect 
 %  to the 3D alpha shape; and, the list of triangles of the boundary/convex
