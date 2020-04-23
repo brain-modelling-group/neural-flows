@@ -49,7 +49,7 @@ function singularity3d_classify(params)
         singularity3d_classify_fun = @singularity3d_interpolate_serial
     end
 
-    % Allocate output
+    % Allocate output and save to file
     obj_singularity.classification_list = singularity_classify_fun(nullflow_points3d, params);
 
 end % function singularity3d_classify()
