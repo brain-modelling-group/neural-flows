@@ -27,19 +27,11 @@ function singularity3d_classify(params)
 % NOTE: as the timeseries get longer, we can in principle parallelise this
 % function.
 
-    % Load flows data - nonwritable
-    obj_flows = load_iomat_flows(params);
+    
 
     % Load singularity data- writable
     obj_singularity = load_iomat_singularity(params);
-
-    % Get important parameters
-    tpts = params.flows.data.shape.t;
-    grid_size = [params.flows.data.shape.y, params.flows.data.shape.x, params.flows.data.shape.z]; 
-    hx = params.flows.data.hx; 
-    hy = params.flows.data.hy; 
-    hz = params.flows.data.hz; 
-
+    nullflow_points3d = obj_singularity.nullflow_points3d;
 
     % Check if we stored linear indices or subscripts 
     if ~isfield(nullflow_points3d(1).locs, 'subscripts')
@@ -48,7 +40,7 @@ function singularity3d_classify(params)
             nullflow_points3d(tt).locs.subscripts = switch_index_mode(nullflow_points3d(tt).xyz_idx, 'subscript', grid_size);;
         end   
         fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished converting lindear indices into subscripts.'))
- 
+        obj_singularity.nullflow_points3d = nullflow_points3d;
     end
 
     if params.general.parallel.enabled
@@ -58,6 +50,6 @@ function singularity3d_classify(params)
     end
 
     % Allocate output
-    obj_singularity.classification_list = singularity_classify_fun();
+    obj_singularity.classification_list = singularity_classify_fun(nullflow_points3d, params);
 
 end % function singularity3d_classify()
