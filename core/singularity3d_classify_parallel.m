@@ -104,7 +104,6 @@ function [boundary_vec_idx, innies_vec_idx] = detect_boundary_points(points_idx,
 
 end % function detect_boundary_points()
 
-
 function temp_data = classification_step(idx, nullflow_points3d_subscripts, innies_vec_idx, ux, uy, uz, hx, hy, hz)
 
            % Check if any subscript is on the boundary of the grid. 
