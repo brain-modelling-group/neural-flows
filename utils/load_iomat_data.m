@@ -1,4 +1,4 @@
-function [obj_data, obj_data_sentinel] = load_io_mat_file(params)
+function [obj_data, obj_data_sentinel] = load_iomat_data(params)
 % Load interpolated data iomat or put regular data into an appropriate structure?
 % or make a temporary iomatfile??
 % TODO: make a sentinel, delete object handle or file? 
@@ -19,4 +19,4 @@ function [obj_data, obj_data_sentinel] = load_io_mat_file(params)
     end
 
 
-end % function load_iomat_file()
+end % function load_iomat_data()
