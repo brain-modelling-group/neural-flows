@@ -17,7 +17,7 @@ function [params, masks, obj_interp, obj_interp_sentinel] = data3d_interpolate(p
     [X, Y, Z, params] = data3d_get_interpolation_meshgrid(locs, params);
 
     % Calculate boundary masks
-    [masks, params]  = data3d_define_boundary_masks();
+    [masks, params]  = data3d_calculate_boundary_masks(locs, X, Y, Z, params);
 
     if params.general.parallel.enabled
         data3d_interpolate_fun = @data3d_interpolate_parallel
