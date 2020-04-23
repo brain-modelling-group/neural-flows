@@ -52,9 +52,6 @@ Iz(boundary_mask) = 0;
 It(boundary_mask) = 0;
 
 
-
-
-%
 avg_filter = vonneumann_neighbourhood_3d();
 % The average should not include the central point
 %avg_filter = fspecial3('average', 3);
@@ -101,10 +98,10 @@ function [ux, uy, uz] = horn_schunk_step(ux, uy, uz)
         uz = uz_avg - ( Iz.*( (Ix.*ux_avg) + (Iy.*uy_avg) + (Iz.*uz_avg) + It))...
                        ./ ( alpha_smooth.^2 + Ix.^2 + Iy.^ 2 + Iz.^ 2);
         
-end
+end % function horn_schunk_step
   
 
-end % function flows3d_hsd3()
+end % function flows3d_hs3d_step()
 
 function avg_filter = vonneumann_neighbourhood_3d()
     % Neumann neighbourhood in 3D - 6-nearest neighbours for averaging 
