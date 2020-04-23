@@ -9,7 +9,7 @@ function [obj_flows] = flows3d_get_unstructured_flows_parallel(obj_flows, locs, 
 %    
 % OUTPUT:
 %           obj_flows : the same MatFile handle, but the file will have a
-%           new field 'uxyz_sc', which is an array of size [num_nodes x 3 x tpts]
+%           new field 'uxyz', which is an array of size [num_nodes x 3 x tpts]
 % 
 % USAGE:
 %{
