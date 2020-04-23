@@ -1,4 +1,4 @@
-function mfile_sings = singularity3d_detection(mfile_flows, detection_threshold)
+function mfile_sings = singularity3d_detect(mfile_flows, detection_threshold)
 % This function runs the detection of null flows and saves the points in a new
 % matfile. 
 %
