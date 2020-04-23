@@ -140,16 +140,53 @@ for this_tpt = 1:tpts-1
                                         hx, hy, hz, ht, ...
                                         mask_betweenies);
  
-    % Save the velocity components
-    %uno = single(sqrt(uxo.^2 + uyo.^2 + uzo.^2));
-    mfile_flows.ux(:, :, :, this_tpt) = single(uxo);
-    mfile_flows.uy(:, :, :, this_tpt) = single(uyo);
-    mfile_flows.uz(:, :, :, this_tpt) = single(uzo);
-    %mfile_flows.un(:, :, :, this_tpt) =  uno;
-    % Save some other useful information to guesstimate the singularity detection threshold
-    %mfile_flows = flows3d_hs3d_flow_stats(mfile_flows, uxo(:), uyo(:), uzo(:), uno(:), this_tpt);
+    % Save the velocity components and norm
+    obj_flows.ux(:, :, :, this_tpt) = single(uxo);
+    obj_flows.uy(:, :, :, this_tpt) = single(uyo);
+    obj_flows.uz(:, :, :, this_tpt) = single(uzo);
+    obj_flows.un(:, :, :, this_tpt) = single(sqrt(uxo.^2 + uyo.^2 + uzo.^2));;
+    %Save some other useful information to guesstimate the singularity detection threshold
+    flow_stats(this_tpt);
 
 end
+
+function flow_stats(this_tpt)
+% Get basic info of a velocity vector field
+% ARGUMENTS:
+%   mfile_vel  -- an MatFile handle to the file where the data will be stored 
+%   ux, uy, uz, un -- arrays with the componentns of the velocity vector field
+%   this_tpt       -- index to store the info.
+% OUTPUT       
+%  mfile_vel  -- an mFile handle to the file where the new data fields will be stored 
+% REQUIRES: 
+%        None
+%
+% USAGE:
+%{     
+
+
+%}
+%
+% MODIFICATION HISTORY:
+%     Paula Sanz-Leon, QIMR Berghofer December 2018
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    obj_flows.ux_min(1, this_tpt) = nanmin(uxo(:));
+    obj_flows.ux_max(1, this_tpt) = nanmax(uxo(:));
+
+    obj_flows.uy_min(1, this_tpt) = nanmin(uyo(:));
+    obj_flows.uy_min(1, this_tpt) = nanmax(uyo(:));
+
+    obj_flows.uz_min(1, this_tpt) = nanmin(uzo(:));
+    obj_flows.uz_min(1, this_tpt) = nanmax(uzo(:));
+
+    obj_flows.ux_sun(1, this_tpt) = nansum(uxo(:));
+    obj_flows.uy_sum(1, this_tpt) = nansum(uyo(:));
+    obj_flows.uz_sum(1, this_tpt) = nansum(uzo(:)); 
+    
+end % function flow_stats()
+
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished estimation of flows.'))
 
 end % function flows3d_hs3d_loop()
