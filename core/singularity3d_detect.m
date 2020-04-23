@@ -53,6 +53,7 @@ function[params, obj_sings, obj_sings_sentinel] = singularity3d_detect(params)
              flows3d_detect_null_flow_field(obj_singularity, obj_flows, params);
         
         case {'surf', 'null-flow-surf', 'null-flow-isosurf'}
+            %xperimental_detect_null_flow_isosurface(obj_singularity, obj_flows, params);
             error(['neural-flows:' mfilename ':NotImplemented'], ...
                    'This feature is not fully implemented.');
         otherwise
