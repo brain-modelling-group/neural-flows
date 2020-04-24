@@ -16,8 +16,8 @@ function [X, Y, Z, params] = data3d_get_interpolation_meshgrid(locs, params)
     params.interpolation.z_lims = [min(Z(:)) max(Z(:))];
     % Save size of grid for interpolated data
     params.interpolation.data.shape.grid = grid_size;
-    params.interpolation.data.shape.x = params.interpolation.data.shape(params.data.x_dim_mgrid);
-    params.interpolation.data.shape.y = params.interpolation.data.shape(params.data.y_dim_mgrid);
-    params.interpolation.data.shape.z = params.interpolation.data.shape(params.data.z_dim_mgrid);
+    params.interpolation.data.shape.x = params.interpolation.data.shape.grid(params.data.x_dim_mgrid);
+    params.interpolation.data.shape.y = params.interpolation.data.shape.grid(params.data.y_dim_mgrid);
+    params.interpolation.data.shape.z = params.interpolation.data.shape.grid(params.data.z_dim_mgrid);
 
 end % function data3d_get_interpolation_meshgrid()
