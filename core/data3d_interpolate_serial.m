@@ -70,6 +70,7 @@ function [params, obj_interp, obj_interp_sentinel] = data3d_interpolate_serial(d
     obj_interp.X = X;
     obj_interp.Y = Y;
     obj_interp.Z = Z;
+    obj_interp.locs = locs;
     
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started interpolating data.'))              
     for this_tpt=1:tpts

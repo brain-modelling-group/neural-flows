@@ -69,6 +69,7 @@ function [params, obj_interp, obj_interp_sentinel] = data3d_interpolate_parallel
     obj_interp.X = X;
     obj_interp.Y = Y;
     obj_interp.Z = Z;
+    obj_interp.locs = locs;
     
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started interpolating data.'))              
     %spmd_parfor_with_matfiles(number_of_things, parfun, temp_fname_obj, storage_expression)
