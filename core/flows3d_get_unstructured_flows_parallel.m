@@ -43,7 +43,7 @@ end
     Z = obj_flows.Z;
     
     masks = obj_flows.masks; 
-    innies_idx = find(masks.innies == true);
+    innies_idx = find(masks.innies == true).';
     
     X = X(innies_idx);
     Y = Y(innies_idx);
