@@ -18,20 +18,22 @@ end
 % Copy structure
 tmp_params = inparams;
 %---------------------------------INTERPOLATION--------------------------------%
-% Check if we need to interpolate data
-if strcmp(tmp_params.data.grid.type, 'structured') && tmp_params.interpolation.enabled
-   error(['neural-flows:' mfilename ':IncompatibleOptions'], ...
-          'Will not perform interpolation on gridded/structured data.');
+if inparams.interpolation.enabled
+  % Check if we need to interpolate data
+  if strcmp(tmp_params.data.grid.type, 'structured') && tmp_params.interpolation.enabled
+     error(['neural-flows:' mfilename ':IncompatibleOptions'], ...
+            'Will not perform interpolation on gridded/structured data.');
 
-elseif strcmp(tmp_params.data.grid.type, 'unstructured') && ~tmp_params.interpolation.enabled
-   warning(['neural-flows:' mfilename ':NoInterpolation'], ...
-            'Skipping interpolation ...')
+  elseif strcmp(tmp_params.data.grid.type, 'unstructured') && ~tmp_params.interpolation.enabled
+     warning(['neural-flows:' mfilename ':NoInterpolation'], ...
+              'Skipping interpolation ...')
 
-elseif strcmp(tmp_params.data.grid.type, 'unstructured') && tmp_params.interpolation.enabled
-   % Do the interpolation  
-   [tmp_params, masks, obj_data, obj_interp_sentinel] = data3d_interpolate(tmp_params);
-else
-  % Presumably structured data
+  elseif strcmp(tmp_params.data.grid.type, 'unstructured') && tmp_params.interpolation.enabled
+     % Do the interpolation  
+     [tmp_params, obj_data, obj_interp_sentinel] = data3d_interpolate(tmp_params);
+  else
+    % Presumably structured data
+  end
 end
 %---------------------------------INTERPOLATION--------------------------------%
 % Save parameters up to this point
