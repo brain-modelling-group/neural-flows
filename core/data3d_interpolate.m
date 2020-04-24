@@ -27,6 +27,9 @@ function [params, masks, obj_interp, obj_interp_sentinel] = data3d_interpolate(p
     % Interpolate data
     [params, obj_interp, obj_interp_sentinel] = data3d_interpolate_fun(data, locs, X, Y, Z, masks.outties, params);
     
+    % Save
+    obj_interp.masks = masks;
+
     % Update parameter fields on params.data
     params.data.hx = params.interpolation.hx;
     params.data.hy = params.interpolation.hy;
