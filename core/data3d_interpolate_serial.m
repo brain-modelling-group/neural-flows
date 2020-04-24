@@ -63,7 +63,8 @@ function [params, obj_interp, obj_interp_sentinel] = data3d_interpolate_serial(d
     % Write dummy data to disk to create matfile
     obj_interp.data(params.interpolation.data.shape.y, ...
                     params.interpolation.data.shape.x, ...
-                    params.interpolation.data.shape.z) = 0;
+                    params.interpolation.data.shape.z, ...
+                    tpts) = 0;
 
     % Write grids to disk
     obj_interp.X = X;
