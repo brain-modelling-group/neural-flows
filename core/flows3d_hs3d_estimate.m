@@ -49,7 +49,6 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params
     params = flows3d_hs3d_loop(obj_data, obj_flows, params);
     % Alternative for using structures
     % [params, varargout(obj_flows)] = ..... 
-
     if params.flows.method.hs3d.nodal_flows.enabled
         % Here we get the flows on defined on the nodes -- It adds 30% to the current runtime because it uses ScatterInterpolant
         % Also, the file gets large, but having this additional variable help us with visualisations. 
@@ -60,4 +59,7 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params
         % Save original locations, just in case
         obj_flows.locs = obj_data.locs;
     end
+    % Disable flows calculation if we already did it
+    params.general.flows.enabled = false;
+    params.flows.file.exists = true;
 end % function flows3d_estimate_hs3d()
