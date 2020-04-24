@@ -45,6 +45,12 @@ function[params, obj_sings, obj_sings_sentinel] = singularity3d_detect(params)
                                                                     params.general.storage.dir, ...
                                                                     params.singularity.file.keep); 
 
+    obj_singularity_cell = strsplit(obj_singularity.Properties.Source, filesep);
+    % Save properties of file
+    params.singularity.file.exists = true;
+    params.singularity.file.dir  = params.general.storage.dir;
+    params.singularity.file.name = obj_singularity_cell{end};
+
     if strcmp(params.singularity.file.label, '')
         params.singularity.file.label = 'tmp_singularity';
     end
