@@ -35,7 +35,7 @@ function[params, obj_sings, obj_sings_sentinel] = singularity3d_detect(params)
     % Check if we are receiving one slice of the data
     if params.data.slice.enabled
         rng(params.data.slice.id)
-        params = generate_slice_filename(params, 'singularity') 
+        params = generate_slice_filename(params, 'singularity'); 
     else
         rng(2020)
     end
@@ -57,7 +57,7 @@ function[params, obj_sings, obj_sings_sentinel] = singularity3d_detect(params)
 
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started detection of null flows.'))
 
-    switch inparams.singularity.detection.mode
+    switch params.singularity.detection.mode
         case {'null-flow-field', 'vel', 'flowfield', 'vectorfield'}
              % Use velocity vector fields
              flows3d_detect_null_flow_field(obj_singularity, obj_flows, params);
