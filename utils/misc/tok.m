@@ -29,15 +29,15 @@ function tok(tstart, time_unit)
     
     switch time_unit
      	case {'seconds', 'sec', 's'}
-     		divisor = 1
+     		divisor = 1;
      	case {'minutes', 'min', 'mins', 'm'}
-     		divisor = 60
+     		divisor = 60;
      	case {'hours', 'hour', 'h', 'hr', 'hrs'}
-     		divisor = 3600
+     		divisor = 3600;
      	otherwise
      		error(['neural-flows:' mfilename ':UnknownUnits'], 'Unknown time units. Options: {"seconds", "minutes", "hours"}');
 
      end % switch case block
     
-    fprintf('%s%s%s\n\n', ['Elapsed time: ' string(tik_tok/divisor) ' ' time_unit])
+    fprintf('%s%s%s\n\n', ['Elapsed time: ' string(tik_tok/divisor) ' ' time_unit]);
 end % function tok()
