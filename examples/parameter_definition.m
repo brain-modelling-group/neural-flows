@@ -43,7 +43,7 @@ inparams.data.hz = [];
 inparams.data.units.space = 'mm';
 inparams.data.units.time  = 'ms';
 inparams.data.mode = 'amplitude';
-??????inparams.data.phase.enabled = true; % calculate phase
+%??????inparams.data.phase.enabled = true; % calculate phase
 
 
 % inparams for the data interpolation
@@ -102,8 +102,8 @@ inparams.flows.method.hs3d.initial_conditions.seed = 42;
 
 
 % CNEM
-inparams.flows.method.name = 'cnem';
-inparams.flows.method.cnem.alpha_radius = 30;
+%inparams.flows.method.name = 'cnem';
+%inparams.flows.method.cnem.alpha_radius = 30;
 
 inparams.flows.visualisation.enabled = true;
 
