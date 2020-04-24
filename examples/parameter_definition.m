@@ -19,6 +19,12 @@ inparams.general.storage.format = 'iomat'; %{'iomat', 'mat'}
 inparams.general.parallel.enabled = true; 
 inparams.general.parallel.workers_fraction = 0.8;
 
+
+% General module like stuff
+inparams.general.interpolation.enabled = true;
+inparams.general.flows.enabled = true;
+inparams.general.singularity.enabled = true;
+
 % Properties of input data, data file should come with data and locations
 inparams.data.file.dir = '/home/paula/Work/Code/matlab-neuro/neural-flows/demo-data';
 inparams.data.file.name = 'rotating_wave_W_c1_d1ms_trial1.mat';
