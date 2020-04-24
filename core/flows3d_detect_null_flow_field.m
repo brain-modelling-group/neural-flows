@@ -42,9 +42,9 @@ function flows3d_detect_null_flow_field(obj_singularity, obj_flows, params)
     for tt=1:tpts     % hard to parallelise because obj_flows is a file or a structure
          un = obj_flows.un(:, :, :, tt);
          nullflow_points3d(tt).locs.linear_idx = locate_null_flow_index(un, detection_threshold);      
-         nullflow_points3d(tt).locs.x = locate_points(X, nullflow_points3d(tt).locs.linear_idx);
-         nullflow_points3d(tt).locs.y = locate_points(Y, nullflow_points3d(tt).locs.linear_idx);
-         nullflow_points3d(tt).locs.z = locate_points(Z, nullflow_points3d(tt).locs.linear_idx);
+         nullflow_points3d(tt).locs.x = get_coordinate(X, nullflow_points3d(tt).locs.linear_idx);
+         nullflow_points3d(tt).locs.y = get_coordinate(Y, nullflow_points3d(tt).locs.linear_idx);
+         nullflow_points3d(tt).locs.z = get_coordinate(Z, nullflow_points3d(tt).locs.linear_idx);
     end 
     % Save
     obj_singularity.nullflow_points3d = nullflow_points3d;
