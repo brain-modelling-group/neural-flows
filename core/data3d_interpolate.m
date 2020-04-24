@@ -35,4 +35,7 @@ function [params, masks, obj_interp, obj_interp_sentinel] = data3d_interpolate(p
     params.data.shape.y = params.interpolation.data.shape.y;
     params.data.shape.z = params.interpolation.data.shape.z;
 
+    % Disable interpolation if we already did it
+    params.general.interpolation.enabled = false;
+    params.interpolation.file.exists = true;
 end % function data3d_interpolate()
