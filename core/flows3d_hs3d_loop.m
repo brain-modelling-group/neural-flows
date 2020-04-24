@@ -114,7 +114,7 @@ if ~isfield(params.flows.method.hs3d, 'burnin')
 end
 
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started burn-in period for random initial velocity conditions.'))
-for bb=1:burnin_len
+for bb=1:burnin_length
     % Calculate the velocity components
     [uxo, uyo, uzo] = flows3d_hs3d_step(FA, FB, alpha_smooth, ...
                                         max_iterations, ...
