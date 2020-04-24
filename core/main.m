@@ -52,6 +52,7 @@ switch tmp_params.flows.method.name
                'Requested unknown method. Options: {"hs3d", "cnem"}');
 end
 %---------------------------------FLOWS----------------------------------------%
+% Save parameters up to this point
 save_tmp_params(tmp_params)
 %---------------------------------STREAMLINES----------------------------------%
 
@@ -61,6 +62,7 @@ if tmp_params.flows.streamlines.enabled
                'This feature has not been implemented yet. Next!');
 end 
 %---------------------------------STREAMLINES----------------------------------%
+% Save parameters up to this point
 save_tmp_params(tmp_params)
 %---------------------------------SINGULARITY----------------------------------%
 % DETECTION
@@ -68,6 +70,7 @@ if tmp_params.singularity.detection.enabled
     [tmp_params, obj_singularity, obj_singularity_sentinel] = singularity3d_detect(tmp_params);
 end
 %-------------------------------------------------------------------------------%
+% Save parameters up to this point
 save_tmp_params(tmp_params)
 %-------------------------------------------------------------------------------%
 % CLASSIFICATION
@@ -79,7 +82,7 @@ save_tmp_params(tmp_params)
 %TRACKING
 %---------------------------------SINGULARITY----------------------------------%
 %---------------------------------THE END -------------------------------------%
-
+% Save parameters up to this point
 ouparams = tmp_params;
 
 % Toc
