@@ -1,6 +1,6 @@
 
 inparams_filename = 'rotating_wave_in.json';
-ouparams_filename = 'rotating_wave_ou.json'
+ouparams_filename = 'rotating_wave_ou.json';
 inparams_dir  = '/home/paula/Work/Code/matlab-neuro/neural-flows/examples';
 inparams_mode = 'write';
 
@@ -84,7 +84,7 @@ inparams.flows.method.hs3d.max_iterations = 128;
 inparams.flows.method.hs3d.initial_conditions.mode = 'random';
 inparams.flows.method.hs3d.initial_conditions.seed = 42;
 %inparams.flows.method.hs3d.burnin.length = 8; % in time steps
-
+inparams.flows.method.hs3d.nodal_flows.enabled = true
 % CNEM
 %inparams.flows.method.name = 'cnem';
 %inparams.flows.method.cnem.alpha_smooth   = 0.1;
@@ -113,7 +113,7 @@ inparams.flows.decomposition.svd.modes = 4;
 inparams.flows.decomposition.svd.grid.type = 'unstructured'; 
 
 % Streamline analysis 
-inparams.flows.streamlines.enabled = true
+inparams.flows.streamlines.enabled = true;
 inparams.flows.streamlines.grid.type = 'unstructured';
 
 
