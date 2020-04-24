@@ -43,7 +43,7 @@ save_tmp_params(tmp_params)
 switch tmp_params.flows.method.name
     case {'hs3d', 'horn-schunk', 'hs'}
         %
-        [tmp_params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(tmp_params, masks);
+        [tmp_params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(tmp_params);
     case {'cnem'}
         %[tmp_params, obj_flows, obj_flows_sentinel] = flows3d_estimate_cnem_hs(tmp_params, masks);
         % 
