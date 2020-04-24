@@ -108,7 +108,7 @@ this_tpt = 1;
 FA = obj_data.data(:, :, :, this_tpt);
 FB = obj_data.data(:, :, :, this_tpt+1);
 
-if ~isfield(params.flows.method.hs3d.burnin, 'length')
+if ~isfield(params.flows.method.hs3d, 'burnin')
     burnin_length = 8; % for iterations, not much but better than one
     params.flows.method.hs3d.burnin.length = burnin_length;
 end
