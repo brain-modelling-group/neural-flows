@@ -45,6 +45,10 @@ function[params, obj_sings, obj_sings_sentinel] = singularity3d_detect(params)
                                                                     params.general.storage.dir, ...
                                                                     params.singularity.file.keep); 
 
+    if strcmp(params.singularity.file.label, '')
+        params.singularity.file.label = 'tmp_singularity';
+    end
+
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started detection of null flows.'))
 
     switch inparams.singularity.detection.mode
