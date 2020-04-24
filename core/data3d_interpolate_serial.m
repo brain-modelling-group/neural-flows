@@ -56,7 +56,7 @@ function [params, obj_interp, obj_interp_sentinel] = data3d_interpolate_serial(d
 
     obj_interp_cell = strsplit(obj_interp.Properties.Source, filesep);
     % Save properties of file
-    params.interpolation.file.exists = false;
+    params.interpolation.file.exists = true;
     params.interpolation.file.dir  = params.general.storage.dir;
     params.interpolation.file.name = obj_interp_cell{end};
 
