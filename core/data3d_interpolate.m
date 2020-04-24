@@ -20,19 +20,19 @@ function [params, masks, obj_interp, obj_interp_sentinel] = data3d_interpolate(p
     [masks, params]  = data3d_calculate_boundary_masks(locs, X, Y, Z, params);
 
     if params.general.parallel.enabled
-        data3d_interpolate_fun = @data3d_interpolate_parallel
+        data3d_interpolate_fun = @data3d_interpolate_parallel;
     else
-        data3d_interpolate_fun = @data3d_interpolate_serial
+        data3d_interpolate_fun = @data3d_interpolate_serial;
     end
     % Interpolate data
-    [params, obj_interp, obj_interp_sentinel] = data3d_interpolate_fun(data, locs, X, Y, Z, masks.outties, params)
+    [params, obj_interp, obj_interp_sentinel] = data3d_interpolate_fun(data, locs, X, Y, Z, masks.outties, params);
     
     % Update parameter fields on params.data
     params.data.hx = params.interpolation.hx;
     params.data.hy = params.interpolation.hy;
     params.data.hz = params.interpolation.hz;
     params.data.shape.x = params.interpolation.data.shape.x; 
-    params.data.shape.y = params.inetrpolation.data.shape.y;
+    params.data.shape.y = params.interpolation.data.shape.y;
     params.data.shape.z = params.interpolation.data.shape.z;
 
 end % function data3d_interpolate()
