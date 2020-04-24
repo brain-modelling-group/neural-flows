@@ -21,9 +21,9 @@ inparams.general.parallel.workers_fraction = 0.8;
 
 
 % General module like stuff
-inparams.general.interpolation.enabled = true;
-inparams.general.flows.enabled = true;
-inparams.general.singularity.enabled = true;
+inparams.interpolation.enabled = true;
+inparams.flows.enabled = true;
+inparams.singularity.enabled = true;
 
 % Properties of input data, data file should come with data and locations
 inparams.data.file.dir = '/home/paula/Work/Code/matlab-neuro/neural-flows/demo-data';
