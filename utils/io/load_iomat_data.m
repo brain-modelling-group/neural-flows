@@ -15,7 +15,7 @@ function [obj_data, obj_data_sentinel] = load_iomat_data(params)
         %obj_data = matfile(fullfile(params.data.file.dir, ...
         %                            params.data.file.name), ...
         %                            'Writable', true);
-        continue
+        disp('continue')
     end
 
 
