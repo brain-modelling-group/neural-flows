@@ -90,7 +90,7 @@ inparams.flows.method.hs3d.max_iterations = 128;
 inparams.flows.method.hs3d.initial_conditions.mode = 'random';
 inparams.flows.method.hs3d.initial_conditions.seed = 42;
 %inparams.flows.method.hs3d.burnin.length = 8; % in time steps
-inparams.flows.method.hs3d.nodal_flows.enabled = true
+inparams.flows.method.hs3d.nodal_flows.enabled = true;
 % CNEM
 %inparams.flows.method.name = 'cnem';
 %inparams.flows.method.cnem.alpha_smooth   = 0.1;
