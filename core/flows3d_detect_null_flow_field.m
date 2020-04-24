@@ -32,7 +32,7 @@ function flows3d_detect_null_flow_field(obj_singularity, obj_flows, params)
 
     % Get parameters
     tpts = params.flows.data.shape.t; 
-    detection_threshold = params.singularity.detection.detection_threshold;
+    detection_threshold = params.singularity.detection.threshold;
         
     nullflow_points3d = struct([]); 
     X = obj_flows.X;
