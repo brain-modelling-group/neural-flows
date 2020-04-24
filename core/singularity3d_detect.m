@@ -1,4 +1,4 @@
-function[params, obj_sings, obj_sings_sentinel] = singularity3d_detect(params)
+function[params, obj_singularity, obj_singularity_sentinel] = singularity3d_detect(params)
 % This function runs the detection of null flows and saves the points in a new
 % matfile. 
 %
