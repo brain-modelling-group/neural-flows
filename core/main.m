@@ -34,7 +34,8 @@ else
   % Presumably structured data
 end
 %---------------------------------INTERPOLATION--------------------------------%
-
+% Save parameters up to this point
+save_tmp_params(tmp_params)
 %---------------------------------FLOWS----------------------------------------%
 % Check which method we want to use - hsd3 only works with interpolated data, while cnem
 switch tmp_params.flows.method.name
@@ -51,7 +52,7 @@ switch tmp_params.flows.method.name
                'Requested unknown method. Options: {"hs3d", "cnem"}');
 end
 %---------------------------------FLOWS----------------------------------------%
-
+save_tmp_params(tmp_params)
 %---------------------------------STREAMLINES----------------------------------%
 
 % Check what else we want to do
@@ -60,18 +61,21 @@ if tmp_params.flows.streamlines.enabled
                'This feature has not been implemented yet. Next!');
 end 
 %---------------------------------STREAMLINES----------------------------------%
-
+save_tmp_params(tmp_params)
 %---------------------------------SINGULARITY----------------------------------%
 % DETECTION
 if tmp_params.singularity.detection.enabled 
     [tmp_params, obj_singularity, obj_singularity_sentinel] = singularity3d_detect(tmp_params);
 end
-
+%-------------------------------------------------------------------------------%
+save_tmp_params(tmp_params)
+%-------------------------------------------------------------------------------%
 % CLASSIFICATION
 %if tmp_params.singularity.classification.enabled 
 %   tmp_params = singularity3d_classify(tmp_params)
 %end
-
+%-------------------------------------------------------------------------------%
+% save_tmp_params(tmp_params)
 %TRACKING
 %---------------------------------SINGULARITY----------------------------------%
 %---------------------------------THE END -------------------------------------%
@@ -84,8 +88,8 @@ tok(tstart, 'minutes')
 tok(tstart, 'hours')
 
 % Save parameter structure with updated fields and values
-read_write_json(tmp_params.general.storage.params.output.filename, ...
-                tmp_params.general.storage.params.output.dir, ...
+read_write_json(ouparams.general.storage.params.output.filename, ...
+                ouparams.general.storage.params.output.dir, ...
                 'write', ...
                 ouparams)
 
@@ -95,3 +99,12 @@ delete(obj_flows_sentinel)
 %delete(obj_streamline_sentinel)
 delete(obj_singularity_sentinel)
 end % function main()
+
+
+function save_tmp_params(tmp_params)
+read_write_json(tmp_params.general.storage.params.output.filename, ...
+                tmp_params.general.storage.params.output.dir, ...
+                'write', ...
+                tmp_params)
+
+end
