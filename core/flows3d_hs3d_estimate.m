@@ -1,4 +1,4 @@
-function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params, masks)
+function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params)
 % ARGUMENTS:
 %           
 %%    
@@ -35,6 +35,8 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params
                                                         params.flows.file.keep); 
 
     % Save masks with convex hulls of the brain
+    % Note this will fail if there are no masks here
+    masks = obj_data.masks;
     obj_flows.masks = masks;
     
     % Save grid and masks - needed for singularity tracking and visualisation
