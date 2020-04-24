@@ -29,7 +29,7 @@ elseif strcmp(tmp_params.data.grid.type, 'unstructured') && ~tmp_params.interpol
 
 elseif strcmp(tmp_params.data.grid.type, 'unstructured') && tmp_params.interpolation.enabled
    % Do the interpolation  
-   [tmp_params, masks, obj_data, obj_interp_sentinel] = data3d_interpolate(tmp_params)
+   [tmp_params, masks, obj_data, obj_interp_sentinel] = data3d_interpolate(tmp_params);
 else
   % Presumably structured data
 end
@@ -64,13 +64,13 @@ end
 %---------------------------------SINGULARITY----------------------------------%
 % DETECTION
 if tmp_params.singularity.detection.enabled 
-    [tmp_params, obj_singularity, obj_singularity_sentinel] = singularity3d_detect(tmp_params)
+    [tmp_params, obj_singularity, obj_singularity_sentinel] = singularity3d_detect(tmp_params);
 end
 
 % CLASSIFICATION
-if tmp_params.singularity.classification.enabled 
-   tmp_params = singularity3d_classify(tmp_params)
-end
+%if tmp_params.singularity.classification.enabled 
+%   tmp_params = singularity3d_classify(tmp_params)
+%end
 
 %TRACKING
 %---------------------------------SINGULARITY----------------------------------%
@@ -93,5 +93,5 @@ read_write_json(tmp_params.general.storage.params.output.filename, ...
 delete(obj_interp_sentinel)
 delete(obj_flows_sentinel)
 %delete(obj_streamline_sentinel)
-%delete(obj_singularity_sentinel)
+delete(obj_singularity_sentinel)
 end % function main()
