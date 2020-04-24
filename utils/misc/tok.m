@@ -21,7 +21,7 @@ function tok(tstart, time_unit)
     fprintf('%s%s\n', ['Finished: ' tend])
   
     if nargin < 2
-	    time_unit = 'seconds'
+	    time_unit = 'seconds';
 	    divisor = 1;
     end
 
@@ -39,5 +39,5 @@ function tok(tstart, time_unit)
 
      end % switch case block
     
-    fprintf('%s%s%s\n\n', ['Elapsed time: ' string(tik_tok/divisor) ' ' time_unit]);
+    fprintf('%s%s%s%s\n', ['Elapsed time: ' string(tik_tok/divisor) ' ' time_unit]);
 end % function tok()
