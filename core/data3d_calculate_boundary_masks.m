@@ -1,7 +1,7 @@
 function [masks, params] = data3d_calculate_boundary_masks(locs, X, Y, Z, params)
     % Alpha radius has to be adjusted depending on the location data
     % (mostly, granularity of parcellation).
-    if isfield(inparams.interpolation.boundary, 'alpha_radius')
+    if isfield(params.interpolation.boundary, 'alpha_radius')
         bdy_alpha_radius = params.interpolation.boundary.alpha_radius;
     end
     
