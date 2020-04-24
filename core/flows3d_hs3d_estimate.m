@@ -26,7 +26,7 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params
     end
     
     if strcmp(params.flows.file.label, '')
-        params.interpolation.file.label = 'tmp_flows';
+        params.flows.file.label = 'tmp_flows';
     end
     
     % Save flow calculation parameters
