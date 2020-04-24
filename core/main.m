@@ -19,39 +19,41 @@ end
 tmp_params = inparams;
 %---------------------------------INTERPOLATION--------------------------------%
 if inparams.interpolation.enabled
-  % Check if we need to interpolate data
-  if strcmp(tmp_params.data.grid.type, 'structured') && tmp_params.interpolation.enabled
-     error(['neural-flows:' mfilename ':IncompatibleOptions'], ...
-            'Will not perform interpolation on gridded/structured data.');
+    % Check if we need to interpolate data
+    if strcmp(tmp_params.data.grid.type, 'structured') && tmp_params.interpolation.enabled
+       error(['neural-flows:' mfilename ':IncompatibleOptions'], ...
+              'Will not perform interpolation on gridded/structured data.');
 
-  elseif strcmp(tmp_params.data.grid.type, 'unstructured') && ~tmp_params.interpolation.enabled
-     warning(['neural-flows:' mfilename ':NoInterpolation'], ...
-              'Skipping interpolation ...')
+    elseif strcmp(tmp_params.data.grid.type, 'unstructured') && ~tmp_params.interpolation.enabled
+       warning(['neural-flows:' mfilename ':NoInterpolation'], ...
+                'Skipping interpolation ...')
 
-  elseif strcmp(tmp_params.data.grid.type, 'unstructured') && tmp_params.interpolation.enabled
-     % Do the interpolation  
-     [tmp_params, obj_data, obj_interp_sentinel] = data3d_interpolate(tmp_params);
-  else
-    % Presumably structured data
-  end
+    elseif strcmp(tmp_params.data.grid.type, 'unstructured') && tmp_params.interpolation.enabled
+       % Do the interpolation  
+       [tmp_params, obj_data, obj_interp_sentinel] = data3d_interpolate(tmp_params);
+    else
+      % Presumably structured data
+    end
 end
 %---------------------------------INTERPOLATION--------------------------------%
 % Save parameters up to this point
 save_tmp_params(tmp_params)
 %---------------------------------FLOWS----------------------------------------%
-% Check which method we want to use - hsd3 only works with interpolated data, while cnem
-switch tmp_params.flows.method.name
-    case {'hs3d', 'horn-schunk', 'hs'}
-        %
-        [tmp_params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(tmp_params);
-    case {'cnem'}
-        %[tmp_params, obj_flows, obj_flows_sentinel] = flows3d_estimate_cnem_hs(tmp_params, masks);
-        % 
-        error(['neural-flows:' mfilename ':NotTested'], ...
-               'Sorry mate, have not tested this one yet.');
-    otherwise
-        error(['neural-flows:' mfilename ':UnknownCase'], ...
-               'Requested unknown method. Options: {"hs3d", "cnem"}');
+if inparams.flows.enabled
+    % Check which method we want to use - hsd3 only works with interpolated data, while cnem
+    switch tmp_params.flows.method.name
+        case {'hs3d', 'horn-schunk', 'hs'}
+            %
+            [tmp_params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(tmp_params);
+        case {'cnem'}
+            %[tmp_params, obj_flows, obj_flows_sentinel] = flows3d_estimate_cnem_hs(tmp_params, masks);
+            % 
+            error(['neural-flows:' mfilename ':NotTested'], ...
+                   'Sorry mate, have not tested this one yet.');
+        otherwise
+            error(['neural-flows:' mfilename ':UnknownCase'], ...
+                   'Requested unknown method. Options: {"hs3d", "cnem"}');
+    end
 end
 %---------------------------------FLOWS----------------------------------------%
 % Save parameters up to this point
