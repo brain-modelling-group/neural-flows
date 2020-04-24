@@ -44,7 +44,7 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params
     obj_flows.Z = obj_data.Z;
    
     % Here is where the magic happens
-    params = flows3d_hs3d_loop(obj_data, obj_flows, params)
+    params = flows3d_hs3d_loop(obj_data, obj_flows, params);
     % Alternative for using structures
     % [params, varargout(obj_flows)] = ..... 
 
