@@ -20,16 +20,20 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params
     % Check if we are receiving one slice of the data
     if params.data.slice.enabled
         rng(params.data.slice.id)
-        params = generate_slice_filename(params, 'flows') 
+        params = generate_slice_filename(params, 'flows'); 
     else
         rng(2020)
+    end
+    
+    if strcmp(params.flows.file.label, '')
+        params.interpolation.file.label = 'tmp_flows';
     end
     
     % Save flow calculation parameters
     [obj_flows, obj_flows_sentinel] = create_iomat_file(params.flows.file.label, ...
                                                         params.general.storage.dir, ...
                                                         params.flows.file.keep); 
-    
+
     % Save masks with convex hulls of the brain
     obj_flows.masks = masks;
     
