@@ -44,7 +44,6 @@ end
     
     masks = obj_flows.masks; 
     innies_idx = find(masks.innies == true);
-    delete(masks)
     
     X = X(innies_idx);
     Y = Y(innies_idx);
