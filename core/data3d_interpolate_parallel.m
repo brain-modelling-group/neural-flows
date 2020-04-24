@@ -50,7 +50,7 @@ function [params, obj_interp, obj_interp_sentinel] = data3d_interpolate_parallel
 
     % Create file for the interpolated data
     [obj_interp, obj_interp_sentinel] = create_iomat_file(params.interpolation.file.label, ...
-                                                          params.general.storage.dir, 
+                                                          params.general.storage.dir, ...
                                                           params.interpolation.file.keep);
 
     obj_interp_cell = strsplit(obj_interp.Properties.Source, filesep);
