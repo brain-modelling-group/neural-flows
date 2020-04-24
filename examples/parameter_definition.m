@@ -127,6 +127,7 @@ inparams.flows.streamlines.grid.type = 'unstructured';
 inparams.singularity.file.keep = true;
 inparams.singularity.file.dir = '';  % or false
 inparams.singularity.file.name = ''; % or false
+inparams.singularity.file.label = ''; % or false
 inparams.singularity.detection.enabled = true;    
 inparams.singularity.detection.mode  = 'null-flow-field';
 inparams.singularity.detection.threshold = [0 2^-6]; % or empty
