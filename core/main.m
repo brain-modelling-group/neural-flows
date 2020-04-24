@@ -11,7 +11,10 @@ function ouparams = main(inparams)
 %              5) Track singularities
 % Tic
 tstart = tik();
-
+%-------------------------------------------------------------------------------%
+if inparams.general.parallel.enabled
+  open_parpool(inparams.general.parallel.workers_fraction)
+end
 % Copy structure
 tmp_params = inparams;
 %---------------------------------INTERPOLATION--------------------------------%
