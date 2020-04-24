@@ -119,7 +119,7 @@ inparams.flows.decomposition.svd.modes = 4;
 inparams.flows.decomposition.svd.grid.type = 'unstructured'; 
 
 % Streamline analysis 
-inparams.flows.streamlines.enabled = true;
+inparams.flows.streamlines.enabled = false;
 inparams.flows.streamlines.grid.type = 'unstructured';
 
 
