@@ -43,7 +43,7 @@ end
     Z = obj_flows.Z;
     
     masks = obj_flows.masks; 
-    innies_idx = find(masks.innies == true).';
+    innies_idx = find(masks.innies == true);
     
     X = X(innies_idx);
     Y = Y(innies_idx);
@@ -60,6 +60,7 @@ end
     
     % Child function with access to local scope variables from parent
     % function
+%end
     function temp_data = interpolate_flow_step(idx)
             % Create nan array so the output is in the right shape
             ux = obj_flows.ux(:, :, :, idx);
