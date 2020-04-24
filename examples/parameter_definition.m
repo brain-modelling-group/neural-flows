@@ -76,8 +76,8 @@ inparams.interpolation.visualisation.enabled = true;
 % Flow calculation
 inparams.flows.file.exists = false;
 inparams.flows.file.keep = true;
-inparams.flows.file.dir = [];
-inparams.flows.file.name = [];
+inparams.flows.file.dir = '';
+inparams.flows.file.name = '';
 inparams.flows.file.label = '';  % Part of the filename for interp data
 
 % Estimation of flows
@@ -125,8 +125,8 @@ inparams.flows.streamlines.grid.type = 'unstructured';
 
 % Singularity detection and classification
 inparams.singularity.file.keep = true;
-inparams.singularity.file.dir = [];  % or false
-inparams.singularity.file.name = []; % or false
+inparams.singularity.file.dir = '';  % or false
+inparams.singularity.file.name = ''; % or false
 inparams.singularity.detection.enabled = true;    
 inparams.singularity.detection.mode  = 'null-flow-field';
 inparams.singularity.detection.threshold = [0 2^-6]; % or empty
