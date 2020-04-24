@@ -90,9 +90,9 @@ save_tmp_params(tmp_params)
 ouparams = tmp_params;
 
 % Toc
-tok(tstart, 'seconds')
-tok(tstart, 'minutes')
-tok(tstart, 'hours')
+tok(tstart, 'seconds');
+tok(tstart, 'minutes');
+tok(tstart, 'hours');
 
 % Save parameter structure with updated fields and values
 read_write_json(ouparams.general.storage.params.output.filename, ...
@@ -101,10 +101,10 @@ read_write_json(ouparams.general.storage.params.output.filename, ...
                 ouparams)
 
 % Delete files if we don't want to keep them
-delete(obj_interp_sentinel)
-delete(obj_flows_sentinel)
+%delete(obj_interp_sentinel)
+%delete(obj_flows_sentinel)
 %delete(obj_streamline_sentinel)
-delete(obj_singularity_sentinel)
+%delete(obj_singularity_sentinel)
 end % function main()
 
 
