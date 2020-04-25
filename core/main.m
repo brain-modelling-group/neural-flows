@@ -78,9 +78,9 @@ end
 save_params_checkpoint(tmp_params)
 %-------------------------------------------------------------------------------%
 % CLASSIFICATION
-%if tmp_params.singularity.classification.enabled 
-%   tmp_params = singularity3d_classify(tmp_params)
-%end
+if tmp_params.singularity.classification.enabled 
+   tmp_params = singularity3d_classify(tmp_params);
+end
 %-------------------------------------------------------------------------------%
 % save_tmp_params(tmp_params)
 %TRACKING
