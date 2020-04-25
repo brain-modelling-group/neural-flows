@@ -46,6 +46,7 @@ params.flows.data.shape.x = params.data.shape.x;
 params.flows.data.shape.y = params.data.shape.y;
 params.flows.data.shape.z = params.data.shape.z;
 params.flows.data.shape.t = params.data.shape.timepoints-1;
+params.flows.data.shape.grid = [params.data.shape.y, params.data.shape.x, params.data.shape.z];
 
 % Resolution
 hx = params.data.hx;
