@@ -3,9 +3,12 @@ function [Mx, My, Mz] = moore_neighbourhood_3d(ii, jj, kk)
 % each dimensions of the neighbours of a point ii, jj, kk in a 3D Moore neighbourhood. 
 %
 % ARGUMENTS:
-%        ii -- subscript of the centre point along the +1st+ spatial dimension
-%        jj -- subscript of the centre point along the +2nd+ spatial dimension
-%        kk -- subscript of the centre point along the +3rd+ spatial dimension
+%        ii -- subscript of the centre point along the +1st+ spatial
+%              dimension (y)
+%        jj -- subscript of the centre point along the +2nd+ spatial
+%              dimension (x)
+%        kk -- subscript of the centre point along the +3rd+ spatial
+%              dimension (z)
 %
 % OUTPUT: 
 %        Mx -- 3 x 3 x 3 array with the subscripts along the +first+ dimension 
@@ -34,31 +37,31 @@ function [Mx, My, Mz] = moore_neighbourhood_3d(ii, jj, kk)
 % third dimension.
 k_centre = 2;
 
-           Mx(:, :, k_centre-1) = [ ii-1  ii   ii+1;
-                                    ii-1  ii   ii+1;
-                                    ii-1  ii   ii+1];
+           Mx(:, :, k_centre-1) = [ jj-1  jj   jj+1;
+                                    jj-1  jj   jj+1;
+                                    jj-1  jj   jj+1];
                        
-           Mx(:, :, k_centre)  =  [ ii-1  ii   ii+1;
-                                    ii-1  ii   ii+1;
-                                    ii-1  ii   ii+1];
+           Mx(:, :, k_centre)  =  [ jj-1  jj   jj+1;
+                                    jj-1  jj   jj+1;
+                                    jj-1  jj   jj+1];
                        
-           Mx(:, :, k_centre+1) = [ ii-1  ii   ii+1;
-                                    ii-1  ii   ii+1;
-                                    ii-1  ii   ii+1];
+           Mx(:, :, k_centre+1) = [ jj-1  jj   jj+1;
+                                    jj-1  jj   jj+1;
+                                    jj-1  jj   jj+1];
                        
                        
                        
-           My(:, :, k_centre-1) =  [ jj-1  jj-1   jj-1;
-                                     jj    jj     jj;
-                                     jj+1  jj+1   jj+1];
+           My(:, :, k_centre-1) =  [ ii-1  ii-1   ii-1;
+                                     ii    ii     ii;
+                                     ii+1  ii+1   ii+1];
                         
-           My(:, :, k_centre)   =  [ jj-1  jj-1   jj-1;
-                                     jj    jj     jj;
-                                     jj+1  jj+1   jj+1];
+           My(:, :, k_centre)   =  [ ii-1  ii-1   ii-1;
+                                     ii    ii     ii;
+                                     ii+1  ii+1   ii+1];
                         
-           My(:, :, k_centre+1) =  [ jj-1  jj-1   jj-1;
-                                     jj    jj     jj;
-                                     jj+1  jj+1   jj+1];
+           My(:, :, k_centre+1) =  [ ii-1  ii-1   ii-1;
+                                     ii    ii     ii;
+                                     ii+1  ii+1   ii+1];
         
                                  
                         
