@@ -33,7 +33,7 @@ for this_point = 1:num_critical_points
     ix = critical_xyz_idx(this_point, jj);
     iz = critical_xyz_idx(this_point, kk);
     
-    [My, Mx, Mz] = moore_neighbourhood_3d(ix, iy, iz);
+    [Mx, My, Mz] = moore_neighbourhood_3d(iy, ix, iz);
     
     % preallocate memory in the right shape
     ux_cube = zeros(3, 3, 3);
@@ -41,9 +41,9 @@ for this_point = 1:num_critical_points
     uz_cube = ux_cube;
     
     for this_elem = 1:numel(Mx)
-        ux_cube(this_elem) = ux(Mx(this_elem), My(this_elem), Mz(this_elem));
-        uy_cube(this_elem) = uy(Mx(this_elem), My(this_elem), Mz(this_elem));
-        uz_cube(this_elem) = uz(Mx(this_elem), My(this_elem), Mz(this_elem));
+        ux_cube(this_elem) = ux(My(this_elem), Mx(this_elem), Mz(this_elem));
+        uy_cube(this_elem) = uy(My(this_elem), Mx(this_elem), Mz(this_elem));
+        uz_cube(this_elem) = uz(My(this_elem), Mx(this_elem), Mz(this_elem));
     end
 
     [duxdx, duxdy, duxdz] = gradientxyz(ux_cube, hy, hx, hz);
