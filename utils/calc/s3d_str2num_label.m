@@ -1,4 +1,4 @@
-function [singularity_classification_num_list] = s3d_str2num_label(singularity_classification_str_list)
+function [singularity_classification_num_list] = singularity3d_convert_str2num_label(singularity_classification_str_list)
 % This function maps singularity human-readable string labels inside the 
 % cell array into integer numbers for quantitative classification,
 %
