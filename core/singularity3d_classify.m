@@ -18,6 +18,8 @@ function params = singularity3d_classify(params)
 %                                         the type of singularity detected. 
 % REQUIRES:
 %          switch_index_mode()
+%          s3d_get_numlabel()
+%          s3d_get_base_singularity_list()
 % AUTHOR:
 %     Paula Sanz-Leon, QIMR Berghofer February 2019
 % USAGE:
@@ -38,7 +40,6 @@ function params = singularity3d_classify(params)
     grid_size = [params.flows.data.shape.y, params.flows.data.shape.x, params.flows.data.shape.z];
     % ENABLE grid_size = params.flows.data.shape.grid; 
 
-
     % Check if we stored linear indices or subscripts 
     if ~isfield(nullflow_points3d(1).locs, 'subscripts')
         fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started converting lindear indices into subscripts.'))
@@ -56,11 +57,12 @@ function params = singularity3d_classify(params)
     end
 
     % Allocate output and save to file
-    classification_cell = singularity3d_classify_fun(nullflow_points3d, params);
-    counts = singularity3d_count(classification_cell);
+    [classification_cell_str, classification_cell_num, counts] = singularity3d_classify_fun(nullflow_points3d, params);
+    %counts = singularity3d_count(classification_cell_num);
     
     % XXXX: temporary
-    obj_singularity.classification = classification_cell;
+    obj_singularity.classification_str = classification_cell_str;
+    obj_singularity.classification_num = classification_cell_num;
     obj_singularity.count = counts;
     
     % Disable classification

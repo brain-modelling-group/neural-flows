@@ -1,4 +1,4 @@
-function [classification_cell_str, classification_cell_num] = singularity3d_classify_parallel(nullflow_points3d, params)
+function [classification_cell_str, classification_cell_num, singularity_count] = singularity3d_classify_parallel(nullflow_points3d, params)
 % ARGUMENTS: XXXX Document
 %      .null_points_3d        -- a struct of size [1 x no. timepoints]
 %                                                -- .xyz_idx [no. of singularities x 1] -- linear indices 
@@ -32,6 +32,8 @@ function [classification_cell_str, classification_cell_num] = singularity3d_clas
     % Calculate jacobian and classify singularities
     classification_cell_str = cell(size(nullflow_points3d));
     classification_cell_num = cell(size(nullflow_points3d));
+    base_singularity_num_list = cellfun(@(x) s3d_get_numlabel(x), s3d_get_base_singularity_list());
+    singularity_count = zeros(length(classification_cell_num), length(base_singularity_num_list));
 
     null_points_cell = struct2cell(nullflow_points3d);
     % Get only relevant data -- subscripts
@@ -65,7 +67,10 @@ function [classification_cell_str, classification_cell_num] = singularity3d_clas
            
            %obj_singularity.classification_cell(1, tt) = {singularity_labels};
            classification_cell_str{1, tt} = singularity_labels;
+           % Get numeric labels
            classification_cell_num{1, tt} = cellfun(@(x) s3d_get_numlabel(x), singularity_labels);
+           % Count singularities
+           singularity_count(tt, :) = singularity3d_count(classification_cell_num{1, tt}, base_singularity_num_list);
     end
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished classification of singularities.'))
 end % singularity3d_classify_parallel()
