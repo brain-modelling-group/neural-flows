@@ -33,6 +33,9 @@ function params = singularity3d_classify(params)
     obj_singularity = load_iomat_singularity(params);
     nullflow_points3d = obj_singularity.nullflow_points3d;
 
+    % NOTE: perhaps this part of the parameters should be based on singularity params
+    tpts = params.flows.data.shape.t;
+
     % Check if we stored linear indices or subscripts 
     if ~isfield(nullflow_points3d(1).locs, 'subscripts')
         fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started converting lindear indices into subscripts.'))
