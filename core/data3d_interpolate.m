@@ -1,4 +1,4 @@
-function [params, masks, obj_interp, obj_interp_sentinel] = data3d_interpolate(params)
+function [params, obj_interp, obj_interp_sentinel] = data3d_interpolate(params)
 % This is a wrapper function for data interpolation step
 % works only for unstructured data
 
