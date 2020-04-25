@@ -37,7 +37,7 @@ if inparams.interpolation.enabled
 end
 %---------------------------------INTERPOLATION--------------------------------%
 % Save parameters up to this point
-save_tmp_params(tmp_params)
+save_params_checkpoint(tmp_params)
 %---------------------------------FLOWS----------------------------------------%
 if inparams.flows.enabled
     % Check which method we want to use - hsd3 only works with interpolated data, while cnem
@@ -57,7 +57,7 @@ if inparams.flows.enabled
 end
 %---------------------------------FLOWS----------------------------------------%
 % Save parameters up to this point
-save_tmp_params(tmp_params)
+save_params_checkpoint(tmp_params)
 %---------------------------------STREAMLINES----------------------------------%
 
 % Check what else we want to do
@@ -67,7 +67,7 @@ if tmp_params.flows.streamlines.enabled
 end 
 %---------------------------------STREAMLINES----------------------------------%
 % Save parameters up to this point
-save_tmp_params(tmp_params)
+save_params_checkpoint(tmp_params)
 %---------------------------------SINGULARITY----------------------------------%
 % DETECTION
 if tmp_params.singularity.detection.enabled 
@@ -75,7 +75,7 @@ if tmp_params.singularity.detection.enabled
 end
 %-------------------------------------------------------------------------------%
 % Save parameters up to this point
-save_tmp_params(tmp_params)
+save_params_checkpoint(tmp_params)
 %-------------------------------------------------------------------------------%
 % CLASSIFICATION
 %if tmp_params.singularity.classification.enabled 
@@ -106,12 +106,3 @@ read_write_json(ouparams.general.storage.params.output.filename, ...
 %delete(obj_streamline_sentinel)
 %delete(obj_singularity_sentinel)
 end % function main()
-
-
-function save_tmp_params(tmp_params)
-read_write_json(tmp_params.general.storage.params.output.filename, ...
-                tmp_params.general.storage.params.output.dir, ...
-                'write', ...
-                tmp_params)
-
-end
