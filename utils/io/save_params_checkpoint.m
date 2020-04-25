@@ -1,0 +1,9 @@
+function save_tmp_params(tmp_params)
+% Dummy function that saves json output params up to a point in the code
+% Downside - it ovewrites the file if it exists
+read_write_json(tmp_params.general.storage.params.output.filename, ...
+                tmp_params.general.storage.params.output.dir, ...
+                'write', ...
+                tmp_params)
+
+end
