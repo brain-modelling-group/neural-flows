@@ -1,4 +1,4 @@
-function singularity3d_classify(params)
+function params = singularity3d_classify(params)
 % 1) calculates jacobian for each critical point, and then 
 % 2) classify type of critical point. 
 % ARGUMENTS:
@@ -56,5 +56,8 @@ function singularity3d_classify(params)
     % XXXX: temporary
     obj_singularity.classification = classification_cell;
     obj_singularity.count = counts;
+    
+    % Disable classification
+    params.singularity.classification.enabled = false;
     
 end % function singularity3d_classify()
