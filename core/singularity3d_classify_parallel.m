@@ -23,35 +23,33 @@ function classification_cell = singularity3d_classify_parallel(nullflow_points3d
     obj_flows = load_iomat_flows(params);
     % Get important parameters
     tpts = params.flows.data.shape.t;
-    grid_size = [params.flows.data.shape.y, params.flows.data.shape.x, params.flows.data.shape.z]; 
+    grid_size = [params.flows.data.shape.y, params.flows.data.shape.x, params.flows.data.shape.z];
+    %TODO: ENABLE: grid_size = params.flows.data.shape.grid; 
     hx = params.flows.data.hx; 
     hy = params.flows.data.hy; 
     hz = params.flows.data.hz; 
 
     % Calculate jacobian and classify singularities
     classification_cell = cell(size(nullflow_points3d));
-
-    % TODO: CHECK THIS STILL WORKS
     null_points_cell = struct2cell(nullflow_points3d);
     % Get only relevant data -- subscripts
     null_points_cell = squeeze(null_points_cell(1, 1, :));
 
     fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started classification of singularities.'))
 
-    for tt=1:tpts 
+    parfor tt=1:tpts 
            % Check if we have critical points. There are 'frames' for which
            % nothing was detected, we should not attempt to calculate jacobian.
            nullflow_points3d_frame = null_points_cell{tt};
 
-           if isempty(nullflow_points3d_frame)
+           if isempty(nullflow_points3d_frame.subscripts)
                singularity_labels = {'empty'};
-               %msings_obj.classification_cell(1, tt) = {singularity_labels};
+               %obj_singularity.classification_cell(1, tt) = {singularity_labels};
                classification_cell{1, tt} = singularity_labels;
-
                continue
            end
            
-           num_critical_points = size(nullflow_points3d_subscripts, 1);
+           num_critical_points = size(nullflow_points3d_frame, 1);
            singularity_labels  = cell(num_critical_points, 1);
 
            [boundary_vec_idx, innies_vec_idx] = detect_boundary_points(nullflow_points3d_frame.subscripts, grid_size);
@@ -60,12 +58,11 @@ function classification_cell = singularity3d_classify_parallel(nullflow_points3d
            ux = obj_flows.ux(:, :, :, tt);
            uy = obj_flows.uy(:, :, :, tt);
            uz = obj_flows.uz(:, :, :, tt);
-           
-           temp_labels = classify_points(subscripts, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz);
-           singularity_labels(innies_vec_idx) = temp_labels;
+           tmp = classify_points(nullflow_points3d_frame.subscripts, innies_vec_idx, ux, uy, uz, hx, hy, hz);
+           singularity_labels(innies_vec_idx) = tmp;
            singularity_labels(boundary_vec_idx) = {'boundary'};
            
-           %msings_obj.classification_cell(1, tt) = {singularity_labels};
+           %obj_singularity.classification_cell(1, tt) = {singularity_labels};
            classification_cell{1, tt} = singularity_labels;
 
 
@@ -73,16 +70,6 @@ function classification_cell = singularity3d_classify_parallel(nullflow_points3d
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished classification of singularities.'))
 
 end % singularity3d_classify_parallel()
-
-   
-function label = classify_points(nullflow_points3d_xyz_idx, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz)
-    num_points = length(in_bdy_vec_idx);
-     parfor idx=1:num_points
-         tmp = classification_step(idx, nullflow_points3d_xyz_idx, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz)
-         label{idx} = tmp;
-     end
-
-end % function classify_points()
 
 function [boundary_vec_idx, innies_vec_idx] = detect_boundary_points(points_idx, grid_size)
 % This function only detects points on the faces of the grid.
@@ -101,6 +88,15 @@ function [boundary_vec_idx, innies_vec_idx] = detect_boundary_points(points_idx,
     innies_vec_idx = find(bv ==0);
 
 end % function detect_boundary_points()
+
+function label = classify_points(nullflow_points3d_subscripts, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz)
+    num_points = length(in_bdy_vec_idx);
+     parfor idx=1:num_points
+         tmp = classification_step(idx, nullflow_points3d_subscripts, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz);
+         label{idx} = tmp;
+     end
+
+end % function classify_points()
 
 function temp_data = classification_step(idx, nullflow_points3d_subscripts, innies_vec_idx, ux, uy, uz, hx, hy, hz)
 

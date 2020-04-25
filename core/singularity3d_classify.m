@@ -35,13 +35,15 @@ function params = singularity3d_classify(params)
 
     % NOTE: perhaps this part of the parameters should be based on singularity params
     tpts = params.flows.data.shape.t;
-    grid_size = [params.flows.data.shape.y, params.flows.data.shape.z, params.flows.data.shape.z];
+    grid_size = [params.flows.data.shape.y, params.flows.data.shape.x, params.flows.data.shape.z];
+    % ENABLE grid_size = params.flows.data.shape.grid; 
+
 
     % Check if we stored linear indices or subscripts 
     if ~isfield(nullflow_points3d(1).locs, 'subscripts')
         fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started converting lindear indices into subscripts.'))
         for tt=1:tpts
-            nullflow_points3d(tt).locs.subscripts = switch_index_mode(nullflow_points3d(tt).locs.linear_idx, 'subscript', grid_size);;
+            nullflow_points3d(tt).locs.subscripts = switch_index_mode(nullflow_points3d(tt).locs.linear_idx, 'subscript', grid_size);
         end   
         fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished converting lindear indices into subscripts.'))
         obj_singularity.nullflow_points3d = nullflow_points3d;
