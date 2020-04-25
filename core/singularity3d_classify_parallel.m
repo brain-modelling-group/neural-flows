@@ -1,4 +1,4 @@
-function classification_cell = singularity3d_classify_parallel(nullflow_points3d, params)
+function [classification_cell_str, classification_cell_num] = singularity3d_classify_parallel(nullflow_points3d, params)
 % ARGUMENTS: XXXX Document
 %      .null_points_3d        -- a struct of size [1 x no. timepoints]
 %                                                -- .xyz_idx [no. of singularities x 1] -- linear indices 
@@ -30,13 +30,14 @@ function classification_cell = singularity3d_classify_parallel(nullflow_points3d
     hz = params.flows.data.hz; 
 
     % Calculate jacobian and classify singularities
-    classification_cell = cell(size(nullflow_points3d));
+    classification_cell_str = cell(size(nullflow_points3d));
+    classification_cell_num = cell(size(nullflow_points3d));
+
     null_points_cell = struct2cell(nullflow_points3d);
     % Get only relevant data -- subscripts
     null_points_cell = squeeze(null_points_cell(1, 1, :));
 
     fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started classification of singularities.'))
-
     parfor tt=1:tpts 
            % Check if we have critical points. There are 'frames' for which
            % nothing was detected, we should not attempt to calculate jacobian.
@@ -63,12 +64,10 @@ function classification_cell = singularity3d_classify_parallel(nullflow_points3d
            singularity_labels(boundary_vec_idx) = {'boundary'};
            
            %obj_singularity.classification_cell(1, tt) = {singularity_labels};
-           classification_cell{1, tt} = singularity_labels;
-
-
+           classification_cell_str{1, tt} = singularity_labels;
+           classification_cell_num{1, tt} = cellfun(@(x) s3d_get_numlabel(x), singularity_labels);
     end
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished classification of singularities.'))
-
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished classification of singularities.'))
 end % singularity3d_classify_parallel()
 
 function [boundary_vec_idx, innies_vec_idx] = detect_boundary_points(points_idx, grid_size)
