@@ -35,7 +35,7 @@ function params = singularity3d_classify(params)
 
     % NOTE: perhaps this part of the parameters should be based on singularity params
     tpts = params.flows.data.shape.t;
-    grid_size = [params.flows.data.shape.y, params.flows.data.shape.z, params.flows.data.shape.z]
+    grid_size = [params.flows.data.shape.y, params.flows.data.shape.z, params.flows.data.shape.z];
 
     % Check if we stored linear indices or subscripts 
     if ~isfield(nullflow_points3d(1).locs, 'subscripts')
