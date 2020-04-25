@@ -38,12 +38,12 @@ function classification_cell = singularity3d_classify_parallel(nullflow_points3d
 
     fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started classification of singularities.'))
 
-    parfor tt=1:tpts 
+    for tt=1:tpts 
            % Check if we have critical points. There are 'frames' for which
            % nothing was detected, we should not attempt to calculate jacobian.
-           nullflow_points3d_subscripts = null_points_cell{tt};
+           nullflow_points3d_frame = null_points_cell{tt};
 
-           if isempty(nullflow_points3d_subscripts)
+           if isempty(nullflow_points3d_frame)
                singularity_labels = {'empty'};
                %msings_obj.classification_cell(1, tt) = {singularity_labels};
                classification_cell{1, tt} = singularity_labels;
@@ -54,7 +54,7 @@ function classification_cell = singularity3d_classify_parallel(nullflow_points3d
            num_critical_points = size(nullflow_points3d_subscripts, 1);
            singularity_labels  = cell(num_critical_points, 1);
 
-           [boundary_vec_idx, innies_vec_idx] = detect_boundary_points(nullflow_points3d_subscripts, grid_size);
+           [boundary_vec_idx, innies_vec_idx] = detect_boundary_points(nullflow_points3d_frame.subscripts, grid_size);
 
            % Create temp variables with partial load of a matfile. 
            ux = obj_flows.ux(:, :, :, tt);
