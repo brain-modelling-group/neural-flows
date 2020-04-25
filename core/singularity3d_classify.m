@@ -48,13 +48,13 @@ function params = singularity3d_classify(params)
     end
 
     if params.general.parallel.enabled
-        singularity3d_classify_fun = @singularity3d_classify_parallel
+        singularity3d_classify_fun = @singularity3d_classify_parallel;
     else
-        singularity3d_classify_fun = @singularity3d_interpolate_serial
+        singularity3d_classify_fun = @singularity3d_interpolate_serial;
     end
 
     % Allocate output and save to file
-    classification_cell = singularity_classify_fun(nullflow_points3d, params);
+    classification_cell = singularity3d_classify_fun(nullflow_points3d, params);
     counts = singularity3d_count(classification_cell);
     
     % XXXX: temporary
