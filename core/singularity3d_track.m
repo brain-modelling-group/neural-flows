@@ -6,31 +6,32 @@ function[params] = singularity3d_track(params)
     t_start_idx = 1;
     t_end_idx = params.flows.data.shape.t;
     np3d_cell = s3d_build_particle_cell(obj_singularity, [t_start_idx, t_end_idx]);
-    s3d_bifurcation_tracking(np3d_cell);
+    s3d_bifurcation_tracking(np3d_cell, params);
 
 
 
 end %function singularity3d_track()
 
 
-function s3d_bifurcation_tracking(np3d_cell)
+function s3d_bifurcation_tracking(np3d_cell, params)
 
 
 %idx_start_stop = varargin{1};
 %max_link_dis = varargin{2};    % in mm or unit of the locations of singularities
 %max_gap_closing = varargin{3}; % in time samples
 
-
-[tracks, adjacency_tracks, A ] = simpletracker(np3d_cell, 'Debug', true, 'MaxLinkingDistance', 27, 'MaxGapClosing', 2);
+time_vec = 1: params.flows.data.shape.t;
+[tracks, adjacency_tracks, A ] = simpletracker(np3d_cell, 'Debug', true, 'MaxLinkingDistance', 50, 'MaxGapClosing', 10);
 
 %%
 all_points = vertcat(np3d_cell{:} );
 %%
 
 figure;
-ax = subplot(1,1,1);
-hold(ax, 'on')
-
+ax1 = subplot(2,1,1);
+ax2 = subplot(2,1,2);
+hold(ax1, 'on')
+hold(ax2, 'on')
 %%
 
 for this_track=1:length(tracks)
@@ -41,12 +42,12 @@ for this_track=1:length(tracks)
     y_val = all_points(x_idx, 2);
     z_val = all_points(x_idx, 3);
     
-    %plot3(ax, x_val, y_val, z_val, 'color', [0.25 0.25 0.25], 'linewidth', 0.1)
+    plot3(ax1, x_val, y_val, z_val, 'color', [0.25 0.25 0.25], 'linewidth', 0.1)
 
     
-    plot(ax, time_vec(tpts_idx), x_val, 'color', [0.25 0.25 0.25], 'linewidth', 0.1)
-    plot(ax, time_vec(tpts_idx(1)), x_val(1), '.', 'markerfacecolor', [0.5 0.25 0.25], 'markersize', 0.0042)
-    plot(ax, time_vec(tpts_idx(end)), x_val(end), '.', 'markerfacecolor', [0.25 0.5 0.25], 'markersize', 0.0042)    
+    plot(ax2, time_vec(tpts_idx), x_val, 'color', [0.25 0.25 0.25], 'linewidth', 0.1)
+    plot(ax2, time_vec(tpts_idx(1)), x_val(1), '.', 'markerfacecolor', [0.5 0.25 0.25], 'markersize', 0.0042)
+    plot(ax2, time_vec(tpts_idx(end)), x_val(end), '.', 'markerfacecolor', [0.25 0.5 0.25], 'markersize', 0.0042)    
     
 end
     
