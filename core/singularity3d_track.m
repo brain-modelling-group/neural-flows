@@ -21,7 +21,7 @@ function s3d_bifurcation_tracking(np3d_cell, params)
 %max_gap_closing = varargin{3}; % in time samples
 
 time_vec = 1: params.flows.data.shape.t;
-[tracks, adjacency_tracks, A ] = simpletracker(np3d_cell, 'Debug', true, 'MaxLinkingDistance', 50, 'MaxGapClosing', 10);
+[tracks, adjacency_tracks, A ] = simpletracker(np3d_cell, 'Debug', true, 'MaxLinkingDistance', inf, 'MaxGapClosing', 10);
 
 %%
 all_points = vertcat(np3d_cell{:} );
@@ -46,8 +46,8 @@ for this_track=1:length(tracks)
 
     
     plot(ax2, time_vec(tpts_idx), x_val, 'color', [0.25 0.25 0.25], 'linewidth', 0.1)
-    plot(ax2, time_vec(tpts_idx(1)), x_val(1), '.', 'markerfacecolor', [0.5 0.25 0.25], 'markersize', 0.0042)
-    plot(ax2, time_vec(tpts_idx(end)), x_val(end), '.', 'markerfacecolor', [0.25 0.5 0.25], 'markersize', 0.0042)    
+    plot(ax2, time_vec(tpts_idx(1)), x_val(1), '.', 'markeredgecolor', [0.5 0.25 0.25], 'markersize', 10)
+    plot(ax2, time_vec(tpts_idx(end)), x_val(end), '.', 'markeredgecolor', [0.25 0.5 0.25], 'markersize', 10)    
     
 end
     
