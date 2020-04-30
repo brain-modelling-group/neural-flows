@@ -1,5 +1,6 @@
 function figure_handle = plot1d_speed_distribution(mflows_obj, varargin)
-
+%        varargin   -- for the time being a 1 x 2 cell array with
+%                      {'Visible', 'off'}:
 numsubplot = 2;
 figure_handle = figure('Name', 'nflows-speed-distribution', varargin{:});
 ax = gobjects(numsubplot);
@@ -9,7 +10,7 @@ for jj=1:numsubplot
     hold(ax(jj), 'on')
 end
 
-uxyz = mflows_obj.uxyz_sc;
+uxyz = mflows_obj.uxyz;
 
 un = squeeze(sqrt(uxyz(:, 1, :).^2+uxyz(:, 2, :).^2+uxyz(:, 3, :).^2));
 
