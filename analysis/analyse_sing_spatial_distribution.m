@@ -19,12 +19,12 @@ function analyse_sing_spatial_distribution(mfile_sing, sing_labels, XYZ, num_fra
 % Kindda hardcoded values, but at least make it idiomatic
 source_ = 1;
 spiral_source_ = 3;
-saddle_source = 5;
+saddle_source  = 5;
 saddle_source_ = 7;
 
 sink_ = 2;
 spiral_sink_ = 4;
-saddle_sink = 6;
+saddle_sink  = 6;
 saddle_sink_ = 8; 
 
 xyz_idx = mfile_sing.xyz_idx;    
@@ -114,10 +114,10 @@ start_tt = 256;
      % NOTE: there is a smarter way of doing this using scatterhist. 
      % TODO: do it for the other two combinations of axes. XZ, YZ.
      scatterhist([Xsource; Xsink; Xsaddle_sink; Xsaddle_source], ...
-                     [Ysource; Ysink; Ysaddle_sink; Ysaddle_source], ...
+                 [Ysource; Ysink; Ysaddle_sink; Ysaddle_source], ...
                 'Group', label, 'Kernel','on','Location','SouthEast',...
-    'Direction','out','Color',[cmap(source_, 1:3);  cmap(sink_, 1:3); cmap(saddle_sink_, 1:3); cmap(saddle_source_, 1:3)],'LineStyle',{'-','-','--', '--'},...
-    'LineWidth',[2,2,2, 2],'Marker','..v^','MarkerSize',[10, 10, 4, 4]);
+                'Direction','out','Color',[cmap(source_, 1:3);  cmap(sink_, 1:3); cmap(saddle_sink_, 1:3); cmap(saddle_source_, 1:3)],'LineStyle',{'-','-','--', '--'},...
+                'LineWidth',[2,2,2, 2],'Marker','..v^','MarkerSize',[10, 10, 4, 4]);
 
      ax = gca;
      
