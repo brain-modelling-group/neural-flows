@@ -5,7 +5,7 @@ if nargin < 2
 end
 
 num_points = obj_flows.num_innies; 
-figure_handle = figure('Name', 'nflows-flows-average-over-time', varargin{:});
+figure_handle = figure('Name', 'nflows-flows-average-ux-uy-uz', varargin{:});
 
 
 hold(ax_handle, 'on')
