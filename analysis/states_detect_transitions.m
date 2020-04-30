@@ -1,4 +1,4 @@
-function [out]= states_detect_transitions(dEnergy)
+function [out]= states_detect_energy_transitions(dEnergy)
 % Detect state transitions as peaks of energy in the flow
 % This is a basic functionusing Matlab's findpeaks
 % INPUT ARGUMENTS:
@@ -72,4 +72,4 @@ std_s = std(s);
 
 
 
-end % function detect_state_transitions()
+end % function states_detect_energy_transitions()
