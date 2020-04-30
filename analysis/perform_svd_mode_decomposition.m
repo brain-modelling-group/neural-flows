@@ -42,7 +42,7 @@ switch params.flows.decomposition.svd.grid.type
  end 
 
 % get locations and data
-[X, Y, Z, ux, uy, uz, num_points] = svd_fun(params, obj_flows)
+[X, Y, Z, ux, uy, uz, num_points] = svd_fun(params, obj_flows);
 
 num_modes = params.flows.decomposition.svd.modes;
 [U, S, V, prct_var] = svd_decomposition(ux, uy, uz, num_modes);
