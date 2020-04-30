@@ -18,7 +18,7 @@ function fig_handles = analyse_singularities(mobj_sings, fig_visibility, to_plot
 %        s3d_get_base_singularity_list()
 %        s3d_get_numlabel()
 %        s3d_count_singularities()
-%        plot_singularity_scatter_xyz_vs_time()
+%        plot1d_singularity_scatter_xyz_vs_time()
 %        plot_singularity_count_traces
 %
 % USAGE:
@@ -91,7 +91,7 @@ switch to_plot
        % Count how many singularities of each type we have
        sing_count = s3d_count_singularities(singularity_list_num);
        % Plot traces of each singularity
-       fig_counts = plot_singularity_count_traces(sing_count, fig_visibility{:});
+       fig_counts = plot1d_singularity_count_traces(sing_count, fig_visibility{:});
        fig_handles{length(fig_handles)+1} = fig_counts;
        
        % FOCI
@@ -120,10 +120,10 @@ switch to_plot
        
        % COMBINED SINGS
        fig_xyz_all_cp = plot1d_singularity_scatter_xyz_vs_time(singularity_list_num, ...
-                                                             mobj_sings.null_points_3d, ...
-                                                             base_list(1:14), ...
-                                                             options.interpolation.xyz_lims, ...
-                                                             marker_plot, fig_visibility{:});
+                                                               mobj_sings.null_points_3d, ...
+                                                               base_list(1:14), ...
+                                                               options.interpolation.xyz_lims, ...
+                                                               marker_plot, fig_visibility{:});
        fig_handles{length(fig_handles)+1} = fig_xyz_all_cp;
        
     otherwise
