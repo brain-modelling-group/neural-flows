@@ -1,8 +1,8 @@
-function [figure_handle] = plot_quiver_slice(mfile_vel, slice_axis, slice_idx, tpt_idx, options)
+function [figure_handle] = plot_quiver_slice(obj_flows, slice_axis, slice_idx, tpt_idx, options)
 %% Plots 2D stream-quivers. The 2D velocity field is a slice of a 3D+t field.
 %
 % ARGUMENTS: 
-%    mfile_vel  -- MatFile object
+%    obj_flows  -- MatFile object
 %    slice_axis -- a string with the axis along which we'll slice
 %                  Options: {'xaxis', 'yaxis', 'zaxis'}. Default: {'x-axis'}
 %    slice_idx  -- slice index along slice_axis. No dim checks implemented
@@ -39,33 +39,32 @@ switch slice_axis
     
     case {'xaxis', 'x', 'x-axis'}
         % plane zy
-        %vx = squeeze(mfile_vel.ux(:, slice_idx, :, tpt_idx));
-        u = squeeze(mfile_vel.uy(:, slice_idx, :, tpt_idx))';
-        v = squeeze(mfile_vel.uz(:, slice_idx, :, tpt_idx))';
-        XX = squeeze(mfile_vel.Y(:, slice_idx, :))';
-        YY = squeeze(mfile_vel.Z(:, slice_idx, :))';             
+        %vx = squeeze(obj_flows.ux(:, slice_idx, :, tpt_idx));
+        u = squeeze(obj_flows.uy(:, slice_idx, :, tpt_idx))';
+        v = squeeze(obj_flows.uz(:, slice_idx, :, tpt_idx))';
+        XX = squeeze(obj_flows.Y(:, slice_idx, :))';
+        YY = squeeze(obj_flows.Z(:, slice_idx, :))';             
     case {'yaxis', 'y', 'y-axis'}
         % plane zx
-        u = squeeze(mfile_vel.ux(slice_idx, :, :, tpt_idx))';
-        %vy = squeeze(mfile_vel.uy(slice_idx, :, :, tpt_idx));
-        v = squeeze(mfile_vel.uz(slice_idx, :, :, tpt_idx))';
-        XX = squeeze(mfile_vel.X(slice_idx, :, :))';
-        YY = squeeze(mfile_vel.Z(slice_idx, :, :))';
+        u = squeeze(obj_flows.ux(slice_idx, :, :, tpt_idx))';
+        %vy = squeeze(obj_flows.uy(slice_idx, :, :, tpt_idx));
+        v = squeeze(obj_flows.uz(slice_idx, :, :, tpt_idx))';
+        XX = squeeze(obj_flows.X(slice_idx, :, :))';
+        YY = squeeze(obj_flows.Z(slice_idx, :, :))';
     case {'zaxis', 'z', 'z-axis'}  
         % plane xy
-        u = squeeze(mfile_vel.ux(:, :, slice_idx, tpt_idx));
-        v = squeeze(mfile_vel.uy(:, :, slice_idx, tpt_idx));
-        %v = squeeze(mfile_vel.uz(slice_idx, :, :, tpt_idx));
-        XX = squeeze(mfile_vel.X(:, :, slice_idx));
-        YY = squeeze(mfile_vel.Y(:, :, slice_idx));
+        u = squeeze(obj_flows.ux(:, :, slice_idx, tpt_idx));
+        v = squeeze(obj_flows.uy(:, :, slice_idx, tpt_idx));
+        %v = squeeze(obj_flows.uz(slice_idx, :, :, tpt_idx));
+        XX = squeeze(obj_flows.X(:, :, slice_idx));
+        YY = squeeze(obj_flows.Y(:, :, slice_idx));
     otherwise
-        error(['patchflow:' mfilename ':BadInputArgument'], ...
+        error(['neural-flows:' mfilename ':BadInputArgument'], ...
               'The slice_axis you requested is not available.');
                
 end
 
 % Plot the stuff
 [figure_handle] = draw_stream_arrow(XX, YY, u, v, options);
-
 
 end % function plot_quiver_slice()
