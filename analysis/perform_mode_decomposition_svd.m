@@ -1,7 +1,8 @@
-function [U, S, V, varargout] = perform_mode_decomposition_svd(mflows_obj, data_type, num_modes, time_vec, visual_debugging, quiver_scale_factor)
+function [U, S, V, varargout] = perform_svd_mode_decomposition(params, mflows_obj, data_type, num_modes, time_vec, visual_debugging, quiver_scale_factor)
 % Performs singular vector decomposition of a vector field.
 % Plots most dominant spatial modes and their time series 
 % ARGUMENTS:
+%            params --- almighty structure
 %            mflows_obj --  a matflab object, a handle to a Matfile or a struct(), with the flows and locations 
 %            data_type  -- a string specifying if it's gridded data or scattered data
 %
@@ -18,12 +19,12 @@ function [U, S, V, varargout] = perform_mode_decomposition_svd(mflows_obj, data_
     
 %}
 % AUTHOR:
-%     Paula Sanz-Leon, QIMR Berghofer, November 2018
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
-% AUTHOR: 
 % Paula Sanz-Leon October 2019
+%
 % REFERENCE: 
 % Townsend and Gong, 2018
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
 %% Set default values
 if ~exist('num_modes', 'var')
