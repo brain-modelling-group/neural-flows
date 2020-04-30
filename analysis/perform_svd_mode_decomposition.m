@@ -49,7 +49,7 @@ num_modes = params.flows.decomposition.svd.modes;
 
 % Plot spatial modes containing most energy
 if params.flows.visualisation.enabled
-    time_vec = inparams.data.ht:inparams.data.ht:nt*inparams.data.ht; 
+    time_vec = params.data.ht:params.data.ht:params.flows.data.shape.t*params.data.ht; 
     quiver_scale_factor = params.visualisation.quiver.scale;
 
     fig_spatial_modes =  plot_svd_modes(V, U, X, Y, Z, ...
