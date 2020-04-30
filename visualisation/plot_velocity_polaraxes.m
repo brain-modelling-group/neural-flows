@@ -1,6 +1,6 @@
-function [figure_handle] = plot_velocity_polaraxes(vx, vy, vz, scaling_factor)
+function [figure_handle] = plot_velocity_polaraxes(ux, uy, uz, scaling_factor)
 
-% vx, vy, vz, 1D arrays of size (1 x tpts)
+% ux, uy, uz, 1D arrays of size (1 x tpts)
 
 
 if nargin < 4
@@ -14,24 +14,24 @@ z_angle = 90;
 
 % Build angle vectors
 %x
-theta_x = zeros(1, length(vx));
-theta_x(sign(vx) >= 0) = x_angle;
-theta_x(sign(vy) < 0) = x_angle+180;
+theta_x = zeros(1, length(ux));
+theta_x(sign(ux) >= 0) = x_angle;
+theta_x(sign(uy) < 0) = x_angle+180;
 theta_x = [theta_x; theta_x];
 %y
-theta_y = zeros(1, length(vy));
-theta_y(sign(vy) >= 0) = y_angle;
-theta_y(sign(vy) < 0) = y_angle+180;
+theta_y = zeros(1, length(uy));
+theta_y(sign(uy) >= 0) = y_angle;
+theta_y(sign(uy) < 0) = y_angle+180;
 theta_y = [theta_y; theta_y];
 %z
-theta_z = zeros(1, length(vz));
-theta_z(sign(vz) >= 0) = z_angle;
-theta_z(sign(vz) < 0) = z_angle+180;
+theta_z = zeros(1, length(uz));
+theta_z(sign(uz) >= 0) = z_angle;
+theta_z(sign(uz) < 0) = z_angle+180;
 theta_z = [theta_z; theta_z];
 % Make data vectors
-data_x = [zeros(size(vx));abs(vx./scaling_factor)];
-data_y = [zeros(size(vy));abs(vy./scaling_factor)];
-data_z = [zeros(size(vz));abs(vz./scaling_factor)];
+data_x = [zeros(size(ux));abs(ux./scaling_factor)];
+data_y = [zeros(size(uy));abs(uy./scaling_factor)];
+data_z = [zeros(size(uz));abs(uz./scaling_factor)];
 
 % Get some info for
 mxx = max(data_x(:));
@@ -57,7 +57,7 @@ pax.RAxisLocation = 150;
 
 % Theta axes
 pax.ThetaTick =  [0 30 90 180 210 270];
-pax.ThetaTickLabel = {'vx', 'vy', 'vz', '-vx', '-vy', '-vz'};
+pax.ThetaTickLabel = {'ux', 'uy', 'uz', '-ux', '-uy', '-uz'};
 % Positive axes
 axx = polarplot([0 0], [0 1.2*mxv], 'color', [0.75 0.75 0.75], 'linewidth', 3);
 axy = polarplot([y_angle y_angle]*pi/180, [0 1.2*mxv], 'color', [0.75 0.75 0.75], 'linewidth', 3);
@@ -77,7 +77,7 @@ hy = polarplot(pax, theta_y(:, tt)*pi/180, data_y(:, tt), 'color', green, 'linew
 hz = polarplot(pax, theta_z(:, tt)*pi/180, data_z(:, tt), 'color', blue, 'linewidth', 2);
 
 
-for tt=1:size(vx, 2)
+for tt=1:size(ux, 2)
     hx.RData      = data_x(:, tt);
     hx.ThetaData  = theta_x(:, tt)*pi/180;
     hy.RData      = data_y(:, tt);
