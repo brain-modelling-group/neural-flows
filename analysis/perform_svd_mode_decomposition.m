@@ -116,13 +116,13 @@ function [X, Y, Z, ux, uy, uz, num_points] = svd_nodal(params, obj_flows)
     uz(num_points, nt) = 0;
 
      for tt=1:nt
-        temp = squeeze(obj_flows.uxyz_sc(:, xdim, tt));
+        temp = squeeze(obj_flows.uxyz(:, xdim, tt));
         %temp(isnan(temp)) = 0;
         ux(:, tt) = temp;
-        temp = squeeze(obj_flows.uxyz_sc(:, ydim, tt));
+        temp = squeeze(obj_flows.uxyz(:, ydim, tt));
         %temp(isnan(temp)) = 0;
         uy(:, tt) = temp;
-        temp = squeeze(obj_flows.uxyz_sc(:, zdim, tt));
+        temp = squeeze(obj_flows.uxyz(:, zdim, tt));
         %temp(isnan(temp)) = 0;
         uz(:, tt) = temp;
     end
@@ -133,7 +133,7 @@ function [X, Y, Z, ux, uy, uz, num_points] = svd_nodal(params, obj_flows)
 end % function svd_nodal()
 
 
-function [U, S, V, prct_var] = svd_decomposition(ux, uy, uz, prct_var)
+function [U, S, V, prct_var] = svd_decomposition(ux, uy, uz, num_modes)
     % svd mat is of size [nt x (nx*ny*nz*3)]
     svdmat = cat(1, ux, uy, uz).';
 
