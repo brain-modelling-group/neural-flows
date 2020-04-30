@@ -1,4 +1,4 @@
-function [U, S, V, varargout] = perform_svd_mode_decomposition(params, mflows_obj, data_type, num_modes, time_vec, visual_debugging, quiver_scale_factor)
+function [U, S, V, varargout] = perform_svd_mode_decomposition(params, data_type, num_modes, time_vec, visual_debugging, quiver_scale_factor)
 % Performs singular vector decomposition of a vector field.
 % Plots most dominant spatial modes and their time series 
 % ARGUMENTS:
@@ -26,52 +26,36 @@ function [U, S, V, varargout] = perform_svd_mode_decomposition(params, mflows_ob
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
-%% Set default values
-if ~exist('num_modes', 'var')
-    num_modes = 4;
-end
-
-if ~exist('quiver_scale_factor', 'var')
-    quiver_scale_factor = 1;
-end
-
-if ~exist('visual_debugging', 'var')
-    visual_debugging = true;
-end
+% Load flows data
+obj_flows = load_iomat_flows(params);
 
 
-if strcmp(data_type, 'grid')
-   quiver_scale_factor = 2;
+%% Define which function we will use
+switch params.flows.decomposition.svd.grid.type
+     case {'grid', 'structured', 'voxel'}
+         [output] = svd_grid();
+     case {'unstructured', 'nodal', 'scattered'}
+         [output] = svd_nodal();
+     otherwise
+        error(['neural-flows:' mfilename ':UnknownCase'], ...
+                   'Requested unknown case of grid. Options: {"structured", "unstructured"}'); 
+ end 
 
-    in_bdy_idx = find(mflows_obj.in_bdy_mask == true);
-    num_points = length(in_bdy_idx);
 
-    try
-        [ny, nx, nz, nt] = size(mflows_obj, 'ux');
+function [output] = svd_grid(params, obj_flows)
+    masks = obj_flows.masks;
+    innies_idx = find(masks.innies == true);
+    num_points = length(innies_idx);
+    nt = params.flows.data.shape.t;
 
-    catch 
-        [ny, nx, nz, nt] = size(mflows_obj.ux);
+    if nt > 1024
+        disp('This is going to get ugly ...')
     end
-
 
     ux(num_points, nt) = 0;
     uy(num_points, nt) = 0;
     uz(num_points, nt) = 0;
-    % NOTE: to check why we get nans in the flows point inside the boundary.
-    for tt=1:nt
-        temp = reshape(mflows_obj.ux(:, :, :, tt), nx*ny*nz, []);
-        temp = temp(in_bdy_idx);
-        temp(isnan(temp)) = 0;
-        ux(:, tt) = temp;
-        temp = reshape(mflows_obj.uy(:, :, :, tt), nx*ny*nz, []);
-        temp = temp(in_bdy_idx);
-        temp(isnan(temp)) = 0;
-        uy(:, tt) = temp;
-        temp = reshape(mflows_obj.uz(:, :, :, tt), nx*ny*nz, []);
-        temp = temp(in_bdy_idx);
-        temp(isnan(temp)) = 0;
-        uz(:, tt) = temp;
-    end
+
 
     X = mflows_obj.X;
     Y = mflows_obj.Y;
@@ -79,10 +63,13 @@ if strcmp(data_type, 'grid')
 
     X = X(in_bdy_idx);
     Y = Y(in_bdy_idx);
-    Z = Z(in_bdy_idx);
+    Z = Z(in_bdy_idx); 
 
-else
-     [num_points, ~, nt] = size(mflows_obj.uxyz_sc);
+end
+
+function svd_nodal()
+
+    [num_points, ~, nt] = size(mflows_obj.uxyz);
      xdim = 1;
      ydim = 2;
      zdim = 3;
@@ -106,18 +93,15 @@ else
     X = mflows_obj.locs(:, xdim);
     Y = mflows_obj.locs(:, ydim);
     Z = mflows_obj.locs(:, zdim);
-    
 end
 
-if ~exist('time_vec', 'var')
-        time_vec = 1:nt; 
-end
-
-if nt > 1024
-    disp('This is going to get ugly ...')
-end
+%   
+time_vec = inparams.data.ht:inparams.data.ht:nt*inparams.data.ht; 
 
 
+
+
+   quiver_scale_factor = params.visualisation.quiver.scale
 
 % svd mat is of size [nt x (nx*ny*nz*3)]
 svdmat = cat(1, ux, uy, uz).';
@@ -139,8 +123,7 @@ V(:, isNegative) = -V(:, isNegative);
 
 
 % Plot spatial modes containing most energy
-if visual_debugging
-    
+if params.flows.visualisation.enabled;
     fig_spatial_modes =  plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, num_points, prct_var, quiver_scale_factor);
     varargout{1} = fig_spatial_modes;
 end
