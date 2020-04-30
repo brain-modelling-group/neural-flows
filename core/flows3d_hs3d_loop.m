@@ -73,6 +73,9 @@ end
 % Save masks
 obj_flows.masks = masks;
 
+% Number of points inside the boundary
+obj_flows.num_innies = length(find(masks.innies == true));
+
 switch params.flows.method.hs3d.initial_conditions.mode
      case {'random', 'rand'}
          seed_init = params.flows.method.hs3d.initial_conditions.seed;
