@@ -136,6 +136,8 @@ inparams.singularity.classification.enabled = true;
 inparams.singularity.quantification.enabled = true;    
 inparams.singularity.visualisation.enabled = true;
 
+% Plotting
+inparams.visualisation.quiver.scale = 1;
 %%
 read_write_json(inparams_filename, inparams_dir, inparams_mode, inparams);
 
