@@ -15,7 +15,7 @@
 %                elements to form a cluster) its cluster number is 0.
 %       centres -- dim x Nc array of the average centre of each cluster.
 % REQUIRES: 
-%          -  utilis/dis()
+%          -  utils/calc/dis()
 % Reference:
 % Martin Ester, Hans-Peter Kriegel, Jörg Sander, Xiaowei Xu (1996). "A
 % density-based algorithm for discovering clusters in large spatial databases
