@@ -10,12 +10,11 @@ json_mode = 'read';
 
 % Load options
 input_params = read_write_json(input_params_filename, input_params_dir, json_mode);
-%%
-% Run interpolation, estimation and classification, this function writes to a new json file
+%% Run core functions: interpolation, estimation and classification, this function writes to a new json file
 output_params = main(input_params); 
 
-%NOT: FUNCTIONAL YET: NEEDS REFACTORING OF ANALYSIS: Analyse and visualise
-perform_mode_decomposition_svd(output_params);
+%% Run analysis
+perform_svd_mode_decomposition(output_params);
 
 %analyse_singularities(output_params)
 
