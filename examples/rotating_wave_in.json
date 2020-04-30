@@ -135,5 +135,11 @@
       "time": "ms"
     },
     "mode": "amplitude"
+  },
+
+"visualisation": {
+    "quiver": {
+      "scale": 1
+    }  
   }
 }
