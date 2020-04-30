@@ -15,7 +15,7 @@ input_params = read_write_json(input_params_filename, input_params_dir, json_mod
 output_params = main(input_params); 
 
 %NOT: FUNCTIONAL YET: NEEDS REFACTORING OF ANALYSIS: Analyse and visualise
-%perform_mode_decomposition_svd(output_params);
+perform_mode_decomposition_svd(output_params);
 
 %analyse_singularities(output_params)
 
