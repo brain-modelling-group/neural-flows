@@ -1,64 +1,49 @@
 function test_flow_estimation__travellingwave3d_scattered_hs3d()
-% NOTE: Takes about 110 seconds @ dracarys
+% NOTE: Takes about 110 seconds @dracarys
+%       Takes about 129 seconds @tesseract
+
 % Generate data with these step sizes
- options.interpolation.hx = 2;
- options.interpolation.hy = 2;
- options.interpolation.hz = 2;
- options.data.ht = 0.5;
- options.data.slice.id = 0;
+ options.hx = 2;
+ options.hy = 2;
+ options.hz = 2;
+ options.ht = 0.5;
 
  % With these parameters the wave is moving at 4 m/s along the y-axis 
  load('513COG.mat', 'COG')
  locs = COG(1:256, :);
  
- [wave3d, ~] = generate_wave3d_travelling_scattered(locs, 'hxyz',  options.interpolation.hx, 'ht', options.data.ht, 'direction', 'y');
+ [data, ~] = generate_wave3d_travelling_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'y');
  
  %Option to generate a travelling wave moving back and forth along the
  %chose axis
- wave3d = [wave3d(end:-1:1, :); wave3d];
+ data = [data(end:-1:1, :); data];
+ full_path_to_file = mfilename('fullpath');
+ save([full_path_to_file '.mat'], 'data', 'locs');
  
- options.interpolation.file.exists = false;
- options.interpolation.file.keep = true;
- options.interpolation.boundary.alpha_radius = 30;
- options.interpolation.boundary.thickness = 2;
- 
- % Flow calculation
- options.flows.file.keep = true;
- options.flows.init_conditions.mode = 'preset';
- options.flows.init_conditions.seed = 42;
- options.flows.init_conditions.uxo = zeros([87, 34, 62]);
- options.flows.init_conditions.uyo = -4.*ones([87, 34, 62]);
- options.flows.init_conditions.uzo = zeros([87, 34, 62]);
- options.flows.method.name = 'hs3d';
- options.flows.method.alpha_smooth   = 1;
- options.flows.method.max_iterations = 128;
- 
-  % Singularity detection and classification
- options.singularity.file.keep = false;
- options.singularity.detection.enabled = false;    
- 
- % Do the stuff
- [~, mfile_flows] = main_neural_flows_hs3d_scatter(wave3d, locs, options);
+ input_params_filename = 'test-flow-travellingwave3d-scattered-in.json';
+ input_params_dir  = '/home/paula/Work/Code/matlab-neuro/neural-flows/tests';
+ json_mode = 'read';
 
- % Plot the velocity estimates
- fig_hist = figure('Name', 'nflows-test-travellingwave3d-scattered-hs3d');
+ input_params = read_write_json(input_params_filename, input_params_dir, json_mode);
+ output_params = main(input_params);
 
+ [obj_flows] = load_iomat_flows(output_params);
+
+ fig_hist = figure('Name', 'nflows-test-planewave3d-scatter-hs3d');
+ 
  subplot(1, 4, 1, 'Parent', fig_hist)
- histogram(mfile_flows.ux)
+ histogram(squeeze(obj_flows.uxyz(:, 1, :)))
  xlabel('ux [m/s]')
  
  subplot(1, 4 ,2, 'Parent', fig_hist)
- histogram(mfile_flows.uy)
+ histogram(squeeze(obj_flows.uxyz(:, 2, :)))
  xlabel('uy [m/s]')
-
+ 
  subplot(1, 4, 3, 'Parent', fig_hist)
- histogram(mfile_flows.uz)
+ histogram(squeeze(obj_flows.uxyz(:, 3, :)))
  xlabel('uz [m/s]')
  
  subplot(1, 4, 4, 'Parent', fig_hist)
- histogram(sqrt(mfile_flows.ux(2:end-1, 2:end-1, 2:end-1, :).^2 + ...
-               mfile_flows.uy(2:end-1, 2:end-1, 2:end-1, :).^2 + ...
-               mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :).^2))
+ histogram(squeeze(sqrt(obj_flows.uxyz(:, 1, :).^2 + obj_flows.uxyz(:, 2, :).^2 + obj_flows.uxyz(:, 3, :).^2)))
  xlabel('u_{norm} [m/s]')
- 
 end % function test_flow_estimation__travellingwave3d_scattered_hs3d()

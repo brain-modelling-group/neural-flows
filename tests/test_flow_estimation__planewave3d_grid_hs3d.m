@@ -34,8 +34,6 @@ input_params = read_write_json(input_params_filename, input_params_dir, json_mod
 %%
 output_params = main(input_params); 
 
-perform_svd_mode_decomposition(output_params);
-
 [obj_flows] = load_iomat_flows(output_params);
 
 % Plot stuff
