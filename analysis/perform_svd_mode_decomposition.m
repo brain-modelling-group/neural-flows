@@ -65,11 +65,18 @@ function [X, Y, Z, ux, uy, uz, num_points] = svd_grid(params, obj_flows)
     masks = obj_flows.masks;
     innies_idx = find(masks.innies == true);
     num_points = length(innies_idx);
-    [nx, ny, nz] = [params.flows.data.shape.x, ...
-                    params.flows.data.shape.y, ...
-                    params.flows.data.shape.z];
+    
+    
+    [nx, ny, nz] = deal(params.flows.data.shape.x, ...
+                        params.flows.data.shape.y, ...
+                        params.flows.data.shape.z);
     nt = params.flows.data.shape.t;
 
+    if isempty(innies_idx)
+        num_points = nx*ny*nz;
+        innies_idx = ones(num_points, 1);
+    end
+    
     if nt > 1024
         disp('This is going to get ugly ...')
     end
