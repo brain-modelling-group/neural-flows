@@ -67,7 +67,7 @@ function [X, Y, Z, ux, uy, uz, num_points] = svd_grid(params, obj_flows)
     num_points = length(innies_idx);
     [nx, ny, nz] = [params.flows.data.shape.x, ...
                     params.flows.data.shape.y, ...
-                    params.flows.data.shape.nz];
+                    params.flows.data.shape.z];
     nt = params.flows.data.shape.t;
 
     if nt > 1024
