@@ -107,11 +107,7 @@ k_r = sqrt(k_x.^2 + k_y.^2 + k_z.*2);
 % we allow for input temp and spatial freqs.
 %c = omega ./ kr;
 
-% Amplitude of the wave.
-% NOTE: can be turned into a parameter
-A = 1;
-% Preallocate memory
-wave3d(length(time), len_y, len_x, len_z) = 0;
+
 
 if nargin < 1
     direction = 'x';
@@ -122,36 +118,46 @@ switch direction
         k_x = 0;
         k_z = 0;
         k_r = 0;
+        idx_expr = '(:, 11:20, 12, 12)'; 
         
     case 'x'
         k_y = 0;
         k_z = 0;
         k_r = 0;
+        idx_expr = '(:, 12, 11:20, 12)'; 
+
     case 'z'
         k_x = 0;
         k_y = 0;
         k_r = 0;
+        idx_expr = '(:, 12, 12, 11:20)'; 
     case 'xy'
         k_z = 0;
         k_r = 0;
+        idx_expr = '(:, 12, 12, 12)'; 
     case 'radial'
         k_x = 0;
         k_y = 0;
         k_z = 0;
-        
+        idx_expr = '(:, 12, 12, 12)'; 
     case 'all'
         % I wonder about my sanity and state of mind when I find myself doing
         % recursive function calls in matlab.
-        generate_planewave3d_grid('x');
-        generate_planewave3d_grid('y');
-        generate_planewave3d_grid('z');
-        generate_planewave3d_grid('radial');
-        generate_planewave3d_grid('blah');
+        generate_wave3d_plane_grid('direction', 'x');
+        generate_wave3d_plane_grid('direction', 'y');
+        generate_wave3d_plane_grid('direction', 'z');
+        generate_wave3d_plane_grid('direction', 'radial');
+        generate_wave3d_plane_grid('direction', 'xy');
         return
     otherwise
         kr = 0;
 end
 
+% Amplitude of the wave.
+% NOTE: can be turned into a parameter
+A = 1;
+% Preallocate memory
+wave3d(length(time), len_y, len_x, len_z) = 0;
 omega_sign = 1;
 % Generate the wave
 for tt=1:length(time)
@@ -162,11 +168,13 @@ end
 
 % Save only the real part
 wave3d = real(wave3d);
+eval(['wave2d = squeeze(wave3d' idx_expr ');']);  
+
 
 if plot_stuff 
     % Visual debugging of the first time point
     % TODO: generate a movie, perhaps of projections onto a 2d plane.
-    figure('Name', 'nflows-planewave3d-space');
+    %figure('Name', 'nflows-planewave3d-space');
     tt = 1;
     %colormap(bluegred(256))
     pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)));
@@ -176,9 +184,15 @@ if plot_stuff
     zlabel('Z')
 
     figure('Name', 'nflows-planewave3d-time')
-    plot(time, squeeze(wave3d(:, 11, 12, 12)));
+    plot(time, wave2d, 'color', [0.0 0.0 0.0 0.5]);
     xlabel('time')
     ylabel('p(x, y, z)')
+
+    
 end
 end % generate_wave3d_plane_grid()
 
+
+function fig_handle = plot_1d_timeseries(time, data_4d, direction)
+    
+end
