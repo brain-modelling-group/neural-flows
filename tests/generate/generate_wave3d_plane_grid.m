@@ -157,13 +157,13 @@ end
 % NOTE: can be turned into a parameter
 A = 1;
 % Preallocate memory
-wave3d(length(time), len_y, len_x, len_z) = 0;
+wave3d(len_y, len_x, len_z, length(time)) = 0;
 omega_sign = 1;
 % Generate the wave
 for tt=1:length(time)
     % The - sign of omega * t means the direction of propagation will be
     % along the + direction of the corresponding axes.
-    wave3d(tt, :, :, :) = A.* exp(1i.*(k_x.*X + k_y.*Y + k_z.*Z + k_r.*R - omega_sign.*omega.*time(tt)));
+    wave3d(:, :, :, tt) = A.* exp(1i.*(k_x.*X + k_y.*Y + k_z.*Z + k_r.*R - omega_sign.*omega.*time(tt)));
 end
 
 % Save only the real part
