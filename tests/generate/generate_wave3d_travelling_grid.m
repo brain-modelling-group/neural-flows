@@ -108,7 +108,7 @@ switch direction
         %ylabel_str = 'y-axis';
         
     case 'z'
-        wave3d = permute(wave3d, [3 2 1 4]);
+        wave3d = permute(wave3d, [3 1 2 4]);
         %temp  = squeeze(wave3d(:, idx_1, idx_2, :)); % indices do not mean anything special -- just selecting a plane of 3d space
         %temp2 = squeeze(wave3d(:, idx_2, :, :)); 
         %ylabel_str = 'z-axis';
