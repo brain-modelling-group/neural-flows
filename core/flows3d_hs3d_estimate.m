@@ -41,15 +41,17 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params
 
     % Save masks with convex hulls of the brain
     % Note this will fail if there are no masks here
-    masks = obj_data.masks;
-    obj_flows.masks = masks;
+    if strcmp(params.data.grid.type, 'unstructured')
+        masks = obj_data.masks;
+        obj_flows.masks = masks;
+        obj_flows.locs = obj_data.locs;
+    end
     
     % Save grid and masks - needed for singularity tracking and visualisation
     % Consider saving min max values and step, saves memory
     obj_flows.X = obj_data.X;
     obj_flows.Y = obj_data.Y;
     obj_flows.Z = obj_data.Z;
-    obj_flows.locs = obj_data.locs;
    
     % Here is where the magic happens
     params = flows3d_hs3d_loop(obj_data, obj_flows, params);
