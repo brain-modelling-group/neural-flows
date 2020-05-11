@@ -58,10 +58,10 @@ end
 
 % generate a plane wave in a regular grid cause it's easier
 [temp_wave3d, X, Y, Z, time] = generate_wave3d_plane_grid('hxyz', hxyz, 'ht', ht, ...
-                            'direction', direction, ...
-                            'visual_debugging', false, ...
-                            'min_val_space', [min_x_val, min_y_val, min_z_val], ...
-                            'max_val_space', [max_x_val, max_y_val, max_z_val]);
+                                                          'direction', direction, ...
+                                                          'visual_debugging', false, ...
+                                                          'min_val_space', [min_x_val, min_y_val, min_z_val], ...
+                                                          'max_val_space', [max_x_val, max_y_val, max_z_val]);
 
                         
 wave3d(length(time), size(locs, 1)) = 0;
@@ -71,9 +71,9 @@ y_dim = 2;
 z_dim = 3;
                         
 for tt=1:length(time)
-    B = temp_wave3d(tt, :, :, :);
+    B = temp_wave3d(:, :, :, tt);
     data_interpolant = scatteredInterpolant(X(:), Y(:), Z(:), B(:), 'linear', 'none');
-    wave3d(tt, :) = data_interpolant(locs(:, x_dim), locs(:, y_dim), locs(:, z_dim));
+    wave3d(tt, :)    = data_interpolant(locs(:, x_dim), locs(:, y_dim), locs(:, z_dim));
 end
 
 end % end generate_planewave3d_scattered()
