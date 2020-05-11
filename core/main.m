@@ -69,17 +69,19 @@ end
 % Save parameters up to this point
 save_params_checkpoint(tmp_params)
 %---------------------------------SINGULARITY----------------------------------%
-% DETECTION
-if tmp_params.singularity.detection.enabled 
-    [tmp_params, obj_singularity, obj_singularity_sentinel] = singularity3d_detect(tmp_params);
-end
-%-------------------------------------------------------------------------------%
-% Save parameters up to this point
-save_params_checkpoint(tmp_params)
-%-------------------------------------------------------------------------------%
-% CLASSIFICATION
-if tmp_params.singularity.classification.enabled 
-   tmp_params = singularity3d_classify(tmp_params);
+if tmp_params.singularity.enabled
+    % DETECTION
+    if tmp_params.singularity.detection.enabled 
+        [tmp_params, obj_singularity, obj_singularity_sentinel] = singularity3d_detect(tmp_params);
+    end
+    %-------------------------------------------------------------------------------%
+    % Save parameters up to this point
+    save_params_checkpoint(tmp_params)
+    %-------------------------------------------------------------------------------%
+    % CLASSIFICATION
+    if tmp_params.singularity.classification.enabled 
+       tmp_params = singularity3d_classify(tmp_params);
+    end
 end
 %-------------------------------------------------------------------------------%
 % save_tmp_params(tmp_params)
