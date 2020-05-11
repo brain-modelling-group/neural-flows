@@ -10,14 +10,13 @@ function [wave3d, X, Y, Z, time] = generate_wave3d_travelling_grid(varargin)
 %                        Default: {'x'}.
 %           velocity -- an integer number between 1-4. Will fail
 %                       otherwise.
-%           step     -- a scalar with the space step size to generate the grid
 %           visual_debugging -- a boolean to determine whther to plot
 %                       figures or not.
 %                       Default: {true}.
 % 
 % OUTPUT:
-%           wave3d   -- a 4D array of size [21, 21, 21, 22]. The first 
-%                       dimension is time, and the last three dimensions are space.
+%           wave3d   -- a 4D array of size [21, 21, 21, 22]. The last
+%                       dimension is time, and the first three dimensions are space.
 %                       This wave moves at exaclty 1 m/s.
 % REQUIRES: 
 %          pcolor3() for visual debugging
@@ -29,9 +28,9 @@ function [wave3d, X, Y, Z, time] = generate_wave3d_travelling_grid(varargin)
 % USAGE:
 %{
 
-[wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured('x');
-[wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured('y');
-[wave3d, X, Y, Z, time] = generate_travellingwave_3d_structured('z');
+[wave3d, X, Y, Z, time] = generate_wave3d_travelling_grid('direction', 'x');
+[wave3d, X, Y, Z, time] = generate_wave3d_travelling_grid('direction', 'y');
+[wave3d, X, Y, Z, time] = generate_wave3d_travelling_grid('direction', 'z');
 
 
 %}
@@ -88,13 +87,13 @@ time = 0:ht:21; % in seconds
 
 A = -X;
 % Preallocate memory
-wave3d(length(time), len_x, len_x, len_x) = 0;
+wave3d(len_x, len_x, len_x, length(time)) = 0;
 
 idx_start = ceil(len_x1/2);
 idx_end   = idx_start+len_x-1;
 for tt=1:length(time)
     B = circshift(A, velocity*tt, 2);
-    wave3d(tt, :, :, :) = B(:, idx_start:idx_end, :);
+    wave3d(:, :, :, tt) = B(:, idx_start:idx_end, :);
 end
 
 [X, Y, Z] = meshgrid(x, x, x); % in metres
