@@ -21,11 +21,11 @@ function [data, params, varargout] = load_data(params)
             params.data.shape.nodes = params.data.shape.size(2);
             varargout{1} = data_struct.locs;
         case 'structured'
-            params.data.shape.timepoints = params.data.shape.size(1);
+            params.data.shape.timepoints = params.data.shape.size(4);
             % This may bring problems if x, y are swapped
             params.data.shape.x = params.data.shape.size(2); 
-            params.data.shape.y = params.data.shape.size(3);
-            params.data.shape.z = params.data.shape.size(4);
+            params.data.shape.y = params.data.shape.size(1);
+            params.data.shape.z = params.data.shape.size(3);
             params.data.hx = data_struct.hx;
             params.data.hy = data_struct.hy;
             params.data.hz = data_struct.hz;
