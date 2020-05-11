@@ -23,7 +23,7 @@ function test_flow_estimation__planewave3d_grid_hs3d()
  
 %
 input_params_filename = 'test-flow-planewave3d-grid-in.json';
-input_params_dir  = '/home/paula/Work/Code/matlab-neuro/neural-flows/tests/generate';
+input_params_dir  = '/home/paula/Work/Code/matlab-neuro/neural-flows/tests';
 json_mode = 'read';
 
 % Load options -- TODO: the use of load_data is kind of a hack. The toolbox

@@ -1,55 +1,43 @@
 function test_flow_estimation__planewave3d_scattered_hs3d()
-% NOTE: Takes about XXX seconds @dracarys -- includes interpolation of
-% data.
+% NOTE: Takes about XXX seconds @tesseract 
 
-% Generate data
- options.interpolation.hx = 2;
- options.interpolation.hy = 2;
- options.interpolation.hz = 2;
- options.data.ht = 2;
- 
+ % Generate data
+ hxyz = 2;
+ ht = 1;
  
  load('513COG.mat', 'COG')
  locs = COG(1:256, :);
  
+ [data, ~] = generate_wave3d_plane_scattered(locs, 'hxyz', hxyz, 'ht', ht, ...
+                                                   'direction', 'x');
+ full_path_to_file = mfilename('fullpath');
+ save([full_path_to_file '.mat'], 'data', 'locs');
  
- [wave3d, ~] = generate_wave3d_plane_scattered(locs, 'hxyz', ...
-                                               options.interpolation.hx, 'ht', options.data.ht, ...
-                                               'direction', 'x');
- 
- % Options
- options.interpolation.file.exists = false;
- options.interpolation.file.keep = false;
- options.interpolation.boundary.thickness = 3;
- options.data.slice.id = 0;
- options.interpolation.boundary.alpha_radius = 30;
- options.flows.file.keep = true;
- options.flows.init_conditions.mode = 'random';
- options.flows.init_conditions.seed = 42;
- options.flows.method.alpha_smooth   = 0.1;
- options.flows.method.max_iterations = 128;
- options.singularity.detection.enabled = false;
+ input_params_filename = 'test-flow-planewave3d-scattered-in.json';
+ input_params_dir  = '/home/paula/Work/Code/matlab-neuro/neural-flows/tests';
+ json_mode = 'read';
 
- mfile_flows = main_neural_flows_hs3d_scatter(wave3d, locs, options);
+ input_params = read_write_json(input_params_filename, input_params_dir, json_mode);
+ output_params = main(input_params);
+
+ [obj_flows] = load_iomat_flows(output_params);
 
  fig_hist = figure('Name', 'nflows-test-planewave3d-scatter-hs3d');
-
+ 
  subplot(1, 4, 1, 'Parent', fig_hist)
- histogram(mfile_flows.ux(2:end-1, 2:end-1, 2:end-1, :))
+ histogram(squeeze(obj_flows.uxyz(:, 1, :)))
  xlabel('ux [m/s]')
  
  subplot(1, 4 ,2, 'Parent', fig_hist)
- histogram(mfile_flows.uy(2:end-1, 2:end-1, 2:end-1, :))
+ histogram(squeeze(obj_flows.uxyz(:, 2, :)))
  xlabel('uy [m/s]')
  
  subplot(1, 4, 3, 'Parent', fig_hist)
- histogram(mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :))
+ histogram(squeeze(obj_flows.uxyz(:, 3, :)))
  xlabel('uz [m/s]')
  
  subplot(1, 4, 4, 'Parent', fig_hist)
- histogram(sqrt(mfile_flows.ux(2:end-1, 2:end-1, 2:end-1, :).^2 + ...
-                mfile_flows.uy(2:end-1, 2:end-1, 2:end-1, :).^2 + ...
-                mfile_flows.uz(2:end-1, 2:end-1, 2:end-1, :).^2))
+ histogram(squeeze(sqrt(obj_flows.uxyz(:, 1, :).^2 + obj_flows.uxyz(:, 2, :).^2 + obj_flows.uxyz(:, 3, :).^2)))
  xlabel('u_{norm} [m/s]')
- 
-end % function test_flow_estimation__planewave3d_scattered_hs3d()
+   
+end % test_flow_estimation__planewave3d_scattered_hs3d()
