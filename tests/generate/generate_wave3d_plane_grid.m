@@ -98,10 +98,10 @@ R = sqrt(X.^2+Y.^2+Z.^2);
 omega = 0.2;%2*pi*0.05; % in rad sec^-1
 
 % NOTE: Hardocoded frequencies
-kx = 0.1; % in m^-1
-ky = 0.1; % in m^-1
-kz = 0.1; % in m^-1
-kr = sqrt(kx.^2 + ky.^2 + kz.*2);
+k_x = 0.1; % in m^-1
+k_y = 0.1; % in m^-1
+k_z = 0.1; % in m^-1
+k_r = sqrt(k_x.^2 + k_y.^2 + k_z.*2);
 
 %NOTE: estimation of wave propagation speed, should be output parameter if
 % we allow for input temp and spatial freqs.
@@ -119,25 +119,25 @@ end
 
 switch direction
     case 'y'
-        ky = 0;
-        kz = 0;
-        kr = 0;
+        k_x = 0;
+        k_z = 0;
+        k_r = 0;
         
     case 'x'
-        kx = 0;
-        kz = 0;
-        kr = 0;
+        k_y = 0;
+        k_z = 0;
+        k_r = 0;
     case 'z'
-        kx = 0;
-        ky = 0;
-        kr = 0;
+        k_x = 0;
+        k_y = 0;
+        k_r = 0;
     case 'xy'
-        kz = 0;
-        kr = 0;
+        k_z = 0;
+        k_r = 0;
     case 'radial'
-        kx = 0;
-        ky = 0;
-        kz = 0;
+        k_x = 0;
+        k_y = 0;
+        k_z = 0;
         
     case 'all'
         % I wonder about my sanity and state of mind when I find myself doing
@@ -148,7 +148,6 @@ switch direction
         generate_planewave3d_grid('radial');
         generate_planewave3d_grid('blah');
         return
-        
     otherwise
         kr = 0;
 end
@@ -158,7 +157,7 @@ omega_sign = 1;
 for tt=1:length(time)
     % The - sign of omega * t means the direction of propagation will be
     % along the + direction of the corresponding axes.
-    wave3d(tt, :, :, :) = A.* exp(1i.*(kx.*X + ky.*Y + kz.*Z + kr.*R - omega_sign.*omega.*time(tt)));
+    wave3d(tt, :, :, :) = A.* exp(1i.*(k_x.*X + k_y.*Y + k_z.*Z + k_r.*R - omega_sign.*omega.*time(tt)));
 end
 
 % Save only the real part
@@ -172,14 +171,14 @@ if plot_stuff
     %colormap(bluegred(256))
     pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)));
     colormap(bluegred(256))
-
+    ylabel('Y')
     xlabel('X')
     zlabel('Z')
 
     figure('Name', 'nflows-planewave3d-time')
-    plot(time, squeeze(wave3d(:, 11,12, 12)));
+    plot(time, squeeze(wave3d(:, 11, 12, 12)));
     xlabel('time')
     ylabel('p(x, y, z)')
 end
-end % function generate_planewave3d_structured()
+end % generate_wave3d_plane_grid()
 
