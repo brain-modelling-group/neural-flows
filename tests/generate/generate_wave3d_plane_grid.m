@@ -118,28 +118,28 @@ switch direction
         k_x = 0;
         k_z = 0;
         k_r = 0;
-        idx_expr = '(:, 11:20, 12, 12)'; 
+        idx_expr = '(11:20, 12, 12, :)'; 
         
     case 'x'
         k_y = 0;
         k_z = 0;
         k_r = 0;
-        idx_expr = '(:, 12, 11:20, 12)'; 
+        idx_expr = '(12, 11:20, 12, :)'; 
 
     case 'z'
         k_x = 0;
         k_y = 0;
         k_r = 0;
-        idx_expr = '(:, 12, 12, 11:20)'; 
+        idx_expr = '(12, 12, 11:20, :)'; 
     case 'xy'
         k_z = 0;
         k_r = 0;
-        idx_expr = '(:, 12, 12, 12)'; 
+        idx_expr = '(12, 12, 12, :)'; 
     case 'radial'
         k_x = 0;
         k_y = 0;
         k_z = 0;
-        idx_expr = '(:, 12, 12, 12)'; 
+        idx_expr = '(12, 12, 12, :)'; 
     case 'all'
         % I wonder about my sanity and state of mind when I find myself doing
         % recursive function calls in matlab.
@@ -177,7 +177,7 @@ if plot_stuff
     %figure('Name', 'nflows-planewave3d-space');
     tt = 1;
     %colormap(bluegred(256))
-    pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)));
+    pcolor3(X, Y, Z, squeeze(wave3d(:, :, :, tt)));
     colormap(bluegred(256))
     ylabel('Y')
     xlabel('X')
