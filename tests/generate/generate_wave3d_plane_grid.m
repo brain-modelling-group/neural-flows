@@ -191,8 +191,3 @@ if plot_stuff
     
 end
 end % generate_wave3d_plane_grid()
-
-
-function fig_handle = plot_1d_timeseries(time, data_4d, direction)
-    
-end
