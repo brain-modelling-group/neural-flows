@@ -1,4 +1,4 @@
-function test_singularity_classification__criticalpoints3d_grid(cp_type)
+function test_singularity3d_classification_hyperbolic_points(cp_type)
 % This function test the accuracy of the singularity classification functions 
 % called via singularity3d_classify_singularities(). The current function
 % only tests the 8 canonical critical points in 3D. It first generates the 
@@ -59,8 +59,8 @@ for this_cp=1:length(s3d_list)
     jj = floor(xyz(2)/2); % x
     kk = floor(xyz(3)/2); % z
 
-    [J3D] = singularity3d_jacobian([ii, jj, kk], ux, uy, uz, hx, hy, hz)
-    out_classification{this_cp} = singularity3d_classify_critical_points(J3D)
+    [J3D] = singularity3d_jacobian([ii, jj, kk], ux, uy, uz, hx, hy, hz);
+    out_classification{this_cp} = singularity3d_classify_critical_points(J3D);
 
 
      err_message = ['neural-flows' mfilename '::ClassificationError:: ', ...
