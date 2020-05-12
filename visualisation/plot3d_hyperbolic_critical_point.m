@@ -13,7 +13,7 @@ end
 [cmap] = s3d_get_colours(cp_type);
 
 
-fig_handle.Position = [1   18   19   17];
+%fig_handle.Position = [1   18   19   17];
 fig_handle.Color = [1, 1, 1];
 ax(1) = subplot(2, 2, 4, 'Parent', fig_handle);
 ax(2) = subplot(2, 2, 3, 'Parent', fig_handle);
@@ -84,7 +84,7 @@ ax(1).ZLabel.String = 'z';
 ax(1).View = [90 0];
 ax(1).Title.String = 'ZY';
 
-id_x = ceil(length(x)/(2*dsf)); % index of the slice laong x-we need to keep.
+id_x = ceil(size(X, 2)/(2*dsf)); % index of the slice laong x-we need to keep.
 U = ax(1).Children(end).UData;
 V = ax(1).Children(end).VData;
 W = ax(1).Children(end).WData;
@@ -104,7 +104,7 @@ ax(2).ZLabel.String = 'z';
 ax(2).View = [0 0];
 ax(2).Title.String = 'ZX';
 
-id_y = ceil(length(y)/(2*dsf)); % index of the slice laong x-we need to keep.
+id_y = ceil(size(X, 1)/(2*dsf)); % index of the slice laong x-we need to keep.
 U = ax(2).Children(end).UData;
 V = ax(2).Children(end).VData;
 W = ax(2).Children(end).WData;
