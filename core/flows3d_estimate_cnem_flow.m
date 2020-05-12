@@ -115,4 +115,4 @@ v.vxp=vnormp.*-dphidxp./normgradphip; % magnitude * unit vector component
 v.vyp=vnormp.*-dphidyp./normgradphip;
 v.vzp=vnormp.*-dphidzp./normgradphip;
 disp([mfilename ':: Done. \n'])
-end % function estimate_flow_cnem()
+end % function flows3d_estimate_cnem_flow()

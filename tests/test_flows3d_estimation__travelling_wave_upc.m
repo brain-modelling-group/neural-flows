@@ -1,4 +1,12 @@
-function test_flow_estimation__travellingwave3d_scattered_cnem()
+function test_flows3d_estimation__travelling_wave_upc()
+% grid-input-method
+% u: unstructured
+% p: phase-based
+% c: cnem
+% s: structured (grid)
+% a: activity-based (input data)
+% h: hornschunk (method)
+
 %NOTE: takes about 51 seconds @dracarys
  %Generate data
  options.hx = 2;
