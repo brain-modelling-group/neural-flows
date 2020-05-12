@@ -8,8 +8,11 @@ function test_flow_estimation__planewave3d_scattered_hs3d()
  load('513COG.mat', 'COG')
  locs = COG(1:256, :);
  
+ tstart = tik();
  [data, ~] = generate_wave3d_plane_scattered(locs, 'hxyz', hxyz, 'ht', ht, ...
                                                    'direction', 'x');
+ tok(tstart);
+ 
  full_path_to_file = mfilename('fullpath');
  save([full_path_to_file '.mat'], 'data', 'locs');
  
