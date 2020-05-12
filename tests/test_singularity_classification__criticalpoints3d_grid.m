@@ -46,33 +46,28 @@ for this_cp=1:length(s3d_list)
     [ux, uy, uz, X, Y, Z, p1, p2] = generate_singularity3d_hyperbolic_critical_points(cp_type{:});
 
     plot3d_hyperbolic_critical_point([], p1, p2, ux, uy, uz, X, Y, Z, cp_type{:})
-    % % Fake time points
-    % max_t = 16;
-    % options.flow_calculation.grid_size = size(X);
+    % Fake time points
+    max_t = 16;
+    options.flow_calculation.grid_size = size(X);
+    
+    hx = X(1, 2, 1) - X(1, 1, 1);
+    hy = Y(2, 1, 1) - Y(1, 1, 1);
+    hz = Z(1, 1, 2) - Z(1, 1, 1);
 
-    % null_points_3d = struct([]);
-    % for ii=1:max_t
-    %     mstruct_vel.ux(:, :, :, ii) =  ux;
-    %     mstruct_vel.uy(:, :, :, ii) =  uy;
-    %     mstruct_vel.uz(:, :, :, ii) =  uz;
-    %     % Location of the critical points
-    %     null_points_3d(ii).xyz_idx = floor(options.flow_calculation.grid_size/2);
+    xyz = size(X);
+    ii = floor(xyz(1)/2); % y
+    jj = floor(xyz(2)/2); % x
+    kk = floor(xyz(3)/2); % z
 
-    % end
+    [J3D] = singularity3d_jacobian([ii, jj, kk], ux, uy, uz, hx, hy, hz)
+    out_classification{this_cp} = singularity3d_classify_critical_points(J3D)
 
-    % mstruct_vel.options = options;
-    % mstruct_vel.hx = 2^-4;
-    % mstruct_vel.hy = 2^-4;
-    % mstruct_vel.hz = 2^-4;
 
-    % % Perform classification
-    % [singularity_classification_list] =   singularity3d_classify_singularities(null_points_3d, mstruct_vel);
+     err_message = ['neural-flows' mfilename '::ClassificationError:: ', ...
+                    'Input singularity type (' cp_type{:} ') does not match classification result '];
 
-    % err_message = ['neural-flows' mfilename '::ClassificationError:: ', ...
-    %                'Input singularity type (' cp_type ') does not match classification result '];
 
-    % for tt=1:max_t
-    %     assert(strcmp(singularity_classification_list{tt}, cp_type), [err_message '(' singularity_classification_list{tt} ').']);
-    % end
+    assert(strcmp(out_classification{this_cp}, cp_type{:}), [err_message '(' out_classification{this_cp} ').']);
+
 end
-end %function test_sing_classification_critical_points_grid()
+end %function test_singularity3d_classification_hyperbolic_points()
