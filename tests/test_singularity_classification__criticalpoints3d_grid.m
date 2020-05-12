@@ -37,7 +37,7 @@ if nargin < 1
 end
 
 if strcmp(cp_type, 'all')
-    s3d_list = s3d_get_singularity_list();
+    s3d_list = s3d_get_base_singularity_list();
     s3d_list(9:end) = [];
 end
 
