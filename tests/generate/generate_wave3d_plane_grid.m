@@ -1,4 +1,4 @@
-function [wave3d, X, Y, Z, time] = generate_wave3d_plane_grid(varargin)
+function [data, X, Y, Z, time] = generate_data3d_plane_wave(varargin)
 % Generates plane harmonic waves in 3D physical space +
 % time. The size of space and time vector are hardcoded as these waves are
 % intended for fast debugging and testing purposes. 
@@ -9,7 +9,7 @@ function [wave3d, X, Y, Z, time] = generate_wave3d_plane_grid(varargin)
 %                        Available: {'x', 'y', 'z', 'radial', 'any', 'all'}.
 %                        Default: {'x'}.
 % OUTPUT:
-%           wave3d   -- a 4D array of size [21, 21, 21, 50]. The first 
+%           wave3d   -- is actually a 4D array of size [21, 21, 21, 50]. The first 
 %                       three dimensions are space and the last one is time.
 % REQUIRES: 
 %         pcolor3() for visual debugging
@@ -47,6 +47,13 @@ else
     ht = 1;
 end
 
+% For unstructured case
+tmp = strcmpi(varargin,'locs'); 
+if any(tmp)
+    locs = varargin{find(tmp)+1}; 
+else
+    locs = [];
+end
 
 tmp = strcmpi(varargin,'max_val_space'); % max value in the grid along each axis
 if any(tmp)
@@ -108,7 +115,6 @@ k_r = sqrt(k_x.^2 + k_y.^2 + k_z.*2);
 %c = omega ./ kr;
 
 
-
 if nargin < 1
     direction = 'x';
 end
@@ -143,51 +149,84 @@ switch direction
     case 'all'
         % I wonder about my sanity and state of mind when I find myself doing
         % recursive function calls in matlab.
-        generate_wave3d_plane_grid('direction', 'x');
-        generate_wave3d_plane_grid('direction', 'y');
-        generate_wave3d_plane_grid('direction', 'z');
-        generate_wave3d_plane_grid('direction', 'radial');
-        generate_wave3d_plane_grid('direction', 'xy');
+        generate_data3d_plane_wave('direction', 'x');
+        generate_data3d_plane_wave('direction', 'y');
+        generate_data3d_plane_wave('direction', 'z');
+        generate_data3d_plane_wave('direction', 'radial');
+        generate_data3d_plane_wave('direction', 'xy');
+        data = [];
+        X = [];
+        Y = [];
+        Z = [];
+        time = [];
         return
     otherwise
         kr = 0;
 end
 
-% Amplitude of the wave.
-% NOTE: can be turned into a parameter
-A = 1;
-% Preallocate memory
-wave3d(len_y, len_x, len_z, length(time)) = 0;
-omega_sign = 1;
-% Generate the wave
-for tt=1:length(time)
-    % The - sign of omega * t means the direction of propagation will be
-    % along the + direction of the corresponding axes.
-    wave3d(:, :, :, tt) = A.* exp(1i.*(k_x.*X + k_y.*Y + k_z.*Z + k_r.*R - omega_sign.*omega.*time(tt)));
+switch grid_type
+    case {'unstructured', 'scattered', 'nodal'}
+        data = get_plane_wave_structured();
+    case {'structured', 'grid', 'voxel'}
+        data = get_plane_wave_unstructured()
+    otherwise
+        body
 end
 
-% Save only the real part
-wave3d = real(wave3d);
-eval(['wave2d = squeeze(wave3d' idx_expr ');']);  
+
+% eval(['wave2d = squeeze(wave3d' idx_expr ');']);  
 
 
 if plot_stuff 
-    % Visual debugging of the first time point
-    % TODO: generate a movie, perhaps of projections onto a 2d plane.
-    %figure('Name', 'nflows-planewave3d-space');
-    tt = 1;
-    %colormap(bluegred(256))
-    pcolor3(X, Y, Z, squeeze(wave3d(:, :, :, tt)));
-    colormap(bluegred(256))
-    ylabel('Y')
-    xlabel('X')
-    zlabel('Z')
-
-    figure('Name', 'nflows-planewave3d-time')
-    plot(time, wave2d, 'color', [0.0 0.0 0.0 0.5]);
-    xlabel('time')
-    ylabel('p(x, y, z)')
-
-    
+    fig_handle = figure('Name', 'nflows-planewave3d-space');
+    plot3d(fig_handle, data, X, Y, Z, time)
 end
-end % generate_wave3d_plane_grid()
+
+
+function data = get_plane_wave_structured()
+
+    % Amplitude of the wave.
+    % NOTE: can be turned into a parameter
+    A = 1;
+    % Preallocate memory
+    data(len_y, len_x, len_z, length(time)) = 0;
+    omega_sign = 1;
+    % Generate the wave
+    for tt=1:length(time)
+        % The - sign of omega * t means the direction of propagation will be
+        % along the + direction of the corresponding axes.
+        data(:, :, :, tt) = A.* exp(1i.*(k_x.*X + k_y.*Y + k_z.*Z + k_r.*R - omega_sign.*omega.*time(tt)));
+    end
+
+    % Save only the real part
+    data = real(data);
+end % function get_plane_wave_structured()
+
+
+function data = get_plane_wave_unstructured()
+
+    % Get limits of grid without actually calculating the grid arrays.
+    [min_x_val, min_y_val, min_z_val, max_x_val, max_y_val, max_z_val, ~] = get_grid_limits(locs, hxyz, hxyz, hxyz);
+
+
+    % generate a plane wave in a regular grid cause it's easier
+    [temp_wave3d, X, Y, Z, time] = generate_data3d_plane_wave('hxyz', hxyz, 'ht', ht, ...
+                                                              'direction', direction, ...
+                                                              'visual_debugging', false, ...
+                                                              'min_val_space', [min_x_val, min_y_val, min_z_val], ...
+                                                              'max_val_space', [max_x_val, max_y_val, max_z_val]);
+
+                            
+    wave3d(length(time), size(locs, 1)) = 0;
+
+    x_dim = 1;
+    y_dim = 2;
+    z_dim = 3;
+                            
+    for tt=1:length(time)
+        B = temp_wave3d(:, :, :, tt);
+        data_interpolant = scatteredInterpolant(X(:), Y(:), Z(:), B(:), 'linear', 'none');
+        data(tt, :) = data_interpolant(locs(:, x_dim), locs(:, y_dim), locs(:, z_dim));
+    end
+end % function get_plane_wave_unstructured()
+end % function generate_data3d_plane_wave()
