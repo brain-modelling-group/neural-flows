@@ -1,11 +1,26 @@
 function [ux, uy, uz] = generate_flow3d_embeddedvortex_grid()
-A = -5;
-B = 0.2;
-% Author, Paula Sanz-Leon
-% Reference: 
+% ARGUMENTS:
+%            None
+% OUTPUT:
+%      [ux, uy, uz]  -- orthogonal velocity field components of size [ny, nx, nz] 
+% 
+% USAGE:
+%{
+    
+%}
+% AUTHOR:
+% Paula Sanz-Leon June 2019
+%
+% REFERENCE: 
 % https://www.groundai.com/project/vortex-dynamics-in-cerebral-aneurysms/1
 % Eq (2)
 % A maximum of two fixed points, located at xf1=(−√R,0,0) and xf2=(√R,0,0),
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+
+A = -5;
+B = 0.2;
+
 x = linspace(-5, 5, 21);
 [X, Y, Z] = meshgrid(x, x, x);
 R = 1;
