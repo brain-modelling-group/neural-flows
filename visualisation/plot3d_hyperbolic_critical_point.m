@@ -6,6 +6,9 @@ if isempty fig_handle
     fig_handle = figure('Name', fig_name);
 end
 
+% TODO: 
+% Correct the 2D projections so they look prettier -- in particular the
+% spiral saddles and sources/sinks --
 % Get appropriate color
 [cmap] = s3d_get_colours(cp_type);
 
