@@ -18,22 +18,22 @@ function [ux, uy, uz] = generate_flow3d_burgesvortex_grid()
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 
-alpha = 0.2;   % strain-rate 
-gamma = 0.1;   % circulation
+alfa = 0.2;   % strain-rate 
+gmma = 0.1;   % circulation
 nu = 0.1;      % kinematic viscosity
-ro = sqrt(4*nu/alpha); % core radius
-omegaz = gamma/(pi*ro^2); % spanwise vorticity
+ro = sqrt(4*nu/alfa); % core radius
+omegaz = gmma/(pi*ro^2); % spanwise vorticity
 
 
 x = linspace(-5, 5, 21);
 [X, Y, Z] = meshgrid(x, x, x);
 R = X.^2+Y.^2;
 
-ux = -alpha/2.*X + ...
-      gamma/(2*pi).*(1-exp(-R./((4*nu)/alpha))) .* (1./R) .* -Y; 
-uy = -alpha/2.*Y + ...
-      gamma/(2*pi).*(1-exp(-R./((4*nu)/alpha))) .* (1./R) .* X; 
-uz = alpha .* Z;
+ux = -alfa/2.*X + ...
+      gmma/(2*pi).*(1-exp(-R./((4*nu)/alfa))) .* (1./R) .* -Y; 
+uy = -alfa/2.*Y + ...
+      gmma/(2*pi).*(1-exp(-R./((4*nu)/alfa))) .* (1./R) .* X; 
+uz = alfa .* Z;
 
 fig_handle = figure('Name', 'nflows-burges');
 unorm = sqrt(ux.^2 + uy.^2 + uz.^2);
