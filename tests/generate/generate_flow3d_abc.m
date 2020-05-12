@@ -79,6 +79,6 @@ uz = C .* sin(y) + B .* cos(x);
 
 if plot_stuff
     fig_handle = figure('Name', 'nflows-abcflow');
-    plot3d_flow_frame_coneplot(fig_handle, ux, uy, uz, )  
+    plot3d_flow_frame(fig_handle, ux, uy, uz, x, y, z)  
 end
 end % function generate_abcflow_3d_grid()
