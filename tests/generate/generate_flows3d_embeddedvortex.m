@@ -1,4 +1,4 @@
-function [ux, uy, uz] = generate_flow3d_embeddedvortex_grid()
+function [ux, uy, uz] = generate_flows3d_embeddedvortex()
 % ARGUMENTS:
 %            None
 % OUTPUT:

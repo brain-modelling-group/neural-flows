@@ -1,4 +1,4 @@
-function [ux, uy, uz] = generate_flow3d_abc_unsteady(abc, varargin)
+function [ux, uy, uz] = generate_flows3d_abc_unsteady(abc, varargin)
 % Generates time-dependent (unsteady) Arnold-Beltrami-Childress (ABC) 3D flow 
 %
 % ARGUMENTS:

@@ -1,4 +1,4 @@
-function [ux, uy, uz] = generate_flow3d_burgesvortex_grid()
+function [ux, uy, uz] = generate_flows3d_burgesvortex()
 % ARGUMENTS:
 %            None
 % OUTPUT:

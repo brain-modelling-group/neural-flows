@@ -1,4 +1,4 @@
-function [ux, uy, uz, X, Y, Z] = generate_flow3d_abc_grid(abc, varargin)
+function [ux, uy, uz, X, Y, Z] = generate_flows3d_abc(abc, varargin)
 % Generates Arnold-Beltrami-Childress (ABC) 3D flow 
 % Arnold-Beltrami-Childress (ABC) flow is an analytically defined velocity ...
 % field which is known to exhibit chaotic trajectories. 
