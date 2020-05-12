@@ -1,4 +1,4 @@
-function test_flow_estimation__planewave3d_grid_hs3d()
+function test_flows3d_estimation__plane_wave_sah()
 
 
  % Generate data
