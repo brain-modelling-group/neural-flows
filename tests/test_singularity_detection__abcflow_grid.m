@@ -1,4 +1,4 @@
-function test_singularity_detection__abcflow_grid(mstruct_vel, detection_threshold)
+function test_singularity3d_detection__abcflow()
 % This evaluates the singularity detection functions, and the effect of the 
 % threshold currently used.
 %
@@ -23,6 +23,7 @@ function test_singularity_detection__abcflow_grid(mstruct_vel, detection_thresho
 % REFERENCES:
 % Didov, Ulysky (2018) Analysis of stationary points and their bifurcations in the ABC flow
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 % arbitrary threshold
 if nargin < 3
