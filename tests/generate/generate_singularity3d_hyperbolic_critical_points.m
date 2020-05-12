@@ -1,26 +1,28 @@
-function [fig_sing3d, ux, uy, uz, X, Y, Z] = generate_singularity3d_hyperbolic_critical_points(cp_type)
+function [ux, uy, uz, X, Y, Z] = generate_singularity3d_hyperbolic_critical_points(cp_type)
 % Generate 8 canonical hyperbolic 3D critical points in a grid of side 2 in the
 % range of [-1 1];
 %
 % ARGUMENTS:
 %        cp_type -- a string specifying the type of hyperbolic critical
-%                   point. Options: {'source', 'sink', ...
-%                                    '2-1-saddle', '1-2-saddle', ...
-%                                    'spiral-sink', 'spiral-source', ...
-%                                    '2-1-spiral-saddle', '1-2-spiral-saddle',
+%                   point. Options: {'source', ...
+%                                    'sink', ...
+%                                    '2-1-saddle', 
+%                                    '1-2-saddle', ...
+%                                    'spiral-sink', 
+%                                    'spiral-source', ...
+%                                    '2-1-spiral-saddle', 
+%                                    '1-2-spiral-saddle',
 %                                    'all'}
 %       
 %
 % OUTPUT: 
-%        fig_sing3d -- Figure handle
 %        ux -- 3D array with the x component of the vector field
 %        uy -- 3D array with the y component of the vector field
 %        uz -- 3D array with the z component of the vector field
 %        X, Y, Z -- 3D arrays with the grid of the space where fields are defined 
 %
 % REQUIRES: 
-%       s3d_get_singularity_list()
-%       s3d_get_colours()
+%        None
 % USAGE:
 %{
     
@@ -117,13 +119,6 @@ switch cp_type
         error(['neural-flows::' mfilename '::UnknownCase'], 'Unknown type of critical points. Check docs to see types available.')
 
 end
-
-
-
-% Correct the 2D projections so they look prettier -- in particular the
-% spiral saddles and sources/sinks --
-
-
 
 function [ux, uy, uz] = spiral_source()
         a = 0.2;
