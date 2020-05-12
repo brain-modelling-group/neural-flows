@@ -1,16 +1,19 @@
 function test_flows3d_estimation__plane_wave_sah()
-
+% This function generates a 3D plane wave  moving in a particular direction
+% The wave is defined in a structured grid. 
 
  % Generate data
- [data, X, Y, Z, ~] = generate_wave3d_plane_grid('visual_debugging', true, ...
+ [data, X, Y, Z, ~] = generate_data3d_plane_wave('visual_debugging', false, ...
                                                  'hxyz', 1, 'ht', 1, ...
-                                                 'direction', 'radial');
+                                                 'direction', 'radial', ...
+                                                 'grid_type', 'structured');
  % Save data
  hx = 1;
  hy = 1;
  hz = 1;
  ht = 1;
- obj_data = matfile('test_flow_estimation__planewave3d_grid', 'Writable', true);
+ full_path_to_file = mfilename('fullpath'); 
+ obj_data = matfile(full_path_to_file, 'Writable', true);
  obj_data.data = data;
  obj_data.X = X;
  obj_data.Y = Y;
@@ -22,7 +25,7 @@ function test_flows3d_estimation__plane_wave_sah()
  obj_data.ht = ht;
  
 %
-input_params_filename = 'test-flow-planewave3d-grid-in.json';
+input_params_filename = 'test-flows3d-estimation_plane-wave_sah_in.json';
 input_params_dir  = '/home/paula/Work/Code/matlab-neuro/neural-flows/tests';
 json_mode = 'read';
 
