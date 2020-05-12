@@ -24,20 +24,13 @@ function test_singularity3d_detection__abcflow()
 % Didov, Ulysky (2018) Analysis of stationary points and their bifurcations in the ABC flow
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+input_params_filename = 'test-singularity-planewave3d-grid-in.json';
+input_params_dir  = get_directory_path(mfilename('fullpath'), 'json');
+input_params = read_write_json(input_params_filename, input_params_dir, 'read');
 
-% arbitrary threshold
-if nargin < 3
-    detection_threshold = [0 2^-3]; % velocity norm values
-end
-
-mstruct_vel.detection_threshold = detection_threshold;
-
-mobj_sing.null_points_3d = flows3d_grid_detect_nullflows_velocities(mstruct_vel);
-
-% Perform classification
-mobj_sing.singularity_classification_list = singularity3d_classify_singularities(mobj_sing.null_points_3d, mstruct_vel);
-
-analyse_singularities(mobj_sing)
+% Generate flow data - [ux, uy, uz] = generate_flows3d_abc_unsteady(abc, varargin)
+% Save flow data with all the trimmings
+% Output_params = main(input_params)
 
 
 end %function test_singularity_detection__abcflow_grid()
