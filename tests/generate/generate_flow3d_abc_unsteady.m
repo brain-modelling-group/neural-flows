@@ -69,40 +69,38 @@ end
 
 
 max_t = size(abc, 1);
- for tt=1:max_t-1
-     [ux, uy, uz, ~, ~, ~] = generate_flow3d_abc_grid(abc(tt, :), 'visual_debugging', plot_stuff);
-     ux(:, :, :, tt) =  ux;
-     uy(:, :, :, tt) =  uy;
-     uz(:, :, :, tt) =  uz;
- end
- [ux, uy, uz, X, Y, Z] = generate_flow3d_abc_grid(abc(max_t, :), 'visual_debugging', plot_stuff]);
- mstruct_vel.ux(:, :, :, max_t) =  ux;
- mstruct_vel.uy(:, :, :, max_t) =  uy;
- mstruct_vel.uz(:, :, :, max_t) =  uz;
- 
- options.flow_calculation.grid_size = size(X);
-  
- mstruct_vel.options = options;
- mstruct_vel.hx = Y(2)-Y(1);
- mstruct_vel.hy = Y(2)-Y(1);
- mstruct_vel.hz = Y(2)-Y(1);
- mstruct_vel.X =  X;
- mstruct_vel.Y =  Y;
- mstruct_vel.Z =  Z;
+
+switch grid_type
+    case {'structured', 'grid', 'voxel'}
+        [ux, uy, uz] = get_flow_structured(abc, max_t);
+    case {'unstructured', 'scattered', 'points', 'nodal'}
+        [ux, uy, uz] = get_flow_unstructured(abc, max_t);
+    otherwise
+        error(['neural-flows:' mfilename ':UnknownCase'], ...
+               'Requested unknown grid type. Options: {"structured", "unstructured"}');
+end
 
 
 function [ux, uy, uz] = get_flow_structured(abc, max_t)
 	for tt=1:max_t-1
-         [ux, uy, uz, ~, ~, ~] = generate_flow3d_abc_grid(abc(tt, :), 'visual_debugging', plot_stuff);
+         [ux, uy, uz, ~, ~, ~] = generate_flow3d_abc_grid(abc(tt, :), ...
+                                                         'x', x, ...
+                                                         'y', y, ...
+                                                         'z', z, ...
+                                                         'visual_debugging', plot_stuff));
          ux(:, :, :, tt) =  ux;
          uy(:, :, :, tt) =  uy;
          uz(:, :, :, tt) =  uz;
      end
 end
 
-function [ux, uy, uz] = get_flow_unstructured()
-	for tt=1:max_t-1
-         [ux, uy, uz] = generate_flow3d_abc_grid(abc(tt, :), 'visual_debugging', plot_stuff);
+function [ux, uy, uz] = get_flow_unstructured(abc, max_t)
+	for tt=1:max_t
+         [ux, uy, uz] = generate_flow3d_abc_grid(abc(tt, :), ...
+                                                 'x', x, ...
+                                                 'y', y, ...
+                                                 'z', z, ...
+                                                 'visual_debugging', plot_stuff));
          ux(tt, :) =  ux;
          uy(tt, :) =  uy;
          uz(tt, :) =  uz;
