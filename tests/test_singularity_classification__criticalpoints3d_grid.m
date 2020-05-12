@@ -43,9 +43,9 @@ end
 
 for this_cp=1:length(s3d_list)
     cp_type = s3d_list(this_cp);
-    [ux, uy, uz, X, Y, Z] = generate_singularity3d_hyperbolic_critical_points(cp_type);
+    [ux, uy, uz, X, Y, Z, p1, p2] = generate_singularity3d_hyperbolic_critical_points(cp_type{:});
 
-    plot3d_hyperbolic_critical_point([], ux, uy, uz, X, Y, Z, s3d_list(this_cp))
+    plot3d_hyperbolic_critical_point([], p1, p2, ux, uy, uz, X, Y, Z, cp_type{:})
     % % Fake time points
     % max_t = 16;
     % options.flow_calculation.grid_size = size(X);

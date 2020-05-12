@@ -1,7 +1,7 @@
-function fig_handle = plot3d_hyperbolic_critical_point(fig_handle, ux, uy, uz, X, Y, Z, cp_type)
+function fig_handle = plot3d_hyperbolic_critical_point(fig_handle, p1, p2, ux, uy, uz, X, Y, Z, cp_type)
 
 
-if isempty fig_handle
+if isempty(fig_handle)
 	fig_name = ['nflows-singularity3d_hyperbolic-cp-' cp_type];
     fig_handle = figure('Name', fig_name);
 end
@@ -41,7 +41,7 @@ plot3(ax(1), [0 0], [-1 1], [0 0], 'color', [0.0 0.65 0.0], 'linewidth', 1.5)
 plot3(ax(1), [0 0], [0 0], [-1 1], 'color', [0.0 0.0 0.65], 'linewidth', 1.5)
 
 % Plot the critical point at the origin
-plot3(ax(1), 0, 0, 0, 'o', 'markerfacecolor', color(1:3), 'markersize', 12, 'markeredgecolor', color(1:3))
+plot3(ax(1), 0, 0, 0, 'o', 'markerfacecolor', cmap(1:3), 'markersize', 12, 'markeredgecolor', cmap(1:3))
 
 for ii=1:4
     ax(ii).XLim = [-1 1];
