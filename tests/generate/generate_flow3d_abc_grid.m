@@ -37,71 +37,48 @@ else
     C = abc(3);
 end
 
-if nargin > 1
-    visual_debugging = varargin{1}; 
+tmp = strcmpi(varargin,'visual_debugging'); 
+if any(tmp)
+    plot_stuff = varargin{find(tmp)+1}; 
+else
+    plot_stuff = true;
 end
 
-% Author, Paula Sanz-Leon, QIMR 2019
+tmp = strcmpi(varargin,'x'); 
+if any(tmp)
+    x = varargin{find(tmp)+1}; 
+else
+    Nx = 43;
+    x = linspace(-pi, pi, Nx);
+    x(end) = [];
+end
 
-Nx = 43;
-x = linspace(-pi, pi, Nx);
-x(end) = [];
+tmp = strcmpi(varargin,'y'); 
+if any(tmp)
+    y = varargin{find(tmp)+1}; 
+else
+    Ny = 43;
+    y = linspace(-pi, pi, Ny);
+    y(end) = [];
+end
 
-[X, Y, Z] = meshgrid(x, x, x);
+tmp = strcmpi(varargin,'z'); 
+if any(tmp)
+    z = varargin{find(tmp)+1}; 
+else
+    Nz = 43;
+    z = linspace(-pi, pi, Nz);
+    z(end) = [];
+end
 
-ux = A .* sin(Z) + C .* cos(Y);
-uy = B .* sin(X) + A .* cos(Z);
-uz = C .* sin(Y) + B .* cos(X);
 
-%x = linspace(0, 1, Nx);
-%[X, Y, Z] = meshgrid(x, x, x);
+ux = A .* sin(z) + C .* cos(y);
+uy = B .* sin(x) + A .* cos(z);
+uz = C .* sin(y) + B .* cos(x);
 
-if visual_debugging
+
+if plot_stuff
     fig_handle = figure('Name', 'nflows-abcflow');
-
-    for kk=1:4
-        ax(kk) = subplot(2, 2, kk, 'Parent', fig_handle);
-        ax(kk).XLabel.String = 'x';
-        ax(kk).YLabel.String = 'y';
-        ax(kk).ZLabel.String = 'z';
-        ax(kk).View = [-37.5 30];
-    end
-
-    % Norm
-    unorm = sqrt(ux.^2 + uy.^2 + uz.^2);
-
-    hcone = coneplot(ax(1), X, Y, Z, ux, uy, uz, X, Y, Z, unorm);
-    camlight right
-    lighting gouraud
-    hcone_ux = coneplot(ax(2), X, Y, Z, ux, uy, uz, X, Y, Z, ux);
-    ax(2).Colormap = bluegred(256);
-    ax(2).CLim = [-1.5 1.5];
-
-
-    camlight right
-    lighting gouraud
-    hcone_uy = coneplot(ax(3), X, Y, Z, ux, uy, uz, X, Y, Z, uy);
-    ax(3).Colormap = bluegred(256);
-    ax(3).CLim = [-1.5 1.5];
-    camlight right
-    lighting gouraud
-
-    hcone_uz = coneplot(ax(4), X, Y, Z, ux, uy, uz, X, Y, Z, uz);
-    ax(4).Colormap = bluegred(256);
-    ax(4).CLim = [-1.5 1.5];
-    camlight right
-    lighting gouraud
-
-    set(hcone,'EdgeColor','none');
-    set(hcone_ux,'EdgeColor','none');
-    set(hcone_uy,'EdgeColor','none');
-    set(hcone_uz,'EdgeColor','none');
-
-
-    hcone.DiffuseStrength = 0.8;
-    hcone_ux.DiffuseStrength = 0.8;
-    hcone_uy.DiffuseStrength = 0.8;
-    hcone_uz.DiffuseStrength = 0.8;
-
+    plot3d_flow_frame_coneplot(fig_handle, ux, uy, uz, )  
 end
 end % function generate_abcflow_3d_grid()
