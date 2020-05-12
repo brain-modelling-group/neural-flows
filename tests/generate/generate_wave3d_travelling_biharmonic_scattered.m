@@ -9,9 +9,6 @@ function [wave3d, time] = generate_wave3d_travelling_biharmonic_scattered(locs, 
 %                        in 3d used to sample the solid travelling 3d wave.
 %                       
 % (VAR)ARGUMENTS:
-%           direction -- a string with the desired wave propagation direction.
-%                        Available: {'x', 'y'}.
-%                        Default: {'x'}.
 %           step     -- a scalar with the space step size to generate the grid
 %           visual_debugging -- a boolean to determine whther to plot
 %                       figures or not.
