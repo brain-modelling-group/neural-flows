@@ -81,10 +81,12 @@ time = 0:ht:4; % in seconds
 
 switch grid_type
     case {'unstructured', 'scattered', 'nodal'}
-        [data, X, Y, Z] = get_structured_data();
-    case {'structured', 'grid', 'voxel'}
         [data, X, Y, Z] = get_unstructured_data();
+    case {'structured', 'grid', 'voxel'}
+        [data, X, Y, Z] = get_structured_data();
     otherwise
+        error(['neural-flows:' mfilename ':UnknownCase'], ...
+               'Requested unknown case of grid. Options: {"structured", "unstructured"}'); 
         
 end
 
@@ -92,9 +94,13 @@ end
  if plot_stuff
      switch grid_type
          case {'unstructured', 'scattered', 'nodal'}
-             plot_sphereanim(wave3d, locs*1000, time);
+             plot_sphereanim(data, locs*1000, time);
          case {'structured', 'grid', 'voxel'}
+             fig_handle = figure('Name', 'nflows-data3-biharmonic-wave-space-time');
+             plot3d_pcolor3_movie(fig_handle, X, Y, Z, data)
          otherwise
+             error(['neural-flows:' mfilename ':UnknownCase'], ...
+                   'Requested unknown case of grid. Options: {"structured", "unstructured"}'); 
      end
  end
 
