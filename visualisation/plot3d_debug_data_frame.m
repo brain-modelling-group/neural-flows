@@ -3,8 +3,7 @@ function fig_handle = plot3d_debug_data_frame(fig_handle, data, X, Y, Z, time)
     % TODO: generate a movie, perhaps of projections onto a 2d plane.
     %figure('Name', 'nflows-planewave3d-space');
 
-    if length(size(data)) == 4:
-
+    if length(size(data)) == 4
         tt = 1;
         %colormap(bluegred(256))
         pcolor3(X, Y, Z, squeeze(data(:, :, :, tt)));
