@@ -58,6 +58,14 @@ else
     ht = 1;
 end
 
+% For unstructured case
+tmp = strcmpi(varargin,'locs'); 
+if any(tmp)
+    locs = varargin{find(tmp)+1}; 
+else
+    locs = [];
+end
+
 tmp = strcmpi(varargin,'grid_type'); 
 if any(tmp)
     grid_type = varargin{find(tmp)+1}; 
@@ -156,7 +164,7 @@ function [data, X, Y, Z] = get_unstructured_data()
           z = min(ZZ(:)):hxyz:max(ZZ(:));
           offset = 25;
           x1 = (min(X(:))-2*offset):hxyz:max(X(:));
-          [X1, ~, ~] = meshgrid(x1, y, z);
+          [XX1, ~, ~] = meshgrid(x1, y, z);
           circshift_dim = 2;
           A = XX1;
           % X
@@ -168,21 +176,20 @@ function [data, X, Y, Z] = get_unstructured_data()
           % Z
           idz_start = 1;
           idz_end = length(z);
-          
         case 'y'
           x = min(XX(:)):hxyz:max(XX(:));
           z = min(ZZ(:)):hxyz:max(ZZ(:));
           offset = 25;
-          y1 = (min(Y(:))-2*offset):hxyz:max(Y(:));
+          y1 = (min(YY(:))-2*offset):hxyz:max(YY(:));
           [~, Y1, ~] = meshgrid(x, y1, z);
           circshift_dim = 1;
           A = Y1;
           idx_start = 1;
           idx_end = length(x);
           idy_start = offset;
-          idy_end   = offset+size(X, 1)-1;
-          idz_start = 1;wave3d(length(time), size(locs, 1)) = 0;
-
+          idy_end   = offset+size(XX, 1)-1;
+          idz_start = 1;
+          data(length(time), size(locs, 1)) = 0;
           idz_end = length(z);
         case 'z'
           x = min(X(:)):hxyz:max(X(:));
@@ -205,7 +212,7 @@ function [data, X, Y, Z] = get_unstructured_data()
         B = B(idy_start:idy_end, idx_start:idx_end, idz_start:idz_end);
         % This step is super slow -- so do not run this example for long
         % timeseries.
-        data_interpolant = scatteredInterpolant(X(:), Y(:), Z(:), B(:), 'linear', 'none');
+        data_interpolant = scatteredInterpolant(XX(:), YY(:), ZZ(:), B(:), 'linear', 'none');
         data(tt, :) = data_interpolant(locs(:, 1), locs(:, 2), locs(:, 3));
     end
 
