@@ -162,11 +162,18 @@ if any(tmp)
     assert(nx>=0,'Number of slices Nx must be greater than zero.')
 end
 
+
+tmp = strcmpi(varargin, 'fig');
+if any(tmp)
+    pcolor_fig = varargin{find(tmp)+1}; 
+else
+    pcolor_fig = figure('Name', 'nflows-pcolor3');
+end
+
 tmp = strcmpi(varargin, 'axes');
 if any(tmp)
     these_axes = varargin{find(tmp)+1}; 
 else
-    pcolor_fig = figure('Name', 'nflows-pcolor3');
     these_axes = subplot(1,1,1, 'Parent', pcolor_fig); 
 end
 
