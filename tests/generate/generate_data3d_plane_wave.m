@@ -19,7 +19,7 @@ function [data, X, Y, Z, time] = generate_data3d_plane_wave(varargin)
 %
 % USAGE:
 %{
-    generate_wave3d_plane_grid('direction', 'x');
+    generate_wave3d_plane('direction', 'x');
 
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -31,6 +31,13 @@ if any(tmp)
     direction = varargin{find(tmp)+1}; 
 else
     direction = 'x';
+end
+
+tmp = strcmpi(varargin,'grid_type'); 
+if any(tmp)
+    grid_type = varargin{find(tmp)+1}; 
+else
+    grid_type = 'structured';
 end
 
 tmp = strcmpi(varargin,'hxyz'); 
@@ -166,9 +173,9 @@ end
 
 switch grid_type
     case {'unstructured', 'scattered', 'nodal'}
-        data = get_plane_wave_structured();
+        data = get_plane_wave_unstructured();
     case {'structured', 'grid', 'voxel'}
-        data = get_plane_wave_unstructured()
+        data = get_plane_wave_structured();
     otherwise
         body
 end
@@ -179,7 +186,7 @@ end
 
 if plot_stuff 
     fig_handle = figure('Name', 'nflows-planewave3d-space');
-    plot3d(fig_handle, data, X, Y, Z, time)
+    plot3d_debug_data_frame(fig_handle, data, X, Y, Z, time)
 end
 
 

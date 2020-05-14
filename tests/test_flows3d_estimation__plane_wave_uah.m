@@ -1,4 +1,4 @@
-function test_flow_estimation__planewave3d_scattered_hs3d()
+function test_flows3d_estimation__plane_wave_uah()
 % NOTE: Takes about XXX seconds @tesseract 
 
  % Generate data
@@ -9,8 +9,11 @@ function test_flow_estimation__planewave3d_scattered_hs3d()
  locs = COG(1:256, :);
  
  tstart = tik();
- [data, ~] = generate_wave3d_plane_scattered(locs, 'hxyz', hxyz, 'ht', ht, ...
-                                                   'direction', 'x');
+ [data, ~] = generate_data3d_plane_wave('hxyz', hxyz, 'ht', ht, ...
+                                        'direction', 'x', ...
+                                        'locs', locs, ...
+                                        'grid_type', 'unstructured');
+                                               
  tok(tstart);
  
  full_path_to_file = mfilename('fullpath');
