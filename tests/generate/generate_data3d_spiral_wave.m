@@ -48,6 +48,15 @@ else
     vel = [ux uy];
 end
 
+
+tmp = strcmpi(varargin,'grid_type'); 
+if any(tmp)
+    grid_type = varargin{find(tmp)+1}; 
+else
+    grid_type = 'structured';
+end
+
+
 tmp = strcmpi(varargin,'visual_debugging');
 if any(tmp)
     plot_stuff = varargin{find(tmp)+1}; 
@@ -150,6 +159,15 @@ switch filament
         tip_x = tip_b.*ones(size(z));
         
 end 
+
+switch grid_type
+  case {'structured'}
+    data = get_structured_data();
+  case {'unstructured'}
+    data = get_unstructured_data();
+  otherwise
+    body
+end
 
 
 [X, Y, Z] = meshgrid(x, y, z);
