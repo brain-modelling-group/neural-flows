@@ -1,4 +1,4 @@
-function [wave3d, X, Y, Z, time] = generate_wave3d_travelling_grid(varargin)
+function [data, X, Y, Z, time] = generate_wave3d_travelling_grid(varargin)
 % Generates a plane "travelling" wave moving along one of the three main 
 % orthogonal axes of Euclidean space. The data is generating as a linear 
 % function of space (x, Y, or Z), so in a sense is a like sinusoidal plane
@@ -28,9 +28,9 @@ function [wave3d, X, Y, Z, time] = generate_wave3d_travelling_grid(varargin)
 % USAGE:
 %{
 
-[wave3d, X, Y, Z, time] = generate_wave3d_travelling_grid('direction', 'x');
-[wave3d, X, Y, Z, time] = generate_wave3d_travelling_grid('direction', 'y');
-[wave3d, X, Y, Z, time] = generate_wave3d_travelling_grid('direction', 'z');
+[wave3d, X, Y, Z, time] = generate_data3d_travelling_wave('direction', 'x');
+[wave3d, X, Y, Z, time] = generate_data3d_travelling_wave('direction', 'y');
+[wave3d, X, Y, Z, time] = generate_data3d_travelling_wave('direction', 'z');
 
 
 %}
@@ -56,6 +56,14 @@ if any(tmp)
     ht = varargin{find(tmp)+1}; 
 else
     ht = 1;
+end
+
+
+tmp = strcmpi(varargin,'grid_type'); 
+if any(tmp)
+    grid_type = varargin{find(tmp)+1}; 
+else
+    grid_type = 'structured';
 end
 
 tmp = strcmpi(varargin,'velocity'); % note really a velocity but an integer scaling for circshift
@@ -87,72 +95,35 @@ time = 0:ht:21; % in seconds
 
 A = -X;
 % Preallocate memory
-wave3d(len_x, len_x, len_x, length(time)) = 0;
+data(len_x, len_x, len_x, length(time)) = 0;
 
 idx_start = ceil(len_x1/2);
 idx_end   = idx_start+len_x-1;
 for tt=1:length(time)
     B = circshift(A, velocity*tt, 2);
-    wave3d(:, :, :, tt) = B(:, idx_start:idx_end, :);
+    data(:, :, :, tt) = B(:, idx_start:idx_end, :);
 end
 
 [X, Y, Z] = meshgrid(x, x, x); % in metres
 
-%idx_1 = floor(len_x/2);
-%idx_2 = idx_1 + 1;
 switch direction
     case 'y'
-        wave3d = permute(wave3d, [2 1 3 4]);
-        %temp = squeeze(wave3d(:, :, idx_1, idx_2));
-        %temp2 = squeeze(wave3d(:, :, :, idx_2));
-        %ylabel_str = 'y-axis';
-        
+        data = permute(data, [2 1 3 4]);        
     case 'z'
-        wave3d = permute(wave3d, [3 1 2 4]);
-        %temp  = squeeze(wave3d(:, idx_1, idx_2, :)); % indices do not mean anything special -- just selecting a plane of 3d space
-        %temp2 = squeeze(wave3d(:, idx_2, :, :)); 
-        %ylabel_str = 'z-axis';
-        
+        data = permute(data, [3 1 2 4]);        
     otherwise
 end
 
-% % Visual debugging of the first time point
-% % TODO: generate a movie, perhaps of projections onto a 2d plane.
-% if plot_stuff
-%     min_val = min(wave3d(:));
-%     max_val = max(wave3d(:));
-%     
-% %     fig_pcolor3 = figure('Name', 'nflows-travellingwave3d-space');
-% %     these_axes = subplot(1,1,1, 'Parent', fig_pcolor3);
-% %     tt = 1;
-% %     pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)), 'axes', these_axes);
-% %     xlabel('X')
-% %     ylabel('Y')
-% %     zlabel('Z')
-% % 
-% %     figure('Name', 'nflows-travellingwave3d-time')
-% %     plot(time, squeeze(wave3d(:, idx_1, idx_2, idx_2)));
-% %     xlim([time(1) time(end)])
-% %     xlabel('time')
-% %     ylabel('p(x, y, z)')
-% % 
-% %     figure('Name', 'nflows-travellingwave3d-space-time-1d')
-% %     plot(time, temp, 'color', [0.65 0.65 0.65]);
-% %     xlim([time(1) time(end)])
-% %     xlabel('time')
-% %     ylabel(['space: ' ylabel_str])
-%     
-%     fig_spiral = figure('Name', 'nflows-spiralwave3d-space-time');
-%     for tt=1:length(time)
-%         these_axes = subplot(1, 1, 1, 'Parent', fig_spiral);
-%         these_axes.XLabel.String = 'X';
-%         these_axes.YLabel.String = 'Y';
-%         these_axes.ZLabel.String = 'Z';
-%         cla;
-%         pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)), 'axes', these_axes); 
-%         caxis([min_val  max_val]);pause(0.5); 
-%     end     
-% 
-%     %make_movie_gif(temp2)
-% end
+if plot_stuff 
+    fig_handle = figure('Name', 'nflows-data3-travelling-wave-space');
+    switch grid_type
+    case {'unstructured', 'scattered', 'nodal'}
+        plot_sphereanim(data, locs, time);
+    case {'structured', 'grid', 'voxel'}
+        plot3d_debug_data_frame(fig_handle, data, X, Y, Z, time)
+    otherwise
+         error(['neural-flows:' mfilename ':UnknownCase'], ...
+                   'Requested unknown case of grid. Options: {"structured", "unstructured"}'); 
+    end
+end
 end % function generate_travellingwave3d_grid()

@@ -175,7 +175,7 @@ end
 if plot_stuff
     switch grid_type
     case {'structured'}
-        fig_spiral = figure('Name', 'nflows-spiraldata-space-time');
+        fig_spiral = figure('Name', 'nflows-data3-spiral-wave-space-time');
         plot3d_pcolor3_movie(fig_spiral, X, Y, Z, data)
     case {'unstructured'}
         plot_sphereanim(data, locs, time);
