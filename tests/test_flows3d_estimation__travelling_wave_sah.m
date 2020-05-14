@@ -1,4 +1,4 @@
-function test_flow_estimation__travellingwave3d_grid_hs3d()
+function test_flows3d_estimation__travelling_wave_sah()
 % Takes 17 seconds @tesseract
 
 % Generate data
@@ -6,7 +6,12 @@ function test_flow_estimation__travellingwave3d_grid_hs3d()
  options.hy = 2;
  options.hz = 2;
  options.ht = 0.5;
- [data, X, Y, Z, ~] = generate_wave3d_travelling_grid('visual_debugging', false, 'hxyz', options.hx, 'ht', options.ht, 'velocity', 1, 'direction', 'y');
+ [data, X, Y, Z, ~] = generate_wave3d_travelling_grid('visual_debugging', true, ...
+                                                      'hxyz', options.hx, ...
+                                                      'ht', options.ht, ...
+                                                      'velocity', 1, ...
+                                                      'direction', 'y', ...
+                                                      'grid_type', 'structured');
  
  % Save data
  full_path_to_file = mfilename('fullpath'); 
