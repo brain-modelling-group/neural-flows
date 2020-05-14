@@ -27,25 +27,25 @@ function test_flows3d_estimation__plane_wave_upc()
      fig_name = 'nflows-test-planewave3d-unstructured-activity-cnem-uac';
  end
  
- v = flows3d_estimate_cnem_flow(data, locs, options.ht, options);
+ u = flows3d_estimate_cnem_flow(data, locs, options.ht, options);
  
  fig_hist = figure('Name', fig_name);
 
  subplot(1, 4, 1, 'Parent', fig_hist)
- histogram(v.vxp(:))
+ histogram(u.vxp(:))
  xlabel('ux [mm/ms]')   
  
  subplot(1, 4 ,2, 'Parent', fig_hist)
- histogram(v.vyp(:))
+ histogram(u.vyp(:))
  xlabel('uy [mm/ms]')
 
  subplot(1, 4, 3, 'Parent', fig_hist)
- histogram(v.vzp(:))
+ histogram(u.vzp(:))
  xlabel('uz [mm/ms]')
  
  
  subplot(1, 4, 4, 'Parent', fig_hist)
- histogram(sqrt(v.vxp(:).^2+v.vyp(:).^2+v.vzp(:).^2))
+ histogram(sqrt(u.vxp(:).^2+u.vyp(:).^2+u.vzp(:).^2))
  xlabel('u_{norm} [mm/ms]')
 
 end % function test_flow_estimation__planewave3d_scattered_cnem()
