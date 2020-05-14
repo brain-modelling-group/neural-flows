@@ -177,7 +177,7 @@ switch grid_type
     case {'structured', 'grid', 'voxel'}
         data = get_plane_wave_structured();
     otherwise
-        body
+        
 end
 
 
