@@ -1,4 +1,4 @@
-function [wave3d, X, Y, Z, time] = generate_wave3d_spiral_grid(varargin)
+function [data, X, Y, Z, time] = generate_data3d_spiral_wave(varargin)
 % Generates a spiral wave in 3D space+time. The rotation occurs on the XY-plane. 
 % The position of the centre of rotation (the tip) - on xy - changes with 
 % depth z.
@@ -25,8 +25,6 @@ function [wave3d, X, Y, Z, time] = generate_wave3d_spiral_grid(varargin)
 %}
 
 % TODO -- generalise to accept almost all harcoded values as parameters
-
-
 tmp = strcmpi(varargin,'hxyz'); 
 if any(tmp)
     hxyz = varargin{find(tmp)+1}; 
@@ -88,6 +86,13 @@ else
     min_val_z = -16;
 end
 
+% For unstructured case
+tmp = strcmpi(varargin,'locs'); 
+if any(tmp)
+    locs = varargin{find(tmp)+1}; 
+else
+    locs = [];
+end
 
 tmp = strcmpi(varargin,'tip_centre'); % min value in the grid along each axis
 if any(tmp)
@@ -127,9 +132,9 @@ k = 2*pi/wavelength;
 % Gaussian width parameter
 c = gausswidth / (2*sqrt(2*log(2)));
 
-
-%Beahviour of the spiral tip/centre or rotiation along z-axis form the
+%Behaviour of the spiral tip/centre or rotiation along z-axis form the
 %filament of a wave.
+
 tip = z;
 switch filament
     case 'helix'
@@ -146,46 +151,72 @@ switch filament
         
 end 
 
-wave3d(length(time), length(y), length(x), length(z)) = 0;
-
-for kk=1:length(tip)
-            
-       wave2d = exp(1i*(-w*TT + angle(XX-tip_x(kk)-vel(xdim)*TT + 1i*(YY-tip_y(kk)-vel(ydim)*TT)) - ...
-                  k*sqrt((XX-tip_x(kk)-vel(xdim)*TT).^2 + (YY-tip_y(kk)-vel(ydim)*TT).^2)));
-       wave2d(wave2d~=0) = amp * wave2d(wave2d~=0) ./ abs(wave2d(wave2d~=0));
-       
-       gaussian = @(c, loc, kk) exp(-1/(2*c^2) * (((XX(:, :, 1)-tip_x(kk)).^2 + ...
-                                                   (YY(:, :, 1)-tip_y(kk)).^2)));
-       wave2d = apply_spatiotemporal_mask(wave2d, gaussian(c, tip_centre, kk));
-       
-       % Ensure that the maximum amplitude is still AMP
-       wave2d = wave2d / max(abs(wave2d(:))) * amp;
-
-       wave2d = permute(wave2d, [3 1 2]);       
-       wave3d(:, :, :, kk) = real(wave2d); 
-    
-end
 
 [X, Y, Z] = meshgrid(x, y, z);
 
-min_val = min(wave3d(:));
-max_val = max(wave3d(:));
 
-
+fig_spiral = figure('Name', 'nflows-spiraldata-space-time');
 if plot_stuff
-    fig_spiral = figure('Name', 'nflows-spiralwave3d-space-time');
-    
-    for tt=1:length(time)
-        these_axes = subplot(1, 1, 1, 'Parent', fig_spiral);
-        these_axes.XLabel.String = 'X';
-        these_axes.YLabel.String = 'Y';
-        these_axes.ZLabel.String = 'Z';
-        cla;
-        colormap(bluegred(256))
-        pcolor3(X, Y, Z, squeeze(wave3d(tt, :, :, :)), 'axes', these_axes); 
-        caxis([min_val  max_val]);pause(0.5); 
+    switch grid_type
+    case {'structured'}
+        plot3d_pcolor3_movie(fig_spiral, X, Y, Z, data)
+    case {'unstructured'}
+        plot_sphereanim(data, locs, time);
+    otherwise
+        error(['neural-flows:' mfilename ':UnknownCase'], ...
+                   'Requested unknown case of grid. Options: {"structured", "unstructured"}'); 
     end
 end     
-    
 
-end % end generate_spiralwave3d_grid()
+
+function data = get_unstructured_data()
+    % Get limits of grid without actually calculating the grid arrays.
+    [min_x_val, min_y_val, ...
+     min_z_val, max_x_val, ...
+     max_y_val, max_z_val, ~] = get_grid_limits(locs, hxyz, hxyz, hxyz);
+
+
+    % generate a spiral wave in a regular grid cause it's easier
+    [temp_data, X, Y, Z, time] = generate_data_spiral('hxyz', hxyz, 'ht', ht, ...
+                                                          'velocity', vel, ...
+                                                          'tip_centre', [tip_a, tip_b], ...
+                                                          'filament', 'line', 'visual_debugging', false, ...
+                                                           'min_val_space', [min_x_val, min_y_val, min_z_val], ...
+                                                           'max_val_space', [max_x_val, max_y_val, max_z_val]);
+
+                            
+    data(length(time), size(locs, 1)) = 0;
+    x_dim = 1;
+    y_dim = 2;
+    z_dim = 3;
+                            
+    for tt=1:length(time)
+        B = temp_data(tt, :, :, :);
+        data_interpolant = scatteredInterpolant(X(:), Y(:), Z(:), B(:), 'linear', 'none');
+        data(tt, :) = data_interpolant(locs(:, x_dim), locs(:, y_dim), locs(:, z_dim));
+        
+    end
+       
+end % function get_unstructured_data()
+
+function data = get_structured_data()
+    data(length(y), length(x), length(z), length(time)) = 0;
+
+    for kk=1:length(tip)   
+           wave2d = exp(1i*(-w*TT + angle(XX-tip_x(kk)-vel(xdim)*TT + 1i*(YY-tip_y(kk)-vel(ydim)*TT)) - ...
+                      k*sqrt((XX-tip_x(kk)-vel(xdim)*TT).^2 + (YY-tip_y(kk)-vel(ydim)*TT).^2)));
+           wave2d(wave2d~=0) = amp * wave2d(wave2d~=0) ./ abs(wave2d(wave2d~=0));
+           
+           gaussian = @(c, loc, kk) exp(-1/(2*c^2) * (((XX(:, :, 1)-tip_x(kk)).^2 + ...
+                                                       (YY(:, :, 1)-tip_y(kk)).^2)));
+           wave2d = apply_spatiotemporal_mask(wave2d, gaussian(c, tip_centre, kk));
+           
+           % Ensure that the maximum amplitude is still AMP
+           wave2d = wave2d / max(abs(wave2d(:))) * amp;
+
+           wave2d = permute(wave2d, [3 1 2]);       
+           data(:, :, :, kk) = real(wave2d); 
+    end
+end % function get_structured_data()
+    
+end % function generate_data3d_spiral_wave()
