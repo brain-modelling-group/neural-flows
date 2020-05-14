@@ -1,4 +1,4 @@
-function [wave3d, X, Y, Z, time] = generate_data3d_travelling_biharmonic_wave(varargin)
+function [data, X, Y, Z, time] = generate_data3d_travelling_biharmonic_wave(varargin)
 % Generates a plane "travelling" wave moving along one of the three main 
 % orthogonal axes of Euclidean space. The data is generating as a linear 
 % function of space (x, Y, or Z), so in a sense is a like sinusoidal plane
@@ -89,12 +89,14 @@ switch grid_type
 end
 
 
-% if plot_stuff
-%     plot_sphereanim(wave3d, locs*1000, time);
-% end
-
-
-end % function generate_wave3d_travelling_biharmonic_scattered()
+ if plot_stuff
+     switch grid_type
+         case {'unstructured', 'scattered', 'nodal'}
+             plot_sphereanim(wave3d, locs*1000, time);
+         case {'structured', 'grid', 'voxel'}
+         otherwise
+     end
+ end
 
 function [wave_temp, time] = generate_biharmonic_wave(X, Y, Z, ht)
     % Example: phase velocity slower than group velocity and in opposite
