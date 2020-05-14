@@ -23,34 +23,30 @@ function test_flows3d_estimation__travelling_wave_upc()
  locs = [locs; COG(513, :)]; % amygdala on that side.
 
  % Generate fake data
- [wave3d, ~] = generate_wave3d_travelling_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'y');
+ [data, ~] = generate_data3d_travelling_wave('locs', locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'y');
  
- if options.is_phase
-     % Transform data into phase via hilber transform
-     wave3d = calculate_insta_phase(wave3d);
-     fig_name = 'nflows-test-travellingwave3d-scattered-cnem-phase';
- else
-     fig_name = 'nflows-test-travellingwave3d-scattered-cnem-activity';
- end
- 
- v = flows3d_estimate_cnem_flow(wave3d, locs, options.ht);
+ % Transform data into phase via hilber transform
+ data = calculate_insta_phase(data);
+ fig_name = 'nflows-test-travellingwave3d-unstructured-phase-cnem';
+  
+ u = flows3d_estimate_cnem_flow(data, locs, options.ht);
  
  fig_hist = figure('Name', fig_name);
 
  subplot(1, 4, 1, 'Parent', fig_hist)
- histogram(v.vxp(:, 1:50))
+ histogram(u.vxp(:, 1:50))
  xlabel('ux [m/s]')
  
  subplot(1, 4 ,2, 'Parent', fig_hist)
- histogram(v.vyp(:, 1:50))
+ histogram(u.vyp(:, 1:50))
  xlabel('uy [m/s]')
 
  subplot(1, 4, 3, 'Parent', fig_hist)
- histogram(v.vzp(:, 1:50))
+ histogram(u.vzp(:, 1:50))
  xlabel('uz [m/s]')
  
  subplot(1, 4, 4, 'Parent', fig_hist)
- histogram(sqrt(v.vxp(:).^2+v.vyp(:).^2+v.vzp(:).^2))
+ histogram(sqrt(u.vxp(:).^2+u.vyp(:).^2+u.vzp(:).^2))
  xlabel('u_{norm} [mm/ms]')
  
 end % function test_flow_estimation__travellingwave3d_scattered_cnem()
