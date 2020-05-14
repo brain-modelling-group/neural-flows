@@ -1,4 +1,4 @@
-function test_flow_estimation__travellingwave3d_scattered_hs3d()
+function test_flows3d_estimation__travelling_wave_uah()
 % NOTE: Takes about 110 seconds @dracarys
 %       Takes about 129 seconds @tesseract
 
@@ -12,7 +12,9 @@ function test_flow_estimation__travellingwave3d_scattered_hs3d()
  load('513COG.mat', 'COG')
  locs = COG(1:256, :);
  
- [data, ~] = generate_wave3d_travelling_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'y');
+ [data, ~] = generate_data3d_travelling_wave('locs', locs, 'hxyz',  options.hx, ...
+                                             'ht', options.ht, 'direction', 'y', ...
+                                             'grid_type', 'unstructured');
  
  %Option to generate a travelling wave moving back and forth along the
  %chose axis
