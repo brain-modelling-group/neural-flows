@@ -97,7 +97,7 @@ end
              plot_sphereanim(data, locs*1000, time);
          case {'structured', 'grid', 'voxel'}
              fig_handle = figure('Name', 'nflows-data3-biharmonic-wave-space-time');
-             plot3d_pcolor3_movie(fig_handle, X, Y, Z, data)
+             plot3d_debug_data_frame(fig_handle, data, X, Y, Z, time)
          otherwise
              error(['neural-flows:' mfilename ':UnknownCase'], ...
                    'Requested unknown case of grid. Options: {"structured", "unstructured"}'); 
@@ -169,7 +169,8 @@ end % function get_unstructured_data()
 
 
 function [data, X, Y, Z] = get_structured_data()
-    [~, X, Y, Z, ~] = generate_data3d_plane_wave('hxyz', hxyz);
+    x = -0.1:hxyz:0.1
+    [X, Y, Z] = meshgrid(x, x, x);
     data = generate_biharmonic_wave(X, Y, Z); 
 end % function generate_structured_data()
 
