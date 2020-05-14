@@ -81,7 +81,7 @@ time = 0:ht:4; % in seconds
 
 switch grid_type
     case {'unstructured', 'scattered', 'nodal'}
-        [data, X, Y, Z] = get_plane_wave_unstructured();
+        [data, X, Y, Z] = get_structured_data();
     case {'structured', 'grid', 'voxel'}
         [data, X, Y, Z] = get_unstructured_data();
     otherwise
@@ -98,7 +98,7 @@ end
      end
  end
 
-function [wave_temp, time] = generate_biharmonic_wave(X, Y, Z, ht)
+function [wave_temp] = generate_biharmonic_wave(X, Y, Z)
     % Example: phase velocity slower than group velocity and in opposite
     % direction
     % Wave parameters
@@ -148,7 +148,7 @@ end % function generate_biharmonic_wave()
 function [data, X, Y, Z] = get_unstructured_data()
     [X, Y, Z, ~] = get_structured_grid(locs, hxyz, hxyz, hxyz, lim_type);
 
-    [wave_temp, time] = generate_biharmonic_wave(X, Y, Z, ht);
+    [wave_temp] = generate_biharmonic_wave(X, Y, Z);
 
     % Preallocate memory
     data(length(time), size(locs, 1)) = 0;
@@ -164,7 +164,7 @@ end % function get_unstructured_data()
 
 function [data, X, Y, Z] = get_structured_data()
     [~, X, Y, Z, ~] = generate_data3d_plane_wave('hxyz', hxyz);
-    [data, time] = generate_biharmonic_wave(X, Y, Z, ht); 
+    data = generate_biharmonic_wave(X, Y, Z); 
 end % function generate_structured_data()
 
 end % function generaste_data3d_travelling_biharmonic_wave()
