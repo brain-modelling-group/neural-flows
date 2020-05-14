@@ -152,12 +152,11 @@ switch filament
         tip_x = radius.*cos(tip);
     case 'cone'
         radius = abs(z).^2; 
-         tip_y = radius.*sin(tip);
-         tip_x = radius.*cos(tip);
+        tip_y = radius.*sin(tip);
+        tip_x = radius.*cos(tip);
     case 'line'
         tip_y = tip_a.*ones(size(z));
-        tip_x = tip_b.*ones(size(z));
-        
+        tip_x = tip_b.*ones(size(z));    
 end 
 
 switch grid_type
@@ -193,36 +192,39 @@ function data = get_unstructured_data()
      min_z_val, max_x_val, ...
      max_y_val, max_z_val, ~] = get_grid_limits(locs, hxyz, hxyz, hxyz);
 
-
-    % generate a spiral wave in a regular grid cause it's easier
-    [temp_data, X, Y, Z, time] = generate_data_spiral('hxyz', hxyz, 'ht', ht, ...
-                                                          'velocity', vel, ...
-                                                          'tip_centre', [tip_a, tip_b], ...
-                                                          'filament', 'line', 'visual_debugging', false, ...
-                                                           'min_val_space', [min_x_val, min_y_val, min_z_val], ...
-                                                           'max_val_space', [max_x_val, max_y_val, max_z_val]);
-
-                            
-    data(length(time), size(locs, 1)) = 0;
+    % Generate a spiral wave in a regular grid cause it's easier
+    [temp_data, XXX, YYY, ZZZ, t] = generate_data_spiral('hxyz', hxyz, 'ht', ht, ...
+                                                      'velocity', vel, ...
+                                                      'tip_centre', [tip_a, tip_b], ...
+                                                      'filament', 'line', ...
+                                                      'visual_debugging', false, ...
+                                                      'min_val_space', [min_x_val, min_y_val, min_z_val], ...
+                                                      'max_val_space', [max_x_val, max_y_val, max_z_val]);
+                        
+    data(length(t), size(locs, 1)) = 0;
     x_dim = 1;
     y_dim = 2;
     z_dim = 3;
                             
-    for tt=1:length(time)
+    for tt=1:length(t)
         B = temp_data(tt, :, :, :);
-        data_interpolant = scatteredInterpolant(X(:), Y(:), Z(:), B(:), 'linear', 'none');
+        data_interpolant = scatteredInterpolant(XXX(:), YYY(:), ZZZ(:), B(:), 'linear', 'none');
         data(tt, :) = data_interpolant(locs(:, x_dim), locs(:, y_dim), locs(:, z_dim));
         
-    end
-       
+    end  
 end % function get_unstructured_data()
 
+
 function data = get_structured_data()
-    data(length(y), length(x), length(z), length(time)) = 0;
+    len_y = length(y);
+    len_x = length(x);
+    len_z = length(z);
+    len_t = length(time);
+    data(len_y, len_x, len_z, len_t) = 0;
 
     for kk=1:length(tip)   
            wave2d = exp(1i*(-w*TT + angle(XX-tip_x(kk)-vel(xdim)*TT + 1i*(YY-tip_y(kk)-vel(ydim)*TT)) - ...
-                      k*sqrt((XX-tip_x(kk)-vel(xdim)*TT).^2 + (YY-tip_y(kk)-vel(ydim)*TT).^2)));
+                        k*sqrt((XX-tip_x(kk)-vel(xdim)*TT).^2 + (YY-tip_y(kk)-vel(ydim)*TT).^2)));
            wave2d(wave2d~=0) = amp * wave2d(wave2d~=0) ./ abs(wave2d(wave2d~=0));
            
            gaussian = @(c, loc, kk) exp(-1/(2*c^2) * (((XX(:, :, 1)-tip_x(kk)).^2 + ...
@@ -231,9 +233,10 @@ function data = get_structured_data()
            
            % Ensure that the maximum amplitude is still AMP
            wave2d = wave2d / max(abs(wave2d(:))) * amp;
+           wave2d = reshape(wave2d, len_y, len_x, 1, len_t);
 
-           wave2d = permute(wave2d, [3 1 2]);       
-           data(:, :, :, kk) = real(wave2d); 
+             
+           data(:, :, kk, :) = real(wave2d); 
     end
 end % function get_structured_data()
     
