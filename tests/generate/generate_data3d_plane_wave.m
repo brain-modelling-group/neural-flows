@@ -180,10 +180,6 @@ switch grid_type
         
 end
 
-
-% eval(['wave2d = squeeze(wave3d' idx_expr ');']);  
-
-
 if plot_stuff 
     fig_handle = figure('Name', 'nflows-planewave3d-space');
     switch grid_type
