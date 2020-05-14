@@ -19,14 +19,9 @@ function test_flows3d_estimation__plane_wave_upc()
                                               'direction', 'z', ...
                                               'grid_type', 'unstructured');
  
- if options.is_phase
-     % Transform data into instantanous phase via hilbert transform
-     data = calculate_insta_phase(data);
-     fig_name = 'nflows-test-planewave3d-unstructured-phase-cnem-upc';
- else
-     fig_name = 'nflows-test-planewave3d-unstructured-activity-cnem-uac';
- end
  
+ data = calculate_insta_phase(data);
+ fig_name = 'nflows-test-planewave3d-unstructured-phase-cnem-upc';
  u = flows3d_estimate_cnem_flow(data, locs, options.ht, options);
  
  fig_hist = figure('Name', fig_name);
@@ -43,9 +38,8 @@ function test_flows3d_estimation__plane_wave_upc()
  histogram(u.vzp(:))
  xlabel('uz [mm/ms]')
  
- 
  subplot(1, 4, 4, 'Parent', fig_hist)
  histogram(sqrt(u.vxp(:).^2+u.vyp(:).^2+u.vzp(:).^2))
  xlabel('u_{norm} [mm/ms]')
 
-end % function test_flow_estimation__planewave3d_scattered_cnem()
+end % function test_flows3d_estimation__plane_wave_upc()
