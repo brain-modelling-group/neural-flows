@@ -6,8 +6,8 @@ function [figure_handle] = plot3d_pcolor3_movie(fig_handle, X, Y, Z, V)
 
 
 if isempty(fig_handle)
-    fig_pcolor = figure('Name', 'nflows-pcolor3-movie');
-    fig_pcolor.Position = [31.6442   10.0013   29.5010   22.5954];
+    fig_handle = figure('Name', 'nflows-pcolor3-movie');
+    fig_handle.Position = [31.6442   10.0013   29.5010   22.5954];
 end
 
 crange=quantile(V(1:100:end),[0.001 0.999]); 
@@ -15,9 +15,8 @@ max_val = max(abs(crange));
 
 time = 1:size(V, 4);
 
-colormap(yellowgreenblue(256, 'rev'))
+colormap(redyellowblue(256, 'rev'))
 colorbar
-
 
 try
         vidfile = VideoWriter('pcolor3_movie.mp4','MPEG-4');
@@ -28,7 +27,7 @@ end
         open(vidfile);
         
 for tt=1:length(time)
-        these_axes = subplot(1, 1, 1, 'Parent', fig_pcolor);
+        these_axes = subplot(1, 1, 1, 'Parent', fig_handle);
         colorbar(these_axes)
         these_axes.XLabel.String = 'X';
         these_axes.YLabel.String = 'Y';
@@ -42,7 +41,7 @@ for tt=1:length(time)
         %view([90 0]) 
         caxis([crange]);
         pause(0.01); 
-        writeVideo(vidfile, getframe(fig_pcolor));
+        writeVideo(vidfile, getframe(fig_handle));
 end     
 close(vidfile)
 
