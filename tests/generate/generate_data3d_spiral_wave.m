@@ -172,10 +172,10 @@ end
 [X, Y, Z] = meshgrid(x, y, z);
 
 
-fig_spiral = figure('Name', 'nflows-spiraldata-space-time');
 if plot_stuff
     switch grid_type
     case {'structured'}
+        fig_spiral = figure('Name', 'nflows-spiraldata-space-time');
         plot3d_pcolor3_movie(fig_spiral, X, Y, Z, data)
     case {'unstructured'}
         plot_sphereanim(data, locs, time);
