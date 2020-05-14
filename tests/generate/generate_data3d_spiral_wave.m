@@ -207,7 +207,7 @@ function data = get_unstructured_data()
     z_dim = 3;
                             
     for tt=1:length(t)
-        B = temp_data(tt, :, :, :);
+        B = temp_data(:, :, :, tt);
         data_interpolant = scatteredInterpolant(XXX(:), YYY(:), ZZZ(:), B(:), 'linear', 'none');
         data(tt, :) = data_interpolant(locs(:, x_dim), locs(:, y_dim), locs(:, z_dim));
         
