@@ -1,4 +1,4 @@
-function test_flow_estimation__planewave3d_scattered_cnem()
+function test_flows3d_estimation__plane_wave_upc()
 % NOTE: Takes about XX seconds @dracarys -- cnem is a c++ multithreaded
 % library.
 
@@ -15,17 +15,19 @@ function test_flow_estimation__planewave3d_scattered_cnem()
  locs = COG(1:256, :);
  
  
- [wave3d, ~] = generate_wave3d_plane_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht, 'direction', 'z');
+ [data, ~] = generate_data3d_plane_wave(locs, 'hxyz',  options.hx, 'ht', options.ht, ...
+                                              'direction', 'z', ...
+                                              'grid_type', 'unstructured');
  
  if options.is_phase
-     % Transform data into phase via hilbert transform
-     wave3d = calculate_insta_phase(wave3d);
-     fig_name = 'nflows-test-planewave3d-scattered-cnem-phase';
+     % Transform data into instantanous phase via hilbert transform
+     data = calculate_insta_phase(data);
+     fig_name = 'nflows-test-planewave3d-unstructured-phase-cnem-upc';
  else
-     fig_name = 'nflows-test-planewave3d-scattered-cnem-activity';
+     fig_name = 'nflows-test-planewave3d-unstructured-activity-cnem-uac';
  end
  
- v = flows3d_estimate_cnem_flow(wave3d, locs, options.ht, options);
+ v = flows3d_estimate_cnem_flow(data, locs, options.ht, options);
  
  fig_hist = figure('Name', fig_name);
 
