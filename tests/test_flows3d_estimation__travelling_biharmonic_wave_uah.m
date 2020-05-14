@@ -1,4 +1,4 @@
-function test_flow_estimation__travellingbihwave3d_scattered_hs3d()
+function test_flows3d_estimation__travelling_biharmonic_wave_uah()
 % NOTE: Takes about 110 seconds @ dracarys
 % Generate data with these step sizes
  options.hx = 0.004;
