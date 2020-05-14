@@ -131,28 +131,28 @@ switch direction
         k_x = 0;
         k_z = 0;
         k_r = 0;
-        idx_expr = '(11:20, 12, 12, :)'; 
+        %idx_expr = '(11:20, 12, 12, :)'; 
         
     case 'x'
         k_y = 0;
         k_z = 0;
         k_r = 0;
-        idx_expr = '(12, 11:20, 12, :)'; 
+        %idx_expr = '(12, 11:20, 12, :)'; 
 
     case 'z'
         k_x = 0;
         k_y = 0;
         k_r = 0;
-        idx_expr = '(12, 12, 11:20, :)'; 
+        %idx_expr = '(12, 12, 11:20, :)'; 
     case 'xy'
         k_z = 0;
         k_r = 0;
-        idx_expr = '(12, 12, 12, :)'; 
+        %idx_expr = '(12, 12, 12, :)'; 
     case 'radial'
         k_x = 0;
         k_y = 0;
         k_z = 0;
-        idx_expr = '(12, 12, 12, :)'; 
+        %idx_expr = '(12, 12, 12, :)'; 
     case 'all'
         % I wonder about my sanity and state of mind when I find myself doing
         % recursive function calls in matlab.
@@ -168,7 +168,7 @@ switch direction
         time = [];
         return
     otherwise
-        kr = 0;
+        k_r = 0;
 end
 
 switch grid_type
@@ -228,7 +228,7 @@ function data = get_plane_wave_unstructured()
                                                               'max_val_space', [max_x_val, max_y_val, max_z_val]);
 
                             
-    wave3d(length(time), size(locs, 1)) = 0;
+    data(length(time), size(locs, 1)) = 0;
 
     x_dim = 1;
     y_dim = 2;
