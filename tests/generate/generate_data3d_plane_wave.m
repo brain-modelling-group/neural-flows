@@ -186,7 +186,15 @@ end
 
 if plot_stuff 
     fig_handle = figure('Name', 'nflows-planewave3d-space');
-    plot3d_debug_data_frame(fig_handle, data, X, Y, Z, time)
+    switch grid_type
+    case {'unstructured', 'scattered', 'nodal'}
+        plot_sphereanim(data, locs, time);
+    case {'structured', 'grid', 'voxel'}
+        plot3d_debug_data_frame(fig_handle, data, X, Y, Z, time)
+    otherwise
+         error(['neural-flows:' mfilename ':UnknownCase'], ...
+                   'Requested unknown case of grid. Options: {"structured", "unstructured"}'); 
+    end
 end
 
 
