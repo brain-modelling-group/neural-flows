@@ -8,4 +8,4 @@ function [obj_data, obj_data_sentinel] = load_iomat_interp(params)
 
 
 
-end % function load_iomat_data()
+end % function load_iomat_interp()
