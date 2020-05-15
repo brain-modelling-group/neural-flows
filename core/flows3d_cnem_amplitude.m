@@ -77,9 +77,7 @@ switch params.flows.method.cnem.initial_conditions.mode
 end
 
 % Write to disk 
-obj_flows.ux(num_nodes, tpts-1) = 0;    
-obj_flows.uy(num_nodes, tpts-1) = 0;
-obj_flows.uz(num_nodes, tpts-1) = 0;
+obj_flows.uxyz(num_nodes, 3, tpts-1) = 0;    
 
 %---------------------------------BURN-IN--------------------------------------%
 % Do a burn-in period for the first frame (eg, two time points of data)
@@ -118,10 +116,10 @@ for this_tpt = 1:tpts-1
                                         neighbours_matrix);
  
     % Save the velocity components and norm
-    obj_flows.ux(:, this_tpt) = single(uxo);
-    obj_flows.uy(:, this_tpt) = single(uyo);
-    obj_flows.uz(:, this_tpt) = single(uzo);
-    obj_flows.un(:, this_tpt) = single(sqrt(uxo.^2 + uyo.^2 + uzo.^2));
+    obj_flows.uxyz(:, 1, this_tpt) = single(uxo);
+    obj_flows.uxyz(:, 2, this_tpt) = single(uyo);
+    obj_flows.uxyz(:, 3, this_tpt) = single(uzo);
+    obj_flows.uxyz_n(:, this_tpt)  = single(sqrt(uxo.^2 + uyo.^2 + uzo.^2));
     %Save some other useful information to guesstimate the singularity detection threshold
     flow_stats(this_tpt);
 
