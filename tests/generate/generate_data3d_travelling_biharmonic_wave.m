@@ -169,7 +169,7 @@ end % function get_unstructured_data()
 
 
 function [data, X, Y, Z] = get_structured_data()
-    x = -0.1:hxyz:0.1
+    x = -0.1:hxyz:0.1;
     [X, Y, Z] = meshgrid(x, x, x);
     data = generate_biharmonic_wave(X, Y, Z); 
 end % function generate_structured_data()
