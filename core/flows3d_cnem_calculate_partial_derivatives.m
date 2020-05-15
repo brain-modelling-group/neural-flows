@@ -27,11 +27,11 @@ function [Ix, Iy, Iz, It] = flows3d_cnem_calculate_partial_derivatives(F1, F2, h
     Ix = (0.5*(get_derivative(F1, xdim, B) + get_derivative(F2, xdim, B)));
     Iy = (0.5*(get_derivative(F1, ydim, B) + get_derivative(F2, ydim, B)));
     Iz = (0.5*(get_derivative(F1, zdim, B) + get_derivative(F2, zdim, B)));
-    It = (F1 - F2)/ht;
+    It = [(F1 - F2)/ht].';
 
 end % flows3d_cnem_calculate_partial_derivatives()
 
 function I = get_derivative(F, dim, B)
-    Ixyz = flows3d_cnem_grad_V(B, F);
+    Ixyz = flows3d_cnem_grad_V(B, F.');
     I = Ixyz(:, dim);
 end % function get_derivative()
