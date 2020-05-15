@@ -92,9 +92,11 @@ this_tpt = 1;
 FA = obj_data.data(this_tpt, :);
 FB = obj_data.data(this_tpt+1, :);
 
-if ~isfield(params.flows.method.cnem.burnin, 'length')
+if ~isfield(params.flows.method.cnem, 'burnin')
     burnin_length = 8; % for iterations, not much but better than one
     params.flows.method.cnem.burnin.length = burnin_length;
+else
+    burnin_len = params.flows.method.cnem.burnin.length;
 end
 
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started burn-in period for random initial velocity conditions.'))
