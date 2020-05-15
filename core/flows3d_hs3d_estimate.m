@@ -18,6 +18,7 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params
     switch params.data.grid.type
         case 'unstructured'
             % Presumabaly we performed interpolation of unstructured data
+            % and it is now stored in a matfile
             obj_data = load_iomat_interp(params);
         case 'structured'
             % Original data is already a strucutured grid
