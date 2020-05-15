@@ -85,6 +85,7 @@ end
 
 % Write to disk 
 obj_flows.uxyz(num_nodes, 3, tpts-1) = 0;    
+obj_flows.uxyz_n(num_nodes, tpts-1) = 0;    
 
 %---------------------------------BURN-IN--------------------------------------%
 % Do a burn-in period for the first frame (eg, two time points of data)
