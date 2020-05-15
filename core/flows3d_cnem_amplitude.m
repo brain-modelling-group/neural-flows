@@ -66,7 +66,7 @@ obj_flows.masks = masks;
 % Save matrix
 obj_flows.neighbours_matrix = neighbours_matrix;
 
-B = flows3d_cnem_get_B_mat(locs, masks.innies_triangles);
+B = flows3d_cnem_get_B_mat(locs, boundary_triangles);
 
 switch params.flows.method.cnem.initial_conditions.mode
      case {'random', 'rand'}
