@@ -7,7 +7,7 @@ function [Ix, Iy, Iz, It] = flows3d_cnem_calculate_partial_derivatives(F1, F2, h
 %       F1, F2      --  two subsequent 2D arrays 
 %       ht          --  a double with the time step size 
 %       B           --  CNEM differential matrix                 
-% OUTPUT:
+% OUTPUT:eeee
 %   Ix, Iy, Iz, It  --  partial derivatives along X, Y, Z and T axes respectively
 %
 % AUTHOR:
