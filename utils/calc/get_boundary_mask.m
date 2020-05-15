@@ -26,13 +26,13 @@ num_nodes_right = length(right_idx);
 
 tri_left  = get_boundary_triangles(obj_data.locs(left_idx, :), params.data.boundary.alpha_radius);
 tri_right = get_boundary_triangles(obj_data.locs(right_idx, :), params.data.boundary.alpha_radius);
-tri_right = tri_right + num_nodes_left; % fix numbering of vertex indices
+tri_right = tri_right + num_nodes_left; % fix numbering of vertex indices, assumes all the left nodes are contiguous
 
 tri_both = get_boundary_triangles(obj_data.locs, params.data.boundary.alpha_radius);
 
-masks.inner_triangles = tri_both;
-masks.inner_triangles_l = tri_left;
-masks.inner_triangles_r = tri_right;
+masks.inner_triangles_bi = tri_both;
+masks.inner_triangles_lr = [tri_left; tri_right]
+
 
 obj_data.masks = masks;
 
