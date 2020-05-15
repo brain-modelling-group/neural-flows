@@ -1,6 +1,7 @@
-function [ux, uy, uz] = flows3d_cnem_step(F1, F2, alpha_smooth, max_iterations, ux, uy, uz, inner_triangles, cnem_B)
+function [ux, uy, uz] = flows3d_cnem_step(F1, F2, alpha_smooth, max_iterations, ux, uy, uz, neighbours_matrix, cnem_B)
 %% NOTE: NOT WORKING ATM --- This function estimates the velocity components between two subsequent 3D 
-% images using the Horn-Schunck optical flow method (HS3D), but using CNEM. 
+% images using the Horn-Schunck optical flow method (HS), but using CNEM for 
+% gradients.
 %
 % ARGUMENTS:
 %      - F1, F2      --    two subsequent 3D arrays or 3D image frames
@@ -11,7 +12,7 @@ function [ux, uy, uz] = flows3d_cnem_step(F1, F2, alpha_smooth, max_iterations, 
 % OUTPUT:
 %   ux, uy, ux -- 3D arrays with the velocity components along each of the
 %                 3 orthogonal axes. 
-%
+%neighbours_matrix
 % AUTHOR:
 %     Paula Sanz-Leon, QIMR Berghofer September 2019
 % USAGE:
@@ -36,14 +37,10 @@ end
 [Ix, Iy, Iz, It] = flows3d_cnem_calculate_partial_derivatives(F1, F2, ht, cnem_B);
 
 % one_ring_neighbours_matrix = nodes x 6 or 5
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FIND A WAY TO CALCULATE AVERAGE OF NEIGHBOURS
 
     for tt=1:max_iterations
-        % NOTE: averaging may be useful if interpolation is not peformed, 
-        % or if the data are noisy. For narrowband signals, the
-        % averaging introduces artifacts.
         ux_avg = calculate_local_average(ux, neighbours_matrix);
         uy_avg = calculate_local_average(uy, neighbours_matrix);
         uz_avg = calculate_local_average(uz, neighbours_matrix);
@@ -62,3 +59,9 @@ end
   
 
 end % function compute_flow_cnem()
+
+function u_avg = calculate_local_average(u, neighbours_matrix)
+ 
+    u_avg = neighbours_matrix * u;
+
+end  %function calculate_local_average
