@@ -1,4 +1,4 @@
-function [ux, uy, uz] = flows3d_hs3d(F1, F2, alpha_smooth, max_iterations, ux, uy, uz, hx, hy, hz, ht, boundary_mask)
+function [ux, uy, uz] = flows3d_hs3d_step(F1, F2, alpha_smooth, max_iterations, ux, uy, uz, hx, hy, hz, ht, boundary_mask)
 %% This function estimates the velocity components between two subsequent 3D 
 % images using the Horn-Schunck optical flow method (HS3D). 
 %
