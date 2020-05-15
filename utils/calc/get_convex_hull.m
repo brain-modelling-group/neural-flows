@@ -29,8 +29,8 @@ tri_right = tri_right + num_nodes_left; % fix numbering of vertex indices, assum
 
 tri_both = get_boundary_triangles(obj_data.locs, alpha_radius);
 
-masks.inner_triangles_bi = tri_both;
-masks.inner_triangles_lr = [tri_left; tri_right];
+masks.innies_triangles_bi = tri_both;
+masks.innies_triangles_lr = [tri_left; tri_right];
 
 obj_data.masks = masks;
 
