@@ -1,4 +1,4 @@
-function get_boundary_masks(params, obj_data, left_idx, right_idx)
+function get_convex_hull(params, obj_data, left_idx, right_idx)
 %% Returns a local patch of surface of the neighbourhood around a vertex.
 %
 % ARGUMENTS: params    -- almighty structure
@@ -31,7 +31,7 @@ tri_right = tri_right + num_nodes_left; % fix numbering of vertex indices, assum
 tri_both = get_boundary_triangles(obj_data.locs, params.data.boundary.alpha_radius);
 
 masks.inner_triangles_bi = tri_both;
-masks.inner_triangles_lr = [tri_left; tri_right]
+masks.inner_triangles_lr = [tri_left; tri_right];
 
 obj_data.masks = masks;
 
