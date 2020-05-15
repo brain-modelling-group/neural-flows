@@ -45,12 +45,7 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_cnem_estimate(params
     obj_flows.masks = masks;
     obj_flows.locs = obj_data.locs;
     
-    % Save grid and masks - needed for singularity tracking and visualisation
-    % Consider saving min max values and step, saves memory
-    obj_flows.X = obj_data.X;
-    obj_flows.Y = obj_data.Y;
-    obj_flows.Z = obj_data.Z;
-   
+
     % Here is where the magic happens -- assumes data input is always
     % amplitude, we calculate phases internally
     switch params.flows.method.data.mode
