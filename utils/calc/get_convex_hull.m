@@ -36,7 +36,7 @@ obj_data.masks = masks;
 
 end % get_boundary_masks()
 
-function get_boundary_triangles(locs, alpha_radius)
+function tri_list = get_boundary_triangles(locs, alpha_radius)
 shp = alphaShape(locs, alpha_radius);
 % The boundary of the centroids is an approximation of the cortex
 tri_list = shp.boundaryFacets;
