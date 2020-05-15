@@ -46,10 +46,7 @@ if inparams.flows.enabled
             %
             [tmp_params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(tmp_params);
         case {'cnem'}
-            %[tmp_params, obj_flows, obj_flows_sentinel] = flows3d_estimate_cnem_hs(tmp_params, masks);
-            % 
-            error(['neural-flows:' mfilename ':NotTested'], ...
-                   'Sorry mate, have not tested this one yet.');
+            [tmp_params, obj_flows, obj_flows_sentinel] = flows3d_cnem_estimate(tmp_params);
         otherwise
             error(['neural-flows:' mfilename ':UnknownCase'], ...
                    'Requested unknown method. Options: {"hs3d", "cnem"}');
