@@ -3,17 +3,17 @@ function [params] = flows3d_cnem_loop(obj_data, obj_flows, params, varargin)
 %
 % ARGUMENTS:
 %          obj_data --- is the MatFile file with the data (interpolated
-%                       or not), or a 4D [x,y,z,t] array with all the
+%                       or not), or a 2D [t, num_nodes ] array with all the
 %                       data.
-%          obj_vel  -- a handle to the MatFile 
-%          params   -- almighty structure with everything
-%          varargin -- if intiail flows are precalculated, then pass them here
-%                   -- a structure with initial_conditions.uxo
+%          obj_flows  -- a handle to the MatFile 
+%          params     -- almighty structure with everything
+%          varargin   -- if intiail flows are precalculated, then pass them here
+%                     -- a structure with initial_conditions.uxo
 %                                                         .uyo
 %                                                         .uzo
 %
 % OUTPUT: 
-%          None
+%          params
 %
 % REQUIRES: 
 %           flows3d_cnem_set_initial_flows()
@@ -25,7 +25,7 @@ function [params] = flows3d_cnem_loop(obj_data, obj_flows, params, varargin)
 %}
 %
 % MODIFICATION HISTORY:
-%     Paula Sanz-Leon -- QIMR December 2018
+%     Paula Sanz-Leon -- QIMR April 2020
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if nargin > 3
