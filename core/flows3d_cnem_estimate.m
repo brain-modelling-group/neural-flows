@@ -15,7 +15,7 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_cnem_estimate(params
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
     % Load original unstructured data saved in a matfile
-    obj_data = load_iomat_data(params);
+    [obj_data, params] = load_iomat_data(params);
 
 %----------------------------- FLOW CALCULATION -------------------------------%
     % Check if we are receiving one slice of the data
