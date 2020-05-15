@@ -28,8 +28,8 @@ for kk=1:length(zero_idx)
     distance_vec = dis(this_point.', locs.');
     [~, idx] = sort(distance_vec);
     neighbour_idx(kk, :) = idx(2:neighbours+1); 
-    nth_ring_matrix(zero_idx(kk), idx(2:neighbours+1)) = 1/neighbours;
+    neighbour_matrix(zero_idx(kk), idx(2:neighbours+1)) = 1/neighbours;
 end
 
 
-end % function get_nth_ring_matrix()
+end % function build_neighbour_matrix()
