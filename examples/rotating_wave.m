@@ -16,6 +16,6 @@ output_params = main(input_params);
 %% Run analysis
 perform_svd_mode_decomposition(output_params);
 
-%analyse_singularities(output_params)
+analyse_singularities(output_params)
 
 %plot1d_speed_distribution(output_params)

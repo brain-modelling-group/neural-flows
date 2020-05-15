@@ -35,6 +35,8 @@ inparams.data.ht = 0.25;
 inparams.data.hx = [];
 inparams.data.hy = [];
 inparams.data.hz = [];
+%inparams.data.boundary.alpha_radius = 30; % au for interpolation and cnem-based flows
+
 %params.data.shape.x = params.data.shape.size(2); 
 %params.data.shape.y = params.data.shape.size(3);
 %params.data.shape.z = params.data.shape.size(4);
@@ -93,6 +95,7 @@ inparams.flows.method.hs3d.initial_conditions.seed = 42;
 inparams.flows.method.hs3d.nodal_flows.enabled = true;
 % CNEM
 %inparams.flows.method.name = 'cnem';
+%inparams.flows.method.cnem.convex_hull = 'lr'
 %inparams.flows.method.cnem.alpha_smooth   = 0.1;
 %inparams.flows.method.cnem.max_iterations = 128;
 %inparams.flows.method.cnem.initial_conditions.mode = 'random';
@@ -106,10 +109,6 @@ inparams.flows.method.hs3d.nodal_flows.enabled = true;
 
 %params.flows.method.hs3d.nodal_flows.enabled = true
 
-
-% CNEM
-%inparams.flows.method.name = 'cnem';
-%inparams.flows.method.cnem.alpha_radius = 30;
 
 inparams.flows.visualisation.enabled = true;
 
