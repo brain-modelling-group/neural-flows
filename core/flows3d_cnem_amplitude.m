@@ -49,7 +49,7 @@ masks = obj_data.masks;
 locs  = obj_data.locs;
 
 % Calculate neighbours matrix for averages
-switch params.flows.cnem
+switch params.flows.method.cnem.convex_hull
     case {'bi', 'bihemispheric'}
     boundary_triangles = masks.innies_triangles_bi; 
     case {'lr', 'left-right'}
