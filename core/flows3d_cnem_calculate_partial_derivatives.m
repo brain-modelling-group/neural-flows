@@ -4,16 +4,14 @@ function [Ix, Iy, Iz, It] = flows3d_cnem_calculate_partial_derivatives(F1, F2, h
 % uses cnem.
 %
 % ARGUMENTS:
-%       F1, F2      --    two subsequent 2D arrays 
-%       operator_3d --   a function handle with the operator to use. 
-%                        Default is @get_sobel_kernel_3d, but could be 
-%                          @get_laplacian_kernel_3d or any other
-%                          differential kernel obtained via matlab's fspecial3
+%       F1, F2      --  two subsequent 2D arrays 
+%       ht          --  a double with the time step size 
+%       B           --  CNEM differential matrix                 
 % OUTPUT:
 %   Ix, Iy, Iz, It  --  partial derivatives along X, Y, Z and T axes respectively
 %
 % AUTHOR:
-%     Paula Sanz-Leon, QIMR Berghofer, September 2019
+%     Paula Sanz-Leon, QIMR Berghofer, April 2020
 % USAGE:
 %{
     
@@ -33,10 +31,7 @@ function [Ix, Iy, Iz, It] = flows3d_cnem_calculate_partial_derivatives(F1, F2, h
 
 end % flows3d_cnem_calculate_partial_derivatives()
 
-
 function I = get_derivative(F, dim, B)
-
- Ixyz = flows3d_cnem_grad_V(B, F);
- I = Ixyz(:, dim);
-
-end
+    Ixyz = flows3d_cnem_grad_V(B, F);
+    I = Ixyz(:, dim);
+end % function get_derivative()
