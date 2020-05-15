@@ -1,4 +1,4 @@
-function [params] = flows3d_cnem_loop(obj_data, obj_flows, params, varargin)
+function [params] = flows3d_cnem_amplitude(obj_data, obj_flows, params, varargin)
 % This function runs the iterative part of the Horn-Schunk algorithm. 
 %
 % ARGUMENTS:
