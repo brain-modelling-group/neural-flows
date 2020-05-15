@@ -49,10 +49,17 @@ masks = obj_data.masks;
 locs  = obj_data.locs;
 
 % Calculate neighbours matrix for averages
-tr = triangulation(masks.innies_triangles, locs);
+switch params.flows.cnem
+    case {'bi', 'bihemispheric'}
+    boundary_triangles = masks.innies_triangles_bi; 
+    case {'lr', 'left-right'}
+    boundary_triangles = masks.innies_triangles_lr;
+end
+        
+tr = triangulation(boundary_triangles, locs);
 vertex_idx_list = [1:params.data.shape.nodes].'; 
 temp_mat = get_nth_ring_matrix(tr, vertex_idx_list, 1);
-[neighbours_matrix] = build_neighbour_matrix(locs, temp_mat);
+neighbours_matrix = build_neighbour_matrix(locs, temp_mat);
 
 % Save masks
 obj_flows.masks = masks;
