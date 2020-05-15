@@ -22,7 +22,6 @@ function get_convex_hull(params, obj_data, left_idx, right_idx)
 
 
 num_nodes_left = length(left_idx);
-num_nodes_right = length(right_idx);
 
 tri_left  = get_boundary_triangles(obj_data.locs(left_idx, :), params.data.boundary.alpha_radius);
 tri_right = get_boundary_triangles(obj_data.locs(right_idx, :), params.data.boundary.alpha_radius);
