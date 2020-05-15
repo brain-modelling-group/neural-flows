@@ -33,7 +33,6 @@ tri_both = get_boundary_triangles(obj_data.locs, params.data.boundary.alpha_radi
 masks.inner_triangles_bi = tri_both;
 masks.inner_triangles_lr = [tri_left; tri_right]
 
-
 obj_data.masks = masks;
 
 end % get_boundary_masks()
