@@ -1,4 +1,4 @@
-function get_convex_hull(params, obj_data, left_idx, right_idx)
+function get_convex_hull(obj_data, alpha_radius, left_idx, right_idx)
 %% Returns a local patch of surface of the neighbourhood around a vertex.
 %
 % ARGUMENTS: params    -- almighty structure
@@ -23,8 +23,8 @@ function get_convex_hull(params, obj_data, left_idx, right_idx)
 
 num_nodes_left = length(left_idx);
 
-tri_left  = get_boundary_triangles(obj_data.locs(left_idx, :), params.data.boundary.alpha_radius);
-tri_right = get_boundary_triangles(obj_data.locs(right_idx, :), params.data.boundary.alpha_radius);
+tri_left  = get_boundary_triangles(obj_data.locs(left_idx, :), alpha_radius);
+tri_right = get_boundary_triangles(obj_data.locs(right_idx, :),alpha_radius);
 tri_right = tri_right + num_nodes_left; % fix numbering of vertex indices, assumes all the left nodes are contiguous
 
 tri_both = get_boundary_triangles(obj_data.locs, params.data.boundary.alpha_radius);
