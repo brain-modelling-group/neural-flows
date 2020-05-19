@@ -62,6 +62,6 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_cnem_estimate(params
     % [params, varargout(obj_flows)] = ..... 
     
     % Disable flows calculation if we already did it
-    params.general.flows.enabled = false;
+    params.flows.enabled = false;
     params.flows.file.exists = true;
 end % function flows3d_estimate_hs3d()
