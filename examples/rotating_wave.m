@@ -4,7 +4,7 @@
 % Performance: This takes about 5 minutes to run with 11 workers for parallel
 % functions. Memory usage is approximately 6GB.
 
-input_params_filename = 'rotating_wave_in.json';
+input_params_filename = 'rotating_wave_cnem_in.json';
 input_params_dir  = '/home/paula/Work/Code/matlab-neuro/neural-flows/examples';
 json_mode = 'read';
 
@@ -17,5 +17,4 @@ output_params = main(input_params);
 perform_svd_mode_decomposition(output_params);
 
 analyse_singularities(output_params)
-
 %plot1d_speed_distribution(output_params)

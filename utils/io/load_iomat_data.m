@@ -1,4 +1,4 @@
-function [obj_data, varargout] = load_iomat_data(params)
+function [obj_data,varargout] = load_iomat_data(params)
 % Load ioriginal data stored in an iomat file 
 
 obj_data = matfile(fullfile(params.data.file.dir, ...
