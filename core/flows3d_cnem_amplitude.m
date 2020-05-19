@@ -150,7 +150,7 @@ function flow_stats(this_tpt)
     obj_flows.uz_min(1, this_tpt) = nanmin(uzo(:));
     obj_flows.uz_min(1, this_tpt) = nanmax(uzo(:));
 
-    obj_flows.ux_sun(1, this_tpt) = nansum(uxo(:));
+    obj_flows.ux_sum(1, this_tpt) = nansum(uxo(:));
     obj_flows.uy_sum(1, this_tpt) = nansum(uyo(:));
     obj_flows.uz_sum(1, this_tpt) = nansum(uzo(:)); 
     
