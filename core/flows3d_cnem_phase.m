@@ -63,7 +63,7 @@ end
 if strcmp(params.data.mode = 'amplitude')
     phi = calculate_insta_phase(obj_data.data);
 else
-    phi = obj_data.data;
+    phi = obj_data.phi;
 end
 
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Calculating temporal gradient dphi/dt.'))
