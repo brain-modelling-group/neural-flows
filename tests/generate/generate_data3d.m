@@ -30,8 +30,8 @@ switch data_type
         travelling_wave_u()
         travelling_biharmonic_wave_s()
         travelling_biharmonic_wave_u()
-        rotating_wave_s()
-        rotating_wave_u()
+        spiral_wave_s()
+        spiral_wave_u()
     otherwise
        error(['neural-flows:' mfilename ':UnknownCase'], ...
               'Requested unknown method. Options: {"plane", "travelling", "rotating", "biharmonic"}');
