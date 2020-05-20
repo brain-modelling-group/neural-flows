@@ -36,8 +36,8 @@ switch data_type
        error(['neural-flows:' mfilename ':UnknownCase'], ...
               'Requested unknown method. Options: {"plane", "travelling", "rotating", "biharmonic"}');
 
+end 
 end % generate_data3d()
-
 
 function plane_wave_s()
 
