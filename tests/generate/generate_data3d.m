@@ -1,0 +1,168 @@
+function generate_data3d(data_type)
+% Wrapper function to generate all test data before running "test" functions
+% TODO: generalise so we can change parameters to generate waves eventually
+% At the moment many parameters are hardcoded as we know which waves we want for tests
+% Assumes this function is run from directory tests/
+
+if nargin < 1
+    data_type = 'all';
+end
+
+switch data_type 
+    case {'plane', 'planar'}
+        plane_wave_s()
+        plane_wave_u()
+    case {'travelling'}
+        travelling_wave_s()
+        travelling_wave_u()
+    case {'rotating', 'spiral'}
+        rotating_wave_s()
+        rotating_wave_u()
+    case {'biharmonic', 'biwave'}
+        biharmonic_wave_s()
+        biharmonic_wave_u()
+    case {'all'}
+        plane_wave_s()
+        plane_wave_u()
+        travelling_wave_s()
+        travelling_wave_u()
+        travelling_biharmonic_wave_s()
+        travelling_biharmonic_wave_u()
+        rotating_wave_s()
+        rotating_wave_u()
+    otherwise
+       error(['neural-flows:' mfilename ':UnknownCase'], ...
+              'Requested unknown method. Options: {"plane", "travelling", "rotating", "biharmonic"}');
+
+end % generate_data3d()
+
+
+function plane_wave_s()
+
+    % Save data
+    options.visual_debugging = true;
+    options.hxyz = 1;
+    options.hx = 1;
+    options.hy = 1;
+    options.hz = 1;
+    options.ht = 1;
+    options.direction = 'radial';
+    options.grid_type = 'structured';
+
+    % Generate data
+    [data, X, Y, Z, ~] = generate_data3d_plane_wave('visual_debugging', options.visual_debugging, ...
+                                                     'hxyz', options.hxyz, ...
+                                                     'ht', options.ht, ...
+                                                     'direction', options.direction, ...
+                                                     'grid_type', options.structured);
+    obj_data = matfile('data/data-plane-wave-structured-iomat.mat', 'Writable', true);
+    obj_data.data = data;
+    obj_data.X = X;
+    obj_data.Y = Y;
+    obj_data.Z = Z;
+     
+    obj_data.hx = hx;
+    obj_data.hy = hy;
+    obj_data.hz = hz;
+    obj_data.ht = ht;
+
+end
+
+
+function plane_wave_u()
+    % Generate data
+    options.hxyz = 2;
+    options.ht = 1;
+    hemi1_idx = 1:257;
+    load('513COG_lr.mat', 'locs')
+    locs = locs(hemi1_idx, :);
+     
+    [data, ~] = generate_data3d_plane_wave('hxyz', options.hxyz, 'ht', options.ht, ...
+                                            'direction', 'x', ...
+                                            'locs', locs, ...
+                                            'grid_type', 'unstructured');
+                                                   
+    % save MatFile
+    obj_data = matfile('data/data-plane-wave-unstructured-iomat.mat', 'Writable', true);
+    % save in regular matfile
+    save('data/data-plane-wave-unstructured.mat', 'data', 'locs');
+
+    obj_data.data = data;
+    obj_data.locs = locs;
+    alpha_radius = 30;
+    get_convex_hull(obj_data, alpha_radius, hemi1_idx, [])
+ 
+end
+
+
+function spiral_wave_s()
+
+% Generate data
+ options.hx = 1;
+ options.hy = 1;
+ options.hz = 1;
+ options.ht = 1;
+ [data, X, Y, Z, ~] = generate_data3d_spiral_wave('visual_debugging', false, ...
+                                                   'hxyz', options.hx, 'ht', options.ht, ...
+                                                   'velocity', [0 0], 'filament', 'helix', ...
+                                                   'grid_type', 'structured');
+
+  obj_data = matfile('data/data-plane-spiral-structured-iomat.mat', 'Writable', true);
+  obj_data.data = data;
+  obj_data.X = X;
+  obj_data.Y = Y;
+  obj_data.Z = Z;
+     
+  obj_data.hx = hx;
+  obj_data.hy = hy;
+  obj_data.hz = hz;
+  obj_data.ht = ht;
+
+end
+
+
+function spiral_wave_u()
+    % Generate data
+    options.hxyz = 2;
+    options.ht = 1;
+     
+    load('513COG_lr.mat', 'locs')
+    [data, ~] = generate_data3d_spiral_wave('locs', locs, ...
+                                             'hxyz', options.hxyz, ...
+                                             'ht', options.ht, ...
+                                             'grid_type', 'unstructured');
+
+    % save MatFile
+    obj_data = matfile('data/data-spiral-wave-unstructured-iomat.mat', 'Writable', true);
+    % save in regular matfile
+    save('data/data-spiral-wave-unstructured.mat', 'data', 'locs');
+
+    obj_data.data = data;
+    obj_data.locs = locs;
+    alpha_radius = 30;
+    hemi1_idx = 1:257;
+    hemi2_idx = 258:513;
+    get_convex_hull(obj_data, alpha_radius, hemi1_idx, hemi2_idx)
+
+end
+
+
+function travelling_wave_u()
+
+end
+
+
+function travelling_wave_s()
+end
+
+
+
+function travelling_biharmonic_wave_u()
+
+end
+
+
+
+function travelling_biharmonic_wave_u()
+
+end
