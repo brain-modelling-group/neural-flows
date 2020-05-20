@@ -18,8 +18,8 @@ switch data_type
         travelling_wave_s()
         travelling_wave_u()
     case {'rotating', 'spiral'}
-        rotating_wave_s()
-        rotating_wave_u()
+        spiral_wave_s()
+        spiral_wave_u()
     case {'biharmonic', 'biwave'}
         biharmonic_wave_s()
         biharmonic_wave_u()
