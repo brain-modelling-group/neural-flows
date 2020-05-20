@@ -3,6 +3,8 @@ function generate_data3d(data_type)
 % TODO: generalise so we can change parameters to generate waves eventually
 % At the moment many parameters are hardcoded as we know which waves we want for tests
 % Assumes this function is run from directory tests/
+% This functions produces MatFiles and default matfiles with the data. 
+% 
 
 if nargin < 1
     data_type = 'all';
@@ -40,7 +42,7 @@ end % generate_data3d()
 function plane_wave_s()
 
     % Save data
-    options.visual_debugging = true;
+    options.visual_debugging = false;
     options.hxyz = 1;
     options.hx = 1;
     options.hy = 1;
@@ -66,7 +68,7 @@ function plane_wave_s()
     obj_data.hz = hz;
     obj_data.ht = ht;
 
-end
+end % function plane_wave_s()
 
 
 function plane_wave_u()
@@ -92,7 +94,7 @@ function plane_wave_u()
     alpha_radius = 30;
     get_convex_hull(obj_data, alpha_radius, hemi1_idx, [])
  
-end
+end % function plane_wave_u()
 
 
 function spiral_wave_s()
@@ -107,7 +109,7 @@ function spiral_wave_s()
                                                    'velocity', [0 0], 'filament', 'helix', ...
                                                    'grid_type', 'structured');
 
-  obj_data = matfile('data/data-plane-spiral-structured-iomat.mat', 'Writable', true);
+  obj_data = matfile('data/data-spiral-wave-structured-iomat.mat', 'Writable', true);
   obj_data.data = data;
   obj_data.X = X;
   obj_data.Y = Y;
@@ -118,7 +120,7 @@ function spiral_wave_s()
   obj_data.hz = hz;
   obj_data.ht = ht;
 
-end
+end % function spiral_wave_s()
 
 
 function spiral_wave_u()
@@ -144,25 +146,119 @@ function spiral_wave_u()
     hemi2_idx = 258:513;
     get_convex_hull(obj_data, alpha_radius, hemi1_idx, hemi2_idx)
 
-end
-
-
-function travelling_wave_u()
-
-end
+end % function spiral_wave_u()
 
 
 function travelling_wave_s()
-end
+    % Generate data
+    options.hx = 2;
+    options.hy = 2;
+    options.hz = 2;
+    options.ht = 0.5;
+    [data, X, Y, Z, ~] = generate_data3d_travelling_wave('visual_debugging', true, ...
+                                                         'hxyz', options.hx, ...
+                                                         'ht', options.ht, ...
+                                                         'velocity', 1, ...
+                                                         'direction', 'y', ...
+                                                         'grid_type', 'structured');
+    % Reflect wave
+    data = [data(:, :, :, end:-1:1); data];
+ 
+    obj_data = matfile('data/data-travelling-wave-structured-iomat.mat', 'Writable', true);
+    obj_data.data = data;
+    obj_data.X = X;
+    obj_data.Y = Y;
+    obj_data.Z = Z;
+     
+    obj_data.hx = hx;
+    obj_data.hy = hy;
+    obj_data.hz = hz;
+    obj_data.ht = ht;
+end % function function travelling_wave_s()
 
+
+function travelling_wave_u()
+    options.hx = 2;
+    options.hy = 2;
+    options.hz = 2;
+    options.ht = 0.5;
+     
+    % Load centres of gravity
+    load('513COG_lr.mat', 'locs')
+     
+    % Generate fake data
+    [data, ~] = generate_data3d_travelling_wave('locs', locs, 'hxyz',  options.hx, ...
+                                                 'ht', options.ht, 'direction', 'y', ...
+                                                 'velocity', 1, ...
+                                                 'grid_type', 'unstructured');
+    % Reflect wave
+    data = [data(end:-1:1, :); data];
+
+    % save MatFile 
+    obj_data = matfile('data/data-travelling-wave-unstructured-iomat.mat', 'Writable', true);
+    % save in regular matfile
+    save('data/data-travelling-wave-unstructured.mat', 'data', 'locs');
+
+    obj_data.data = data;
+    obj_data.locs = locs;
+    alpha_radius = 30;
+    hemi1_idx = 1:257;
+    hemi2_idx = 258:513;
+    get_convex_hull(obj_data, alpha_radius, hemi1_idx, hemi2_idx)
+end % function travelling_wave_u()
+
+
+function travelling_biharmonic_wave_s()
+    options.hx = 0.004;
+    options.hy = 0.004;
+    options.hz = 0.004;
+    options.grid.lim_type = 'none'; % do not use ceil to calculate the grid.
+    options.ht = 0.025;
+
+ 
+    [data, X, Y, Z, ~] = generate_data3d_travelling_biharmonic_wave('hxyz', options.hx, ...
+                                                            'ht',   options.ht, ...
+                                                            'lim_type', options.grid.lim_type, ...
+                                                            'grid_type', 'structured');
+    obj_data = matfile('data/data-biharmonic-wave-structured-iomat.mat', 'Writable', true);
+    obj_data.data = data;
+    obj_data.X = X;
+    obj_data.Y = Y;
+    obj_data.Z = Z;
+     
+    obj_data.hx = hx;
+    obj_data.hy = hy;
+    obj_data.hz = hz;
+    obj_data.ht = ht;
+end % function travelling_biharmonic_wave_s()
 
 
 function travelling_biharmonic_wave_u()
+    options.hx = 0.004;
+    options.hy = 0.004;
+    options.hz = 0.004;
+    options.grid.lim_type = 'none'; % do not use ceil to calculate the grid.
+    options.ht = 0.025;
 
-end
+    % With these parameters the wave is moving at 4 m/s along the y-axis 
+    load('513COG_lr.mat')
+    locs = locs(1:257, :)/1000;
+     
+    [data, ~] = generate_data3d_travelling_biharmonic_wave('locs', locs, 'hxyz', options.hx, ...
+                                                            'ht',   options.ht, ...
+                                                            'lim_type', options.grid.lim_type, ...
+                                                            'grid_type', 'unstructured');
 
+    % save MatFile
+    obj_data = matfile('data/data-biharmonic-wave-unstructured-iomat.mat', 'Writable', true);
+    % save in regular matfile
+    save('data/data-biharmonic-wave-unstructured.mat', 'data', 'locs');
 
-
-function travelling_biharmonic_wave_u()
-
-end
+    obj_data.data = data;
+    obj_data.locs = locs;
+    alpha_radius = 30;
+    hemi1_idx = 1:257;
+    hemi2_idx = 258:513;
+    get_convex_hull(obj_data, alpha_radius, hemi1_idx, hemi2_idx)
+ 
+end %function travelling_biharmonic_wave_u()
