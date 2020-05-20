@@ -63,10 +63,10 @@ function plane_wave_s()
     obj_data.Y = Y;
     obj_data.Z = Z;
      
-    obj_data.hx = hx;
-    obj_data.hy = hy;
-    obj_data.hz = hz;
-    obj_data.ht = ht;
+    obj_data.hx = options.hx;
+    obj_data.hy = options.hy;
+    obj_data.hz = options.hz;
+    obj_data.ht = options.ht;
 
 end % function plane_wave_s()
 
