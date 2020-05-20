@@ -4,7 +4,8 @@ function generate_data3d(data_type)
 % At the moment many parameters are hardcoded as we know which waves we want for tests
 % Assumes this function is run from directory tests/
 % This functions produces MatFiles and default matfiles with the data. 
-% 
+% Takes about 15 mins to generate 12 datasets
+
 
 if nargin < 1
     data_type = 'all';
