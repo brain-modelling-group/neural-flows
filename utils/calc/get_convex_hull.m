@@ -23,7 +23,7 @@ function get_convex_hull(obj_data, alpha_radius, hemi1_idx, hemi2_idx)
 
 num_nodes_hemi1 = length(hemi1_idx);
 
-if ~isemtpy(hemi2_idx)
+if ~isempty(hemi2_idx)
     tri_hemi1  = get_boundary_triangles(obj_data.locs(hemi1, :), alpha_radius);
     tri_hemi2 = get_boundary_triangles(obj_data.locs(hemi2_idx, :), alpha_radius);
     tri_hemi2 = tri_right + num_nodes_hemi1; % fix numbering of vertex indices, assumes all the left nodes are contiguous
