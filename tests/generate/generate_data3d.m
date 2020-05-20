@@ -40,7 +40,8 @@ end
 end % generate_data3d()
 
 function plane_wave_s()
-
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
+        '::Info:: Generating plane wave (structured).'))
     % Save data
     options.visual_debugging = false;
     options.hxyz = 1;
@@ -72,6 +73,8 @@ end % function plane_wave_s()
 
 
 function plane_wave_u()
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
+        '::Info:: Generating plane wave (unstructured).'))
     % Generate data
     options.hxyz = 2;
     options.ht = 1;
@@ -98,7 +101,8 @@ end % function plane_wave_u()
 
 
 function spiral_wave_s()
-
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
+        '::Info:: Generating spiral wave (structured).'))
 % Generate data
  options.hx = 1;
  options.hy = 1;
@@ -124,6 +128,8 @@ end % function spiral_wave_s()
 
 
 function spiral_wave_u()
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
+        '::Info:: Generating spiral wave (unstructured).'))    
     % Generate data
     options.hxyz = 2;
     options.ht = 1;
@@ -150,6 +156,8 @@ end % function spiral_wave_u()
 
 
 function travelling_wave_s()
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
+        '::Info:: Generating travelling wave (structured).'))
     % Generate data
     options.hx = 2;
     options.hy = 2;
@@ -178,6 +186,8 @@ end % function function travelling_wave_s()
 
 
 function travelling_wave_u()
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
+        '::Info:: Generating travelling wave (unstructured).'))
     options.hx = 2;
     options.hy = 2;
     options.hz = 2;
@@ -209,6 +219,8 @@ end % function travelling_wave_u()
 
 
 function travelling_biharmonic_wave_s()
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
+        '::Info:: Generating travelling biharmonic wave (structured).'))
     options.hx = 0.004;
     options.hy = 0.004;
     options.hz = 0.004;
@@ -234,6 +246,8 @@ end % function travelling_biharmonic_wave_s()
 
 
 function travelling_biharmonic_wave_u()
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
+        '::Info:: Generating travelling biharmonic wave (unstructured).'))
     options.hx = 0.004;
     options.hy = 0.004;
     options.hz = 0.004;
