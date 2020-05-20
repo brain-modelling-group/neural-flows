@@ -20,9 +20,9 @@ switch data_type
     case {'rotating', 'spiral'}
         spiral_wave_s()
         spiral_wave_u()
-    case {'biharmonic', 'biwave'}
-        biharmonic_wave_s()
-        biharmonic_wave_u()
+    case {'biharmonic', 'biwave', 'travelling-biharmonic'}
+        travelling_biharmonic_wave_s()
+        travelling_biharmonic_wave_u()
     case {'all'}
         plane_wave_s()
         plane_wave_u()
