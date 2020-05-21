@@ -6,11 +6,11 @@
       "dir_tmp": "/tmp",
       "params": {
         "input": {
-          "filename": "test-flows3d-estimation_travelling-wave_uac_in.json",
+          "filename": "test-flows3d-estimation_travelling-wave_upc_in.json",
           "dir": "json"
         },
         "output": {
-          "filename": "test-flows3d-estimation_travelling-wave_uac_out.json",
+          "filename": "test-flows3d-estimation_travelling-wave_upc_out.json",
           "dir": "json"
         }
       },
