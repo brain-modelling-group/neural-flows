@@ -7,7 +7,7 @@ function [figure_handle] = plot3d_pcolor3_movie(fig_handle, X, Y, Z, V)
 
 if isempty(fig_handle)
     fig_handle = figure('Name', 'nflows-pcolor3-movie');
-    fig_handle.Position = [31.6442   10.0013   29.5010   22.5954];
+    %fig_handle.Position = [31.6442   10.0013   29.5010   22.5954];
 end
 
 crange=quantile(V(1:100:end),[0.001 0.999]); 
@@ -33,7 +33,7 @@ for tt=1:length(time)
         these_axes.YLabel.String = 'Y';
         these_axes.ZLabel.String = 'Z';
         cla;
-        pcolor3(X, Y, Z, squeeze(V(:, :, :, tt)), 'axes', these_axes);
+        pcolor3(X, Y, Z, squeeze(V(:, :, :, tt)), 'axes', these_axes, 'fig', fig_handle);
         axis off
         title(['Time:' num2str(time(tt), '%.3f') ' ms'])
         view([0 90])
