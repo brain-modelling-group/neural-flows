@@ -30,9 +30,9 @@
       "label": "",
       "keep": true
     },
-    "hx": 2,
-    "hy": 2,
-    "hz": 2,
+    "hx": 1,
+    "hy": 1,
+    "hz": 1,
     "ht": 1,
     "neighbour_method": "",
     "extrapolation_method": "",
