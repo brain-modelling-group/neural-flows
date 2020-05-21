@@ -38,7 +38,7 @@
     "extrapolation_method": "",
     "boundary": {
       "alpha_radius": 30,
-      "thickness": 3
+      "thickness": 2
     }
   },
   "flows": {
@@ -107,7 +107,7 @@
     "hz": [],
     "units": {
       "space": "mm",
-      "time": "ms"
+      "time":  "ms"
     },
     "boundary": {
       "alpha_radius" : 30
