@@ -2,16 +2,16 @@
   "general": {
     "storage": {
       "time_stamp": [],
-      "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/tests",
+      "dir": "data",
       "dir_tmp": "/tmp",
       "params": {
         "input": {
-          "filename": "test-flow-travellingwave3d-scattered-in.json",
-          "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/tests"
+          "filename": "test-flows3d-estimation_travelling-wave_uah_in.json",
+          "dir": "data"
         },
         "output": {
-          "filename": "test-flow-travellingwave3d-scattered-out.json",
-          "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/tests"
+          "filename": "test-flows3d-estimation_travelling-wave_uah_out.json",
+          "dir": "data"
         }
       },
       "format": "iomat"
@@ -94,8 +94,8 @@
   },
   "data": {
     "file": {
-      "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/tests",
-      "name": "test_flow_estimation__travellingwave3d_scattered_hs3d.mat"
+      "dir": "data",
+      "name": "data-travelling-wave-unstructured.mat"
     },
     "slice": {
       "enabled": false,
@@ -105,12 +105,12 @@
       "type": "unstructured"
     },
     "ht": 0.5,
-    "hx": 2,
-    "hy": 2,
-    "hz": 2,
+    "hx": [],
+    "hy": [],
+    "hz": [],
     "units": {
-      "space": "m",
-      "time": "s"
+      "space": "mm",
+      "time":  "ms"
     },
     "mode": "amplitude"
   },
