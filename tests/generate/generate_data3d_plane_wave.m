@@ -30,7 +30,7 @@ tmp = strcmpi(varargin,'direction');
 if any(tmp)
     direction = varargin{find(tmp)+1}; 
 else
-    direction = 'x';
+    direction = 'y';
 end
 
 tmp = strcmpi(varargin,'grid_type'); 
@@ -69,9 +69,9 @@ if any(tmp)
     max_val_y  = max_xyz(2);
     max_val_z  = max_xyz(3);
 else
-    max_val_x = 16;
+    max_val_x = 18;
     max_val_y = 18;
-    max_val_z = 16;
+    max_val_z = 18;
 end
 
 tmp = strcmpi(varargin,'min_val_space'); % min value in the grid along each axis
@@ -81,9 +81,9 @@ if any(tmp)
     min_val_y  = min_xyz(2);
     min_val_z  = min_xyz(3);
 else
-    min_val_x = -16;
+    min_val_x = -18;
     min_val_y = -18;
-    min_val_z = -16;
+    min_val_z = -18;
 end
 
 tmp = strcmpi(varargin,'visual_debugging'); % note really a velocity but an integer scaling for circshift
