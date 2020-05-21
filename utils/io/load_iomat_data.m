@@ -12,6 +12,8 @@ switch params.data.grid.type
         case 'unstructured'
             params.data.shape.timepoints = size(obj_data, 'data', 1);
             params.data.shape.nodes =  size(obj_data, 'data', 2);
+        case 'strucutured'
+            params.data.shape.timepoints = params.data.shape.size(4);
             
 end
 
