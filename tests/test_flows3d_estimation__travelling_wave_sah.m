@@ -1,6 +1,6 @@
 function test_flows3d_estimation__travelling_wave_sah()
 % Estimate amplitude-based flows of a travelling wave using Horn-Schunk 3D algorithm.
-% The wave is defined on an structured domain (ie, regular grid).
+% The wave is defined on a structured domain (ie, regular grid).
 % This is a wave moving at 4 m/s in the y-direction, and then travelling
 % back in the same direction but opposite orientation (- 4 m/s)
 % NOTE: Assumes this function is called from tests/ directory 
