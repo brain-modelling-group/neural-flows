@@ -63,7 +63,7 @@
           "seed": 42
         },
         "nodal_flows": {
-          "enabled": false
+          "enabled": true
         }
       }
     },
