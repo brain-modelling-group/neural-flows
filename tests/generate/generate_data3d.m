@@ -82,7 +82,7 @@ fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
     options.visual_debugging = false;
     hemi1_idx = 1:257;
     load('513COG_lr.mat', 'locs')
-    locs = locs(hemi1_idx, :);
+    %locs = locs(hemi1_idx, :);
      
     [data, ~] = generate_data3d_plane_wave('hxyz', options.hxyz, 'ht', options.ht, ...
                                             'visual_debugging', options.visual_debugging, ...
@@ -98,7 +98,7 @@ fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
     obj_data.data = data;
     obj_data.locs = locs;
     alpha_radius = 30;
-    get_convex_hull(obj_data, alpha_radius, hemi1_idx, [])
+    get_convex_hull(obj_data, alpha_radius, hemi1_idx, 258:513)
  
 end % function plane_wave_u()
 
