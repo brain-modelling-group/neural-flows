@@ -1,7 +1,8 @@
 function test_flows3d_estimation__plane_wave_sah()
 % Estimate amplitude-based flows of a plane wave using Horn-Schunk 3D algorithm.
-% Assumes this function is called from tests/ directory 
+% The wave is defined on an structured domain (ie, regular grid).
 % This is a plane wave moving at 4 m/s in the y-direction
+% NOTE: Assumes this function is called from tests/ directory 
 
 input_params = read_write_json('test-flows3d-estimation_plane-wave_sah_in.json', 'json/', 'read');
 
