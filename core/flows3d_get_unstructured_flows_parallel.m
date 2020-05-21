@@ -57,7 +57,7 @@ end
     %spmd_parfor_with_matfiles(number_of_things, parfun, temp_fname_obj, storage_expression)
     parfun = @interpolate_flow_step;
     [obj_flows] = spmd_parfor_with_matfiles(tpts, parfun, obj_flows, interpolation_3d_storage_expression);
-    
+    obj_flows.uxyz_n = squeeze(sqrt(obj_flows.uxyz(:, 1, :).^2 + obj_flows.uxyz(:, 2, :).^2 + obj_flows.uxyz(:, 3, :).^2));
     % Child function with access to local scope variables from parent
     % function
 %end
