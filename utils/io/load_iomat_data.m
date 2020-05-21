@@ -14,7 +14,12 @@ switch params.data.grid.type
             params.data.shape.nodes =  size(obj_data, 'data', 2);
         case 'structured'
             params.data.shape.timepoints = params.data.shape.size(4);
-            
+            params.data.shape.x = params.data.shape.size(2); 
+            params.data.shape.y = params.data.shape.size(1);
+            params.data.shape.z = params.data.shape.size(3);
+            params.data.hx = data_struct.hx;
+            params.data.hy = data_struct.hy;
+            params.data.hz = data_struct.hz;
 end
 
  % Human readable indexing locs array
