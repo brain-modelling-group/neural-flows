@@ -1,4 +1,4 @@
-function [figure_handle] = plot3d_pcolor3_movie(fig_handle, X, Y, Z, V)
+function [fig_handle] = plot3d_pcolor3_movie(fig_handle, X, Y, Z, V)
 
 % Plots volumetric data over time - memory consuming
 % V is a 4D array, where the three frost dimensions are spatial dimensions
