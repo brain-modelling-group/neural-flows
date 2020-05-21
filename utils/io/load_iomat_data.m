@@ -20,6 +20,7 @@ switch params.data.grid.type
             params.data.hx = obj_data.hx;
             params.data.hy = obj_data.hy;
             params.data.hz = obj_data.hz;
+            params.data.ht = obj_data.ht;
 end
 
  % Human readable indexing locs array
