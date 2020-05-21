@@ -60,7 +60,7 @@ end
 
 
 % Check if data was already transformed or not
-if strcmp(params.data.mode = 'amplitude')
+if strcmp(params.data.mode, 'amplitude')
     phi = calculate_insta_phase(obj_data.data);
 else
     phi = obj_data.phi;
