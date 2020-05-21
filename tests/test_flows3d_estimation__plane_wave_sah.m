@@ -11,6 +11,6 @@ output_params = main(input_params);
 % Plot stuff
 fig_hist = figure('Name', mfilename);
 
-plot_debug_flow_histograms(fig_hist, obj_flows, output_params)
+plot_debug_flow_histogram(fig_hist, obj_flows, output_params)
  
 end % function test_flows3d_estimation__plane_wave_sah()
