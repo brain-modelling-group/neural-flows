@@ -2,16 +2,16 @@
   "general": {
     "storage": {
       "time_stamp": [],
-      "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/tests",
+      "dir": "tests",
       "dir_tmp": "/tmp",
       "params": {
         "input": {
-          "filename": "test-flow-planewave3d-grid-in.json",
-          "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/tests"
+          "filename": "test-flows3d-estimation_plane-wave_sah_in.json",
+          "dir": "tests/json"
         },
         "output": {
-          "filename": "test-flow-planewave3d-grid-out.json",
-          "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/tests"
+          "filename": "test-flows3d-estimation_plane-wave_sah_out.json",
+          "dir": "tests/json"
         }
       },
       "format": "iomat"
@@ -55,7 +55,7 @@
     },
     "decomposition": {
       "svd": {
-        "enabled": true,
+        "enabled": false,
         "modes": 4,
         "grid": {
           "type": "structured"
@@ -74,8 +74,8 @@
   },
   "data": {
     "file": {
-      "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/tests",
-      "name": "test_flow_estimation__planewave3d_grid.mat"
+      "dir": "tests/data",
+      "name": "data-plane-wave-structured-iomat.mat"
     },
     "slice": {
       "enabled": false,
@@ -90,7 +90,7 @@
     "hz": 1,
     "units": {
       "space": "m",
-      "time": "s"
+      "time":  "s"
     },
     "mode": "amplitude"
   },
