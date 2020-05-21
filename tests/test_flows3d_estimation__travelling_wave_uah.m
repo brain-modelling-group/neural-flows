@@ -16,5 +16,4 @@ fig_hist = figure('Name', mfilename);
 
 plot_debug_flow_histogram(fig_hist, obj_flows, output_params)
  
- xlabel('u_{norm} [m/s]')
 end % function test_flows3d_estimation__travelling_wave_uah
