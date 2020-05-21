@@ -22,7 +22,7 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params
             obj_data = load_iomat_interp(params);
         case 'structured'
             % Original data is already a strucutured grid
-            obj_data = load_iomat_data(params);
+            [obj_data, params] = load_iomat_data(params);
     end
 %----------------------------- FLOW CALCULATION -------------------------------%
     % Check if we are receiving one slice of the data
