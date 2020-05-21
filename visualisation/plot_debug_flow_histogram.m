@@ -1,21 +1,27 @@
 function plot_debug_flow_histogram(fig_handle, obj_flows, params)
 
 
-switch params.data.grid.type 
+switch params.flows.method.data.mode
+    case {'amplitude'}
+         switch params.data.grid.type 
  
-    case {'structured'}
-        ux = obj_flows.ux(2:end-1, 2:end-1, 2:end-1, :);
-        uy = obj_flows.uy(2:end-1, 2:end-1, 2:end-1, :);
-        uz = obj_flows.uz(2:end-1, 2:end-1, 2:end-1, :);
-        un = obj_flows.un(2:end-1, 2:end-1, 2:end-1, :);
-        
-    case {'unstructured'}
-        ux = obj_flows.uxyz(:, 1, :);
-        uy = obj_flows.uxyz(:, 2, :);
-        uz = obj_flows.uxyz(:, 3, :);
-        un = obj_flows.uxyz_n;
-    otherwise
-        
+            case {'structured'}
+                ux = obj_flows.ux(2:end-1, 2:end-1, 2:end-1, :);
+                uy = obj_flows.uy(2:end-1, 2:end-1, 2:end-1, :);
+                uz = obj_flows.uz(2:end-1, 2:end-1, 2:end-1, :);
+                un = obj_flows.un(2:end-1, 2:end-1, 2:end-1, :);
+
+            case {'unstructured'}
+                ux = obj_flows.uxyz(:, 1, :);
+                uy = obj_flows.uxyz(:, 2, :);
+                uz = obj_flows.uxyz(:, 3, :);
+                un = obj_flows.uxyz_n;
+         end
+    case {'phase'}
+        ux = obj_flows.vx;
+        uy = obj_flows.vy;
+        uz = obj_flows.vz;
+        un = obj_flows.vn; 
 end
         
 unit_label = strcat('[', params.data.units.space, '/', ...
