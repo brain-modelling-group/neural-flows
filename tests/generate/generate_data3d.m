@@ -46,9 +46,9 @@ fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
     % Save data
     options.visual_debugging = false;
     options.hxyz = 1;
-    options.hx = 1;
-    options.hy = 1;
-    options.hz = 1;
+    options.hx = 2;
+    options.hy = 2;
+    options.hz = 2;
     options.ht = 1;
     options.direction = 'y';
     options.grid_type = 'structured';
@@ -77,7 +77,7 @@ function plane_wave_u()
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
         '::Info:: Generating plane wave (unstructured).'))
     % Generate data
-    options.hxyz = 1;
+    options.hxyz = 2;
     options.ht   = 1;
     options.visual_debugging = false;
     hemi1_idx = 1:257;
