@@ -7,11 +7,11 @@
       "params": {
         "input": {
           "filename": "test-flow-travellingwave3d-grid-in.json",
-          "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/tests"
+          "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/tests/json"
         },
         "output": {
           "filename": "test-flow-travellingwave3d-grid-out.json",
-          "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/tests"
+          "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/tests/json"
         }
       },
       "format": "iomat"
@@ -74,8 +74,8 @@
   },
   "data": {
     "file": {
-      "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/tests",
-      "name": "test_flow_estimation__travellingwave3d_grid_hs3d.mat"
+      "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/tests/data",
+      "name": "test_flows3d_estimation__travelling_wave_sah.mat"
     },
     "slice": {
       "enabled": false,
@@ -85,9 +85,9 @@
       "type": "structured"
     },
     "ht": 1,
-    "hx": 1,
-    "hy": 1,
-    "hz": 1,
+    "hx": 2,
+    "hy": 2,
+    "hz": 2,
     "units": {
       "space": "m",
       "time": "s"
