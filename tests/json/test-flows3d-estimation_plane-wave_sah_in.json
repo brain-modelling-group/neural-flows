@@ -2,16 +2,16 @@
   "general": {
     "storage": {
       "time_stamp": [],
-      "dir": "tests",
+      "dir": "data",
       "dir_tmp": "/tmp",
       "params": {
         "input": {
           "filename": "test-flows3d-estimation_plane-wave_sah_in.json",
-          "dir": "tests/json"
+          "dir": "json"
         },
         "output": {
           "filename": "test-flows3d-estimation_plane-wave_sah_out.json",
-          "dir": "tests/json"
+          "dir": "json"
         }
       },
       "format": "iomat"
@@ -74,7 +74,7 @@
   },
   "data": {
     "file": {
-      "dir": "tests/data",
+      "dir": "data",
       "name": "data-plane-wave-structured-iomat.mat"
     },
     "slice": {
@@ -85,9 +85,9 @@
       "type": "structured"
     },
     "ht": 1,
-    "hx": 1,
-    "hy": 1,
-    "hz": 1,
+    "hx": 2,
+    "hy": 2,
+    "hz": 2,
     "units": {
       "space": "m",
       "time":  "s"
