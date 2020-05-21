@@ -38,7 +38,7 @@ hist_handle(4) = histogram(un(:), 'Normalization', 'pdf');
 xlabel(strcat('u_{norm} ',  unit_label))
 
 for hh=1:length(hist_handle)
-    hist_handle(hh).EdgeColor = 'white';
+    hist_handle(hh).EdgeColor = [0.5 0.5 0.5];
     hist_handle(hh).FaceColor = [0.5 0.5 0.5];
 end
 
