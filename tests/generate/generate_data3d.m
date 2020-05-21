@@ -50,7 +50,7 @@ fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
     options.hy = 1;
     options.hz = 1;
     options.ht = 1;
-    options.direction = 'radial';
+    options.direction = 'y';
     options.grid_type = 'structured';
 
     % Generate data
@@ -77,8 +77,8 @@ function plane_wave_u()
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
         '::Info:: Generating plane wave (unstructured).'))
     % Generate data
-    options.hxyz = 2;
-    options.ht = 1;
+    options.hxyz = 1;
+    options.ht   = 1;
     options.visual_debugging = false;
     hemi1_idx = 1:257;
     load('513COG_lr.mat', 'locs')
@@ -86,7 +86,7 @@ fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
      
     [data, ~] = generate_data3d_plane_wave('hxyz', options.hxyz, 'ht', options.ht, ...
                                             'visual_debugging', options.visual_debugging, ...
-                                            'direction', 'x', ...
+                                            'direction', 'y', ...
                                             'locs', locs, ...
                                             'grid_type', 'unstructured');
                                                    
