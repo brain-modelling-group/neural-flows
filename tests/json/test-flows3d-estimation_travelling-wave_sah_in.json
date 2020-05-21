@@ -84,10 +84,10 @@
     "grid": {
       "type": "structured"
     },
-    "ht": 1,
-    "hx": 2,
-    "hy": 2,
-    "hz": 2,
+    "ht": 0.5,
+    "hx": [],
+    "hy": [],
+    "hz": [],
     "units": {
       "space": "m",
       "time":  "s"
