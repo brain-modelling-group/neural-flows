@@ -6,41 +6,24 @@
       "dir_tmp": "/tmp",
       "params": {
         "input": {
-          "filename": "test-flows3d-estimation_plane-wave_uah_in.json",
+          "filename": "test-flows3d-estimation_plane-wave_uac_in.json",
           "dir": "json"
         },
         "output": {
-          "filename": "test-flows3d-estimation_plane-wave_uah_out.json",
+          "filename": "test-flows3d-estimation_plane-wave_uac_out.json",
           "dir": "json"
         }
       },
       "format": "iomat"
     },
     "parallel": {
-      "enabled": false,
+      "enabled": true,
       "workers_fraction": 0.8
     }
   },
   "interpolation": {
-    "enabled": true,
-    "file": {
-      "exists": false,
-      "dir": "",
-      "name": "",
-      "label": "",
-      "keep": true
+    "enabled": false
     },
-    "hx": 1,
-    "hy": 1,
-    "hz": 1,
-    "ht": 1,
-    "neighbour_method": "",
-    "extrapolation_method": "",
-    "boundary": {
-      "alpha_radius": 30,
-      "thickness": 2
-    }
-  },
   "flows": {
     "enabled": true,
     "file": {
@@ -54,16 +37,20 @@
       "data": {
         "mode": "amplitude"
       },
-      "name": "hs3d",
-      "hs3d": {
+      "name": "cnem",
+      "cnem": {
+        "convex_hull": "bi",
         "alpha_smooth": 0.5,
         "max_iterations": 256,
+        "burnin": {
+          "length": 8
+        },
         "initial_conditions": {
           "mode": "random",
           "seed": 42
         },
         "nodal_flows": {
-          "enabled": true
+          "enabled": false
         }
       }
     },
@@ -92,7 +79,7 @@
   "data": {
     "file": {
       "dir": "data",
-      "name": "data-plane-wave-unstructured.mat"
+      "name": "data-plane-wave-unstructured-iomat.mat"
     },
     "slice": {
       "enabled": false,
@@ -106,8 +93,8 @@
     "hy": [],
     "hz": [],
     "units": {
-      "space": "mm",
-      "time":  "ms"
+      "space":"mm",
+      "time": "ms"
     },
     "boundary": {
       "alpha_radius" : 30
