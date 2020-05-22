@@ -72,9 +72,9 @@ function [params, obj_interp, obj_interp_sentinel] = data3d_interpolate_serial(d
     obj_interp.Z = Z;
     obj_interp.locs = locs;
     
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started interpolating data.'))              
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started interpolating data.'))
+    tmp_data = nan(size(X));
     for this_tpt=1:tpts
-        tmp_data = nan(size(X));
         data_interpolant = scatteredInterpolant(locs(:, x_dim_locs), ...
                                                 locs(:, y_dim_locs), ...
                                                 locs(:, z_dim_locs), ...
