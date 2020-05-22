@@ -17,7 +17,7 @@
       "format": "iomat"
     },
     "parallel": {
-      "enabled": true,
+      "enabled": false,
       "workers_fraction": 0.8
     }
   },
@@ -39,7 +39,7 @@
       },
       "name": "cnem",
       "cnem": {
-        "convex_hull": "bi",
+        "convex_hull": "bi"
       }
     },
     "visualisation": {
