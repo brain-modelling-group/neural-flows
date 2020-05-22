@@ -1,49 +1,18 @@
-function test_flow_estimation__spiralwave3d_scattered_cnem()
-% NOTE: Takes about 152 seconds @dracarys -- cnem is a c++ multithreaded
-% library.
+function test_flows3d_estimation__spiral_wave_upc()
+% Estimate phase-based flows of a spiral wave using CNEM library, 
+% and Roberts et al. 2019 method. 
 
-% Generate data
- options.hx = 1;
- options.hy = 1;
- options.hz = 1;
- options.ht = 1;
- options.alpha_radius = 30;
- options.is_phase = false;
- 
- % With these parameters the wave is moving at 4 m/s along the y-axis
- 
- load('513COG.mat', 'COG')
- locs = COG(1:256, :);
- 
- 
- [wave3d, ~] = generate_wave3d_spiral_scattered(locs, 'hxyz',  options.hx, 'ht', options.ht);
- 
- if options.is_phase
-     % Transform data into phase via hilber transform
-     wave3d = calculate_insta_phase(wave3d);
-     fig_name = 'nflows-test-spiralwave3d-scattered-cnem-phase';
- else
-     fig_name = 'nflows-test-spiralwave3d-scattered-cnem-activity';
- end
- 
- v = flows3d_estimate_cnem_flow(wave3d, locs, options.ht, options);
- 
- fig_hist = figure('Name', fig_name);
+% NOTE: Assumes this function is called from tests/ directory 
 
- subplot(1, 4, 1, 'Parent', fig_hist)
- histogram(v.vxp(:))
- xlabel('ux')
- 
- subplot(1, 4 ,2, 'Parent', fig_hist)
- histogram(v.vyp(:))
- xlabel('uy')
+input_params = read_write_json('test-flows3d-estimation_spiral-wave_upc_in.json', 'json/', 'read');
 
- subplot(1, 4, 3, 'Parent', fig_hist)
- histogram(v.vzp(:))
- xlabel('uz')
- 
- subplot(1, 4, 4, 'Parent', fig_hist)
- histogram(sqrt(v.vxp(:).^2+v.vyp(:).^2+v.vzp(:).^2))
- xlabel('u_{norm} [mm/ms]')
+output_params = main(input_params); 
 
-end % function test_flow_estimation__spiralwave3d_scattered_cnem()
+[obj_flows] = load_iomat_flows(output_params);
+
+% Plot stuff
+fig_hist = figure('Name', mfilename);
+
+plot_debug_flow_histogram(fig_hist, obj_flows, output_params)
+
+end % function test_flows3d_estimation__spiral_wave_upc()
