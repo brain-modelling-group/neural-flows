@@ -17,7 +17,7 @@
       "format": "iomat"
     },
     "parallel": {
-      "enabled": false,
+      "enabled": true,
       "workers_fraction": 0.8
     }
   },
