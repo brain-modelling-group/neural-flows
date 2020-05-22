@@ -1,7 +1,7 @@
 function test_flows3d_estimation__plane_wave_uac()
 % Estimate amplitude-based flows of a plane wave using CNEM library.
 % The wave is defined on an unstructured domain (ie, scattered points).
-% This is a plane wave moving at 4 m/s in the y-direction
+% This is a plane wave moving at 2 m/s in the y-direction
 % NOTE: Assumes this function is called from tests/ directory 
 
 input_params = read_write_json('test-flows3d-estimation_plane-wave_uac_in.json', 'json/', 'read');
