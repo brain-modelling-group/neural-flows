@@ -4,6 +4,10 @@ function test_flows3d_estimation__plane_wave_uah()
 % This is a plane wave moving at 2 m/s in the y-direction
 % NOTE: Assumes this function is called from tests/ directory 
 
+% |     | Data Domain    | Data Mode   | Flow Method     |
+% |-----|----------------|-------------|-----------------|
+% | uac | (u)nstructured | (a)mplitude | (h)orn-schunk3d |
+
 input_params = read_write_json('test-flows3d-estimation_plane-wave_uah_in.json', 'json/', 'read');
 
 output_params = main(input_params); 

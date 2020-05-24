@@ -4,6 +4,9 @@ function test_flows3d_estimation__plane_wave_upc()
 % The wave is defined on an unstructured domain (ie, scattered points).
 % This is a wave moving at 2 m/s in the y-direction.
 % NOTE: Assumes this function is called from tests/ directory 
+% |     | Data Domain    | Data Mode   | Flow Method     |
+% |-----|----------------|-------------|-----------------|
+% | upc | (u)nstructured | (p)hase     | (c)nem          |
 
 input_params = read_write_json('test-flows3d-estimation_plane-wave_upc_in.json', 'json/', 'read');
 

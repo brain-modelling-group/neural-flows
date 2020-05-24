@@ -3,6 +3,9 @@ function test_flows3d_estimation__plane_wave_sah()
 % The wave is defined on an structured domain (ie, regular grid).
 % This is a plane wave moving at 2 m/s in the y-direction
 % NOTE: Assumes this function is called from tests/ directory 
+% |     | Data Domain    | Data Mode   | Flow Method     |
+% |-----|----------------|-------------|-----------------|
+% | sah | (s)tructured   | (a)mplitude | (h)orn-schunk3d |
 
 input_params = read_write_json('test-flows3d-estimation_plane-wave_sah_in.json', 'json/', 'read');
 
