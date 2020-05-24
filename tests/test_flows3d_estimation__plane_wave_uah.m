@@ -6,7 +6,7 @@ function test_flows3d_estimation__plane_wave_uah()
 
 % |     | Data Domain    | Data Mode   | Flow Method     |
 % |-----|----------------|-------------|-----------------|
-% | uac | (u)nstructured | (a)mplitude | (h)orn-schunk3d |
+% | uah | (u)nstructured | (a)mplitude | (h)orn-schunk3d |
 
 input_params = read_write_json('test-flows3d-estimation_plane-wave_uah_in.json', 'json/', 'read');
 
