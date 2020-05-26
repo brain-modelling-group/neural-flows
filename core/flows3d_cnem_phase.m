@@ -6,7 +6,7 @@ function params = flows3d_cnem_phase(obj_data, obj_flows, params)
 %          phi     -- a 2D array of size [time x nodes/locs] matrix of (signal's envelope) phases 
 %                     (assumed unwrapped).
 %          locs     -- a 2D array of size [nodes x 3] with the x,y,z
-%                     coordinates of the nodes/regions centroids.
+%                     coordinates of the nodes/regions centroidsnt = params.flows.data.shape.t.
 %          dt      -- time step or sampling interval of the timseries in
 %                     yphasep
 %          opts    --  a struct with options, whose fields are:
@@ -106,6 +106,7 @@ obj_flows.vn = vnormp;
 obj_flows.vx = vnormp.*-dphidxp./normgradphip; % magnitude * unit vector component
 obj_flows.vy = vnormp.*-dphidyp./normgradphip;
 obj_flows.vz = vnormp.*-dphidzp./normgradphip;
+params.flows.data.shape.t = tpts;
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Done.'))
 
 end % function flows3d_cnem_phase()
