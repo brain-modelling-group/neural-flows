@@ -1,8 +1,8 @@
 {
   "general": {
     "storage": {
-      "dir": "/path/to/directory/to/store/output/files",
-      "dir_tmp": "/tmp"
+      "dir": "/path/to/directory/to/store/output/files", //user: directory where results will be stored
+      "dir_tmp": "/tmp"                                , //user: temp directory for intermediate results 
     },
     "interal_format": "iomat",
     "parallel": {
@@ -12,10 +12,10 @@
   },
   "data": {
     "dir": {
-      "name": "/home/paula/Work/Code/matlab-neuro/neural-flows/demo-data"
+      "name": "/home/user/project-x/demo-data",    // user: where the input data is saved
     },
     "file": {
-      "name": "rotating_wave_W_c1_d1ms_trial1.mat"
+      "name": "my_data_file.mat",                  // user: name of the data file, can be a regular .mat or a  MatFile
     },
     "slice": {
       "id": 0
@@ -23,13 +23,13 @@
     "grid": {
       "type": "unstructured"
     },
-    "ht": 0.25,
-    "hx": [],
+    "ht": 0.25,                                    // user: temporal resolution
+    "hx": [],                                      // 
     "hy": [],
     "hz": [],
     "units": {
-      "space": "mm",
-      "time": "ms"
+      "space":"mm",                                // user: spatial units
+      "time": "ms",                                // user: tempora units
     }
   },
   "interpolation": {
@@ -41,13 +41,12 @@
     "dir": {
       "name": []
     },
-    "hx": 3,
-    "hy": 3,
-    "hz": 3,
-    "ht": 4,
+    "hx": 3,                                       // user: spatial resolution of interpolation grid
+    "hy": 3,                                       // user: spatial resolution of interpolation grid
+    "hz": 3,                                       // user: spatial resolution of interpolation grid
     "boundary": {
-      "alpha_radius": 30,
-      "thickness": 2
+      "alpha_radius": 30,                          // user: radius of alpha shape to define convex hull
+      "thickness": 2,                              // user: thickness in voxels of the boundary mask
     },
     "visualisation": {
       "enabled": true
@@ -70,9 +69,6 @@
         "max_iterations": 128
       }
     },
-    "visualisation": {
-      "enabled": true
-    },
     "decomposition": {
       "svd": {
         "enabled": true,
@@ -81,7 +77,10 @@
           "type": "unstructured"
         }
       }
-    }
+    },
+    "visualisation": {
+      "enabled": true
+    },
   },
   "singularity": {
     "file": {
@@ -93,8 +92,8 @@
       "enabled": true,
       "mode": "vel",
       "threshold": [
-        0,
-        0.015625
+        0,                                  // user: lower bound of threshold to detect quasi-null-flows
+        0.015625                            // user: upper bound of threshold to detect quasi-null-flows
       ]
     },
     "classification": {
