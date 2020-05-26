@@ -11,6 +11,7 @@ function rotating_wave(case_label)
 % | dracarys  | (u)nstructured | (a)mplitude | (c)nem|         |      8     |  X       |    X    | 
 % | tesseract | (u)nstructured | (a)mplitude | (h)orn-schunk3d |      6     |  3.73 min|    X    |  
 % | tesseract | (u)nstructured | (a)mplitude | (c)nem|         |      8     |  0.75 min|    X    |
+% | tesseract | (u)nstructured | (p)hase     | (c)nem|         |      8     |  0.75 min|    X    |
 
 if nargin < 1
     case_label = 'uah';
@@ -22,7 +23,7 @@ switch case_label
     case 'uac'
         input_params_filename = 'rotating_wave_uac_in.json';
     case 'upc'
-        input_params_filename = 'rotating_wave_uap_in.json';
+        input_params_filename = 'rotating_wave_upc_in.json';
 end
 
 
