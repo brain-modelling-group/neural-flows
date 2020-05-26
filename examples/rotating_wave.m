@@ -1,11 +1,32 @@
-% This script runs the whole neural-flows workflow on a small epoch of
-% simulated data, that mostly corresponds to rotating wave.
+function rotating_wave(case_label)
+% This script runs the whole neural-flows workflow on a small epoch of simulated 
+% data, that mostly corresponds to rotating wave.
+% 
+% NOTE: Assumes this function is run from the top level directory neural-flows/
 
-% Performance: This takes about 5 minutes to run with 11 workers for parallel
-% functions. Memory usage is approximately 6GB.
+% PERFORMANCE:
+% |    Host   | Data Domain    | Data Mode   | Flow Method     | # workers  |  Runtime |  Memory |
+% |-----------|----------------|-------------|-----------------|------------|----------|---------|
+% | dracarys  | (u)nstructured | (a)mplitude | (h)orn-schunk3d |      11    |  5  min  |   6 GB  |
+% | dracarys  | (u)nstructured | (a)mplitude | (c)nem|         |      8     |  X       |    X    | 
+% | tesseract | (u)nstructured | (a)mplitude | (h)orn-schunk3d |      6     |  3.73 min|    X    |  
+% | tesseract | (u)nstructured | (a)mplitude | (c)nem|         |      8     |  0.75 min|    X    |
 
-input_params_filename = 'rotating_wave_cnem_in.json';
-input_params_dir  = '/home/paula/Work/Code/matlab-neuro/neural-flows/examples';
+if nargin < 1
+    case_label = 'uah';
+end
+
+switch case_label
+    case 'uah'
+        input_params_filename = 'rotating_wave_uah_in.json';
+    case 'uac'
+        input_params_filename = 'rotating_wave_uac_in.json';
+    case 'upc'
+        input_params_filename = 'rotating_wave_uap_in.json';
+end
+
+
+input_params_dir  = 'examples';
 json_mode = 'read';
 
 % Load options
@@ -18,3 +39,5 @@ perform_svd_mode_decomposition(output_params);
 
 analyse_singularities(output_params)
 %plot1d_speed_distribution(output_params)
+
+end %function example_rotating_wave()
