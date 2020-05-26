@@ -2,16 +2,16 @@
   "general": {
     "storage": {
       "time_stamp": [],
-      "dir": "demo-data",
+      "dir": "scratch",
       "dir_tmp": "/tmp",
       "params": {
         "input": {
           "filename": "rotating_wave_upc_in.json",
-          "dir": "example"
+          "dir": "examples"
         },
         "output": {
           "filename": "rotating_wave_upc_out.json",
-          "dir": "example"
+          "dir": "examples"
         }
       },
       "format": "iomat"
@@ -66,7 +66,7 @@
   },
   "data": {
     "file": {
-      "dir": "data",
+      "dir": "demo-data",
       "name": "rotating_wave_W_c1_d1ms_iomat.mat"
     },
     "slice": {
