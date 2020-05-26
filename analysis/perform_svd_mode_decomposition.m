@@ -122,7 +122,7 @@ function [X, Y, Z, ux, uy, uz, num_points] = svd_nodal(params, obj_flows)
     uy(num_points, nt) = 0;
     uz(num_points, nt) = 0;
     
-    if strcmp(params.flows.data.mode, 'amplitude') 
+    if strcmp(params.flows.method.data.mode, 'amplitude') 
 
          for tt=1:nt
             temp = squeeze(obj_flows.uxyz(:, xdim, tt));
