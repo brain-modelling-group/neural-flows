@@ -137,9 +137,9 @@ function [X, Y, Z, ux, uy, uz, num_points] = svd_nodal(params, obj_flows)
          end
     else % assume phase
          for tt=1:nt
-            ux(:, tt) = obj_flows.vx(:, tt);
-            uy(:, tt) = obj_flows.vy(:, tt);
-            uz(:, tt) = obj_flows.vz(:, tt);
+            ux(:, tt) = obj_flows.vx(tt, :);
+            uy(:, tt) = obj_flows.vy(tt, :);
+            uz(:, tt) = obj_flows.vz(tt, :);
          end
     end
         
