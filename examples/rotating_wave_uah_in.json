@@ -2,16 +2,16 @@
   "general": {
     "storage": {
       "time_stamp": [],
-      "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/scratch",
+      "dir": "scratch",
       "dir_tmp": "/tmp",
       "params": {
         "input": {
           "filename": "rotating_wave_in.json",
-          "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/examples"
+          "dir": "examples"
         },
         "output": {
           "filename": "rotating_wave_ou.json",
-          "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/examples"
+          "dir": "examples"
         }
       },
       "format": "iomat"
@@ -116,7 +116,7 @@
   },
   "data": {
     "file": {
-      "dir": "/home/paula/Work/Code/matlab-neuro/neural-flows/demo-data",
+      "dir": "demo-data",
       "name": "rotating_wave_W_c1_d1ms_trial1.mat"
     },
     "slice": {
