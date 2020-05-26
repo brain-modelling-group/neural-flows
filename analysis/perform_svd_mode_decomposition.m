@@ -141,6 +141,7 @@ function [X, Y, Z, ux, uy, uz, num_points] = svd_nodal(params, obj_flows)
             uy(:, tt) = obj_flows.vy(:, tt);
             uz(:, tt) = obj_flows.vz(:, tt);
          end
+    end
         
     X = obj_flows.locs(:, xdim);
     Y = obj_flows.locs(:, ydim);
