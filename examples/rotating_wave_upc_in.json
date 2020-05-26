@@ -1,0 +1,97 @@
+{
+  "general": {
+    "storage": {
+      "time_stamp": [],
+      "dir": "demo-data",
+      "dir_tmp": "/tmp",
+      "params": {
+        "input": {
+          "filename": "rotating_wave_upc_in.json",
+          "dir": "example"
+        },
+        "output": {
+          "filename": "rotating_wave_upc_out.json",
+          "dir": "example"
+        }
+      },
+      "format": "iomat"
+    },
+    "parallel": {
+      "enabled": false,
+      "workers_fraction": 0.8
+    }
+  },
+  "interpolation": {
+    "enabled": false
+    },
+  "flows": {
+    "enabled": true,
+    "file": {
+      "exists": false,
+      "keep": true,
+      "dir": "",
+      "name": "",
+      "label": ""
+    },
+    "method": {
+      "data": {
+        "mode": "phase"
+      },
+      "name": "cnem",
+      "cnem": {
+        "convex_hull": "bi"
+      }
+    },
+    "visualisation": {
+      "enabled": true
+    },
+    "decomposition": {
+      "svd": {
+        "enabled": false,
+        "modes": 4,
+        "grid": {
+          "type": "unstructured"
+        }
+      }
+    },
+    "streamlines": {
+      "enabled": false,
+      "grid": {
+        "type": "unstructured"
+      }
+    }
+  },
+  "singularity": {
+    "enabled": false
+  },
+  "data": {
+    "file": {
+      "dir": "data",
+      "name": "rotating_wave_W_c1_d1ms_iomat.mat"
+    },
+    "slice": {
+      "enabled": false,
+      "id": 0
+    },
+    "grid": {
+      "type": "unstructured"
+    },
+    "ht": 0.25,
+    "hx": [],
+    "hy": [],
+    "hz": [],
+    "units": {
+      "space":"mm",
+      "time": "ms"
+    },
+    "boundary": {
+      "alpha_radius" : 30
+    },
+    "mode": "amplitude"
+  },
+  "visualisation": {
+    "quiver": {
+      "scale": 1
+    }
+  }
+}
