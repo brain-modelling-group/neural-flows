@@ -1,9 +1,4 @@
 function [data, X, Y, Z, time] = generate_data3d_travelling_biharmonic_wave(varargin)
-% Generates a plane "travelling" wave moving along one of the three main 
-% orthogonal axes of Euclidean space. The data is generating as a linear 
-% function of space (x, Y, or Z), so in a sense is a like sinusoidal plane
-% wave of infinite (temporal) period. However, the wave3d array is a 2D
-% array 
 % ARGUMENTS: 
 %           locs      -- a 2D array of size [node/regions, 3] with the points 
 %                        in 3d used to sample the solid travelling 3d wave.
