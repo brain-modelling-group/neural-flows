@@ -19,6 +19,7 @@ function [local_vertices, local_triangles, global_vx_indices, global_tri_indices
 % REQUIRES: 
 %         Matlab's triangulation
 %         
+%         
 % USAGE:
 %{
       load('Cortex_reg13_to_513parc.mat', 'Vertices', 'Triangles', 'VertexNormals'); 
@@ -27,6 +28,10 @@ function [local_vertices, local_triangles, global_vx_indices, global_tri_indices
       nth_ring = 3;
       [local_vertices, local_triangles, global_vx_indices, global_tri_indices, nth_ring_size] = get_nth_ring(tr, focus_vx_idx, nth_ring);    
 %}
+% MODIFICATION HISTORY:
+%     SAK(22-07-2010) -- Original (get_local_surface)
+%     PSL(21-12-2018) -- Updated to use Matlab's triangulation or a struct,
+%                        document
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
