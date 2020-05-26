@@ -121,18 +121,27 @@ function [X, Y, Z, ux, uy, uz, num_points] = svd_nodal(params, obj_flows)
     ux(num_points, nt) = 0;
     uy(num_points, nt) = 0;
     uz(num_points, nt) = 0;
+    
+    if strcmp(params.flows.data.mode, 'amplitude') 
 
-     for tt=1:nt
-        temp = squeeze(obj_flows.uxyz(:, xdim, tt));
-        %temp(isnan(temp)) = 0;
-        ux(:, tt) = temp;
-        temp = squeeze(obj_flows.uxyz(:, ydim, tt));
-        %temp(isnan(temp)) = 0;
-        uy(:, tt) = temp;
-        temp = squeeze(obj_flows.uxyz(:, zdim, tt));
-        %temp(isnan(temp)) = 0;
-        uz(:, tt) = temp;
-    end
+         for tt=1:nt
+            temp = squeeze(obj_flows.uxyz(:, xdim, tt));
+            %temp(isnan(temp)) = 0;
+            ux(:, tt) = temp;
+            temp = squeeze(obj_flows.uxyz(:, ydim, tt));
+            %temp(isnan(temp)) = 0;
+            uy(:, tt) = temp;
+            temp = squeeze(obj_flows.uxyz(:, zdim, tt));
+            %temp(isnan(temp)) = 0;
+            uz(:, tt) = temp;
+         end
+    else % assume phase
+         for tt=1:nt
+            ux(:, tt) = obj_flows.vx(:, tt);
+            uy(:, tt) = obj_flows.vy(:, tt);
+            uz(:, tt) = obj_flows.vz(:, tt);
+         end
+        
     X = obj_flows.locs(:, xdim);
     Y = obj_flows.locs(:, ydim);
     Z = obj_flows.locs(:, zdim);
