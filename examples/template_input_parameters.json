@@ -4,7 +4,7 @@
       "dir": "/path/to/directory/to/store/output/files", //user: directory where results will be stored
       "dir_tmp": "/tmp"                                , //user: temp directory for intermediate results 
     },
-    "interal_format": "iomat",
+    "internal_format": "iomat",
     "parallel": {
       "enabled": true,
       "workers_fraction": 0.8
@@ -23,14 +23,15 @@
     "grid": {
       "type": "unstructured"
     },
-    "ht": 0.25,                                    // user: temporal resolution
-    "hx": [],                                      // 
-    "hy": [],
-    "hz": [],
-    "units": {
-      "space":"mm",                                // user: spatial units
-      "time": "ms",                                // user: tempora units
-    }
+    "resolution": {
+      "ht": [],
+      "hx": [],                                      // 
+      "hy": [],
+      "hz": [],
+      "units": {
+         "space":"mm",                                // user: spatial units
+          "time": "ms",                               // user: temporal units
+     }
   },
   "interpolation": {
     "file": {
@@ -41,9 +42,12 @@
     "dir": {
       "name": []
     },
-    "hx": 3,                                       // user: spatial resolution of interpolation grid
-    "hy": 3,                                       // user: spatial resolution of interpolation grid
-    "hz": 3,                                       // user: spatial resolution of interpolation grid
+    "resolution": {
+      "ht": [],
+      "hx": 3,                                     // Set to be same data.resolution.ht 
+      "hy": 3,                                     // user: spatial resolution of interpolation grid
+      "hz": 3,                                     // user: spatial resolution of interpolation grid
+    },                                   
     "boundary": {
       "alpha_radius": 30,                          // user: radius of alpha shape to define convex hull
       "thickness": 2,                              // user: thickness in voxels of the boundary mask
