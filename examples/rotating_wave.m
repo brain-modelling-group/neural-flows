@@ -35,9 +35,10 @@ input_params = read_write_json(input_params_filename, input_params_dir, json_mod
 %% Run core functions: interpolation, estimation and classification, this function writes to a new json file
 output_params = main(input_params); 
 
-%% Run analysis
+%% Run svd analysis
 perform_svd_mode_decomposition(output_params);
 
+%% 
 analyse_singularities(output_params)
 %plot1d_speed_distribution(output_params)
 
