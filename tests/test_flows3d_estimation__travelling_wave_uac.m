@@ -5,6 +5,10 @@ function test_flows3d_estimation__travelling_wave_uac()
 % back in the same direction but opposite orientation (- 4 m/s)
 % NOTE: Assumes this function is called from tests/ directory 
 
+%|     | Data Domain    | Data Mode   | Flow Method     |
+%|-----|----------------|-------------|-----------------|
+%| uac | (u)nstructured | (a)mplitude | (c)nem          |
+
 input_params = read_write_json('test-flows3d-estimation_travelling-wave_uac_in.json', 'json/', 'read');
 
 output_params = main(input_params); 
