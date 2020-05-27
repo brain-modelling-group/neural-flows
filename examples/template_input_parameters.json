@@ -1,23 +1,34 @@
 {
   "general": {
     "storage": {
+      "time_stamp": [],
       "dir": "/path/to/directory/to/store/output/files", //user: directory where results will be stored
       "dir_tmp": "/tmp"                                , //user: temp directory for intermediate results 
     },
-    "internal_format": "iomat",
+    "params": {
+        "input": {
+          "filename": "input_params_file.json",
+          "dir": "examples"
+        },
+        "output": {
+          "filename": "input_params_file.json",
+          "dir": "examples"
+        }
+      },
+      "format": "iomat"
+    },
     "parallel": {
       "enabled": true,
       "workers_fraction": 0.8
     }
   },
   "data": {
-    "dir": {
-      "name": "/home/user/project-x/demo-data",    // user: where the input data is saved
-    },
     "file": {
-      "name": "my_data_file.mat",                  // user: name of the data file, can be a regular .mat or a  MatFile
+      "dir": "demo-data",
+      "name": "rotating_wave_W_c1_d1ms_iomat.mat"
     },
     "slice": {
+      "enabled": false,
       "id": 0
     },
     "grid": {
@@ -32,6 +43,11 @@
          "space":"mm",                                // user: spatial units
           "time": "ms",                               // user: temporal units
      }
+  },
+  "boundary": {
+      "alpha_radius" : 30
+    },
+  "mode": "amplitude"
   },
   "interpolation": {
     "file": {
@@ -113,6 +129,13 @@
         "grid": {
           "type": "unstructured"
         }
+      }
+    },
+
+    "streamlines": {
+      "enabled": false,
+      "grid": {
+        "type": "unstructured"
       }
     },
     "visualisation": {
