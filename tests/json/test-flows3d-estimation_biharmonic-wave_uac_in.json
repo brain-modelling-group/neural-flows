@@ -22,7 +22,13 @@
     }
   },
   "interpolation": {
-    "enabled": false
+    "enabled": true,
+    "file": {
+      "exists": false,
+      "keep": true,
+      "dir": "",
+      "name": "",
+      "label": ""
     },
   "flows": {
     "enabled": true,
