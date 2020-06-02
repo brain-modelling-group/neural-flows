@@ -86,24 +86,36 @@
       "label": "",
       "keep": true
     },
-    "method": {
-      "data": {
-        "modality": "amplitude"
-      },
-      "name": "hs3d",
-      "hs3d": {
-        "alpha_smooth": 0.1,
-        "max_iterations": 128,
-        "initial_conditions": {
-          "modality": "random",
-          "seed": 42
-        },
-        "nodal_flows": {
-          "enabled": true
-        }
-      }
+    "estimation": {
+      "modality": "amplitude",
+      "method": {
+        "hs3d": {
+              "enabled": true,
+              "extract_nodal_flows": true 
+              },
+        "cnem": {
+              "enabled" : false,
+              "convex_hull": "bi"
+              }, 
+        "properties": {
+              "initial_conditions": {
+                                  "modality": "random",
+                                  "seed": 42
+              },
+              "iterative_block": {
+                      "burnin_loop": {
+                              "steps": 8
+                      },
+                      "main_loop": {
+                            "steps": 128
+                      },
+                      "regularisation": {
+                          "alpha" : 0.1      
+                      }
+              }
+          }
+       }
     },
-
     "decomposition": {
       "svd": {
         "enabled": true,
@@ -113,7 +125,7 @@
         }
       }
     }
-    },
+  },
 
 "streamlines": {
       "enabled": false,
@@ -142,7 +154,7 @@
     },
     "detection": {
       "enabled": true,
-      "modality": "vel",
+      "modality": "magnitude",
       "threshold": [
         0,                                  
         0.015625                            
