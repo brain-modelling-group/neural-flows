@@ -2,8 +2,8 @@
   "general": {
     "storage": {
       "time_stamp": [],
-      "dir": "/path/to/directory/to/store/output/files", //user: directory where results will be stored
-      "dir_tmp": "/tmp"                                , //user: temp directory for intermediate results 
+      "dir_out": "/path/to/directory/to/store/output/files", //user: directory where output will be stored
+      "dir_tmp": "/tmp"                                    , //user: temp directory for intermediate results 
     },
     "params": {
         "input": {
@@ -15,7 +15,7 @@
           "dir": "examples"
         }
       },
-      "format": "iomat"
+    "format": "iomat"
     },
     "parallel": {
       "enabled": true,
@@ -47,23 +47,25 @@
   "boundary": {
       "alpha_radius" : 30
     },
-  "mode": "amplitude"
+  "modality": "amplitude"
   },
   "interpolation": {
+    "enabled": true,
     "file": {
       "exists": false,
-      "name": [],
+      "dir": "",
+      "name": "",
+      "label": "",
       "keep": true
-    },
-    "dir": {
-      "name": []
     },
     "resolution": {
       "ht": [],
       "hx": 3,                                     // Set to be same data.resolution.ht 
       "hy": 3,                                     // user: spatial resolution of interpolation grid
       "hz": 3,                                     // user: spatial resolution of interpolation grid
-    },                                   
+    },
+    "neighbour_method": "",
+    "extrapolation_method": "",                                   
     "boundary": {
       "alpha_radius": 30,                          // user: radius of alpha shape to define convex hull
       "thickness": 2,                              // user: thickness in voxels of the boundary mask
@@ -94,7 +96,7 @@
     },
     // "method": { // amplitude-based flows using CNEM
     //   "data": {
-    //     "mode": "amplitude"
+    //     "modality": "amplitude"
     //   },
     //   "name": "cnem",
     //   "cnem": {
@@ -115,7 +117,7 @@
     // },
     // "method": { // phase-based flows using CNEM
     //   "data": {
-    //     "mode": "phase"
+    //     "modality": "phase"
     //   },
     //   "name": "cnem",
     //   "cnem": {
@@ -134,6 +136,13 @@
 
     "streamlines": {
       "enabled": false,
+      "file": {
+      "exists": false,
+      "dir": "",
+      "name": "",
+      "label": "",
+      "keep": true
+    },
       "grid": {
         "type": "unstructured"
       }
@@ -144,13 +153,15 @@
   },
   "singularity": {
     "file": {
-      "keep": true,
-      "dir": [],
-      "name": []
+      "exists": false,
+      "dir": "",
+      "name": "",
+      "label": "",
+      "keep": true
     },
     "detection": {
       "enabled": true,
-      "mode": "vel",
+      "modality": "vel",
       "threshold": [
         0,                                  // user: lower bound of threshold to detect quasi-null-flows
         0.015625                            // user: upper bound of threshold to detect quasi-null-flows
