@@ -145,19 +145,8 @@
                    "type": "unstructured"
                   },
                "seeding_points": {
-                                  "modality": "random-sparse",
+                                  "modality": "random",
                                   "seed": 42
-              },
-              "iterative_block": {
-                      "burnin_loop": {
-                              "steps": 8
-                      },
-                      "main_loop": {
-                            "steps": 128
-                      },
-                      "regularisation": {
-                          "alpha" : 0.1      
-                      }
               },
               "max_stream_length" : 200
           },
