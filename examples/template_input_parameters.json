@@ -79,7 +79,7 @@
   },
 "flows": {
   "enabled": true,
-    "file": {
+  "file": {
       "exists": false,
       "dir": "",
       "name": "",
@@ -139,6 +139,39 @@
       "grid": {
         "type": "unstructured"
     },
+
+
+      "tracing": {
+      "modality": "amplitude",
+      "method": {
+        "hs3d": {
+              "enabled": true,
+              "extract_nodal_flows": true 
+              },
+        "cnem": {
+              "enabled" : false,
+              "convex_hull": "bi"
+              }, 
+        "properties": {
+              "initial_conditions": {
+                                  "modality": "random",
+                                  "seed": 42
+              },
+              "iterative_block": {
+                      "burnin_loop": {
+                              "steps": 8
+                      },
+                      "main_loop": {
+                            "steps": 128
+                      },
+                      "regularisation": {
+                          "alpha" : 0.1      
+                      }
+              }
+          }
+       }
+    },
+
     "visualisation": {
       "enabled": true
     }
@@ -164,6 +197,9 @@
       "enabled": true
     },
     "quantification": {
+      "enabled": true
+    },
+    "tracking": {
       "enabled": true
     },
     "visualisation": {
