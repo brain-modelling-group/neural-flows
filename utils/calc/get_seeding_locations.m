@@ -14,7 +14,7 @@ switch modality
         node_idx1 = randi([1, size(locs, 1)], size(locs, 1),  1);
         node_idx2 = randi([1, size(locs, 1)], size(locs, 1),  1);
         seed_locs = (locs(node_idx1, :) + locs(node_idx2, :))/2;
-        seed_locs = vercat(seed_locs, locs);
+        seed_locs = vertcat(seed_locs, locs);
     otherwise
         error(['neural-flows:' mfilename ':UnknownCase'], ...
                'Requested unknown method. Options: {"nodes", "random"}');
