@@ -49,18 +49,18 @@ max_stream_length = params.streamlines.tracing.max_streamline_length;
 masks = obj_flows.masks;
 locs  = obj_flows.locs;
 boundary_faces = masks.innies_triangles;
-dt = params.streamlines.tracing.time_step; % fake time step for streamline tracing
+time_step = params.streamlines.tracing.time_step; % fake time step for streamline tracing
 
 % Get seeding locations
-seed_locs = get_seeding_locations(locs, params.streamlines.tracing.seeding_points.seed);
+seed_locs = get_seeding_locations(locs, params.streamlines.tracing.seeding_points.modality, params.streamlines.tracing.seeding_points.seed);
 % Save seeding locations
 obj_streams.seed_locs = seed_locs;
 
 switch params.flows.modality
     case "amplitude"
-        tracing_cnem_fun_step = @tracing_cnem_amplitude_step
+        tracing_cnem_fun_step = @tracing_cnem_amplitude_step;
     case "phase"
-        tracing_cnem_fun_step = @tracing_cnem_phase_step
+        tracing_cnem_fun_step = @tracing_cnem_phase_step;
     otherwise
        error(['neural-flows:' mfilename ':UnknownCase'], ...
                'Requested unknown modality. Options: {"amplitude", "phase"}'); 
@@ -135,7 +135,7 @@ function tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_ste
         
         % calculate step size
         % stream3c rescales the velocities by max(abs(vcomponent))
-        flowfield_step = flowfield_interp*time_step./max(abs(flowfield_interp)); % uses singleton expanson
+        flowfield_step = flowfield_interp*time_step./max(abs(flowfield_interp)); % uses singleton expansion
         
         % update overall live list
         live_streams(live_streams) = livej;
