@@ -158,7 +158,8 @@
                       "regularisation": {
                           "alpha" : 0.1      
                       }
-              }
+              },
+              "max_stream_length" : 200
           },
 
     "visualisation": {
