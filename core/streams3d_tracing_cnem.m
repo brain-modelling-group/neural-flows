@@ -3,31 +3,6 @@ function obj_streams = streams3d_tracing_cnem(obj_flows, params)
 %  based on traceStreamXYZUVW from matlab's stream3c.c, using CNEM
 %  functions.
 %
-% ARGUMENTS:
-%          locs     -- a 2D array of size [nodes x 3] with the x,y,z
-%                      coordinates of the nodes/regions centroids.
-%          boundary_faces -- a 2D array of size [num_faces x 3] with the
-%                            triangulation of the brain's convex hull.
-%          flow_field -- a 2D array of size [nodes x 3] with the 
-%                        velocity components u, v, w at each point in locs.
-%                        
-%          seed_locs  -- a 2D array of size [num_seeds x 3] with the x, y,z 
-%                        coordinates of the streamlines starting points. 
-%          time_step  -- a float with the time step used to trace the
-%                        streamlines.
-%          max_streamline_length -- an integer with the maximum length acceptable 
-%                                  for a streamlines (in points/samples).
-%                                  Matlab's streamline functions call this number  
-%                                  'max number of vertices'. In a way, this
-%                                  is the maximum number of timesteps tht
-%                                  we will integrate.
-%                                  
-%
-% OUTPUT: 
-%          stream_cell -- a cell of length num_streams/length seed_locs
-%                         where each element is a 2D array of size
-%                         [stream_length_i x 3], and stream_length_i is at
-%                         most max_streamline_length.
 % REQUIRES: 
 %          m_cnem3d_interpol()
 %          
@@ -68,16 +43,40 @@ switch params.flows.modality
 end
 
 tracing_cnem_step()
-
 function tracing_cnem_step()
     for tt = 1:tpts
-       obj_streams.streamlines(tt) = tracing_cnem_fun_step(tt); 
+       obj_streams.streamlines(1, tt).streams = tracing_cnem_fun_step(tt); 
     end
 end % function tracing_cnem_step()
 
 
 function stream_cell = tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length)
-    % tracing loop
+% Tracing loop
+% ARGUMENTS:
+%          locs     -- a 2D array of size [nodes x 3] with the x,y,z
+%                      coordinates of the nodes/regions centroids.
+%          boundary_faces -- a 2D array of size [num_faces x 3] with the
+%                            triangulation of the brain's convex hull.
+%          flow_field -- a 2D array of size [nodes x 3] with the 
+%                        velocity components u, v, w at each point in locs.
+%                        
+%          seed_locs  -- a 2D array of size [num_seeds x 3] with the x, y,z 
+%                        coordinates of the streamlines starting points. 
+%          time_step  -- a float with the time step used to trace the
+%                        streamlines.
+%          max_streamline_length -- an integer with the maximum length acceptable 
+%                                  for a streamlines (in points/samples).
+%                                  Matlab's streamline functions call this number  
+%                                  'max number of vertices'. In a way, this
+%                                  is the maximum number of timesteps tht
+%                                  we will integrate.
+%                                  
+%
+% OUTPUT: 
+%          stream_cell -- a cell of length num_streams/length seed_locs
+%                         where each element is a 2D array of size
+%                         [stream_length_i x 3], and stream_length_i is at
+%                         most max_streamline_length.
 
     % CNEM parameter - needs to be set but not changed
     Type_FF = 0;
