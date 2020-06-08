@@ -1,4 +1,4 @@
-function stream_cell = streams3d_tracing_cnem(obj_streams, obj_flows, params)
+function obj_streams = streams3d_tracing_cnem(obj_flows, params)
 %% Traces streamlines using a velocity field defined on scattered points in space
 %  based on traceStreamXYZUVW from matlab's stream3c.c, using CNEM
 %  functions.
@@ -48,8 +48,9 @@ function stream_cell = streams3d_tracing_cnem(obj_streams, obj_flows, params)
 max_stream_length = params.streamlines.tracing.max_streamline_length;
 masks = obj_flows.masks;
 locs  = obj_flows.locs;
-boundary_faces = masks.innies_triangles;
+boundary_faces = masks.innies_triangles_bi;
 time_step = params.streamlines.tracing.time_step; % fake time step for streamline tracing
+tpts = 200;
 
 % Get seeding locations
 seed_locs = get_seeding_locations(locs, params.streamlines.tracing.seeding_points.modality, params.streamlines.tracing.seeding_points.seed);
@@ -66,9 +67,7 @@ switch params.flows.modality
                'Requested unknown modality. Options: {"amplitude", "phase"}'); 
 end
 
-
 tracing_cnem_step()
-
 
 function tracing_cnem_step()
     for tt = 1:tpts
@@ -77,19 +76,7 @@ function tracing_cnem_step()
 end % function tracing_cnem_step()
 
 
-function output_cell = tracing_cnem_amplitude_step(idx)
-        flow_field = obj_flows.uxyz(:, :, idx);
-        output_cell = tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length);
-end % function tracing_cnem_amplitude_step()
-
-
-function output_cell = tracing_cnem_phase_step(idx)
-        flow_field = [obj_flows.vx(idx, :) obj_flows.vy(idx, :) obj_flows.vz(idx, :)]; 
-        output_cell = tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length);
-end % function tracing_cnem_phase_step()
-
-
-function tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length)
+function stream_cell = tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length)
     % tracing loop
 
     % CNEM parameter - needs to be set but not changed
@@ -108,7 +95,7 @@ function tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_ste
     for this_iteration=1:max_stream_length
     
         % Stop if all streamlines are done
-        if all(~live)
+        if all(~live_streams)
             break
         end
         
@@ -120,7 +107,7 @@ function tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_ste
         livej = live_streams(live_streams); % live streamlines this iteration (has same length as number of live points)
         livej = livej & cnem_interpol_obj.In_Out;
         
-        streams(live_streams, :, this_iteration) = seed_locs(live,:);
+        streams(live_streams, :, this_iteration) = seed_locs(live_streams,:);
         
         %if already been here, done
         % % how likely is this though!?
@@ -165,5 +152,17 @@ function tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_ste
 
 
 end %tracing_cnem_loop()
+
+
+function output_cell = tracing_cnem_amplitude_step(idx)
+        flow_field = obj_flows.uxyz(:, :, idx);
+        output_cell = tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length);
+end % function tracing_cnem_amplitude_step()
+
+
+function output_cell = tracing_cnem_phase_step(idx)
+        flow_field = [obj_flows.vx(idx, :) obj_flows.vy(idx, :) obj_flows.vz(idx, :)]; 
+        output_cell = tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length);
+end % function tracing_cnem_phase_step()
 
 end %function streams3d_tracing_cnem()
