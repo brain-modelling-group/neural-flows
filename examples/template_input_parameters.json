@@ -124,6 +124,9 @@
           "type": "unstructured"
         }
       }
+    },
+    "visualisation": {
+      "enabled": true
     }
   },
 
@@ -136,25 +139,13 @@
           "label": "",
           "keep": true
     },
-      "grid": {
-        "type": "unstructured"
-    },
-
 
       "tracing": {
-      "modality": "amplitude",
-      "method": {
-        "hs3d": {
-              "enabled": true,
-              "extract_nodal_flows": true 
-              },
-        "cnem": {
-              "enabled" : false,
-              "convex_hull": "bi"
-              }, 
-        "properties": {
-              "initial_conditions": {
-                                  "modality": "random",
+               "grid": {
+                   "type": "unstructured"
+                  },
+               "seeding_points": {
+                                  "modality": "random-sparse",
                                   "seed": 42
               },
               "iterative_block": {
@@ -168,9 +159,7 @@
                           "alpha" : 0.1      
                       }
               }
-          }
-       }
-    },
+          },
 
     "visualisation": {
       "enabled": true
