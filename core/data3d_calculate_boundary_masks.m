@@ -16,6 +16,7 @@ function [masks, params] = data3d_calculate_boundary_masks(locs, X, Y, Z, params
     [mask_outties, mask_betweenies] = data3d_boundary_mask_outter_between(mask_innies, ...
                                                                           params.interpolation.boundary.thickness);
 
+    % Masks
     masks.innies = mask_innies;
     masks.innies_triangles = mask_innies_triangles;
     masks.outties = mask_outties;

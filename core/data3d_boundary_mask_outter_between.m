@@ -44,4 +44,4 @@ diff_mask = logical(outter_bdy_mask - inner_bdy_mask);
 outter_bdy_mask = logical(outter_bdy_mask);
 
 
-end % function data3d_calculate_interpolation_mask()
+end % function data3d_data3d_boundary_mask_outter_between()
