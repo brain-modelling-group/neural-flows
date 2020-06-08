@@ -1,4 +1,4 @@
-function stream_cell = streams3d_tracing_cnem(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length)
+function stream_cell = streams3d_tracing_cnem(obj_streams, obj_flows, params)
 %% Traces streamlines using a velocity field defined on scattered points in space
 %  based on traceStreamXYZUVW from matlab's stream3c.c, using CNEM
 %  functions.
@@ -73,85 +73,142 @@ function stream_cell = streams3d_tracing_cnem(locs, boundary_faces, flow_field, 
 %
 % MODIFICATION HISTORY:
 %     JA Roberts, QIMR Berghofer, 2018
-%     Paula Sanz-Leon, QIMR Berghofer, 2019
+%     Paula Sanz-Leon, QIMR Berghofer, 2019, 2020
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-if nargin<6
-    max_stream_length = 200;
+
+% Load necessary stuff
+max_stream_length = params.streamlines.tracing.max_streamline_length;
+masks = obj_flows.masks;
+locs  = obj_flows.locs;
+boundary_faces = masks.innies_triangles;
+dt = params.streamlines.tracing.time_step; % fake time step for streamline tracing
+
+switch params.streamlines.tracing.seeding_points
+    case {"nodes", "regions", "nodal"}
+        seed_locs = obj_flows.locs;
+    case {"random-sparse"}
+        rng(params.streamlines.tracing.seed)
+
+        % do something
+    case {"random-dense"}
+        % seeds 2*num nodes streamlines
+
+    otherwise
+        error(['neural-flows:' mfilename ':UnknownCase'], ...
+               'Requested unknown method. Options: {"nodes", "random-sparse", "random-dense"}');
 end
 
-% CNEM parameter
-Type_FF = 0;
 
-% Number of streamlines
-num_streams = size(seed_locs, 1);
+switch params.flows.modality
+    case "amplitude"
+        tracing_cnem_fun_step = @tracing_cnem_amplitude_step
+    case "phase"
+        tracing_cnem_fun_step = @tracing_cnem_phase_step
+    otherwise
+       error(['neural-flows:' mfilename ':UnknownCase'], ...
+               'Requested unknown modality. Options: {"amplitude", "phase"}'); 
+end
 
-% Streamlines that are still growing
-live = true(num_streams, 1); 
 
-embedding_dimension = 3;
-% Preallocate, will prune later
-streams(num_streams, embedding_dimension, max_stream_length) = 0; 
+tracing_cnem_step()
 
-disp([mfilename ':: Tracing streamlines ...'])
-    
-for it = 1:max_stream_length
-    
-    % Stop if all streamlines are done
-    if ~live
-        break
+
+function tracing_cnem_step()
+    for tt = 1:tpts
+       obj_streams.streamlines(tt) = tracing_cnem_fun_step(tt); 
     end
-    
-    % Make interpolation object at every iteration. We need to get values
-    % of the vector field at the tip of the streamline.
-    FInterpol = m_cnem3d_interpol(locs, boundary_faces, seed_locs(live,:), Type_FF);
-    
-    % terminate any streamlines that have left the interior
-    livej = live(live); % live streamlines this iteration (has same length as number of live points)
-    livej = livej & FInterpol.In_Out;
-    
-    streams(live,:, it) = seed_locs(live,:);
-    
-    %if already been here, done
-    % % how likely is this though!?
-    
-    % Inteprolate velocity field 
-    flowfield_interp = FInterpol.interpolate(flow_field); % has same length as number of live points
-    
-    % check if step length has hit zero
-    validsteps = ~all(~flowfield_interp, 2);
-    %if any(~validsteps), fprintf('%d steps hit zero\n',sum(~validsteps)), end
-    livej = livej&validsteps;
-    
-    % calculate step size
-    % stream3c rescales the velocities by max(abs(vcomponent))
-    flowfield_step = flowfield_interp*time_step./max(abs(flowfield_interp)); % uses singleton expanson
-    
-    % update overall live list
-    live(live) = livej;
-    
-    % update the current position
-    seed_locs(live, :) = seed_locs(live,:) + flowfield_step(livej,:);
-    
-    
-end
+end % function tracing_cnem_step()
 
-disp([mfilename ':: Pruning streamline array ...'])
 
-% Transform the streams array into a cell.
-conn = zeros(3, 3, 3);
-conn(2, 2, :) =1; 
-conncomp = bwconncomp(streams,conn);
-ids = conncomp.PixelIdxList; ids=reshape(ids,[],3);
-%slens=cellfun(@length,ids); %513x3
-%any(any(diff(slens,[],2),2)) % false if all x,y,z components are same length
-%
-ns = size(streams, 1);
-stream_cell = cell(1,ns);
-for j=1:ns
-    stream_cell{j} = streams([ids{j,:}]);
-end
-disp([mfilename ':: Done.'])
+function output_cell = tracing_cnem_amplitude_step(idx)
+        flow_field = obj_flows.uxyz(:, :, idx);
+        output_cell = tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length);
+end % function tracing_cnem_amplitude_step()
 
-end %function trace_streams_cnem()
+
+function output_cell = tracing_cnem_phase_step(idx)
+        flow_field = [obj_flows.vx(idx, :) obj_flows.vy(idx, :) obj_flows.vz(idx, :)]; 
+        output_cell = tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length);
+end % function tracing_cnem_phase_step()
+
+
+function tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length)
+    % tracing loop
+
+    % CNEM parameter - needs to be set but not changed
+    Type_FF = 0;
+    % Number of streamlinesm to start
+    num_streams = size(seed_locs, 1);
+
+    % Streamlines that are still growing
+    live_streams = true(num_streams, 1); 
+
+    embedding_dimension = 3;
+    % Preallocate, will prune later
+    streams(num_streams, embedding_dimension, max_stream_length) = 0; 
+
+
+    for this_iteration=1:max_stream_length
+    
+        % Stop if all streamlines are done
+        if all(~live)
+            break
+        end
+        
+        % Make interpolation object at every iteration. We need to get values
+        % of the vector field at the tip of the streamline.
+        cnem_interpol_obj = m_cnem3d_interpol(locs, boundary_faces, seed_locs(live_streams,:), Type_FF);
+        
+        % terminate any streamlines that have left the interior
+        livej = live_streams(live_streams); % live streamlines this iteration (has same length as number of live points)
+        livej = livej & cnem_interpol_obj.In_Out;
+        
+        streams(live_streams, :, this_iteration) = seed_locs(live,:);
+        
+        %if already been here, done
+        % % how likely is this though!?
+        
+        % Inteprolate velocity field 
+        flowfield_interp = cnem_interpol_obj.interpolate(flow_field); % has same length as number of live points
+        
+        % check if step length has hit zero
+        validsteps = ~all(~flowfield_interp, 2);
+        %if any(~validsteps), fprintf('%d steps hit zero\n',sum(~validsteps)), end
+        livej = livej&validsteps;
+        
+        % calculate step size
+        % stream3c rescales the velocities by max(abs(vcomponent))
+        flowfield_step = flowfield_interp*time_step./max(abs(flowfield_interp)); % uses singleton expanson
+        
+        % update overall live list
+        live_streams(live_streams) = livej;
+        
+        % update the current position
+        seed_locs(live_streams, :) = seed_locs(live_streams,:) + flowfield_step(livej,:);
+    
+    
+    end
+
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started pruning streamline cell array.'))
+    % Transform the streams array into a cell.
+    conn = zeros(3, 3, 3);
+    conn(2, 2, :) =1; 
+    conn_comp = bwconncomp(streams, conn);
+    ids = conn_comp.PixelIdxList; ids=reshape(ids,[],3);
+    %slens=cellfun(@length,ids); %513x3
+    %any(any(diff(slens,[],2),2)) % false if all x,y,z components are same length
+    %
+    num_streams = size(streams, 1);
+    stream_cell = cell(1, num_streams);
+
+    for jj=1:num_streams
+        stream_cell{jj} = streams([ids{jj,:}]);
+    end
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished pruning streamline cell array.'))
+
+
+end %tracing_cnem_loop()
+
+end %function streams3d_tracing_cnem()
