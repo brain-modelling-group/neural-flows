@@ -33,41 +33,7 @@ function stream_cell = streams3d_tracing_cnem(obj_streams, obj_flows, params)
 %          
 % USAGE:
 %{     
-    load wind
-    rng(42);
-    loc_idx = randperm(length(x(:)), round(length(x(:))*0.05));
-    locs = [x(loc_idx); y(loc_idx); z(loc_idx)].';
-    flow_field = [u(loc_idx); v(loc_idx); w(loc_idx)].';
-    dt = 0.5; % this value needs to be carefully selected
-    max_stream_length = 256;
-     
-    % Get boundary/convex hull
-    [~, bdy] = get_boundary_info(locs, locs(:, 1), locs(:, 2), locs(:, 3));
 
- 
-    streams = trace_streams_cnem(locs, bdy, flow_field, locs, dt, max_stream_length);
-    % Visualize what we just did
-    fig_handle = figure('Name', 'nflow_traced_streams');
-    ax = axes('Parent', fig_handle);
-    hold(ax, 'on')
-
-    quiver3(locs(:, 1), locs(:, 2), locs(:, 3), ...
-            flow_field(:, 1), flow_field(:, 2), ...
-            flow_field(:, 3));
-    % Start locations
-    plot3(locs(:, 1), locs(:, 2), locs(:, 3), 'k.')
-    
-    for ii=1:length(streams);
-        plot3(squeeze(streams{ii}(:, 1)), ...
-              squeeze(streams{ii}(:, 2)), ...
-              squeeze(streams{ii}(:, 3)), 'color', [0.5 0.5 0.5 0.1]);
-       plot3(squeeze(streams{ii}(end, 1)), ...
-              squeeze(streams{ii}(end, 2)), ...
-              squeeze(streams{ii}(end, 3)), 'r.');
-    end
-
-% TODO: prepare an example with brain data -- save one frame of phase flow.
- from brain waves.
 
 %}
 %
@@ -85,21 +51,10 @@ locs  = obj_flows.locs;
 boundary_faces = masks.innies_triangles;
 dt = params.streamlines.tracing.time_step; % fake time step for streamline tracing
 
-switch params.streamlines.tracing.seeding_points
-    case {"nodes", "regions", "nodal"}
-        seed_locs = obj_flows.locs;
-    case {"random-sparse"}
-        rng(params.streamlines.tracing.seed)
-
-        % do something
-    case {"random-dense"}
-        % seeds 2*num nodes streamlines
-
-    otherwise
-        error(['neural-flows:' mfilename ':UnknownCase'], ...
-               'Requested unknown method. Options: {"nodes", "random-sparse", "random-dense"}');
-end
-
+% Get seeding locations
+seed_locs = get_seeding_locations(locs, params.streamlines.tracing.seeding_points.seed);
+% Save seeding locations
+obj_streams.seed_locs = seed_locs;
 
 switch params.flows.modality
     case "amplitude"
