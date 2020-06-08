@@ -1,4 +1,4 @@
-function [U, S, V, varargout] = perform_svd_mode_decomposition(params, data_type, num_modes, time_vec, visual_debugging, quiver_scale_factor)
+function [U, S, V, varargout] = perform_svd_mode_decomposition(params)
 % Performs singular vector decomposition of a vector field.
 % Plots most dominant spatial modes and their time series 
 % ARGUMENTS:
