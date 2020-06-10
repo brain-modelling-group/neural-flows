@@ -24,4 +24,4 @@ end
  x0 = start_X(:); 
  y0 = start_Y(:);
 
-end
+end % function get_seeding_locations_slice()
