@@ -1,17 +1,23 @@
-function streams3d_tracing_grid(mfile_vel, singularity_classification, seed_locs)
+function obj_streams = streams3d_tracing_mlab(obj_flows, obj_streams, params)
 
 % Trace streamlines for one frame 
-
 tt=2;
 
-X = mfile_vel.X;
-Y = mfile_vel.Y;
-Z = mfile_vel.Z;
+% Save grid 
+obj_streams.X = obj_flows.X;
+obj_streams.Y = obj_flows.Y;
+obj_streams.Z = obj_flows.Z;
 
 
 x_dim = 1;
 y_dim = 2;
 z_dim = 3;
+
+
+
+
+
+
 
 % Trace streamlines
 verts = stream3(X, Y, Z, mfile_vel.ux(:, :, :, tt), ...
