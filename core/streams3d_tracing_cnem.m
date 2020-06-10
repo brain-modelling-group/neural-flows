@@ -42,11 +42,12 @@ switch params.flows.modality
        error(['neural-flows:' mfilename ':UnknownCase'], ...
                'Requested unknown modality. Options: {"amplitude", "phase"}'); 
 end
-
+streamlines.paths = [];
 tracing_cnem_step()
 function tracing_cnem_step()
     for tt = 1:tpts
-       obj_streams.streamlines(1, tt).streams = tracing_cnem_fun_step(tt); 
+       streamlines.paths = tracing_cnem_fun_step(tt); 
+       obj_streams.streamlines(1, tt) = streamlines; 
     end
 end % function tracing_cnem_step()
 
@@ -156,13 +157,13 @@ end %tracing_cnem_loop()
 
 function output_cell = tracing_cnem_amplitude_step(idx)
         flow_field = obj_flows.uxyz(:, :, idx);
-        output_cell = tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length);
+        output_cell = tracing_cnem_loop(locs, boundary_faces, flow_field, seeding_locs, time_step, max_stream_length);
 end % function tracing_cnem_amplitude_step()
 
 
 function output_cell = tracing_cnem_phase_step(idx)
         flow_field = [obj_flows.vx(idx, :) obj_flows.vy(idx, :) obj_flows.vz(idx, :)]; 
-        output_cell = tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length);
+        output_cell = tracing_cnem_loop(locs, boundary_faces, flow_field, seeding_locs, time_step, max_stream_length);
 end % function tracing_cnem_phase_step()
 
 end %function streams3d_tracing_cnem()
