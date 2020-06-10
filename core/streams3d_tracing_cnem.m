@@ -43,8 +43,8 @@ switch params.flows.modality
                'Requested unknown modality. Options: {"amplitude", "phase"}'); 
 end
 streamlines.paths = [];
-tracing_cnem_step()
-function tracing_cnem_step()
+tracing_cnem_time_loop()
+function tracing_cnem_time_loop()
     for tt = 1:tpts
        streamlines.paths = tracing_cnem_fun_step(tt); 
        obj_streams.streamlines(1, tt) = streamlines; 
