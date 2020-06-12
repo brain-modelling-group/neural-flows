@@ -39,8 +39,6 @@ function params = singularity3d_classify(params)
     tpts = params.flows.data.shape.t;
     grid_size = [params.flows.data.shape.y, params.flows.data.shape.x, params.flows.data.shape.z];
 
-    % ENABLE grid_size = params.flows.data.shape.grid; 
-
     % Check if we stored linear indices or subscripts 
     if ~isfield(nullflow_points3d(1).locs, 'subscripts')
         fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started converting lindear indices into subscripts.'))
@@ -52,13 +50,14 @@ function params = singularity3d_classify(params)
     end
 
     if params.general.parallel.enabled
-        singularity3d_classify_fun = @singularity3d_classify_parallel;
+        singularity3d_classify_fun = @singularity3d_classify_parallel; 
     else
         singularity3d_classify_fun = @singularity3d_classify_serial;
     end
 
     % Allocate output and save to file
     [classification_cell_str, classification_cell_num, counts] = singularity3d_classify_fun(nullflow_points3d, params);
+    
     
     % XXXX: temporary
     obj_singularity.classification_str = classification_cell_str;
