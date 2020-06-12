@@ -38,6 +38,7 @@ function params = singularity3d_classify(params)
     % NOTE: perhaps this part of the parameters should be based on singularity params
     tpts = params.flows.data.shape.t;
     grid_size = [params.flows.data.shape.y, params.flows.data.shape.x, params.flows.data.shape.z];
+
     % ENABLE grid_size = params.flows.data.shape.grid; 
 
     % Check if we stored linear indices or subscripts 
@@ -53,12 +54,11 @@ function params = singularity3d_classify(params)
     if params.general.parallel.enabled
         singularity3d_classify_fun = @singularity3d_classify_parallel;
     else
-        singularity3d_classify_fun = @singularity3d_interpolate_serial;
+        singularity3d_classify_fun = @singularity3d_classify_serial;
     end
 
     % Allocate output and save to file
     [classification_cell_str, classification_cell_num, counts] = singularity3d_classify_fun(nullflow_points3d, params);
-    %counts = singularity3d_count(classification_cell_num);
     
     % XXXX: temporary
     obj_singularity.classification_str = classification_cell_str;
