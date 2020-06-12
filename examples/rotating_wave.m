@@ -39,7 +39,10 @@ output_params = main(input_params);
 perform_svd_mode_decomposition(output_params);
 
 %% 
-analyse_singularities(output_params)
-%plot1d_speed_distribution(output_params)
+if strcmp(case_label, 'uah')
+   plot1d_singularity_traces(output_params)
+end
+plot1d_speed_distribution(output_params)
+
 
 end %function example_rotating_wave()
