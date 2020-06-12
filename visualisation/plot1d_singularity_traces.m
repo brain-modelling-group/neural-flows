@@ -17,9 +17,8 @@ function fig_handles = plot1d_singularity_traces(params, varargin)
 %
 % REQUIRES: 
 %        s3d_get_base_singularity_list()
-%        s3d_get_numlabel()
 %        plot1d_singularity_scatter_xyz_vs_time()
-%        plot1d_singularity_count_traces
+%        plot1d_singularity_counts()
 %
 % USAGE:
 %{
@@ -61,7 +60,7 @@ switch to_plot
     case {'counts'}
        % Count how many singularities of each type we have
        % Plot traces of each singularity
-       fig_counts = plot1d_singularity_count_traces(obj_sings.count, fig_visibility{:});
+       fig_counts = plot1d_singularity_counts(obj_sings.count, fig_visibility{:});
        fig_handles{length(fig_handles)+1} = fig_counts;
     case {'foci'}
         fig_xyz_base = plot1d_singularity_scatter_xyz_vs_time(obj_sings.classification_num, ...
@@ -93,7 +92,7 @@ switch to_plot
        fig_handles{length(fig_handles)+1} = fig_xyz_all_cp;
     case {'all'}       
        % Plot traces of each singularity
-       fig_counts = plot1d_singularity_count_traces(obj_sings.count, fig_visibility{:});
+       fig_counts = plot1d_singularity_counts(obj_sings.count, fig_visibility{:});
        fig_handles{length(fig_handles)+1} = fig_counts;
        
        % FOCI
