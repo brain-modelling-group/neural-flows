@@ -1,4 +1,4 @@
-function figure_handle = plot1d_singularity_counts(singularity_counts, varargin)
+function figure_handle = plot1d_singularity_counts(params, varargin)
 
 % This function plots the traces of the singularity counts
 %
@@ -20,7 +20,11 @@ function figure_handle = plot1d_singularity_counts(singularity_counts, varargin)
 
 %}
 
- 
+
+obj_sings = load_iomat_singularity(params);
+figure_handle = plot_fun(obj_sings.count);
+
+    function figure_handle = plot_fun(singularity_counts) 
         base_list = s3d_get_base_singularity_list();
         cmap_base_list = s3d_get_colours('critical-points');
         
@@ -47,5 +51,6 @@ function figure_handle = plot1d_singularity_counts(singularity_counts, varargin)
         end
         
         linkaxes(ax, 'x')
+    end
 
 end
