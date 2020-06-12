@@ -5,9 +5,9 @@ function fig_handles = plot_singularity_counts(obj_sings, varargin)
 %
 %
 % ARGUMENTS:
-%           mobj_sings -- a MatFile or a structure with the same internal
+%           obj_sings -- a MatFile or a structure with the same internal
 %                        structure with the singularitiy classification
-%           fig_visibility   -- for the time being a 1 x 2 cell array with
+%           varagin{1} -- fig_visibility_status  -- for the time being a 1 x 2 cell array with
 %                         {'Visible', 'off'}, to set figures to invisible;
 %           to_plot -- a string to tell this function what to plot in terms of scatter
 %                     plots over time.
@@ -31,14 +31,18 @@ function fig_handles = plot_singularity_counts(obj_sings, varargin)
 if nargin < 2
     fig_visibility = {'Visible', 'on'};
 else
-    fig_visibility = {'Visible', vis_status};
+    fig_visibility = {'Visible', varargin{1}};
 end
 if nargin < 3
     to_plot = 'all';
+else
+    to_plot = varargin{2};
 end
 
 if nargin < 4
     marker_plot = 'line';
+else
+    marker_plot = varargin{3};
 end
 
 base_list = s3d_get_base_singularity_list();
