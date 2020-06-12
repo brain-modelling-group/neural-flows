@@ -1,4 +1,4 @@
-function seed_locs = get_seeding_locations(locs, modality, seed)
+function get_seeding_locations(locs, modality, seed)
 
 if nargin < 3
     seed = 2020;
@@ -14,7 +14,7 @@ switch modality
         node_idx1 = randi([1, size(locs, 1)], size(locs, 1),  1);
         node_idx2 = randi([1, size(locs, 1)], size(locs, 1),  1);
         seed_locs = (locs(node_idx1, :) + locs(node_idx2, :))/2;
-        seed_locs = vertcat(seed_locs, locs);
+        seed_locs = vercat(seed_locs, locs);
     otherwise
         error(['neural-flows:' mfilename ':UnknownCase'], ...
                'Requested unknown method. Options: {"nodes", "random"}');
