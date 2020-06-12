@@ -13,7 +13,13 @@ for jj=1:numsubplot
     hold(ax(jj), 'on')
 end
 
-uxyz = obj_flows.uxyz;
+if strcmp(params.flows.method.data.mode, 'amplitude')
+   uxyz = obj_flows.uxyz;
+else
+   uxyz(:, 1, :) = obj_flows.vx; 
+   uxyz(:, 2, :) = obj_flows.vy; 
+   uxyz(:, 3, :) = obj_flows.vz; 
+end
 
 un = squeeze(sqrt(uxyz(:, 1, :).^2+uxyz(:, 2, :).^2+uxyz(:, 3, :).^2));
 
