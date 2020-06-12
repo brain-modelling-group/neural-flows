@@ -44,7 +44,7 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_cnem_estimate(params
     masks = obj_data.masks;
     obj_flows.masks = masks;
     obj_flows.locs = obj_data.locs;
-    
+    locs = obj_data.locs;
 
     % Here is where the magic happens -- assumes data input is always
     % amplitude, we calculate phases internally
@@ -57,6 +57,12 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_cnem_estimate(params
              error(['neural-flows:' mfilename ':UnknownCase'], ...
                'Requested unknown case of grid. Options: {"structured", "unstructured"}'); 
     end
+    
+    % Get
+    xyz_lims{1} = [min(locs(:, 1)) max(locs(:, 1))];
+    xyz_lims{2} = [min(locs(:, 2)) max(locs(:, 2))];
+    xyz_lims{3} = [min(locs(:, 3)) max(locs(:, 3))];
+    obj_flows.xyz_lims = xyz_lims; 
         
     % Alternative for using structures
     % [params, varargout(obj_flows)] = ..... 
