@@ -1,4 +1,4 @@
-function fig_handles = plot1d_singularity_traces(obj_sings, varargin)
+function fig_handles = plot1d_singularity_traces(params, varargin)
 % This function takes as an input a matfile with the list of
 % singularities, and generates plots to give an idea of their
 % beahviour over time and space (1d). It's basically a visual summary.
@@ -28,6 +28,8 @@ function fig_handles = plot1d_singularity_traces(obj_sings, varargin)
 % PSL, QIMR August 2019
 
 %fig_visibility, to_plot, marker_plot
+
+obj_sings = load_iomat_singularity(params); 
 
 if nargin < 2
     fig_visibility = {'Visible', 'on'};
