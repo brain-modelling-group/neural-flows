@@ -77,9 +77,9 @@ for cc=1:num_sing_to_plot
     cmap_cp = s3d_get_colours(cp_type{cc});
         
     for tt=1:num_frames
-        x = null_points_3d(1, tt).x;
-        y = null_points_3d(1, tt).y;
-        z = null_points_3d(1, tt).z;
+        x = null_points_3d(1, tt).locs.x;
+        y = null_points_3d(1, tt).locs.y;
+        z = null_points_3d(1, tt).locs.z;
         idx_cp_type = get_idx_cp_type(singularity_list_num{tt}, num_label_cp);
         plotfun()
     end
