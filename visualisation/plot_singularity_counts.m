@@ -1,4 +1,4 @@
-function fig_handles = plot_singularity_counts(obj_sings, varargin)
+function fig_handles = plot1d_singularity_traces(obj_sings, varargin)
 % This function takes as an input a matfile with the list of
 % singularities, and generates plots to give an idea of their
 % beahviour over time and space (1d). It's basically a visual summary.
