@@ -2,19 +2,19 @@
   "general": {
     "storage": {
       "time_stamp": [],
-      "dir": "scratch",    // make sure this directory exists, or change to dir to store data
-      "dir_tmp": "/tmp",   // change to tmp directory depending on OS 
+      "dir": "scratch",    
+      "dir_tmp": "/tmp",    
       "params": {
         "input": {
           "filename": "rotating_wave_in.json",
-          "dir": "examples", // directory where the input json file is stored
+          "dir": "examples" 
         },
         "output": {
           "filename": "rotating_wave_ou.json",
-          "dir": "examples", // directory where the output json file will be stored
+          "dir": "examples" 
         }
       },
-      "format": "iomat",     
+      "format": "iomat"     
     },
     "parallel": {
       "enabled": true,
@@ -116,7 +116,7 @@
   },
   "data": {
     "file": {
-      "dir": "demo-data", // directory where input data is stored
+      "dir": "demo-data", 
       "name": "rotating_wave_W_c1_d1ms_trial1.mat"
     },
     "slice": {
