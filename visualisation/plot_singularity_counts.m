@@ -7,10 +7,11 @@ function fig_handles = plot_singularity_counts(obj_sings, varargin)
 % ARGUMENTS:
 %           obj_sings -- a MatFile or a structure with the same internal
 %                        structure with the singularitiy classification
-%           varagin{1} -- fig_visibility_status  -- for the time being a 1 x 2 cell array with
-%                         {'Visible', 'off'}, to set figures to invisible;
-%           to_plot -- a string to tell this function what to plot in terms of scatter
+%           varargin{1} --  a 1 x 2 cell array with {'Visible', 'off'}, to set figures to invisible;
+%           varargin{2} --  a string with the case to plot -- tells this function what to plot in terms of scatter
 %                     plots over time.
+%           varargin{3} -- a string with the type of plotting function to
+%                          use 'line' or 'scatter'
 %
 % OUTPUT:   
 %
@@ -31,7 +32,7 @@ function fig_handles = plot_singularity_counts(obj_sings, varargin)
 if nargin < 2
     fig_visibility = {'Visible', 'on'};
 else
-    fig_visibility = {'Visible', varargin{1}};
+    fig_visibility = varargin{1};
 end
 if nargin < 3
     to_plot = 'all';
