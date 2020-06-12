@@ -9,9 +9,9 @@ function rotating_wave(case_label)
 % |-----------|----------------|-------------|-----------------|------------|----------|---------|
 % | dracarys  | (u)nstructured | (a)mplitude | (h)orn-schunk3d |      11    |  5  min  |   6 GB  |
 % | dracarys  | (u)nstructured | (a)mplitude | (c)nem|         |      8     |  X       |    X    | 
-% | tesseract | (u)nstructured | (a)mplitude | (h)orn-schunk3d |      6     |  3.73 min|    X    |  
-% | tesseract | (u)nstructured | (a)mplitude | (c)nem|         |      8     |  0.75 min|    X    |
-% | tesseract | (u)nstructured | (p)hase     | (c)nem|         |      8     |  0.75 min|    X    |
+% | tesseract | (u)nstructured | (a)mplitude | (h)orn-schunk3d |      6     |  3.73 min| 2.5 GB  |  
+% | tesseract | (u)nstructured | (a)mplitude | (c)nem|         |      8     |  0.75 min| 500 MB  |
+% | tesseract | (u)nstructured | (p)hase     | (c)nem|         |      8     |  0.75 min| 500 MB  |
 
 if nargin < 1
     case_label = 'uah';
