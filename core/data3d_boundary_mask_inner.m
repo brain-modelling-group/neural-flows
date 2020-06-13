@@ -44,4 +44,4 @@ end
     % Detect which points are inside the resulting alpha shape boundary.
     in_bdy_mask = inShape(shp, xq, yq, zq);
     
-end % function data3d_calculate_boundary()
+end % function data3d_boundary_mask_inner()

@@ -60,6 +60,16 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params
     obj_flows.X = obj_data.X;
     obj_flows.Y = obj_data.Y;
     obj_flows.Z = obj_data.Z;
+    
+    % Get limits
+    X = obj_data.X;
+    Y = obj_data.Y;
+    Z = obj_data.Z;
+    
+    xyz_lims{1} = [min(X(:)) max(X(:))];
+    xyz_lims{2} = [min(Y(:)) max(Y(:))];
+    xyz_lims{3} = [min(Z(:)) max(Z(:))];
+    obj_flows.xyz_lims = xyz_lims; 
    
     % Here is where the magic happens
     params = flows3d_hs3d_loop(obj_data, obj_flows, params);

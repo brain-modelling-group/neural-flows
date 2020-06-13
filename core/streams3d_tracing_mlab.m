@@ -1,25 +1,47 @@
-function streams3d_tracing_grid(mfile_vel, singularity_classification, seed_locs)
+function obj_streams = streams3d_tracing_mlab(obj_flows, obj_streams, params)
 
 % Trace streamlines for one frame 
-
 tt=2;
 
-X = mfile_vel.X;
-Y = mfile_vel.Y;
-Z = mfile_vel.Z;
+% Save grid 
+obj_streams.X = obj_flows.X;
+obj_streams.Y = obj_flows.Y;
+obj_streams.Z = obj_flows.Z;
 
 
 x_dim = 1;
 y_dim = 2;
 z_dim = 3;
 
+
+masks = obj_flows.
+% Get seeding locations
+seeding_locs = get_seeding_locations_volume(mas, params.streamlines.tracing.seeding_points.modality, ...
+                                                  params.streamlines.tracing.seeding_points.seed);
+% Save seeding locations
+obj_streams.seeding_locs = seeding_locs;
+
+
+streamlines.paths = [];
+tracing_mlab_time_loop()
+
+function tracing_mlab_time_loop()
+    for tt = 1:tpts
+       streamlines.paths = tracing_mlab_fun_step(tt); 
+       obj_streams.streamlines(1, tt) = streamlines; 
+    end
+end % function tracing_mlab_time_loop()
+
+
+
+
 % Trace streamlines
 verts = stream3(X, Y, Z, mfile_vel.ux(:, :, :, tt), ...
                          mfile_vel.uy(:, :, :, tt), ...
                          mfile_vel.uz(:, :, :, tt), ...
-                         seed_locs(:, x_dim), ...
-                         seed_locs(:, y_dim), ...
-                         seed_locs(:, z_dim), [2^-12]); % TODO: adjuts parameters
+                         seeding_locs(:, x_dim), ...
+                         seeding_locs(:, y_dim), ...
+                         seeding_locs(:, z_dim), [2^-12]); % TODO: adjuts parameters
 
 % Remove nan vertices from streamlines (points outside the convex hull)                     
 verts = cellfun(@remove_nans, verts, 'UniformOutput', false);

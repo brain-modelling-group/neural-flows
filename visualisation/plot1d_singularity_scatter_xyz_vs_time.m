@@ -1,4 +1,4 @@
-function figure_handle_xyz = plot_singularity_scatter_xyz_vs_time(singularity_list_num, null_points_3d, cp_type, xyz_lims, marker_plot, varargin)
+function figure_handle_xyz = plot1d_singularity_scatter_xyz_vs_time(singularity_list_num, null_points_3d, cp_type, xyz_lims, marker_plot, varargin)
 % This function plots singularities as a a function of 
 % their position along one axis (X, Y, Z) vs time.
 %
@@ -77,9 +77,9 @@ for cc=1:num_sing_to_plot
     cmap_cp = s3d_get_colours(cp_type{cc});
         
     for tt=1:num_frames
-        x = null_points_3d(1, tt).x;
-        y = null_points_3d(1, tt).y;
-        z = null_points_3d(1, tt).z;
+        x = null_points_3d(1, tt).locs.x;
+        y = null_points_3d(1, tt).locs.y;
+        z = null_points_3d(1, tt).locs.z;
         idx_cp_type = get_idx_cp_type(singularity_list_num{tt}, num_label_cp);
         plotfun()
     end
@@ -126,4 +126,4 @@ end
     end % scatter_plot()
 
 end
-% function plot_singularity_scatter_xyz_vs_time()
+% function plot1d_singularity_scatter_xyz_vs_time()

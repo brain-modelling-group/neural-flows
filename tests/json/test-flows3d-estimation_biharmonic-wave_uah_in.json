@@ -48,14 +48,14 @@
     "enabled": true,
     "file": {
       "exists": false,
-      "keep": true,
       "dir": "",
       "name": "",
-      "label": ""
+      "label": "",
+      "keep": true
     },
     "method": {
       "data": {
-        "mode": "amplitude"
+        "modality": "amplitude"
       },
       "name": "hs3d",
       "hs3d": {
