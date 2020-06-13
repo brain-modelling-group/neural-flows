@@ -25,8 +25,8 @@ function  [params, obj_streams, obj_streams_sentinel] = streams3d_trace(params)
         rng(2020)
     end
     
-    if strcmp(params.streams.file.label, '')
-        params.streams.file.label = 'tmp_streams';
+    if strcmp(params.streamlines.file.label, '')
+        params.streamlines.file.label = 'tmp_streams';
     end
     
     % Save flow calculation parameters
@@ -35,9 +35,9 @@ function  [params, obj_streams, obj_streams_sentinel] = streams3d_trace(params)
                                                             params.streamlines.file.keep);
     obj_streams_cell = strsplit(obj_streams.Properties.Source, filesep);
     % Save properties of file
-    params.streams.file.exists = true;
-    params.streams.file.dir  = params.general.storage.dir;
-    params.streams.file.name = obj_streams_cell{end};
+    params.streamlines.file.exists = true;
+    params.streamlines.file.dir  = params.general.storage.dir;
+    params.streamlines.file.name = obj_streams_cell{end};
 
     % Save masks with convex hulls of the brain
     % Note this will fail if there are no masks here
@@ -60,6 +60,5 @@ function  [params, obj_streams, obj_streams_sentinel] = streams3d_trace(params)
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished tracing of streamlines.'))
 
     % Disable streams calculation if we already did it
-    params.general.streams.enabled = false;
-    params.streams.file.exists = true;
+    params.general.streamlines.enabled = false;
 end % function streams3d_trace()

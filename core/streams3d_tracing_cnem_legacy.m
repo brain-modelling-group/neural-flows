@@ -1,4 +1,4 @@
-function stream_cell = streams3d_tracing_cnem(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length)
+function stream_cell = streams3d_tracing_cnem_legacy(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length)
 %% Traces streamlines using a velocity field defined on scattered points in space
 %  based on traceStreamXYZUVW from matlab's stream3c.c, using CNEM
 %  functions.
