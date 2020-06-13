@@ -42,7 +42,7 @@ switch params.flows.decomposition.svd.grid.type
  end 
 
 % get locations and data
-[X, Y, Z, ux, uy, uz, num_points] = svd_fun(params, obj_flows);
+[X0, Y0, Z0, ux, uy, uz, num_points] = svd_fun(params, obj_flows);
 
 num_modes = params.flows.decomposition.svd.modes;
 [U, S, V, prct_var] = svd_decomposition(ux, uy, uz, num_modes);
@@ -52,7 +52,7 @@ if params.flows.visualisation.enabled
     time_vec = params.data.ht:params.data.ht:params.flows.data.shape.t*params.data.ht; 
     quiver_scale_factor = params.visualisation.quiver.scale;
 
-    fig_spatial_modes =  plot_svd_modes(V, U, X, Y, Z, ...
+    fig_spatial_modes =  plot_svd_modes(V, U, X0, Y0, Z0, ...
                                         time_vec, num_modes, num_points, ...
                                         prct_var, quiver_scale_factor);
     varargout{1} = fig_spatial_modes;
@@ -64,6 +64,11 @@ V.vx = vx;
 V.vy = vy;
 V.vz = vz;
 
+XYZ.X = X0;
+XYZ.Y = Y0;
+XYZ.Z = Z0;
+
+varargout{2} = XYZ;
 end % function perform_svd_mode_decomposition()
 
 
