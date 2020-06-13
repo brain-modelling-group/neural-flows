@@ -58,9 +58,8 @@ save_params_checkpoint(tmp_params)
 %---------------------------------STREAMLINES----------------------------------%
 
 % Check what else we want to do
-if tmp_params.flows.streamlines.enabled
-     error(['neural-flows:' mfilename ':NotImplemented'], ...
-               'This feature has not been implemented yet. Next!');
+if tmp_params.streamlines.enabled
+    streams3d_trace(tmp_params)
 end 
 %---------------------------------STREAMLINES----------------------------------%
 % Save parameters up to this point
