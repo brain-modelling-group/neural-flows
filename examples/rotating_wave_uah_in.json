@@ -80,12 +80,31 @@
           "type": "unstructured"
         }
       }
-    },
-    "streamlines": {
+    }
+  },
+  "streamlines": {
       "enabled": false,
-      "grid": {
-        "type": "unstructured"
-      }
+      "file": {
+          "exists": false,
+          "dir": "",
+          "name": "",
+          "label": "",
+          "keep": true
+    },
+
+      "tracing": {
+               "grid": {
+                   "type": "unstructured"
+                  },
+               "seeding_points": {
+                                  "modality": "random",
+                                  "seed": 42
+              },
+              "max_stream_length" : 200
+          },
+
+    "visualisation": {
+      "enabled": true
     }
   },
   "singularity": {
