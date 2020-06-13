@@ -58,6 +58,12 @@ if params.flows.visualisation.enabled
     varargout{1} = fig_spatial_modes;
 end
 
+[vx, vy, vz] = reshape_svd_modes(V, num_points);
+clear V 
+V.vx = vx;
+V.vy = vy;
+V.vz = vz;
+
 end % function perform_svd_mode_decomposition()
 
 
@@ -172,3 +178,13 @@ function [U, S, V, prct_var] = svd_decomposition(ux, uy, uz, num_modes)
     V(:, is_negative) = -V(:, is_negative);
 
 end % function svd_decomposition()
+
+ function [Vx, Vy, Vz] = reshape_svd_modes(V, num_points)
+    x_idx = 1:num_points;
+    y_idx = num_points+1:2*num_points;
+    z_idx = 2*num_points+1:3*num_points;
+    
+    Vx = V(x_idx, :); 
+    Vy = V(y_idx, :);
+    Vz = V(z_idx, :);                                         
+ end % function reshape_svd_modes()
