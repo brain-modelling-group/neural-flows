@@ -1,4 +1,4 @@
-function get_seeding_locations(locs, modality, seed)
+function seed_locs = get_seeding_locations(locs, modality, seed)
 
 if nargin < 3
     seed = 2020;
