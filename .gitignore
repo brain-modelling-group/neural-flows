@@ -14,7 +14,8 @@ image_frames/
 scratch/
 
 
-# temp files 
+# temp files
+*.asv
 *.m~
 *.mat
 
