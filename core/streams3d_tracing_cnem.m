@@ -20,10 +20,16 @@ function obj_streams = streams3d_tracing_cnem(obj_streams, obj_flows, params)
 
 
 % Load necessary stuff
-max_stream_length = params.streamlines.tracing.max_streamline_length;
+max_stream_length = params.streamlines.tracing.max_stream_length;
 masks = obj_flows.masks;
 locs  = obj_flows.locs;
-boundary_faces = masks.innies_triangles_bi;
+
+if isfield(masks, 'innies_triangles_bi')
+    boundary_faces = masks.innies_triangles_bi;
+else
+    boundary_faces = masks.innies_triangles;
+end
+
 time_step = params.streamlines.tracing.time_step; % fake time step for streamline tracing
 tpts = 200;
 
