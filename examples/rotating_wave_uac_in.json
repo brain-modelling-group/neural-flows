@@ -6,11 +6,11 @@
       "dir_tmp": "/tmp",
       "params": {
         "input": {
-          "filename": "rotating_wave_in.json",
+          "filename": "rotating_wave_uac_in.json",
           "dir": "examples"
         },
         "output": {
-          "filename": "rotating_wave_ou.json",
+          "filename": "rotating_wave_uac_ou.json",
           "dir": "examples"
         }
       },
