@@ -188,7 +188,7 @@ n = prod(theSize);
 x = reshape(x,n,1);
 y = reshape(y,n,1);
 z = reshape(z,n,1);
-if size(tt)==1 && size(fi)==1
+if size(tt)==1 & size(fi)==1
   tt = repmat(tt,n,1);
   fi = repmat(fi,n,1);
 else
