@@ -62,7 +62,8 @@ end % function perform_svd_mode_decomposition()
 
 
 function [X, Y, Z, ux, uy, uz, num_points] = svd_grid(params, obj_flows)
-    masks = obj_flows.masks;
+    obj_interp = load_iomat_interp(params);
+    masks = obj_interp.masks;
     innies_idx = find(masks.innies == true);
     num_points = length(innies_idx);
     
