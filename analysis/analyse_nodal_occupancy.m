@@ -54,7 +54,8 @@ n3d_cell =  squeeze(struct2cell(null_points_3d));
 % NOTE: The following nested for loops are surprisingly fast
 classification_num = obj_singularity.classification_num;
 
-parfor tt=1:tpts
+% XXX: FIX dimensions
+for tt=1:tpts
     sings_temp = classification_num{tt};
     [tracking_3d_matrix(:, :, tt), tracking_2d_matrix(:, tt)] = step_nodal_occupancy_singularity(sings_temp, n3d_cell(tt), locs, num_base_sngs, dist_threshold);
 end
