@@ -177,7 +177,11 @@
       "enabled": true
     },
     "quantification": {
-      "enabled": true
+      "enabled": true,
+      "nodal_occupancy" : {
+        "enabled": true,
+        "distance_threshold" : 50
+      }
     },
     "tracking": {
       "enabled": true
