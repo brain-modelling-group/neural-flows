@@ -1,4 +1,4 @@
-function [obj_data,varargout] = load_iomat_data(params)
+function [obj_data, varargout] = load_iomat_data(params)
 % Load ioriginal data stored in an iomat file 
 
 obj_data = matfile(fullfile(params.data.file.dir, ...
@@ -19,6 +19,7 @@ switch params.data.grid.type
                 end
              end
             obj_data.nodes_strl_lbl = nodes_str_lbl;
+            params.data.nodes_strl_lbl = nodes_str_lbl;
         case 'structured'
             params.data.shape.timepoints = params.data.shape.size(4);
             params.data.shape.x = params.data.shape.size(2); 

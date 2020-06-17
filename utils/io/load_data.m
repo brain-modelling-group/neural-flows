@@ -26,7 +26,8 @@ function [data, params, varargout] = load_data(params)
                     nodes_str_lbl{nn} = num2str(nn, '%03d');
                 end
             end
-            save(data_path, 'nodes_str_lbl', '-append');         
+            save(data_path, 'nodes_str_lbl', '-append');
+            params.data.nodes_strl_lbl = nodes_str_lbl;         
         case 'structured'
             params.data.shape.timepoints = params.data.shape.size(4);
             % This may bring problems if x, y are swapped
