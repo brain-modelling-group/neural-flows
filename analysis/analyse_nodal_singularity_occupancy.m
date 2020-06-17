@@ -1,4 +1,5 @@
 function params = analyse_nodal_singularity_occupancy(params)
+% TODOC
 %function [nodal_occupancy_matrix, total_nodal_occupancy, transition_matrix, tracking_matrix, valid_node_idx] = analyse_nodal_occupancy(msing_obj, locs, nodes_str_lab, dis_th)
 % This function calculates singularity occupancy rates at the nodes of the connectome 
 % ARGUMENTS:
