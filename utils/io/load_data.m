@@ -20,6 +20,13 @@ function [data, params, varargout] = load_data(params)
             params.data.shape.timepoints = params.data.shape.size(1);
             params.data.shape.nodes = params.data.shape.size(2);
             varargout{1} = data_struct.locs;
+            if ~isfield(data_struct, 'nodes_str_lbl')
+                 nodes_str_lbl = cell(params.data.shape.nodes,1); 
+                for nn=1:params.data.shape.nodes
+                    nodes_str_lbl{nn} = num2str(nn, '%03d');
+                end
+            end
+            save(data_path, 'nodes_str_lbl', '-append');         
         case 'structured'
             params.data.shape.timepoints = params.data.shape.size(4);
             % This may bring problems if x, y are swapped
