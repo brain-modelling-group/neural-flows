@@ -4,10 +4,10 @@ function [tracking_3d_matrix, tracking_2d_matrix] = step_nodal_occupancy_singula
     num_nodes = size(nodal_locs, 1);
     tracking_3d_matrix(num_base_sngs, num_nodes) = 0;
     tracking_2d_matrix(num_nodes) = 0;
-    for nn=1:size(nodal_locs, 1)
-         idx = find(singularity_classification_frame <= num_base_sngs);
-         base_sings_temp = singularity_classification_frame(idx);
-         if ~isempty(idx)
+    idx = find(singularity_classification_frame <= num_base_sngs);
+    base_sings_temp = singularity_classification_frame(idx);
+   if ~isempty(idx)
+       for nn=1:size(nodal_locs, 1)
              singularity_locs_struct = singularity_locs{1};
              xyz_sings = [singularity_locs_struct.x(idx), singularity_locs_struct.y(idx), singularity_locs_struct.z(idx)];
              for ss=1:length(idx)
@@ -18,6 +18,6 @@ function [tracking_3d_matrix, tracking_2d_matrix] = step_nodal_occupancy_singula
                  end
              end
              
-         end       
-    end
+       end       
+   end
 end % step_nodal_singularity()
