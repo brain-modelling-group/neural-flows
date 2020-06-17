@@ -26,8 +26,8 @@ obj_singularity = load_iomat_singularity(params);
 obj_flows = load_iomat_flows(params);
 
 
-%dist_threshold = params.singularity.quantification.nodal_occupancy.distance_threshold;
-dist_threshold = 50;
+dist_threshold = params.singularity.quantification.nodal_occupancy.distance_threshold;
+%dist_threshold = 20;
 locs = obj_flows.locs;
 
 % Sizes
