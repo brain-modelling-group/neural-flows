@@ -13,7 +13,7 @@ tmp_params = inparams;
 %---------------------------------DECOMPOSITION-------------------------%
 if inparams.flows.decomposition.svd.enabled
     % Check if we need to interpolate data
-    perform_svd_mode_decomposition(inparams);
+    perform_svd(inparams);
 end
 
 if inparams.flows.quantification.energy.enabled
