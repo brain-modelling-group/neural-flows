@@ -10,14 +10,14 @@ tstart = tik();
 tmp_params = inparams;
 
 %---------------------------------DECOMPOSITION-------------------------%
-if inparams.flows.visualisation.enabled
+%if inparams.flows.visualisation.enabled
     % Check if we need to interpolate data
     
-
-end
+%end
 %---------------------------SINGULARITY---------------------------------%
 if inparams.singularity.visualisation.enabled
-
+   plot2d_singularity_occupancy(inparams)
+   plot1d_singularity_traces(inparams)
 end
 %-------------------------------------------------------------------------------%
 % save_tmp_params(tmp_params)
