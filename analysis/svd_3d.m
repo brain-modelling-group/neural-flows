@@ -1,4 +1,4 @@
-function [U, S, V, varargout] = perform_svd_mode_decomposition(params)
+function [svd_struct] = svd_3d(params)
 % Performs singular vector decomposition of a vector field.
 % Plots most dominant spatial modes and their time series 
 % ARGUMENTS:
@@ -46,17 +46,6 @@ switch params.flows.decomposition.svd.grid.type
 num_modes = params.flows.decomposition.svd.modes;
 [U, S, V, prct_var] = svd_decomposition(ux, uy, uz, num_modes);
 
-% Plot spatial modes containing most energy
-if params.flows.visualisation.enabled
-    time_vec = params.data.ht:params.data.ht:params.flows.data.shape.t*params.data.ht; 
-    quiver_scale_factor = params.visualisation.quiver.scale;
-
-    fig_spatial_modes =  plot_svd_modes(V, U, X0, Y0, Z0, ...
-                                        time_vec, num_modes, num_points, ...
-                                        prct_var, quiver_scale_factor);
-    varargout{1} = fig_spatial_modes;
-end
-
 [vx, vy, vz] = reshape_svd_modes(V, num_points);
 clear V 
 V.vx = vx;
@@ -67,7 +56,12 @@ XYZ.X = X0;
 XYZ.Y = Y0;
 XYZ.Z = Z0;
 
-varargout{2} = XYZ;
+svd_struct.XYZ = XYZ;
+svd_struct.V = V;
+svd_struct.U = U;
+svd_struct.num_points = num_points;
+svd_struct.prct_var = prct_var;
+
 end % function perform_svd_mode_decomposition()
 
 
