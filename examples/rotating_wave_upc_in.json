@@ -47,7 +47,7 @@
     },
     "decomposition": {
       "svd": {
-        "enabled": false,
+        "enabled": true,
         "modes": 4,
         "grid": {
           "type": "unstructured"
