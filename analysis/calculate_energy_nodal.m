@@ -29,16 +29,21 @@ function [energy] = calculate_energy_nodal(flow_field)
 % The mass is m=1, although nodes could have different masses/weigths (eg, hubs/nonhubs)
 
 
-xdim = 1;
-ydim = 2;
-zdim = 3;
-flow_field(isnan(flow_field)) = 0;
-% May use lots of memory
-energy.node = squeeze((((flow_field(:, xdim, :).^2 + flow_field(:, ydim, :).^2 + flow_field(:, zdim, :).^2)/2)));
+params = obj_flows.params; 
+tpts   = params.flows.data.shape.t;
+num_nodes  = size(locs, 1);
 
+% Probably best to iterate over time
+temp_energy(num_nodes, tpts) = 0;
+
+parfor tt=1:tpts
+    un = obj_flows.uxyz_n(:, tt);
+    temp_energy(:, tt) = kinetic_energy(un);
+end
 % 
-energy.sum = nansum(energy.node);
+energy.spatial_sum = nansum(temp_energy);
+energy.spatial_average = nanmean(temp_energy);
+energy.spatial_median  = nanmedian(temp_energy);
 
-energy.av = mean(energy.node);
 
-end % end calculate_nodal_energy()
+end % end calculate_energy_nodal()

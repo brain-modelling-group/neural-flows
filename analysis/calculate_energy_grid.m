@@ -30,18 +30,17 @@ tpts   = params.flows.data.shape.t;
 
 
 % Probably best to iterate over time
-temp_energy(length(find(obj_flows.in_bdy_mask)), tpts) = 0;
-good_idx = find(obj_flows.interp_mask == true);
+innies_idx = find(obj_flows.masks.innies == true);
+temp_energy(length(innies)), tpts) = 0;
+temp_energy(length(innies)), tpts) = 0;
+
 parfor tt=1:tpts
-    ux = obj_flows.ux(:, :, :, tt);
-    uy = obj_flows.uy(:, :, :, tt);
-    uz = obj_flows.uz(:, :, :, tt);
-    temp_energy(:, tt) = 0.5*(ux(good_idx).^2 + uy(good_idx).^2 + uz(good_idx).^2);
+    un = obj_flows.un(:, :, :, tt);
+    temp_energy(:, tt) = kinetic_energy(un(innies_idx));
 end
 % 
-energy.nodal = 
 energy.spatial_sum = nansum(temp_energy);
-
 energy.spatial_average = nanmean(temp_energy);
+energy.spatial_median  = nanmedian(temp_energy);
 
 end % end calculate_energy_grid()
