@@ -39,12 +39,7 @@ output_params = main_core(input_params);
 main_analysis(output_params);
 
 %% Visualisation
-
-
-if strcmp(case_label, 'uah')
-   main_visualisation(output_params)
-end
-plot1d_speed_distribution(output_params)
+main_visualisation(output_params)
 
 
 end %function example_rotating_wave()
