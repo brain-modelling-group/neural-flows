@@ -33,11 +33,12 @@ obj_flows = load_iomat_flows(params);
 % Calculate stuff
 energy_struct = energy_fun(params, obj_flows);
 
-%
+% Do some basic stuff to shocawcase kintic energy functions
 display_flag = 'true';
 extrema_detection = 'peaks';
 time_vec = params.flows.data.ht:params.flows.data.ht:params.flows.data.shape.t*params.flows.data.ht;
-[stable, transient, stablePoints, transientPoints] = energy_states(energy_struct.spatial_sum, time_vec, params.flows.data.ht, min_duration, extrema_detection, display_flag);
+min_duration_stable_state = params.flows.data.ht * 30;
+[stable, transient, stablePoints, transientPoints] = energy_states(energy_struct.component_sum_norm, time_vec, params.flows.data.ht, min_duration_stable_state, extrema_detection, display_flag);
 
 
 % Save output
