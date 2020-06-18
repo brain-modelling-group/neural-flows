@@ -1,7 +1,7 @@
 function ouparams = main_visualisation(inparams)
-%% Wrapper function to perform basic analysis:
-%  (1): svd decomposition
-%  (2): singularity analysis
+%% Wrapper function to perform basic visualisation:
+% People can write their own main function calling different combinations of 
+% plotting functions
 
 % Tic
 tstart = tik();
@@ -12,6 +12,7 @@ tmp_params = inparams;
 %---------------------------------DECOMPOSITION-------------------------%
 if inparams.flows.visualisation.enabled
     plot1d_speed_distribution(inparams)
+    plot2d_svd_modes(inparams)
 end
 %---------------------------SINGULARITY---------------------------------%
 if inparams.singularity.visualisation.enabled
