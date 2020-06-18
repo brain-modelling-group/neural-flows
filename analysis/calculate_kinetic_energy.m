@@ -31,7 +31,7 @@ end
 obj_flows = load_iomat_flows(params);
 
 % Calculate stuff
-energy_struct = energy_fun(obj_flows)
+energy_struct = energy_fun(obj_flows);
 
 % Save output
 obj_flows.kinetic_energy = energy_struct;
