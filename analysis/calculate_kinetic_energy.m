@@ -31,9 +31,17 @@ end
 obj_flows = load_iomat_flows(params);
 
 % Calculate stuff
-energy_struct = energy_fun(obj_flows);
+energy_struct = energy_fun(params, obj_flows);
+
+%
+display_flag = 'true';
+extrema_detection = 'peaks';
+time_vec = params.flows.data.ht:params.flows.data.ht:params.flows.data.shape.t*params.flows.data.ht;
+[stable, transient, stablePoints, transientPoints] = energy_states(energy_struct.spatial_sum, time_vec, params.flows.data.ht, min_duration, extrema_detection, display_flag);
+
 
 % Save output
 obj_flows.kinetic_energy = energy_struct;
+
 
 end % end calculate_kinetic_energy()
