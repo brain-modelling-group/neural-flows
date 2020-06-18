@@ -10,13 +10,13 @@ tstart = tik();
 tmp_params = inparams;
 
 %---------------------------------DECOMPOSITION-------------------------%
-if inparams.flows.decomposition.svd.enabled
+if inparams.flows.visualisation.enabled
     % Check if we need to interpolate data
-    perform_svd_mode_decomposition(inparams);
+    
 
 end
 %---------------------------SINGULARITY---------------------------------%
-if inparams.singularity.quantification.enabled
+if inparams.singularity.visualisation.enabled
 
 end
 %-------------------------------------------------------------------------------%

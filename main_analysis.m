@@ -15,9 +15,10 @@ if inparams.flows.decomposition.svd.enabled
     perform_svd_mode_decomposition(inparams);
 
 end
+
 %---------------------------SINGULARITY---------------------------------%
 if inparams.singularity.quantification.enabled
-
+	analyse_nodal_singularity_occupancy(inparams)	
 end
 % TODO: write output parameters if reequired
 
