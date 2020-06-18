@@ -125,6 +125,12 @@
         }
       }
     },
+    "quantification": {
+      "energy": {
+        "enabled": true,
+        "modality": "nodal"
+      }
+    },
     "visualisation": {
       "enabled": true
     }
