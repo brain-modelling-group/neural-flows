@@ -16,9 +16,12 @@ if inparams.flows.decomposition.svd.enabled
 
 end
 
+if inparams.flows.qunatification.energy.enabled
+    calculate_kinetic_energy(inparams)
+end
 %---------------------------SINGULARITY---------------------------------%
 if inparams.singularity.quantification.enabled
-	analyse_nodal_singularity_occupancy(inparams)	
+    analyse_nodal_singularity_occupancy(inparams)   
 end
 % TODO: write output parameters if reequired
 
