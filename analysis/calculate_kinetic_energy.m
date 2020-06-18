@@ -29,6 +29,7 @@ switch params.flows.quantification.energy.modality
 end
 
 obj_flows = load_iomat_flows(params);
+obj_flows.Properties.Writable = true;
 
 % Calculate stuff
 energy_struct = energy_fun(params, obj_flows);
