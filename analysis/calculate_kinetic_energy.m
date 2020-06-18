@@ -14,12 +14,9 @@ function calculate_energy_grid(params)
 %}
 %
 % MODIFICATION HISTORY:
-%     Paula Sanz-Leon, QIMR Berghofer 2018
+%     Paula Sanz-Leon, QIMR Berghofer 2020
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% NOTE: Displacement energy, this is a kinectic energy-like expression: 1/2 m v^2
-% The mass is m=1
 
 switch params.flows.quantification.energy.modality
 	case {"nodal", "unstructured"}
