@@ -1,7 +1,8 @@
 function ouparams = main_analysis(inparams)
 %% Wrapper function to perform basic analysis:
-%  (1): svd decomposition
-%  (2): singularity analysis
+%  (1): flows: svd decomposition
+%  (2): flows: energy quantification
+%  (3): singularity: quantification
 
 % Tic
 tstart = tik();
