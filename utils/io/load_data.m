@@ -25,8 +25,10 @@ function [data, params, varargout] = load_data(params)
                 for nn=1:params.data.shape.nodes
                     nodes_str_lbl{nn} = num2str(nn, '%03d');
                 end
+                save(data_path, 'nodes_str_lbl', '-append');
+            else
+                nodes_str_lbl = data_struct.nodes_str_lbl;
             end
-            save(data_path, 'nodes_str_lbl', '-append');
             params.data.nodes_strl_lbl = nodes_str_lbl;         
         case 'structured'
             params.data.shape.timepoints = params.data.shape.size(4);
