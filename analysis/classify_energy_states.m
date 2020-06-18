@@ -1,4 +1,4 @@
-function [stable, transient, stablePoints, transientPoints] = classify_energy_states(energy, time_vec, sampling_period, min_duration, extrema_detection, display_flag)
+function [stable, transient, stablePoints, transientPoints] = energy_states(energy, time_vec, sampling_period, min_duration, extrema_detection, display_flag)
 % compute_energy_states  Computation of low and high energy states based on optical flow estimates 
 % INPUT ARGUMENTS:
 %   energy              -- a vector with the kinetic energy estimates
