@@ -38,9 +38,11 @@ output_params = main_core(input_params);
 %% Run basic analysis
 main_analysis(output_params);
 
-%% 
+%% Visualisation
+
+
 if strcmp(case_label, 'uah')
-   plot1d_singularity_traces(output_params)
+   main_visualisation(output_params)
 end
 plot1d_speed_distribution(output_params)
 
