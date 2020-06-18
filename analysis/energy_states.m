@@ -1,11 +1,11 @@
-function [stable, transient, stablePoints, transientPoints] = energy_states(energy, time_vec, sampling_period, min_duration, extrema_detection, display_flag)
+function [stable, transient, stable_points, transient_points] = energy_states(energy, time_vec, sampling_period, min_duration, extrema_detection, display_flag)
 % compute_energy_states  Computation of low and high energy states based on optical flow estimates 
 % INPUT ARGUMENTS:
-%   energy              -- a vector with the kinetic energy estimates
+%   energy              -- a vector with the kinetic energy estimates [1 x tpts]
 %   time_vec            -- a vector with the time of the flow field (time_flow) vector 
 %                          between which the energy states will be calculated and classified
 %
-%   sampling_period     -- time (ms) between two samples, used to defined the minimu span of a microstates 
+%   sampling_period     -- time (in ms) between two samples, used to defined the minimu span of a microstates 
 %
 %   min_duration        -- scalar, time (ms) expressing the minimal
 %                          duration of a state. Default: 10ms
@@ -108,13 +108,16 @@ stable = sortrows(stable);
 
 extrema = clean_flow_states(transient, stable, sampling_period, min_duration);
 
-transient = extrema(extrema(:,3) > 1-eps, 1:2); transientPoints = [];
-for m = 1:length(transient)
-  transientPoints = [transientPoints transient(m,1):transient(m,2)];
+transient = extrema(extrema(:,3) > 1-eps, 1:2); 
+transient_points = [];
+
+for m = 1:size(transient, 1)
+  transient_points = [transient_points transient(m,1):transient(m,2)];
 end
-stable = extrema(extrema(:,3) < eps, 1:2); stablePoints = [];
-for m = 1:length(stable)
-  stablePoints = [stablePoints stable(m,1):stable(m,2)];
+stable = extrema(extrema(:,3) < eps, 1:2); 
+stable_points = [];
+for m = 1:size(stable, 1)
+  stable_points = [stable_points stable(m,1):stable(m,2)];
 end
 
 % Display microstate interval on displaced energy curve
