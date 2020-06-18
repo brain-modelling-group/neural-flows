@@ -21,23 +21,22 @@ function calculate_energy_grid(params)
 % NOTE: Displacement energy, this is a kinectic energy-like expression: 1/2 m v^2
 % The mass is m=1
 
-params = obj_flows.params; 
-tpts   = params.flows.data.shape.t;
-
-
-% Probably best to iterate over time
-temp_energy(length(find(obj_flows.in_bdy_mask)), tpts) = 0;
-good_idx = find(obj_flows.interp_mask == true);
-parfor tt=1:tpts
-    ux = obj_flows.ux(:, :, :, tt);
-    uy = obj_flows.uy(:, :, :, tt);
-    uz = obj_flows.uz(:, :, :, tt);
-    temp_energy(:, tt) = 0.5*(ux(good_idx).^2 + uy(good_idx).^2 + uz(good_idx).^2);
+switch params.flows.quantification.energy.modality
+	case {"nodal", "unstructured"}
+		energy_fun = @calculate_energy_nodal;
+    case {"grid", "structured"}
+    	energy_fun = @calculate_energy_grid;
+    case {"mesh", "triangulation", "tesselation"}
+    	energy_fun = @calculate_energy_tess;
+	otherwise
 end
-% 
-energy.nodal = 
-energy.spatial_sum = nansum(temp_energy);
 
-energy.spatial_average = nanmean(temp_energy);
+obj_flows = load_iomat_flows(params);
 
-end % end calculate_energy_grid()
+% Calculate stuff
+energy_struct = energy_fun(obj_flows)
+
+% Save output
+obj_flows.kinetic_energy = energy_struct;
+
+end % end calculate_kinetic_energy()
