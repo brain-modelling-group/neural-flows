@@ -39,8 +39,13 @@ parfor tt=1:tpts
     temp_energy(:, tt) = kinetic_energy(un(innies_idx));
 end
 % 
+norm_sum_flow = sqrt(obj_flows.ux_sum.^2 + obj_flows.uy_sum.^2 + obj_flows.uz_sum.^2) 
+
 energy.spatial_sum = nansum(temp_energy);
 energy.spatial_average = nanmean(temp_energy);
 energy.spatial_median  = nanmedian(temp_energy);
-
+energy.component_sum_norm = kinetic_energy(norm_sum_flow);
+energy.component_sum_ux = kinetic_energy(obj_flows.ux_sum);
+energy.component_sum_uy = kinetic_energy(obj_flows.uy_sum);
+energy.component_sum_uz = kinetic_energy(obj_flows.uz_sum);
 end % end calculate_energy_grid()
