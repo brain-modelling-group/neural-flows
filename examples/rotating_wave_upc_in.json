@@ -62,7 +62,10 @@
     }
   },
   "singularity": {
-    "enabled": false
+    "enabled": false,
+    "visualisation": {
+      "enabled": false
+    }
   },
   "data": {
     "file": {
