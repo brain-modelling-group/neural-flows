@@ -23,8 +23,8 @@ switch params.flows.quantification.energy.modality
 		energy_fun = @calculate_energy_nodal;
     case {"grid", "structured"}
     	energy_fun = @calculate_energy_grid;
-    case {"mesh", "triangulation", "tesselation"}
-    	energy_fun = @calculate_energy_tess;
+    case {"mesh", "triangulation", "tesselation", "surf"}
+    	energy_fun = @calculate_energy_surf;
 	otherwise
 end
 
