@@ -22,6 +22,9 @@ function params = analyse_nodal_singularity_occupancy(params)
     
 %}
 
+% TODO: split function into smaller functions
+%       or, save locations into obj_singularity
+
 obj_singularity = load_iomat_singularity(params);
 obj_flows = load_iomat_flows(params);
 
@@ -48,9 +51,9 @@ n3d_cell =  squeeze(struct2cell(null_points_3d));
 % NOTE: The following nested for loops are surprisingly fast
 classification_num = obj_singularity.classification_num;
 
-for tt=1:tpts
+parfor tt=1:tpts
     sings_temp = classification_num{tt};
-    [tracking_3d_matrix(:, :, tt), tracking_2d_matrix(:, tt)] = step_nodal_occupancy_singularity(sings_temp, n3d_cell(tt), locs, num_base_sngs, dist_threshold);
+    [tracking_3d_matrix(:, :, tt), tracking_2d_matrix(:, tt)] = step_nodal_singularity_occupancy(sings_temp, n3d_cell(tt), locs, num_base_sngs, dist_threshold);
 end
 
 % The following matrix gives an idea of how much time a nodes spends time being 
@@ -74,7 +77,7 @@ nodal_occupancy_total = sum(nodal_occupancy_singularity, 1);
 % particular type of singularity
 valid_node_idx = find(nodal_max_occupancy & nodal_occupancy_total);
 
-% Singularity types of the nodes that actually soend time close to a
+% Singularity types of the nodes that actually send time close to a
 % singularity. There will be repetition because the same singularity can be
 % assigned to multiple regions, which is fine as it should give us an idea
 % of a continuum for fine-grained parcellations.
@@ -89,6 +92,4 @@ obj_singularity.tracking_3d_matrix = tracking_3d_matrix;
 obj_singularity.tracking_2d_matrix = tracking_2d_matrix;
 obj_singularity.nodal_singularity_summary = nodal_singularity_summary;
 
-end % function analyse_nodal_occupancy()
-
-
+end % function analyse_nodal_singularity_occupancy()
