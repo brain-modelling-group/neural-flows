@@ -16,7 +16,7 @@ if inparams.flows.decomposition.svd.enabled
 
 end
 
-if inparams.flows.qunatification.energy.enabled
+if inparams.flows.quantification.energy.enabled
     calculate_kinetic_energy(inparams)
 end
 %---------------------------SINGULARITY---------------------------------%
