@@ -11,7 +11,7 @@ tmp_params = inparams;
 
 %---------------------------------DECOMPOSITION-------------------------%
 if inparams.flows.visualisation.enabled
-    plot1d_speed_distribution(output_params)
+    plot1d_speed_distribution(inparams)
 end
 %---------------------------SINGULARITY---------------------------------%
 if inparams.singularity.visualisation.enabled
