@@ -1,5 +1,5 @@
 function [tracking_3d_matrix, tracking_2d_matrix] = step_nodal_singularity_occupancy(singularity_classification_frame, singularity_locs, nodal_locs, num_base_sngs, dist_th)
-% Function to be invoked by a parfor
+% TODOC: Function to be invoked by a parfor
 
     num_nodes = size(nodal_locs, 1);
     tracking_3d_matrix(num_base_sngs, num_nodes) = 0;
@@ -20,4 +20,4 @@ function [tracking_3d_matrix, tracking_2d_matrix] = step_nodal_singularity_occup
              
        end       
    end
-end % step_nodal_singularity()
+end % function step_nodal_singularity_occupancy()
