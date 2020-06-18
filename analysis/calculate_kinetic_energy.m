@@ -1,4 +1,4 @@
-function calculate_energy_grid(params)
+function calculate_kinetic_energy(params)
 % TODOC: 
 % Wrapper function to call appropriate low level functions
 % ARGUMENTS:
