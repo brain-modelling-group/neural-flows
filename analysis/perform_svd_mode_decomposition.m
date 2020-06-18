@@ -29,7 +29,6 @@ function [U, S, V, varargout] = perform_svd_mode_decomposition(params)
 % Load flows data
 obj_flows = load_iomat_flows(params);
 
-
 %% Define which function we will use
 switch params.flows.decomposition.svd.grid.type
      case {'grid', 'structured', 'voxel'}
