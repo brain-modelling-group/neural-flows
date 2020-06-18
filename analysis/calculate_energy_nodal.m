@@ -29,7 +29,7 @@ function [energy] = calculate_energy_nodal(params, obj_flows)
 % The mass is m=1, although nodes could have different masses/weigths (eg, hubs/nonhubs)
 
 tpts   = params.flows.data.shape.t;
-num_nodes  = size(locs, 1);
+num_nodes  = size(obj_flows, 'locs', 1);
 
 % Probably best to iterate over time
 temp_energy(num_nodes, tpts) = 0;
