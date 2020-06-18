@@ -33,10 +33,10 @@ json_mode = 'read';
 % Load options
 input_params = read_write_json(input_params_filename, input_params_dir, json_mode);
 %% Run core functions: interpolation, estimation and classification, streamlines, this function writes to a new json file
-output_params = main(input_params); 
+output_params = main_core(input_params); 
 
-%% Run svd analysis
-perform_svd_mode_decomposition(output_params);
+%% Run basic analysis
+main_analysis(output_params);
 
 %% 
 if strcmp(case_label, 'uah')
