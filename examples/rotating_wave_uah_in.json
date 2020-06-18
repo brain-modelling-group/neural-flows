@@ -81,6 +81,12 @@
           "type": "unstructured"
         }
       }
+    },
+    "quantification": {
+      "energy": {
+        "enabled": true,
+        "modality": "nodal"
+      }
     }
   },
   "streamlines": {
@@ -129,7 +135,11 @@
       "enabled": true
     },
     "quantification": {
-      "enabled": true
+      "enabled": true,
+      "nodal_occupancy" : {
+        "enabled": true,
+        "distance_threshold" : 20
+      }
     },
     "visualisation": {
       "enabled": true
