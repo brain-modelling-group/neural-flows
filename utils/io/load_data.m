@@ -29,7 +29,7 @@ function [data, params, varargout] = load_data(params)
             else
                 nodes_str_lbl = data_struct.nodes_str_lbl;
             end
-            params.data.nodes_strl_lbl = nodes_str_lbl;         
+            params.data.nodes_str_lbl = nodes_str_lbl;         
         case 'structured'
             params.data.shape.timepoints = params.data.shape.size(4);
             % This may bring problems if x, y are swapped
