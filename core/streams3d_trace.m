@@ -54,7 +54,11 @@ function  [params, obj_streams, obj_streams_sentinel] = streams3d_trace(params)
         case 'unstructured'
             streams3d_tracing_cnem(obj_streams, obj_flows, params)
         case 'structured'
-            streams3d_tracing_mlab(obj_streams, obj_flows, params)
+            if params.general.parallel.enabled
+                streams3d_tracing_mlab_parallel(obj_streams, obj_flows, params)
+            else
+                streams3d_tracing_mlab(obj_streams, obj_flows, params)
+            end
     end
     obj_streams.xyz_lims = obj_flows.xyz_lims; 
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished tracing of streamlines.'))
