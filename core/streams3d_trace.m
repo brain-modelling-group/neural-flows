@@ -57,7 +57,7 @@ function  [params, obj_streams, obj_streams_sentinel] = streams3d_trace(params)
             if params.general.parallel.enabled
                 streams3d_tracing_mlab_parallel(obj_streams, obj_flows, params)
             else
-                streams3d_tracing_mlab(obj_streams, obj_flows, params)
+                streams3d_tracing_mlab_serial(obj_streams, obj_flows, params)
             end
     end
     obj_streams.xyz_lims = obj_flows.xyz_lims; 

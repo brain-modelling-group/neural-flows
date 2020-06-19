@@ -1,4 +1,4 @@
-function obj_streams = streams3d_tracing_mlab(obj_flows, obj_streams, params)
+function obj_streams = streams3d_tracing_mlab_serial(obj_flows, obj_streams, params)
 %% Traces streamlines using a velocity field defined on a grid in space
 % % TODOC
 % REQUIRES: 
@@ -70,4 +70,4 @@ verts = stream3(obj_flows.X, obj_flows.Y, obj_flows.Z, ...
                 seeding_locs.Z, [time_step, max_stream_length]);             
 end % function tracing_mlab_time_loop()
 
-end % function streams3d_tracing_mlab()
+end % function streams3d_tracing_mlab_serial()
