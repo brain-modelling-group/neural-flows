@@ -16,7 +16,7 @@ switch modality
         seed_locs = (locs(node_idx1, :) + locs(node_idx2, :))/2;
         seed_locs = vertcat(seed_locs, locs);
      case {"random-sparse", "random_sparse"}
-        % seeds 2*num nodes streamlines
+        % seeds 0.5*num nodes streamlines
         rng(seed)
         node_idx1 = randi([1, size(locs, 1)], round(size(locs, 1)/2), 1);
         node_idx2 = randi([1, size(locs, 1)], round(size(locs, 1)/2), 1);
@@ -24,6 +24,6 @@ switch modality
         seed_locs = vertcat(seed_locs, locs);
     otherwise
         error(['neural-flows:' mfilename ':UnknownCase'], ...
-               'Requested unknown method. Options: {"nodes", "random"}');
+               'Requested unknown seeding case for data on an unstructured grid. Options: {"nodes", "random-sparse", "random-dense"}');
 end
 end % function get_seeding_locations()

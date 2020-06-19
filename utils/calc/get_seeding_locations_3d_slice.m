@@ -21,7 +21,7 @@ switch modality
         seeding_locs.Z = min(Z0(:)) + (max(Z0(:)) - min(Z0(:))) * rand(size(Z0));
     otherwise
         error(['neural-flows::' mfilename '::UnknownCase'], ...
-              'Unknown modality for seeding streamlines');        
+              'Unknown modality for seeding streamlines on a structured 3D grid.');        
 end
 
 end % function get_seeding_locations_3d_slice()

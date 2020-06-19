@@ -18,7 +18,7 @@ switch modality
         seeding_locs.Y = min(Y0(:)) + (max(Y0(:)) - min(Y0(:))) * rand(size(Y0));
     otherwise
         error(['neural-flows::' mfilename '::UnknownCase'], ...
-              'Unknown modality for seeding streamlines');
+              'Unknown modality for seeding streamlines on a 2D structured grid.');
         
 end
 
