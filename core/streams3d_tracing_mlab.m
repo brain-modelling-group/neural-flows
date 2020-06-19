@@ -20,7 +20,7 @@ function obj_streams = streams3d_tracing_mlab(obj_flows, obj_streams, params)
 masks = obj_flows.masks;
 innies_idx = find(masks.innies) == true;
 time_step = params.streamlines.tracing.time_step; % fake time step for streamline tracing
-max_stream_length = params.streamlines.tracing.max_stream_length;;
+max_stream_length = params.streamlines.tracing.max_stream_length;
 % Get seeding locations
 seeding_locs = get_seeding_locations_3d_slice(obj_flows.X(innies_idx), obj_flows.Y(innies_idx), obj_flows.Z(innies_idx), ...
                                               params.streamlines.tracing.seeding_points.modality, ...
