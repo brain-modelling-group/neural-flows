@@ -1,7 +1,7 @@
 function fig_handle = plot3d_streamparticles(params)	
 % Set info we need
 %these_frames = params.stremalines.visualisation.particles.frames;
-these_frames = [10];
+these_frames = [10 20];
 
 % Load file handles
 obj_flows = load_iomat_flows(params);
@@ -9,11 +9,14 @@ obj_streams = load_iomat_streams(params);
 
 % Load info we need for visualisation
 xyz_lims = obj_flows.xyz_lims; 
+num_frames = length(these_frames);
+fig_handle = cell(num_frames, 1);
+axs_handle = cell(num_frames, 1);
 
-for ff=1:length(these_frames)
+for ff=1:num_frames
     stream_verts = get_verts(these_frames(ff));
-    fig_handle{ff} = figure('Name', 'nflows-flows-streamparticles')
-    axs_handle{ff} = p3_streamparticles(fig_handle, verts, xyz_lims)
+    fig_handle{ff} = figure('Name', 'nflows-flows-streamparticles');
+    axs_handle{ff} = p3_streamparticles(fig_handle{ff}, stream_verts, xyz_lims);
 end
 
 function verts = get_verts(idx)

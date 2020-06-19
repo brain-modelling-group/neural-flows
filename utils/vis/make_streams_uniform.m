@@ -6,7 +6,7 @@ verts = cellfun(@remove_nans, verts, 'UniformOutput', false);
 stream_lengths   = cellfun(@(c)  size(c, 1), verts);
 max_length = max(stream_lengths);
 wrap_func = @(verts) add_vertices(verts, max_length);
-verts = cellfun(wrap_func, dummy_cell, 'UniformOutput', false);
+verts = cellfun(wrap_func, verts, 'UniformOutput', false);
 
 end % function make_streams_uniform()
 
