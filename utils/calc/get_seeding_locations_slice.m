@@ -1,4 +1,4 @@
-function [x0, y0] = get_seeing_locations_slice(X0, Y0, modality, seed)
+function [x0, y0] = get_seeing_locations_2d_slice(X0, Y0, modality, seed)
 
 if nargin < 4
     seed = 2020;
@@ -24,4 +24,4 @@ end
  x0 = start_X(:); 
  y0 = start_Y(:);
 
-end % function get_seeding_locations_slice()
+end % function get_seeding_locations_2d_slice()
