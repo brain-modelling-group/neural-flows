@@ -38,7 +38,7 @@ streamlines.paths = [];
 tracing_mlab_time_loop()
 
 function tracing_mlab_time_loop()
-    parfor tt = 1:tpts
+    for tt = 1:tpts
        streamlines.paths = tracing_mlab_step(tt); 
        obj_streams.streamlines(1, tt) = streamlines; 
     end
