@@ -19,6 +19,7 @@ function obj_streams = streams3d_tracing_mlab(obj_flows, obj_streams, params)
 % Get some useful information for what we're about to do
 masks = obj_flows.masks;
 innies_idx = find(masks.innies == true);
+outties_idx = find(masks.innies == false);
 time_step = params.streamlines.tracing.time_step; % fake time step for streamline tracing
 max_stream_length = params.streamlines.tracing.max_stream_length;
 tpts = params.flows.data.shape.t;
@@ -52,15 +53,21 @@ end % function tracing_mlab_time_loop()
 
 
 function verts = tracing_mlab_step(t_idx)
-% Trace streamlines
-verts = stream3(obj_flows.X, obj_flows.Y, obj_flows.Z, ...
-                         obj_flows.ux(:, :, :, t_idx), ...
-                         obj_flows.uy(:, :, :, t_idx), ...
-                         obj_flows.uz(:, :, :, t_idx), ...
-                         seeding_locs.X, ...
-                         seeding_locs.Y, ...
-                         seeding_locs.Z, [time_step max_stream_length]); 
+% Load frame -- NOTE: maybe unnecessary step
+ux = obj_flows.ux(:, :, :, t_idx);
+uy = obj_flows.uy(:, :, :, t_idx); 
+uz = obj_flows.uz(:, :, :, t_idx); 
 
+% Set NaNs to zero -- NOTE: maybe unnecessary step
+ux(outties_idx) = 0;
+uy(outties_idx) = 0;
+uz(outties_idx) = 0;
+
+verts = stream3(obj_flows.X, obj_flows.Y, obj_flows.Z, ...
+                ux, uy, uz, ...
+                seeding_locs.X, ...
+                seeding_locs.Y, ...
+                seeding_locs.Z, [time_step, max_stream_length]);             
 end % function tracing_mlab_time_loop()
 
 end % function streams3d_tracing_mlab()
