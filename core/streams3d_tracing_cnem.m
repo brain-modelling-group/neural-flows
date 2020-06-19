@@ -31,7 +31,7 @@ else
 end
 
 time_step = params.streamlines.tracing.time_step; % fake time step for streamline tracing
-tpts = 200;
+tpts = params.flows.data.shape.t;
 
 % Get seeding locations
 seeding_locs = get_seeding_locations(locs, params.streamlines.tracing.seeding_points.modality, ...
