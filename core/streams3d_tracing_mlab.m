@@ -1,5 +1,19 @@
 function obj_streams = streams3d_tracing_mlab(obj_flows, obj_streams, params)
+%% Traces streamlines using a velocity field defined on a grid in space
+%  based on.
+%
+% REQUIRES: 
+%          
+%          
+% USAGE:
+%{     
 
+
+%}
+%
+% MODIFICATION HISTORY:
+%     Paula Sanz-Leon, QIMR Berghofer, 2019, 2020
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Trace streamlines for one frame 
 tt=2;
 
@@ -13,11 +27,13 @@ x_dim = 1;
 y_dim = 2;
 z_dim = 3;
 
+masks = obj_flows.masks;
+innies_idx = find(masks.innies) == true;
 
-masks = obj_flows.
 % Get seeding locations
-seeding_locs = get_seeding_locations_volume(mas, params.streamlines.tracing.seeding_points.modality, ...
-                                                  params.streamlines.tracing.seeding_points.seed);
+seeding_locs = get_seeding_locations_3d_slice(obj_flows.X(innies_idx), obj_flows.Y(innies_idx), obj_flows.Z(innies_idx), ...
+                                              params.streamlines.tracing.seeding_points.modality, ...
+                                              params.streamlines.tracing.seeding_points.seed);
 % Save seeding locations
 obj_streams.seeding_locs = seeding_locs;
 
@@ -27,66 +43,23 @@ tracing_mlab_time_loop()
 
 function tracing_mlab_time_loop()
     for tt = 1:tpts
-       streamlines.paths = tracing_mlab_fun_step(tt); 
+       streamlines.paths = tracing_mlab_step(tt); 
        obj_streams.streamlines(1, tt) = streamlines; 
     end
 end % function tracing_mlab_time_loop()
 
 
-
-
+function tracing_mlab_step(t_idx)
 % Trace streamlines
-verts = stream3(X, Y, Z, mfile_vel.ux(:, :, :, tt), ...
-                         mfile_vel.uy(:, :, :, tt), ...
-                         mfile_vel.uz(:, :, :, tt), ...
-                         seeding_locs(:, x_dim), ...
-                         seeding_locs(:, y_dim), ...
-                         seeding_locs(:, z_dim), [2^-12]); % TODO: adjuts parameters
+verts = stream3(X, Y, Z, obj_flows.ux(:, :, :, tt), ...
+                         obj_flows.uy(:, :, :, tt), ...
+                         obj_flows.uz(:, :, :, tt), ...
+                         seeding_locs.X, ...
+                         seeding_locs.Y, ...
+                         seeding_locs.Z, [2^-12]); 
 
-% Remove nan vertices from streamlines (points outside the convex hull)                     
-verts = cellfun(@remove_nans, verts, 'UniformOutput', false);
-% Make all streamlines of the same length so we can use streamparticles
-stream_lengths   = cellfun(@(c)  size(c, 1), verts);
-max_length = max(stream_lengths);
-wrap_func = @(verts) add_vertices(verts, max_length);
-verts = cellfun(wrap_func, dummy_cell, 'UniformOutput', false);
-
-%verts = cellfun(@add_vertices, verts, 'UniformOutput', false);
-
-sl = streamline(verts);
-set(sl,'LineWidth',1);
-set(sl,'Color',[0.5 0.5 0.5 0.5]);
-%set(sl,'Visible','off');
-% interpolated vertices
-%iverts = interpstreamspeed(X, Y, Z, mfile_vel.ux(:, :, :, tt), ...
-%                                    mfile_vel.uy(:, :, :, tt), ....
-%                                    mfile_vel.uz(:, :, :, tt), verts,.5);
-%
-%axis tight; view(30,30); 
-haxes = gca;
-%haxes.SortMethod = 'ChildOrder';
-%camproj perspective; box on
-%camva(44); camlookat; camdolly(0,0,.4, 'f');
-%h = line;
-haxes.XLim = [min(X(:)), max(X(:))];
-haxes.YLim = [min(Y(:)), max(Y(:))];
-
-haxes.ZLim = [min(Z(:)), max(Z(:))];
-
-streamparticles(haxes, verts, 42, 'animate', Inf, 'ParticleAlignment', 'on', 'MarkerfaceColor', 'blue');
-
-displaynow 
-
-
-end
-
-
-function x = remove_nans(x)
-% Dummy function to be call by cellfun
-    x(isnan(x)) = [];
-    
-end
+end % function tracing_mlab_time_loop()
 
 
 
-
+end % function streams3d_tracing_mlab()
