@@ -1,5 +1,5 @@
 function obj_streams = streams3d_tracing_mlab_parallel(obj_flows, obj_streams, params)
-% This is a wrapper function for Matlab's streams3. 
+% This is a wrapper function for Matlab's streams3 using a parfor along the temporal dimension. 
 % NOTE: Only works for iomat files, not structures
 % ARGUMENTS:
 %
