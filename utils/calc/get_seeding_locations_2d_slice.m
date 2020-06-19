@@ -1,4 +1,4 @@
-function [x0, y0] = get_seeing_locations_2d_slice(X0, Y0, modality, seed)
+function [start_X, start_Y] = get_seeing_locations_2d_slice(X0, Y0, modality, seed)
 
 if nargin < 4
     seed = 2020;
@@ -21,7 +21,5 @@ switch modality
               'Unknown modality for seeding streamlines');
         
 end
- x0 = start_X(:); 
- y0 = start_Y(:);
 
 end % function get_seeding_locations_2d_slice()
