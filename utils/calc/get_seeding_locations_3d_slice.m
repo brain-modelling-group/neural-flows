@@ -11,10 +11,10 @@ switch modality
         num_points = size(X0, 1);
         locs_idx = 1:num_points;       
     case {'random_sparse', 'random-sparse'}
-        num_points = floor(size(X0,1)/8);
+        num_points = 512; % Hardcode, otherwise it gets ugly
         locs_idx  = randi([1 length(X0(:))], num_points, 1);              
     case {'random_dense', 'random-dense'}
-        num_points = floor(size(X0,1)/4);
+        num_points = 1024; % Hardocde, othwerwise it gets ugly
         locs_idx  = randi([1 length(X0(:))], num_points, 1);
     otherwise
         error(['neural-flows::' mfilename '::UnknownCase'], ...
