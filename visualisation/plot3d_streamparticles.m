@@ -1,7 +1,7 @@
 function fig_handle = plot3d_streamparticles(params)	
 % Set info we need
 %these_frames = params.stremalines.visualisation.particles.frames;
-these_frames = [10 20];
+these_frames = [174];
 
 % Load file handles
 obj_flows = load_iomat_flows(params);
