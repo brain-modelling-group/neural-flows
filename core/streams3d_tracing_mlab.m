@@ -21,6 +21,8 @@ masks = obj_flows.masks;
 innies_idx = find(masks.innies == true);
 time_step = params.streamlines.tracing.time_step; % fake time step for streamline tracing
 max_stream_length = params.streamlines.tracing.max_stream_length;
+tpts = params.flows.data.shape.t;
+
 % Get seeding locations
 X0 = obj_flows.X;
 Y0 = obj_flows.Y;
