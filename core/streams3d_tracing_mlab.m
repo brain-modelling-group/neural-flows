@@ -45,7 +45,7 @@ function tracing_mlab_time_loop()
 end % function tracing_mlab_time_loop()
 
 
-function tracing_mlab_step(t_idx)
+function verts = tracing_mlab_step(t_idx)
 % Trace streamlines
 verts = stream3(X, Y, Z, obj_flows.ux(:, :, :, t_idx), ...
                          obj_flows.uy(:, :, :, t_idx), ...
