@@ -23,7 +23,6 @@ switch modality
         seed_locs = (locs(node_idx1, :) + locs(node_idx2, :))/2;
         seed_locs = vertcat(seed_locs, locs);
     otherwise
-        error(['neural-flows:' mfilename ':UnknownCase'], ...
-               'Requested unknown seeding case for data on an unstructured grid. Options: {"nodes", "random-sparse", "random-dense"}');
+        error(['neural-flows:' mfilename ':UnknownCase: Requested unknown seeding case for data on an unstructured grid. Options: {"nodes", "random-sparse", "random-dense"}']);
 end
 end % function get_seeding_locations()
