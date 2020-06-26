@@ -159,13 +159,13 @@ C_Meshless_3d::C_Meshless_3d
 
     //-----------------------------------------------------------------------//
 
-    cout<<"\nData in------------------------------------------------------------------------\n"<<endl;
+    //cout<<"\nData in------------------------------------------------------------------------\n"<<endl;
 
-    cout<<"Nombre noeud = "<<Diag_Vor.Nb_Noeud<<endl;
-    cout<<"Nombre triangle = "<<Nb_Tri_Front<<endl;
-    cout<<"x min = "<<X_Min<<" , x max = "<<X_Max<<" , dx = "<<Arete_X<<endl;
-    cout<<"y min = "<<Y_Min<<" , y max = "<<Y_Max<<" , dy = "<<Arete_Y<<endl;
-    cout<<"z min = "<<Z_Min<<" , z max = "<<Z_Max<<" , dz = "<<Arete_Z<<endl;
+    //cout<<"Nombre noeud = "<<Diag_Vor.Nb_Noeud<<endl;
+    //cout<<"Nombre triangle = "<<Nb_Tri_Front<<endl;
+    //cout<<"x min = "<<X_Min<<" , x max = "<<X_Max<<" , dx = "<<Arete_X<<endl;
+    //cout<<"y min = "<<Y_Min<<" , y max = "<<Y_Max<<" , dy = "<<Arete_Y<<endl;
+    //cout<<"z min = "<<Z_Min<<" , z max = "<<Z_Max<<" , dz = "<<Arete_Z<<endl;
 
     //-----------------------------------------------------------------------//
 }

@@ -97,7 +97,7 @@ vector<double>* P_Vec_Gard=new vector<double>;
 
     C_Meshless_3d* PML= new C_Meshless_3d(Nb_Noeud,Copy_Tab_Noeud,Nb_Tri_Front,Copy_Tab_Ind_Noeud_Tri_Front,1.e-9,0);
 
-    cout<<"\nConstruction base--------------------------------------------------------------\n"<<endl;
+    //cout<<"\nConstruction base--------------------------------------------------------------\n"<<endl;
 
     vector<long> Ind_Voisin;
     vector<double> Phi_Voisin;
@@ -124,22 +124,22 @@ vector<double>* P_Vec_Gard=new vector<double>;
         }
     }
 
-    cout<<"\nConstruction base ok...\n"<<endl;
+    //cout<<"\nConstruction base ok...\n"<<endl;
 
     //-----------------------------------------------------------------------//
 
-    cout<<"\ninterpolation------------------------------------------------------------------\n"<<endl;
+    //cout<<"\ninterpolation------------------------------------------------------------------\n"<<endl;
 
     //task_scheduler_init init(nb_core_for_ff_cal);
 	size_t nb_core_for_ff_cal=task_scheduler_init::default_num_threads();
     
-    cout<<"\nnb thread : "<<nb_core_for_ff_cal<<endl;
+    //cout<<"\nnb thread : "<<nb_core_for_ff_cal<<endl;
     
     InterpolParal
         (PML,Nb_Point,Tab_Point,Type_FF,nb_core_for_ff_cal,
          P_Vec_Ind_Point,P_Vec_Nb_Contrib,P_Vec_INV,P_Vec_Phi,P_Vec_Gard);
 
-    cout<<"\ninterpoltaion ok...\n"<<endl;
+    //cout<<"\ninterpoltaion ok...\n"<<endl;
 
     //-----------------------------------------------------------------------//
     // Sortie corespandance noeus new to old et inv:

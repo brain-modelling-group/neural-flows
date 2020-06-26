@@ -163,7 +163,7 @@ int C_Meshless_3d::Load_Tetgen_TDC(int in_numberofpoints,int out_numberofpoints,
         List_Coord_et_Rayon_Sommet.push_back(Rayon);
     }
 
-    cout<<"Volume_Min_Tet ="<<Volume_Min_Tet<<endl;
+    //cout<<"Volume_Min_Tet ="<<Volume_Min_Tet<<endl;
 
     //Nb_Tri_Front=0;
     for(i=0;i<out_numberoftetrahedra;i++)
@@ -592,7 +592,7 @@ void C_Meshless_3d::Randomise_Noeuds(double Random_Dim)
 
 void C_Meshless_3d::Construction_Topologie_Voronoi()
 {
-    cout<<"\nConstruction Topologie Voronoi-------------------------------------------------\n"<<endl;
+    //cout<<"\nConstruction Topologie Voronoi-------------------------------------------------\n"<<endl;
     
     long T_0=clock();
 
@@ -600,7 +600,7 @@ void C_Meshless_3d::Construction_Topologie_Voronoi()
 
     long T_1=clock();
     double Temp_de_Calcul=(T_1-T_0)/double(CLOCKS_PER_SEC);
-    cout<<"Temp de calcul = "<<Temp_de_Calcul<<" s.\n"<<endl;
+    //cout<<"Temp de calcul = "<<Temp_de_Calcul<<" s.\n"<<endl;
         
     //-----------------------------------------------------------------------//
 
@@ -614,7 +614,7 @@ void C_Meshless_3d::Construction_Topologie_Voronoi()
 
 bool C_Meshless_3d::Voronoi_Contrain_TetGen(int Type_Appel,char* Arg_Tet,long ind_group_tet,bool erase_tet_out)
 {
-    cout<<"\nTetraedrisation Delaunay contrainte Tetgen ------------------------------------\n"<<endl;
+    //cout<<"\nTetraedrisation Delaunay contrainte Tetgen ------------------------------------\n"<<endl;
 
     //-----------------------------------------------------------------------//
 
@@ -635,7 +635,7 @@ bool C_Meshless_3d::Voronoi_Contrain_TetGen(int Type_Appel,char* Arg_Tet,long in
     do
     {
         Nb_Tentative++;
-        cout<<"\nAppel TetGen ";
+        //cout<<"\nAppel TetGen ";
         switch(Type_Appel)
         {
         case 0:    

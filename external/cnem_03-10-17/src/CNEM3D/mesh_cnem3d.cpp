@@ -86,7 +86,7 @@ vector<double>* P_Vec_Gard=new vector<double>;
 
     C_Meshless_3d* PML= new C_Meshless_3d(Nb_Noeud,Copy_Tab_Noeud,Nb_Tri_Front,Copy_Tab_Ind_Noeud_Tri_Front,1.e-9,0);
 
-    cout<<"\nConstruction base--------------------------------------------------------------\n"<<endl;
+    //cout<<"\nConstruction base--------------------------------------------------------------\n"<<endl;
 
     if(Nb_Tri_Front!=0)
     {
@@ -108,7 +108,7 @@ vector<double>* P_Vec_Gard=new vector<double>;
         }
     }
 
-    cout<<"\nConstruction base ok...\n"<<endl;
+    //cout<<"\nConstruction base ok...\n"<<endl;
     
 	//-----------------------------------------------------------------------//
     // Sortie corespandance noeus new to old et inv:

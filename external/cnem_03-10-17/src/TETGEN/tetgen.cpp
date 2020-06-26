@@ -34274,57 +34274,57 @@ void tetgenmesh::qualitystatistics()
   printf("    by its shortest edge length)\n\n");
   */
 
-  printf("  Aspect ratio histogram:\n");
-  printf("         < %-6.6g    :  %8d      | %6.6g - %-6.6g     :  %8d\n",
-         aspectratiotable[0], aspecttable[0], aspectratiotable[5],
-         aspectratiotable[6], aspecttable[6]);
-  for (i = 1; i < 5; i++) {
-    printf("  %6.6g - %-6.6g    :  %8d      | %6.6g - %-6.6g     :  %8d\n",
-           aspectratiotable[i - 1], aspectratiotable[i], aspecttable[i],
-           aspectratiotable[i + 5], aspectratiotable[i + 6],
-           aspecttable[i + 6]);
-  }
-  printf("  %6.6g - %-6.6g    :  %8d      | %6.6g -            :  %8d\n",
-         aspectratiotable[4], aspectratiotable[5], aspecttable[5],
-         aspectratiotable[10], aspecttable[11]);
-  printf("  (A tetrahedron's aspect ratio is its longest edge length");
-  printf(" divided by its\n");
-  printf("    smallest side height)\n\n");
+  //printf("  Aspect ratio histogram:\n");
+  //printf("         < %-6.6g    :  %8d      | %6.6g - %-6.6g     :  %8d\n",
+  //       aspectratiotable[0], aspecttable[0], aspectratiotable[5],
+  //       aspectratiotable[6], aspecttable[6]);
+  //for (i = 1; i < 5; i++) {
+  ///  printf("  %6.6g - %-6.6g    :  %8d      | %6.6g - %-6.6g     :  %8d\n",
+  //         aspectratiotable[i - 1], aspectratiotable[i], aspecttable[i],
+  ///         aspectratiotable[i + 5], aspectratiotable[i + 6],
+  //         aspecttable[i + 6]);
+  //}
+  //printf("  %6.6g - %-6.6g    :  %8d      | %6.6g -            :  %8d\n",
+  //        aspectratiotable[4], aspectratiotable[5], aspecttable[5],
+  //        aspectratiotable[10], aspecttable[11]);
+  // printf("  (A tetrahedron's aspect ratio is its longest edge length");
+  // printf(" divided by its\n");
+  // printf("    smallest side height)\n\n");
 
-  printf("  Face angle histogram:\n");
-  for (i = 0; i < 9; i++) {
-    printf("    %3d - %3d degrees:  %8d      |    %3d - %3d degrees:  %8d\n",
-           i * 10, i * 10 + 10, faceangletable[i],
-           i * 10 + 90, i * 10 + 100, faceangletable[i + 9]);
-  }
-  if (minfaceang != PI) {
-    printf("  Minimum input face angle is %g (degree).\n",
-           minfaceang / PI * 180.0);
-  }
-  printf("\n");
+  // printf("  Face angle histogram:\n");
+  // for (i = 0; i < 9; i++) {
+  //   printf("    %3d - %3d degrees:  %8d      |    %3d - %3d degrees:  %8d\n",
+  //          i * 10, i * 10 + 10, faceangletable[i],
+  //          i * 10 + 90, i * 10 + 100, faceangletable[i + 9]);
+  // }
+  // if (minfaceang != PI) {
+  //   printf("  Minimum input face angle is %g (degree).\n",
+  //          minfaceang / PI * 180.0);
+  // }
+  // printf("\n");
 
-  printf("  Dihedral angle histogram:\n");
-  // Print the three two rows:
-  printf("     %3d - %2d degrees:  %8d      |    %3d - %3d degrees:  %8d\n",
-         0, 5, dihedangletable[0], 80, 110, dihedangletable[9]);
-  printf("     %3d - %2d degrees:  %8d      |    %3d - %3d degrees:  %8d\n",
-         5, 10, dihedangletable[1], 110, 120, dihedangletable[10]);
-  // Print the third to seventh rows.
-  for (i = 2; i < 7; i++) {
-    printf("     %3d - %2d degrees:  %8d      |    %3d - %3d degrees:  %8d\n",
-           (i - 1) * 10, (i - 1) * 10 + 10, dihedangletable[i],
-           (i - 1) * 10 + 110, (i - 1) * 10 + 120, dihedangletable[i + 9]);
-  }
-  // Print the last two rows.
-  printf("     %3d - %2d degrees:  %8d      |    %3d - %3d degrees:  %8d\n",
-         60, 70, dihedangletable[7], 170, 175, dihedangletable[16]);
-  printf("     %3d - %2d degrees:  %8d      |    %3d - %3d degrees:  %8d\n",
-         70, 80, dihedangletable[8], 175, 180, dihedangletable[17]);
-  if (minfacetdihed != PI) {
-    printf("  Minimum input facet dihedral angle is %g (degree).\n",
-           minfacetdihed / PI * 180.0);
-  }
-  printf("\n");
+  // printf("  Dihedral angle histogram:\n");
+  // // Print the three two rows:
+  // printf("     %3d - %2d degrees:  %8d      |    %3d - %3d degrees:  %8d\n",
+  //        0, 5, dihedangletable[0], 80, 110, dihedangletable[9]);
+  // printf("     %3d - %2d degrees:  %8d      |    %3d - %3d degrees:  %8d\n",
+  //        5, 10, dihedangletable[1], 110, 120, dihedangletable[10]);
+  // // Print the third to seventh rows.
+  // for (i = 2; i < 7; i++) {
+  //   printf("     %3d - %2d degrees:  %8d      |    %3d - %3d degrees:  %8d\n",
+  //          (i - 1) * 10, (i - 1) * 10 + 10, dihedangletable[i],
+  //          (i - 1) * 10 + 110, (i - 1) * 10 + 120, dihedangletable[i + 9]);
+  // }
+  // // Print the last two rows.
+  // printf("     %3d - %2d degrees:  %8d      |    %3d - %3d degrees:  %8d\n",
+  //        60, 70, dihedangletable[7], 170, 175, dihedangletable[16]);
+  // printf("     %3d - %2d degrees:  %8d      |    %3d - %3d degrees:  %8d\n",
+  //        70, 80, dihedangletable[8], 175, 180, dihedangletable[17]);
+  // if (minfacetdihed != PI) {
+  //   printf("  Minimum input facet dihedral angle is %g (degree).\n",
+  //          minfacetdihed / PI * 180.0);
+  // }
+  // printf("\n");
 }
 
 ///////////////////////////////////////////////////////////////////////////////
