@@ -57,7 +57,7 @@
     },
     "quantification": {
       "energy": {
-        "enabled": true,
+        "enabled": false,
         "modality": "nodal"
       }
     }
@@ -91,6 +91,9 @@
   "singularity": {
     "enabled": false,
     "visualisation": {
+      "enabled": false
+    },
+    "quantification": {
       "enabled": false
     }
   },
