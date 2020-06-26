@@ -33,6 +33,7 @@
       "name": "",
       "label": ""
     },
+    "modality": "phase",
     "method": {
       "data": {
         "mode": "phase"
