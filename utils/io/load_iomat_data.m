@@ -17,8 +17,10 @@ switch params.data.grid.type
                 for nn=1:params.data.shape.nodes
                     nodes_str_lbl{nn} = num2str(nn, '%03d');
                 end
+                obj_data.nodes_strl_lbl = nodes_str_lbl;
+             else
+                 nodes_str_lbl = obj_data.nodes_str_lbl;
              end
-            obj_data.nodes_strl_lbl = nodes_str_lbl;
             params.data.nodes_strl_lbl = nodes_str_lbl;
         case 'structured'
             params.data.shape.timepoints = params.data.shape.size(4);
