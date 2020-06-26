@@ -55,11 +55,37 @@
         }
       }
     },
-    "streamlines": {
-      "enabled": false,
-      "grid": {
-        "type": "unstructured"
+    "quantification": {
+      "energy": {
+        "enabled": true,
+        "modality": "nodal"
       }
+    }
+  },
+  "streamlines": {
+      "enabled": false,
+      "file": {
+          "exists": false,
+          "dir": "",
+          "name": "",
+          "label": "",
+          "keep": true
+    },
+
+      "tracing": {
+               "grid": {
+                   "type": "unstructured"
+                  },
+               "seeding_points": {
+                                  "modality": "random-sparse",
+                                  "seed": 42
+              },
+              "max_stream_length" : 200,
+              "time_step": 0.5
+          },
+
+    "visualisation": {
+      "enabled": true
     }
   },
   "singularity": {
