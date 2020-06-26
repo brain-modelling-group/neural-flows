@@ -37,7 +37,8 @@ energy_struct = energy_fun(params, obj_flows);
 % Do some basic stuff to shocawcase kintic energy functions
 display_flag = 'true';
 extrema_detection = 'peaks';
-time_vec = params.flows.data.ht:params.flows.data.ht:params.flows.data.shape.t*params.flows.data.ht;
+% TODO: TOFIX: use resolution and length of FLOWS/NOT DATA
+time_vec = params.data.ht:params.data.ht:params.flows.data.shape.t*params.data.ht;
 min_duration_stable_state = params.flows.data.ht * 30;
 [stable, transient, stablePoints, transientPoints] = energy_states(energy_struct.component_sum_norm, time_vec, params.flows.data.ht, min_duration_stable_state, extrema_detection, display_flag);
 
