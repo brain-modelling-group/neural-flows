@@ -121,23 +121,23 @@ for m = 1:size(stable, 1)
 end
 
 % Display microstate interval on displaced energy curve
-if display_flag
-  hold(ax_handles(2), 'on')
-  plot(ax_handles(2), time_vec, energy, 'color', 'k', 'linewidth', 0.5) 
-  for m = 1:size(extrema,1)
-    if abs(extrema(m,3)) < eps % Stable states
-      color = [111,203,159]/255;
-    elseif extrema(m,3) > 1-eps % Transient states
-      color = [255,111,105]/255;
-    end
-    area(ax_handles(2), time_vec(extrema(m,1):extrema(m,2)), energy(extrema(m,1):extrema(m,2)), 'FaceColor', color, 'EdgeColor', 'None');
-  end
-    ax_handles(2).XLim = [time_vec(1) time_vec(end)];
-    ax_handles(2).YLim = [0.95*min(energy) 1.05*max(energy)];
-    ax_handles(2).XLabel.String ='time [ms]';
-    ax_handles(2).YLabel.String ='\partial Energy';
-    ax_handles(2).Box = 'on';
-end
+% if display_flag
+%   hold(ax_handles(2), 'on')
+%   plot(ax_handles(2), time_vec, energy, 'color', 'k', 'linewidth', 0.5) 
+%   for m = 1:size(extrema,1)
+%     if abs(extrema(m,3)) < eps % Stable states
+%       color = [111,203,159]/255;
+%     elseif extrema(m,3) > 1-eps % Transient states
+%       color = [255,111,105]/255;
+%     end
+%     area(ax_handles(2), time_vec(extrema(m,1):extrema(m,2)), energy(extrema(m,1):extrema(m,2)), 'FaceColor', color, 'EdgeColor', 'None');
+%   end
+%     ax_handles(2).XLim = [time_vec(1) time_vec(end)];
+%     ax_handles(2).YLim = [0.95*min(energy) 1.05*max(energy)];
+%     ax_handles(2).XLabel.String ='time [ms]';
+%     ax_handles(2).YLabel.String ='\partial Energy';
+%     ax_handles(2).Box = 'on';
+% end
 
 end % function compute_neuralflow_states()
 
