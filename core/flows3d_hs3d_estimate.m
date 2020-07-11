@@ -29,8 +29,10 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params
     if params.data.slice.enabled
         rng(params.data.slice.id)
         params = generate_slice_filename(params, 'flows'); 
-    elseif ~isempty(params.general.rng.seed)
-        rng(params.general.rng.seed)
+    elseif isfield(params.general, 'rng')
+        if isfield(params.general.rng, 'seed')
+            rng(params.general.rng.seed)
+        end
     else
         rng(2020)
     end
