@@ -1,12 +1,12 @@
-function [p,n]=numSubplots(n)
-% function [p,n]=numSubplots(n)
+function [p, n] = get_number_subplots(n)
+% function [p, n] = get_number_subplots(n)
 %
 % Purpose
 % Calculate how many rows and columns of sub-plots are needed to
 % neatly display n subplots. 
 %
 % Inputs
-% n - the desired number of subplots.     
+% n - the number of subplots we need     
 %  
 % Outputs
 % p - a vector length 2 defining the number of rows and number of
@@ -26,11 +26,11 @@ function [p,n]=numSubplots(n)
 % Rob Campbell - January 2010
    
     
-while isprime(n) & n>4, 
+while isprime(n) & n >4 
     n=n+1;
 end
 
-p=factor(n);
+p = factor(n);
 
 if length(p)==1
     p=[1,p];
@@ -50,11 +50,11 @@ while length(p)>2
     p=sort(p);
 end
 
-
 %Reformat if the column/row ratio is too large: we want a roughly
 %square design 
 while p(2)/p(1)>2.5
     N=n+1;
-    [p,n]=numSubplots(N); %Recursive!
+    [p,n]=get_number_subplots(N); %Recursive!
 end
+end % function get_number_subplots()
 
