@@ -5,8 +5,6 @@ function fig_handles = plot_debug_boundary_masks(masks)
 % Needs: 
 % get_number_subplots()
 
-% Plot innies
-
 
 fig_innies = plot_boundary_volumetric_mask(masks.innies);
 
