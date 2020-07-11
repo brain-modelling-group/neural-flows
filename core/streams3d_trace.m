@@ -52,12 +52,12 @@ function  [params, obj_streams, obj_streams_sentinel] = streams3d_trace(params)
     % If it's amplitude-based it can be nodal or gridded
     switch params.streamlines.tracing.grid.type
         case 'unstructured'
-            streams3d_tracing_cnem(obj_streams, obj_flows, params)
+            streams3d_tracing_cnem(obj_flows, obj_streams, params)
         case 'structured'
             if params.general.parallel.enabled
-                streams3d_tracing_mlab_parallel(obj_streams, obj_flows, params)
+                streams3d_tracing_mlab_parallel(obj_flows, obj_streams, params)
             else
-                streams3d_tracing_mlab_serial(obj_streams, obj_flows, params)
+                streams3d_tracing_mlab_serial(obj_flows, obj_stremas, params)
             end
     end
     obj_streams.xyz_lims = obj_flows.xyz_lims; 

@@ -1,4 +1,4 @@
-function obj_streams = streams3d_tracing_cnem(obj_streams, obj_flows, params)
+function obj_streams = streams3d_tracing_cnem(obj_flows, obj_streams, params)
 %% Traces streamlines using a velocity field defined on scattered points in space
 %  based on traceStreamXYZUVW from matlab's stream3c.c, using CNEM
 %  functions.
