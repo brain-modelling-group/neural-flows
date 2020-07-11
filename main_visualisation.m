@@ -6,20 +6,17 @@ function ouparams = main_visualisation(inparams)
 % Tic
 tstart = tik();
 
-% Copy structure
-tmp_params = inparams;
-
-%---------------------------------DECOMPOSITION-------------------------%
+%---------------------------------DECOMPOSITION--------------------------------%
 if inparams.flows.visualisation.enabled
-    plot1d_speed_distribution(inparams)
-    plot2d_svd_modes(inparams)
+    plot1d_speed_distribution(inparams);
+    plot2d_svd_modes(inparams);
 end
-%---------------------------SINGULARITY---------------------------------%
+%---------------------------SINGULARITY----------------------------------------%
 if inparams.singularity.visualisation.enabled
-   plot2d_singularity_occupancy(inparams)
-   plot1d_singularity_traces(inparams)
+   plot2d_singularity_occupancy(inparams);
+   plot1d_singularity_traces(inparams);
 end
-%-------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------%
 % save_tmp_params(tmp_params)
 %TRACKING
 % TODO: write output parameters if reequired
@@ -28,5 +25,4 @@ end
  tok(tstart, 'seconds');
  tok(tstart, 'minutes');
  tok(tstart, 'hours');
-
 end % function main_analysis()
