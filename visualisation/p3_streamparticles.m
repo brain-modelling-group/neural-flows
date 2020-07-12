@@ -28,9 +28,8 @@ ax_handle.XLabel.String = "X";
 ax_handle.YLabel.String = "Y";
 switch output_modality
     case {"workspace", "desktop"}
-         streamparticles(ax_handle, verts, 2, 'animate', Inf, 'ParticleAlignment', 'on', ...
+         streamparticles(ax_handle, verts, 2, 'animate', 4, 'ParticleAlignment', 'on', ...
 	            'MarkerfaceColor', 'red', 'MarkerSize', 2);
-         displaynow 
     case {"movie"}
         vid_obj = VideoWriter('neural_flows_particles.avi');
         open(vid_obj);
