@@ -1,4 +1,8 @@
-function fig_handle = plot3d_streamparticles(params, these_frames)	
+function fig_handle = plot3d_streamparticles(params, these_frames, display_modality)	
+
+if nargin < 3
+    display_modality = "workspace";
+end
 % Set info we need
 %these_frames = params.stremalines.visualisation.particles.frames;
 %display_modality =  "workspace" or "movie"
@@ -19,7 +23,7 @@ axs_handle = cell(num_frames, 1);
 for ff=1:num_frames
     stream_verts = get_verts(these_frames(ff));
     fig_handle{ff} = figure('Name', 'nflows-flows-streamparticles');
-    axs_handle{ff} = p3_streamparticles(fig_handle{ff}, stream_verts, xyz_lims, "movie");
+    axs_handle{ff} = p3_streamparticles(fig_handle{ff}, stream_verts, xyz_lims, display_modality);
 end
 
 function verts = get_verts(idx)
