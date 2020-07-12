@@ -1,7 +1,7 @@
-function ax_handle = p3_streamparticles(fig_handle, verts, xyz_lims, output_modality)
+function ax_handle = p3_streamparticles(fig_handle, verts, xyz_lims, display_modality)
 
 if nargin < 4
-    output_modality = "workspace";
+    display_modality = "workspace";
 end
 
 ax_handle = subplot(1, 1, 1,'Parent', fig_handle);
@@ -26,7 +26,7 @@ ax_handle.YLim = [xyz_lims{2}(1), xyz_lims{2}(2)];
 ax_handle.ZLim = [xyz_lims{3}(1), xyz_lims{3}(2)];
 ax_handle.XLabel.String = "X";
 ax_handle.YLabel.String = "Y";
-switch output_modality
+switch display_modality
     case {"workspace", "desktop"}
          streamparticles(ax_handle, verts, 2, 'animate', 4, 'ParticleAlignment', 'on', ...
 	            'MarkerfaceColor', 'red', 'MarkerSize', 2);
