@@ -1,7 +1,10 @@
-function fig_handle = plot3d_streamparticles(params)	
+function fig_handle = plot3d_streamparticles(params, these_frames)	
 % Set info we need
 %these_frames = params.stremalines.visualisation.particles.frames;
-these_frames = [174];
+%display_modality =  "workspace" or "movie"
+%params.stremalines.visualisation.particles.display.modality;
+%these_frames = [174];
+%these_frames = [50];
 
 % Load file handles
 obj_flows = load_iomat_flows(params);
@@ -16,7 +19,7 @@ axs_handle = cell(num_frames, 1);
 for ff=1:num_frames
     stream_verts = get_verts(these_frames(ff));
     fig_handle{ff} = figure('Name', 'nflows-flows-streamparticles');
-    axs_handle{ff} = p3_streamparticles(fig_handle{ff}, stream_verts, xyz_lims);
+    axs_handle{ff} = p3_streamparticles(fig_handle{ff}, stream_verts, xyz_lims, "movie");
 end
 
 function verts = get_verts(idx)
@@ -26,5 +29,3 @@ function verts = get_verts(idx)
 end % get_verts()
 
 end % function plot3d_streamparticles()
-
-
