@@ -31,7 +31,9 @@ switch output_modality
          streamparticles(ax_handle, verts, 2, 'animate', 4, 'ParticleAlignment', 'on', ...
 	            'MarkerfaceColor', 'red', 'MarkerSize', 2);
     case {"movie"}
-        vid_obj = VideoWriter('neural_flows_particles.avi');
+        set(sl,'Color',[0.5 0.5 0.5 1.0]); % looks weird in the movie otherwise
+        fname = generate_temp_filename("p3_particles", 3);
+        vid_obj = VideoWriter([char(fname), '.avi']);
         open(vid_obj);
         set(ax_handle,'DrawMode','fast')
         [~, M]=streamparticlesMod(ax_handle, verts, 2, 'animate', 4, 'ParticleAlignment', 'on', ...
