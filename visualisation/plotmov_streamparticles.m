@@ -31,7 +31,7 @@ vid_obj = VideoWriter([char(fname), '.avi']);
 open(vid_obj);
 set(ax_handle,'DrawMode','fast')
 
-for ff=1:20%num_frames
+for ff=1:120%num_frames
     stream_verts = get_verts(ff);
     sl = streamline(stream_verts);
     set(sl,'LineWidth',0.5);

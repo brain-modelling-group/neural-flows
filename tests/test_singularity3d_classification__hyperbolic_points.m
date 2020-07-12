@@ -1,4 +1,4 @@
-function test_singularity3d_classification_hyperbolic_points(cp_type)
+function test_singularity3d_classification__hyperbolic_points(cp_type)
 % This function test the accuracy of the singularity classification functions 
 % called via singularity3d_classify_singularities(). The current function
 % only tests the 8 canonical critical points in 3D. It first generates the 

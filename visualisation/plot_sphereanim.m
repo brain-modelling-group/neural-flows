@@ -85,14 +85,15 @@ nnodes=size(data,2);
 if nnodes==112
     sphereradius=0.5; % mouse brain is small
 else
-    sphereradius=4;
+    sphereradius=5;
 end
 
 sp_handle = add_sphere_size_internal(locs(:,1),locs(:,2),locs(:,3),sphereradius*ones(nnodes,1),data(1,:));
 set(sp_handle, 'facealpha', 0.7)
 drawnow
 cdata = get(sp_handle,'cdata');
-
+view_val = [180 -90];
+view(view_val)
 switch animation_env
     case 'workspace'
         axis off;
@@ -104,7 +105,8 @@ switch animation_env
         title(['Time:' num2str(time(ii), '%.3f') ' s'])
         set(sp_handle, 'cdata', cdata)
         drawnow
-        pause(0.1)
+        pause(0.05)
+        view(view_val)
     end
     case 'movie'
         try
@@ -112,7 +114,7 @@ switch animation_env
         catch
             vidfile = VideoWriter('sphere_animation.avi');
         end    
-        vidfile.FrameRate = 30;
+        vidfile.FrameRate = 15;
         open(vidfile);
         axis off; 
         view(2)
@@ -120,6 +122,7 @@ switch animation_env
         for k=1:nnodes 
             cdata(:,(k-1)*22 + (1:21))=data(ii,k);
         end
+        view(view_val)
         title(['Time:' num2str(time(ii), '%.3f') ' s'])
         set(sp_handle, 'cdata', cdata)
         writeVideo(vidfile, getframe(figure_handle));

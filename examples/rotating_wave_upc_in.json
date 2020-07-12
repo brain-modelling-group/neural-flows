@@ -63,7 +63,7 @@
     }
   },
   "streamlines": {
-      "enabled": false,
+      "enabled": true ,
       "file": {
           "exists": false,
           "dir": "",

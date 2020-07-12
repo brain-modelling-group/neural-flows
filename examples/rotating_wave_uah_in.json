@@ -90,7 +90,7 @@
     }
   },
   "streamlines": {
-      "enabled": true,
+      "enabled": false,
       "file": {
           "exists": false,
           "dir": "",
