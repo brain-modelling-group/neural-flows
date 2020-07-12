@@ -1,11 +1,13 @@
 function fig_handle = plot3d_streamparticles(params, these_frames, display_modality)	
+% params: structure with all the parameters for neural-flows
+% these_frames  vector with indices of time frames to plot
+% display_modality =  "workspace" or "movie"
 
 if nargin < 3
     display_modality = "workspace";
 end
 % Set info we need
 %these_frames = params.stremalines.visualisation.particles.frames;
-%display_modality =  "workspace" or "movie"
 %params.stremalines.visualisation.particles.display.modality;
 %these_frames = [174];
 %these_frames = [50];
