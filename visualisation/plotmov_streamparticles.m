@@ -44,8 +44,6 @@ switch output_modality
             set(sl,'Color',[0.5 0.5 0.5 0.9]); % looks weird in the movie otherwise 
             [~, M{ff}] = streamparticlesMod(ax_handle, stream_verts, 2, 'animate', 1, 'ParticleAlignment', 'on', ...
                                           'MarkerfaceColor', 'red', 'MarkerSize', 2);
-            %movie([M{:}], 1, 75)   % play the movie. Do not close the figure window before playing the movie
-            %writeVideo(vid_obj, [M{:}]);
             set(sl,'Color',[0.5 0.5 0.5 0.0]); % looks weird in the movie otherwise
             cla(ax_handle)
         end
