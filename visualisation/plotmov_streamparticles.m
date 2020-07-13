@@ -1,6 +1,9 @@
-function fig_handle = plotmov_streamparticles(params)	
+function fig_handle = plotmov_streamparticles(params, output_modality)	
 % params: structure with all the parameters for neural-flows
 
+if nargin < 2
+    output_modality = "streamlines";
+end
 
 % Load file handles
 obj_flows = load_iomat_flows(params);
@@ -22,30 +25,52 @@ ax_handle.YLim = [xyz_lims{2}(1), xyz_lims{2}(2)];
 ax_handle.ZLim = [xyz_lims{3}(1), xyz_lims{3}(2)];
 ax_handle.XLabel.String = "X";
 ax_handle.YLabel.String = "Y";
+ax_handle.ZLabel.String = "Z";
 ax_handle.Position = [0.1300    0.1100    0.7750    0.8150];
-
-
-% Create movie object
-fname = generate_temp_filename("p3_particle-movie", 3);
-vid_obj = VideoWriter([char(fname), '.avi']);
-open(vid_obj);
+ax_handle.View = [90 0];
 set(ax_handle,'DrawMode','fast')
 
-for ff=1:120%num_frames
-    stream_verts = get_verts(ff);
-    sl = streamline(stream_verts);
-    set(sl,'LineWidth',0.5);
-    set(sl,'Color',[0.5 0.5 0.5 0.67]); % looks weird in the movie otherwise 
-    [~, M{ff}] = streamparticlesMod(ax_handle, stream_verts, 2, 'animate', 1, 'ParticleAlignment', 'on', ...
-	                              'MarkerfaceColor', 'red', 'MarkerSize', 2);
-    set(sl,'Color',[0.5 0.5 0.5 0.0]); % looks weird in the movie otherwise
-    cla(ax_handle)
+switch output_modality
+    case {"particles"}
+        % Create movie object
+        fname = generate_temp_filename("p3_particle-movie", 3);
+        vid_obj = VideoWriter([char(fname), '.avi']);
+        vid_obj.FrameRate = 4; 
+        open(vid_obj);
+        for ff=1:num_frames
+            stream_verts = get_verts(ff);
+            sl = streamline(stream_verts);
+            set(sl,'LineWidth',0.5);
+            set(sl,'Color',[0.5 0.5 0.5 0.9]); % looks weird in the movie otherwise 
+            [~, M{ff}] = streamparticlesMod(ax_handle, stream_verts, 2, 'animate', 1, 'ParticleAlignment', 'on', ...
+                                          'MarkerfaceColor', 'red', 'MarkerSize', 2);
+            %movie([M{:}], 1, 75)   % play the movie. Do not close the figure window before playing the movie
+            %writeVideo(vid_obj, [M{:}]);
+            set(sl,'Color',[0.5 0.5 0.5 0.0]); % looks weird in the movie otherwise
+            cla(ax_handle)
+        end
+        %
+        %movie([M{:}], 1, 75)   % play the movie. Do not close the figure window before playing the movie
+        writeVideo(vid_obj, [M{:}]);
+    case {"streamlines"}
+        fname = generate_temp_filename("p3_streamlines-movie", 3);
+        vid_obj = VideoWriter([char(fname), '.avi']);
+        vid_obj.FrameRate = 10; 
+        open(vid_obj);
+        for ff=1:num_frames
+            stream_verts = get_verts(ff);
+            sl = streamline(stream_verts);
+            set(sl,'LineWidth',0.5);
+            set(sl,'Color',[0.5 0.5 0.5 0.9]); % looks weird in the movie otherwise 
+            M(ff) = getframe(ax_handle);
+            writeVideo(vid_obj, M(ff));
+            set(sl,'Color',[0.5 0.5 0.5 0.0]); % looks weird in the movie otherwise
+            cla(ax_handle)
+        end
+        
 end
-%
-movie([M{:}], 1, 75)   % play the movie. Do not close the figure window before playing the movie
-writeVideo(vid_obj, [M{:}]);
 % Close file
-close(vid_obj)
+close(vid_obj);
 
 function verts = get_verts(idx)
   tmp = obj_streams.streamlines(1, idx);
