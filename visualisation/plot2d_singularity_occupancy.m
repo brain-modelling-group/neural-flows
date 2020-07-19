@@ -1,9 +1,9 @@
-function figure_handle = plot2d_singularity_occupancy(params)
+function figure_handle = plot2d_singularity_occupancy(params, nodes_str_lbl)
 
 obj_singularity = load_iomat_singularity(params);
 % NOTE: this variable should be part of params or stored in obj_singularity
 num_nodes = size(obj_singularity, 'tracking_2d_matrix', 1);
-nodes_str_lbl = params.data.nodes_str_lbl;
+%nodes_str_lbl = params.data.nodes_str_lbl;
 num_base_sngs = 8;
 nodal_singularity_summary = obj_singularity.nodal_singularity_summary;
 % Plot the occupancy of every type of singularity for valid nodes
@@ -12,14 +12,14 @@ nodal_singularity_summary = obj_singularity.nodal_singularity_summary;
 % TODO: configiure graphics property to handle paper units so we can plot
 % stuff and give figure sizes
 figure_handle = figure('Name', 'nflows-nodal-occupancy');
-ax_bar = subplot(5,1,1, 'Parent', figure_handle);
+ax_bar = subplot(5,1,3, 'Parent', figure_handle);
 
 base_cp = s3d_get_base_singularity_list();
 cmap = s3d_get_colours('critical-points');
 
-ax_2d_mat = subplot(5,1,[3 4], 'Parent', figure_handle);
+ax_2d_mat = subplot(5,1,[1 2], 'Parent', figure_handle);
 ax_3d_mat_a = subplot(5,1,5, 'Parent', figure_handle);
-ax_3d_mat_b = subplot(5,1,2, 'Parent', figure_handle);
+ax_3d_mat_b = subplot(5,1,4, 'Parent', figure_handle);
 
 plot_stacked_bars(ax_bar)
 plot_2d_matrix(ax_2d_mat)
