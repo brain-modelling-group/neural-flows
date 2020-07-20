@@ -85,7 +85,7 @@ nnodes=size(data,2);
 if nnodes==112
     sphereradius=0.5; % mouse brain is small
 else
-    sphereradius=5;
+    sphereradius=10;
 end
 
 sp_handle = add_sphere_size_internal(locs(:,1),locs(:,2),locs(:,3),sphereradius*ones(nnodes,1),data(1,:));
@@ -137,7 +137,7 @@ switch animation_env
 end 
 end
 
-function hout = add_sphere_size_internal( x, y, z, s, c)
+function hout = add_sphere_size_internal(x, y, z, s, c)
 % input:    x   Centrepoint of the sphere in the x direction
 %           y   Centrepoint of the sphere in the y direction
 %           z   Centrepoint of the sphere in the z direction
@@ -154,7 +154,7 @@ hold on;
 
 n = 20; % number of faces each sphere has
 c = double(c);
-[x0,y0,z0] = sphere(n);
+[x0, y0, z0] = sphere(n);
 
 nspheres=length(x);
 Xall=nan(n+1,nspheres*(n+2)); % each sphere is an (n+1)-by-(n+1) matrix

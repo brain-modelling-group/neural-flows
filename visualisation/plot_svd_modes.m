@@ -8,12 +8,12 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, 
     for ii=1:num_planes
         for kk=1:num_modes
             ax(ii, kk) = subplot(num_planes+1, num_modes, sub2ind([num_modes, num_planes+1], kk, ii), 'Parent', fig_spatial_modes);
-            hold(ax(ii, kk), 'on')
+            hold(ax(ii, kk), 'on');
         end
     end
 
     ax(num_planes+1, 1) = subplot(num_planes+1, num_modes, [(num_planes*num_modes)+1 (num_modes*num_planes)+num_modes], 'Parent', fig_spatial_modes);
-    hold(ax(num_planes+1, 1), 'on')
+    hold(ax(num_planes+1, 1), 'on');
     
     x_idx = 1:num_points;
     y_idx = num_points+1:2*num_points;
@@ -25,6 +25,7 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, 
     Vx = sign(sum(V(x_idx, :)));
     Vy = sign(sum(V(y_idx, :)));
     Vz = sign(sum(V(z_idx, :)));
+    
     % NOTE: maybe enable this check to avoid zero division
     %Vnorm(Vnorm < 2^-9) = 1;
     

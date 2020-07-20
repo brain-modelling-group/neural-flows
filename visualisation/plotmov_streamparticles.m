@@ -11,7 +11,7 @@ obj_streams = load_iomat_streams(params);
 
 % Load info we need for visualisation
 xyz_lims = obj_flows.xyz_lims; 
-num_frames = params.flows.data.shape.t;
+num_frames = 200; %1000;%params.flows.data.shape.t;
 
 % Create figure
 fig_handle = figure('Name', 'nflows-flows-streamparticles-movie');
@@ -27,7 +27,7 @@ ax_handle.XLabel.String = "X";
 ax_handle.YLabel.String = "Y";
 ax_handle.ZLabel.String = "Z";
 ax_handle.Position = [0.1300    0.1100    0.7750    0.8150];
-ax_handle.View = [90 0];
+ax_handle.View = [180 0];
 set(ax_handle,'DrawMode','fast')
 
 switch output_modality
@@ -35,7 +35,7 @@ switch output_modality
         % Create movie object
         fname = generate_temp_filename("p3_particle-movie", 3);
         vid_obj = VideoWriter([char(fname), '.avi']);
-        vid_obj.FrameRate = 4; 
+        vid_obj.FrameRate = 11; 
         open(vid_obj);
         for ff=1:num_frames
             stream_verts = get_verts(ff);
@@ -49,7 +49,7 @@ switch output_modality
         end
         %
         %movie([M{:}], 1, 75)   % play the movie. Do not close the figure window before playing the movie
-        writeVideo(vid_obj, [M{:}]);
+        writeVideo(vid_obj, [M{2:end}]);
     case {"streamlines"}
         fname = generate_temp_filename("p3_streamlines-movie", 3);
         vid_obj = VideoWriter([char(fname), '.avi']);

@@ -12,14 +12,14 @@ nodal_singularity_summary = obj_singularity.nodal_singularity_summary;
 % TODO: configiure graphics property to handle paper units so we can plot
 % stuff and give figure sizes
 figure_handle = figure('Name', 'nflows-nodal-occupancy');
-ax_bar = subplot(5,1,3, 'Parent', figure_handle);
+ax_bar = subplot(3,2,[2 4], 'Parent', figure_handle);
 
 base_cp = s3d_get_base_singularity_list();
 cmap = s3d_get_colours('critical-points');
 
-ax_2d_mat = subplot(5,1,[1 2], 'Parent', figure_handle);
-ax_3d_mat_a = subplot(5,1,5, 'Parent', figure_handle);
-ax_3d_mat_b = subplot(5,1,4, 'Parent', figure_handle);
+ax_2d_mat = subplot(3, 2,[1 3], 'Parent', figure_handle);
+ax_3d_mat_a = subplot(3,2,5, 'Parent', figure_handle);
+ax_3d_mat_b = subplot(3,2,6, 'Parent', figure_handle);
 
 plot_stacked_bars(ax_bar)
 plot_2d_matrix(ax_2d_mat)
@@ -36,7 +36,8 @@ plot_3d_matrix_b(ax_3d_mat_b)
         end
         ax_bar.XTick = 1:length(nodal_singularity_summary.active_nodes.idx);
         ax_bar.XTickLabel = nodes_str_lbl(nodal_singularity_summary.active_nodes.idx);
-        ax_bar.XTickLabelRotation = 45;
+        ax_bar.XTickLabelRotation = 90;
+        ax_bar.XAxisLocation = 'top';
         ax_bar.YLabel.String = 'occupancy [#frames]';
         ax_bar.XLabel.String = 'nodes';
         lgd_ax = legend(base_cp(1:num_base_sngs));
@@ -76,8 +77,11 @@ plot_3d_matrix_b(ax_3d_mat_b)
         max_cval = numcolors - 0.5;
         caxis([min_cval max_cval]);
         cbh = colorbar(ax_mat, 'YTick',...
-                ((-1/numcolors)+((numcolors-1)/numcolors):((numcolors-1)/numcolors):max_val),...
-                'YTickLabel',int2str([0:max_val]'), 'YLim', [0 max_val]);
+                [(-1/numcolors)+((numcolors-1)/numcolors), max_val],...
+                'YTickLabel',{int2str(0), int2str(max_val)}, 'YLim', [0 max_val]);
+%         cbh = colorbar(ax_mat, 'YTick',...    
+%                 ((-1/numcolors)+((numcolors-1)/numcolors):((numcolors-1)/numcolors):max_val),...
+%                 'YTickLabel',int2str([0:max_val]'), 'YLim', [0 max_val]);
         cbh.Label.String = '# nodes';
     end
 
@@ -91,13 +95,16 @@ plot_3d_matrix_b(ax_3d_mat_b)
         ax_mat.YTickLabel = base_cp(:);
         ax_mat.XLabel.String = 'nodes';
         numcolors = length(0:max_val);
-        colormap(ax_mat, viridis(numcolors))
+        colormap(ax_mat, inferno(numcolors))
         min_cval = min_val - 0.5;
         max_cval = numcolors - 0.5;
         caxis([min_cval max_cval]);
         cbh = colorbar(ax_mat, 'YTick',...
-                (0:max_val),...
-                'YTickLabel',int2str([0:max_val]'), 'YLim', [min_cval max_cval]);
+                [0,max_val],...
+                'YTickLabel',int2str([0,max_val]'), 'YLim', [min_cval max_cval]);
+%         cbh = colorbar(ax_mat, 'YTick',...
+%                 (0:max_val),...
+%                 'YTickLabel',int2str([0:max_val]'), 'YLim', [min_cval max_cval]);
         cbh.Label.String = '# time frames';
 
        

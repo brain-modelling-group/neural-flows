@@ -8,7 +8,7 @@ ax_handle = subplot(1, 1, 1,'Parent', fig_handle);
 ax_handle.DataAspectRatio = [1 1 1];
 sl = streamline(verts);
 
-set(sl,'LineWidth',0.5);
+set(sl,'LineWidth',1.5);
 set(sl,'Color',[0.5 0.5 0.5 0.5]);
 %set(sl,'Visible','off');
 %interpolated vertices
@@ -26,10 +26,11 @@ ax_handle.YLim = [xyz_lims{2}(1), xyz_lims{2}(2)];
 ax_handle.ZLim = [xyz_lims{3}(1), xyz_lims{3}(2)];
 ax_handle.XLabel.String = "X";
 ax_handle.YLabel.String = "Y";
+
 switch display_modality
     case {"workspace", "desktop"}
          streamparticles(ax_handle, verts, 2, 'animate', 4, 'ParticleAlignment', 'on', ...
-	            'MarkerfaceColor', 'red', 'MarkerSize', 2);
+	                     'MarkerfaceColor', 'red', 'MarkerSize', 0.1);
     case {"movie"}
         set(sl,'Color',[0.5 0.5 0.5 1.0]); % looks weird in the movie otherwise
         fname = generate_temp_filename("p3_particles", 3);
@@ -38,7 +39,7 @@ switch display_modality
         set(ax_handle,'DrawMode','fast')
         [~, M]=streamparticlesMod(ax_handle, verts, 2, 'animate', 4, 'ParticleAlignment', 'on', ...
 	                             'MarkerfaceColor', 'red', 'MarkerSize', 2);
-        movie(M, 2, 100)   % play the movie. Do not close the figure window before playing the movie
+        %movie(M, 2, 100)   % play the movie. Do not close the figure window before playing the movie
         writeVideo(vid_obj, M);
         close(vid_obj)
 end

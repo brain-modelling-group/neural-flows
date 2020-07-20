@@ -30,8 +30,8 @@ if isempty(options)
     options.start_points_mode = 'random_dense';
     options.curved_arrow = 1;
     options.stream_length_steps=42;
-    %cmap = yellowgreenblue(256, 'rev');
-    cmap = inferno(256);
+    cmap = yellowgreenblue(256, 'rev');
+    %cmap = inferno(256);
     options.cmap = cmap;
 
 end
