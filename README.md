@@ -83,5 +83,5 @@ It should take about 5 minutes to run everything and pop up figures with flow mo
 
 ### Where is the user manual?
 
-Coming soon, sorry <(~.~)> ...
+Coming soon, sorry `<(~.~)>` ...
 
