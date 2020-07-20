@@ -1,0 +1,176 @@
+{
+  "general": {
+    "storage": {
+      "time_stamp": [],
+      "dir": "scratch",    
+      "dir_tmp": "/tmp",    
+      "params": {
+        "input": {
+          "filename": "fmri_waves_uah_in.json",
+          "dir": "examples" 
+        },
+        "output": {
+          "filename": "fmri_waves_uah_ou.json",
+          "dir": "examples" 
+        }
+      },
+      "format": "iomat"     
+    },
+    "parallel": {
+      "enabled": true,
+      "workers_fraction": 0.8
+    }
+  },
+  "interpolation": {
+    "enabled": true,
+    "file": {
+      "exists": false,
+      "dir": "",
+      "name": "",
+      "label": "fmri_interp",
+      "keep": true
+    },
+    "hx": 3,
+    "hy": 3,
+    "hz": 3,
+    "neighbour_method": "",
+    "extrapolation_method": "",
+    "boundary": {
+      "alpha_radius": 35,
+      "thickness": 3
+    },
+    "visualisation": {
+      "enabled": true
+    }
+  },
+  "flows": {
+    "enabled": true,
+    "file": {
+      "exists": false,
+      "keep": true,
+      "dir": "",
+      "name": "",
+      "label": "fmri_flows"
+    },
+    "modality": "amplitude",
+    "method": {
+      "data": {
+        "mode": "amplitude"
+      },
+      "name": "hs3d",
+      "hs3d": {
+        "alpha_smooth": 0.2,
+        "max_iterations": 128,
+        "initial_conditions": {
+          "mode": "random",
+          "seed": 42
+        },
+        "nodal_flows": {
+          "enabled": true
+        }
+      }
+    },
+    "visualisation": {
+      "enabled": true
+    },
+    "decomposition": {
+      "svd": {
+        "enabled": true,
+        "modes": 4,
+        "grid": {
+          "type": "unstructured"
+        }
+      }
+    },
+    "quantification": {
+      "energy": {
+        "enabled": true,
+        "modality": "nodal"
+      }
+    }
+  },
+  "streamlines": {
+      "enabled": true,
+      "file": {
+          "exists": false,
+          "dir": "",
+          "name": "",
+          "label": "fmri_streams",
+          "keep": true
+    },
+
+      "tracing": {
+               "grid": {
+                   "type": "structured"
+                  },
+               "seeding_points": {
+                                  "modality": "random-sparse",
+                                  "seed": 42
+              },
+              "max_stream_length" : 200,
+              "time_step": 0.5
+          },
+
+    "visualisation": {
+      "enabled": true
+    }
+  },
+  "singularity": {
+    "enabled": true,
+    "file": {
+      "keep": true,
+      "dir": "",
+      "name": "",
+      "label": "fmri_singularity"
+    },
+    "detection": {
+      "enabled": true,
+      "mode": "null-flow-field",
+      "threshold": [
+        0,
+        0.04
+      ]
+    },
+    "classification": {
+      "enabled": true
+    },
+    "quantification": {
+      "enabled": true,
+      "nodal_occupancy" : {
+        "enabled": true,
+        "distance_threshold" : 25
+      }
+    },
+    "visualisation": {
+      "enabled": true
+    }
+  },
+  "data": {
+    "file": {
+      "dir": "demo-data", 
+      "name": "fmri_waves_unstructured_long.mat"
+    },
+    "slice": {
+      "enabled": false,
+      "id": 0
+    },
+    "grid": {
+      "type": "unstructured"
+    },
+    "ht": 0.5,
+    "hx": [],
+    "hy": [],
+    "hz": [],
+    "units": {
+      "space": "mm",
+      "time":  "ms"
+    },
+    "mode": "amplitude"
+  },
+
+"visualisation": {
+    "quiver": {
+      "scale": 1
+    }  
+  }
+}
