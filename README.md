@@ -56,7 +56,7 @@ A bunch of things, mostly the ones described in the diagram above.
 
 To get started follow the next steps: 
 
-0. Inside directory `neural-flows`, make a new directory call `scratch` (by defualt we will store results there, you can change it later ...)
+0. Inside directory `neural-flows`, make a new directory call `scratch` (by default we will store results there, you can change it later ...)
 1. Open the file `rotating_wave_uah_in.json` under `examples/`
 1a. if you are on windows change line 6 of that file
 ```json
@@ -71,10 +71,12 @@ to
 ```
 
 or any other directory where some temporary files will be stored during execution.
+
 1b. If you are on Mac, similary change that line of the .json file to an appropriate temp folder.
+
 1c. If you re on Linux, you're good to go.
 
-3. Run the function under `examples/` at
+2. Run the function under `examples/` at
 ```matlab
 rotating_wave('uah')
 ``` 
