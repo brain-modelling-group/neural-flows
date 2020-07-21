@@ -30,8 +30,13 @@ end
 input_params_dir  = 'examples';
 json_mode = 'read';
 
-% Load options
+%% Load configuration file with options
 input_params = read_write_json(input_params_filename, input_params_dir, json_mode);
+
+%% Check that the input tmp folder and output folder exist and are consistent with OS,
+% if they aren't, it will try to fix the problem, or error
+input_params = check_storage_dirs(read_write_json(input_params_filename, input_params_dir, json_mode));
+
 %% Run core functions: interpolation, estimation and classification, streamlines, this function writes to a new json file
 output_params = main_core(input_params); 
 
@@ -40,6 +45,5 @@ main_analysis(output_params);
 
 %% Visualisation
 main_visualisation(output_params);
-
 
 end %function example_rotating_wave()

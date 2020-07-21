@@ -22,5 +22,4 @@ if ~(ismcc || isdeployed)
 end
 
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished setting up Matlab paths.'))
-
 % end of startup()
