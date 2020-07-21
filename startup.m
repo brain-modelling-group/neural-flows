@@ -19,6 +19,8 @@ if ~(ismcc || isdeployed)
     addpath('examples', '-begin');
     % Add external modules
     addpath(genpath('external'), '-begin');
+    % Add top directory 
+    addpath('../neural-flows/', '-begin');
 end
 
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished setting up Matlab paths.'))

@@ -1,5 +1,6 @@
-function figure_handle = plot2d_singularity_occupancy(params, nodes_str_lbl)
+function figure_handle = plot2d_singularity_occupancy(params)
 
+nodes_str_lbl = params.data.nodes_str_lbl;
 obj_singularity = load_iomat_singularity(params);
 % NOTE: this variable should be part of params or stored in obj_singularity
 num_nodes = size(obj_singularity, 'tracking_2d_matrix', 1);
