@@ -128,7 +128,7 @@
       "mode": "null-flow-field",
       "threshold": [
         0,
-        0.015625
+        0.1
       ]
     },
     "classification": {

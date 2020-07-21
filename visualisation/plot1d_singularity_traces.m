@@ -36,13 +36,13 @@ else
     fig_visibility = varargin{1};
 end
 if nargin < 3
-    to_plot = 'foci';
+    to_plot = 'combined';
 else
     to_plot = varargin{2};
 end
 
 if nargin < 4
-    marker_plot = 'scatter';
+    marker_plot = 'line';
 else
     marker_plot = varargin{3};
 end
