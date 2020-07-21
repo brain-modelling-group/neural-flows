@@ -59,33 +59,35 @@ Unzip and add to the MATLAB path.
 ### What can the toolbox do?
 A bunch of things, mostly the ones described in the diagram above.
 
-To get started follow the next steps: 
+To get started follow the next steps (timestamp: Tue 21 Jul 2020 16:23:39 AEST): 
 
-0. Inside directory `neural-flows`, make a new directory call `scratch` (by default we will store results there, you can change it later ...)
-1. Open the file `rotating_wave_uah_in.json` under `examples/`
-1a. if you are on windows change line 6 of that file
-```json
+0. (Optional) Inside directory `neural-flows`, make a new directory call `scratch` (by default we will store results there, you can change it later ...)
+1. (Optional) Open the file `rotating_wave_uah_in.json` under `examples/`
+1a.(Optional) if you are on Windows change line 6 of that file
+```
       "dir_tmp": "/tmp",    
 
 ```
 
 to 
 
-```json
-   "dir_tmp": "C:\Windows\Temp",    
+```
+   "dir_tmp": "C:\Users\guest\AppData\Local\Temp",    
 ```
 
 or any other directory where some temporary files will be stored during execution.
 
-1b. If you are on Mac, similary change that line of the .json file to an appropriate temp folder.
+1b. (Optional) If you are on Mac, the default value `/tmp` should work, otherwise change it to an appropriate temp folder.
 
-1c. If you re on Linux, you're good to go.
+1c. (Optional) If you re on Linux, you're good to go.
 
 2. Run the function under `examples/` at
 ```matlab
 rotating_wave('uah')
 ``` 
 It should take about 5 minutes to run everything and pop up figures with flow mode decomposition and singularity tracking!
+
+
 
 
 ### Where is the user manual?
