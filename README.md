@@ -87,8 +87,12 @@ rotating_wave('uah')
 ``` 
 It should take about 5 minutes to run everything and pop up figures with flow mode decomposition and singularity tracking!
 
+##### Flow mode decomposition
 ![alt text](https://github.com/brain-modelling-group/neural-flows/blob/master/demo-data/img/fig_rotating_wave_svd.png?raw=true)
 
+#### Singularity statistics
+![alt text](https://github.com/brain-modelling-group/neural-flows/blob/master/demo-data/img/fig_summary_stats.png?raw=true)
+![alt text](https://github.com/brain-modelling-group/neural-flows/blob/master/demo-data/img/fig_sing_tracking.png?raw=true)
 
 
 ### Where is the user manual?
