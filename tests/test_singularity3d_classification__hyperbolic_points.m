@@ -39,6 +39,14 @@ end
 if strcmp(cp_type, 'all')
     s3d_list = s3d_get_base_singularity_list();
     s3d_list(9:end) = [];
+else
+    s3d_all_list = s3d_get_base_singularity_list();
+    for ii=1:18
+        if strcmp(cp_type, s3d_all_list{ii})
+            this_cp = ii;
+        end
+    end
+    s3d_list = s3d_all_list(this_cp);
 end
 
 for this_cp=1:length(s3d_list)
