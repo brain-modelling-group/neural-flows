@@ -53,13 +53,17 @@ standalone functions that support the main modules.
     
 ### Installation:
 
-Unzip and add to the MATLAB path. 
+If you download the zip folder, first unzip and then ... 
 
+- Windows 10: see the instructions [here](https://github.com/brain-modelling-group/neural-flows/wiki/Getting-started::Windows10::). 
+- Linux: on the terminal change directory to `neura-flows` folder, then start matlab. That's it. The toolbox paths should be appended automatically. 
+
+If you clone the repo, same rules as above apply. 
 
 ### What can the toolbox do?
 A bunch of things, mostly the ones described in the diagram above.
 
-To get started follow the next steps (timestamp: Tue 21 Jul 2020 16:23:39 AEST): 
+To get started follow the next steps (timestamp: Fri 31 Jul 2020 21:21:17 AEST): 
 
 0. (Optional) Inside directory `neural-flows`, make a new directory call `scratch` (by default we will store results there, you can change it later ...)
 1. (Optional) Open the file `rotating_wave_uah_in.json` under `examples/`
