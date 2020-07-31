@@ -18,7 +18,7 @@ if strcmp(who_am_i, 'penguin')
 elseif strcmp(who_am_i, 'apple')
     tbx_abs_path = [filesep strjoin(split_file_path(2:end-1), filesep)];
 else
-    tbx_abs_path = strjoin(split_file_path(1:end-2), filesep);
+    tbx_abs_path = strjoin(split_file_path(1:end-1), filesep);
 end %
 
-end % function()
+end % get_neural_flows_path()
