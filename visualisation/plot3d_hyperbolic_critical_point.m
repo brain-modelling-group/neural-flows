@@ -12,6 +12,10 @@ end
 %fig_handle.Position = [1   18   19   17];
 fig_handle.Color = [1, 1, 1];
 
+if strcmp(fig_handle.PaperUnits, 'centimeters')
+    fig_handle.Position = [21.5164   24.3325   28    6];
+end
+
 row = 1;
 col = 4;
 ax(1) = subplot(row, col, 4, 'Parent', fig_handle);
@@ -30,9 +34,9 @@ max_unorm = max(unorm(:));
                           Z(1:dsf:end, 1:dsf:end, 1:dsf:end), ...
                           ux(1:dsf:end,1:dsf:end,1:dsf:end)./max_unorm, ...
                           uy(1:dsf:end,1:dsf:end,1:dsf:end)./max_unorm, ...
-                          uz(1:dsf:end,1:dsf:end,1:dsf:end)./max_unorm, ones(numel(unorm), 1), [0.1 0.15]);
+                          uz(1:dsf:end,1:dsf:end,1:dsf:end)./max_unorm, ones(numel(unorm), 1), [0.2 0.25]);
 patch(ax(1), 'faces', F,'vertices', V,'cdata',C,'edgecolor','none','facecolor','flat');
-ax(1).Children.FaceColor = [0.4 0.4 0.4];
+ax(1).Children.FaceColor = [0.3 0.3 0.3];
                         
 %  quiv_handle =  quiver3( X(1:dsf:end, 1:dsf:end,1:dsf:end), ...
 %                          Y(1:dsf:end, 1:dsf:end,1:dsf:end), ...
@@ -100,7 +104,7 @@ id_x = ceil(size(X, 2)/(2*dsf)); % index of the slice laong x-we need to keep.
                             Z(1:dsf:end, id_x, 1:dsf:end), ...
                             ux(1:dsf:end,id_x,1:dsf:end)./max_unorm, ...
                             uy(1:dsf:end,id_x,1:dsf:end)./max_unorm, ...
-                            uz(1:dsf:end,id_x,1:dsf:end)./max_unorm, ones(numel(unorm(:, id_x, :)), 1), [0.15 0.2]);
+                            uz(1:dsf:end,id_x,1:dsf:end)./max_unorm, ones(numel(unorm(:, id_x, :)), 1), [0.2 0.25]);
 ax(1).Children(end).Faces = Fx;
 ax(1).Children(end).Vertices = Vx;
 
@@ -129,7 +133,7 @@ id_y = ceil(size(X, 1)/(2*dsf)); % index of the slice laong x-we need to keep.
                             Z(id_y, 1:dsf:end, 1:dsf:end), ...
                             ux(id_y,1:dsf:end, 1:dsf:end)./max_unorm, ...
                             uy(id_y,1:dsf:end, 1:dsf:end)./max_unorm, ...
-                            uz(id_y,1:dsf:end, 1:dsf:end)./max_unorm, ones(numel(unorm(id_y, :, :)), 1), [0.15 0.2]);
+                            uz(id_y,1:dsf:end, 1:dsf:end)./max_unorm, ones(numel(unorm(id_y, :, :)), 1), [0.2 0.25]);
 ax(2).Children(end).Faces = Fy;
 ax(2).Children(end).Vertices = Vy;
 
@@ -139,6 +143,18 @@ ax(3).XLabel.String = 'x';
 ax(3).ZLabel.String = 'z';
 ax(3).View = [0 90];
 ax(3).Title.String = 'XY';
+
+
+id_z = ceil(size(X, 3)/(2*dsf)); % index of the slice laong x-we need to keep.
+[Fz, Vz, ~] = quiver3Dpatch(X(1:dsf:end, 1:dsf:end, id_z), ...
+                            Y(1:dsf:end, 1:dsf:end, id_z), ...
+                            Z(1:dsf:end, 1:dsf:end, id_z), ...
+                            ux(1:dsf:end,1:dsf:end, id_z)./max_unorm, ...
+                            uy(1:dsf:end,1:dsf:end, id_z)./max_unorm, ...
+                            uz(1:dsf:end,1:dsf:end, id_z)./max_unorm, ones(numel(unorm(:, :, id_z)), 1), [0.2 0.25]);
+ax(3).Children(end).Faces = Fz;
+ax(3).Children(end).Vertices = Vz;
+
 
 
 % 3D view
