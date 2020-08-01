@@ -8,7 +8,6 @@ end
 % Get appropriate color
 [cmap] = s3d_get_colours(cp_type);
 
-
 %fig_handle.Position = [1   18   19   17];
 fig_handle.Color = [1, 1, 1];
 
@@ -98,7 +97,7 @@ ax(1).ZLabel.String = 'z';
 ax(1).View = [90 0];
 ax(1).Title.String = 'ZY';
 
-id_x = ceil(size(X, 2)/(2*dsf)); % index of the slice laong x-we need to keep.
+id_x = floor(size(X, 2)/2); % index of the slice laong x-we need to keep.
 [Fx, Vx, ~] = quiver3Dpatch(X(1:dsf:end, id_x, 1:dsf:end), ...
                             Y(1:dsf:end, id_x, 1:dsf:end), ...
                             Z(1:dsf:end, id_x, 1:dsf:end), ...
@@ -127,7 +126,7 @@ ax(2).ZLabel.String = 'z';
 ax(2).View = [0 0];
 ax(2).Title.String = 'ZX';
 
-id_y = ceil(size(X, 1)/(2*dsf)); % index of the slice laong x-we need to keep.
+id_y = ceil(size(X, 1)/2); % index of the slice laong x-we need to keep.
 [Fy, Vy, ~] = quiver3Dpatch(X(id_y, 1:dsf:end, 1:dsf:end), ...
                             Y(id_y, 1:dsf:end, 1:dsf:end), ...
                             Z(id_y, 1:dsf:end, 1:dsf:end), ...
@@ -145,7 +144,7 @@ ax(3).View = [0 90];
 ax(3).Title.String = 'XY';
 
 
-id_z = ceil(size(X, 3)/(2*dsf)); % index of the slice laong x-we need to keep.
+id_z = ceil(size(X, 3)/2); % index of the slice laong x-we need to keep.
 [Fz, Vz, ~] = quiver3Dpatch(X(1:dsf:end, 1:dsf:end, id_z), ...
                             Y(1:dsf:end, 1:dsf:end, id_z), ...
                             Z(1:dsf:end, 1:dsf:end, id_z), ...
@@ -166,5 +165,4 @@ ax(4).GridAlpha = 0;
 ax(4).Children(end).LineStyle = 'none';
 ax(4).Children(end).FaceColor = 'none';
 
-
-end
+end % function plot3d_hyperbolic_critical_point()
