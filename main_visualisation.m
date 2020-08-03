@@ -14,8 +14,8 @@ end
 %---------------------------SINGULARITY----------------------------------------%
 if inparams.singularity.visualisation.enabled
    %plot2d_singularity_occupancy(inparams);
-   %plot1d_singularity_traces_sandplots(inparams);
-   plot1d_singularity_stats(inparams)
+   plot1d_singularity_traces_sandplot(inparams);
+   %plot1d_singularity_stats(inparams)
 end
 %------------------------------------------------------------------------------%
 % save_tmp_params(tmp_params)
