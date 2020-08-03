@@ -104,10 +104,10 @@
                    "type": "structured"
                   },
                "seeding_points": {
-                                  "modality": "random-sparse",
+                                  "modality": "random-dense",
                                   "seed": 42
               },
-              "max_stream_length" : 200,
+              "max_stream_length" : 300,
               "time_step": 0.5
           },
 
@@ -148,7 +148,7 @@
   "data": {
     "file": {
       "dir": "demo-data", 
-      "name": "fmri_waves_unstructured_long.mat"
+      "name": "fmri_waves_unstructured_super_long.mat"
     },
     "slice": {
       "enabled": false,
@@ -157,7 +157,7 @@
     "grid": {
       "type": "unstructured"
     },
-    "ht": 0.5,
+    "ht": 0.25,
     "hx": [],
     "hy": [],
     "hz": [],

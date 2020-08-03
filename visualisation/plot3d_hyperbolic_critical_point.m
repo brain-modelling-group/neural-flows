@@ -12,7 +12,7 @@ end
 fig_handle.Color = [1, 1, 1];
 
 if strcmp(fig_handle.PaperUnits, 'centimeters')
-    fig_handle.Position = [21.5164   24.3325   28    6];
+    fig_handle.Position = [21.5164   24.3325   22.6    4.65];
 end
 
 row = 1;
@@ -22,8 +22,8 @@ ax(2) = subplot(row, col, 3, 'Parent', fig_handle);
 ax(3) = subplot(row, col, 2, 'Parent', fig_handle);
 ax(4) = subplot(row, col, 1, 'Parent', fig_handle);
 
-hold(ax(1), 'on')
-dsf = 2; % downsample factor
+hold(ax(1), 'on');
+dsf = 4; % downsample factor
 unorm = sqrt(ux.^2 + uy.^2 + uz.^2);
 unorm = unorm(1:dsf:end, 1:dsf:end, 1:dsf:end);
 max_unorm = max(unorm(:));
@@ -33,10 +33,10 @@ max_unorm = max(unorm(:));
                           Z(1:dsf:end, 1:dsf:end, 1:dsf:end), ...
                           ux(1:dsf:end,1:dsf:end,1:dsf:end)./max_unorm, ...
                           uy(1:dsf:end,1:dsf:end,1:dsf:end)./max_unorm, ...
-                          uz(1:dsf:end,1:dsf:end,1:dsf:end)./max_unorm, ones(numel(unorm), 1), [0.2 0.25]);
+                          uz(1:dsf:end,1:dsf:end,1:dsf:end)./max_unorm, ones(numel(unorm), 1), [1 2]);
 patch(ax(1), 'faces', F,'vertices', V,'cdata',C,'edgecolor','none','facecolor','flat');
 ax(1).Children.FaceColor = [0.3 0.3 0.3];
-                        
+cone_size = [0.35 0.4];                        
 %  quiv_handle =  quiver3( X(1:dsf:end, 1:dsf:end,1:dsf:end), ...
 %                          Y(1:dsf:end, 1:dsf:end,1:dsf:end), ...
 %                          Z(1:dsf:end, 1:dsf:end,1:dsf:end), ...
@@ -60,6 +60,7 @@ for ii=1:4
     ax(ii).XLim = [-1 1];
     ax(ii).YLim = [-1 1];
     ax(ii).ZLim = [-1 1];
+     
 end
 ax(1).XLabel.String = 'x [mm]';
 ax(1).YLabel.String = 'y [mm]';
@@ -79,8 +80,8 @@ plot3(ax(1), h2.XData(1), h2.YData(1), h2.ZData(1), 'x', 'markerfacecolor', 'k',
 plot3(ax(1), h1.XData(1), h1.YData(1), h1.ZData(1), 'x', 'markerfacecolor', 'k', 'markeredgecolor', 'k', 'markersize', 6)
 
 % End points
-plot3(ax(1), h1.XData(end), h1.YData(end), h1.ZData(end), 'ro', 'markerfacecolor', 'r', 'markeredgecolor', 'w')
-plot3(ax(1), h2.XData(end), h2.YData(end), h2.ZData(end), 'ro', 'markerfacecolor', 'r', 'markeredgecolor', 'w')
+%plot3(ax(1), h1.XData(end), h1.YData(end), h1.ZData(end), 'ro', 'markerfacecolor', 'r', 'markeredgecolor', 'w')
+%plot3(ax(1), h2.XData(end), h2.YData(end), h2.ZD   ata(end), 'ro', 'markerfacecolor', 'r', 'markeredgecolor', 'w')
 
 view(3);
 
@@ -103,7 +104,7 @@ id_x = floor(size(X, 2)/2); % index of the slice laong x-we need to keep.
                             Z(1:dsf:end, id_x, 1:dsf:end), ...
                             ux(1:dsf:end,id_x,1:dsf:end)./max_unorm, ...
                             uy(1:dsf:end,id_x,1:dsf:end)./max_unorm, ...
-                            uz(1:dsf:end,id_x,1:dsf:end)./max_unorm, ones(numel(unorm(:, id_x, :)), 1), [0.2 0.25]);
+                            uz(1:dsf:end,id_x,1:dsf:end)./max_unorm, ones(numel(unorm(:, 1, :)), 1), cone_size );
 ax(1).Children(end).Faces = Fx;
 ax(1).Children(end).Vertices = Vx;
 
@@ -132,7 +133,7 @@ id_y = ceil(size(X, 1)/2); % index of the slice laong x-we need to keep.
                             Z(id_y, 1:dsf:end, 1:dsf:end), ...
                             ux(id_y,1:dsf:end, 1:dsf:end)./max_unorm, ...
                             uy(id_y,1:dsf:end, 1:dsf:end)./max_unorm, ...
-                            uz(id_y,1:dsf:end, 1:dsf:end)./max_unorm, ones(numel(unorm(id_y, :, :)), 1), [0.2 0.25]);
+                            uz(id_y,1:dsf:end, 1:dsf:end)./max_unorm, ones(numel(unorm(1, :, :)), 1), cone_size );
 ax(2).Children(end).Faces = Fy;
 ax(2).Children(end).Vertices = Vy;
 
@@ -150,7 +151,7 @@ id_z = ceil(size(X, 3)/2); % index of the slice laong x-we need to keep.
                             Z(1:dsf:end, 1:dsf:end, id_z), ...
                             ux(1:dsf:end,1:dsf:end, id_z)./max_unorm, ...
                             uy(1:dsf:end,1:dsf:end, id_z)./max_unorm, ...
-                            uz(1:dsf:end,1:dsf:end, id_z)./max_unorm, ones(numel(unorm(:, :, id_z)), 1), [0.2 0.25]);
+                            uz(1:dsf:end,1:dsf:end, id_z)./max_unorm, ones(numel(unorm(:, :, 1)), 1), cone_size );
 ax(3).Children(end).Faces = Fz;
 ax(3).Children(end).Vertices = Vz;
 
@@ -164,5 +165,11 @@ ax(4).View = [40 17];
 ax(4).GridAlpha = 0;
 ax(4).Children(end).LineStyle = 'none';
 ax(4).Children(end).FaceColor = 'none';
+
+
+ax(1).Visible = 'off';
+ax(2).Visible = 'off';
+ax(3).Visible = 'off';
+ax(4).Visible = 'off';
 
 end % function plot3d_hyperbolic_critical_point()

@@ -1,4 +1,4 @@
-function plot_cp_histograms(singularity_cell)
+function figure1 = plot_cp_histograms(singularity_cell)
 % This function takes as input a cell with the integer classification of
 % singular points and plots histograms.
 % 

@@ -1,4 +1,4 @@
-function figure_handle_xyz = plot1d_singularity_scatter_xyz_vs_time(singularity_list_num, null_points_3d, cp_type, xyz_lims, marker_plot, varargin)
+function figure_handle_xyz = plot1d_singularity_sandplot(singularity_list_num, null_points_3d, cp_type, xyz_lims, marker_plot, varargin)
 % This function plots singularities as a a function of 
 % their position along one axis (X, Y, Z) vs time.
 %
@@ -126,4 +126,4 @@ end
     end % scatter_plot()
 
 end
-% function plot1d_singularity_scatter_xyz_vs_time()
+% function plot1d_singularity_sandplot()

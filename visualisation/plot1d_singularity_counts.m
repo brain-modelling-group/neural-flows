@@ -1,5 +1,4 @@
 function figure_handle = plot1d_singularity_counts(singularity_counts, varargin)
-
 % This function plots the traces of the singularity counts
 %
 %
@@ -20,8 +19,6 @@ function figure_handle = plot1d_singularity_counts(singularity_counts, varargin)
 
 %}
 
-
-%obj_sings = load_iomat_singularity(params);
 figure_handle = plot_fun(singularity_counts);
 
     function figure_handle = plot_fun(singularity_counts) 
