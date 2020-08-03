@@ -1,4 +1,4 @@
-function figure_handle = plot1d_singularity_counts(singularity_counts, varargin)
+function figure_handle = plot1d_singularity_traces_counts(singularity_counts, varargin)
 % This function plots the traces of the singularity counts
 %
 %
