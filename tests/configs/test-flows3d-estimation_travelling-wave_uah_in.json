@@ -81,14 +81,11 @@
           "type": "unstructured"
         }
       }
-    },
-    "streamlines": {
-      "enabled": false,
-      "grid": {
-        "type": "structured"
-      }
     }
   },
+  "streamlines": {
+      "enabled": false
+   },
   "singularity": {
     "enabled": false
   },
