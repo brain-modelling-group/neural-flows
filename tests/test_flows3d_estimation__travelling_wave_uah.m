@@ -9,9 +9,9 @@ function test_flows3d_estimation__travelling_wave_uah()
 % |-----|----------------|-------------|-----------------|
 % | uah | (u)nstructured | (a)mplitude | (h)orn-schunk3d |
 
-input_params = read_write_json('test-flows3d-estimation_travelling-wave_uah_in.json', 'json/', 'read');
+input_params = read_write_json('test-flows3d-estimation_travelling-wave_uah_in.json', 'configs/', 'read');
 
-output_params = main(input_params); 
+output_params = main_core(input_params); 
 
 [obj_flows] = load_iomat_flows(output_params);
 
