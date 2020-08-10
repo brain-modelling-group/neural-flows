@@ -31,7 +31,7 @@ options_path = fullfile(options_dir, options_filename);
 
 switch rw_mode
     case {'read', 'r', 'R'}
-        options_json = fileread(options_filename);
+        options_json = fileread(options_path);
         options_strc = jsondecode(options_json);
         varargout{1} = options_strc;
     case {'write', 'w', 'W'}
