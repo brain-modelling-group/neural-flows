@@ -172,12 +172,12 @@ fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
                                                          'hxyz', options.hx, ...
                                                          'ht', options.ht, ...
                                                          'velocity', 1, ...
-                                                         'direction', 'y', ...
+                                                         'direction', 'z', ...
                                                          'grid_type', 'structured');
     % Reflect wave
     data = [data(:, :, :, end:-1:1); data];
  
-    obj_data = matfile('data/data-travelling-wave-structured-iomat.mat', 'Writable', true);
+    obj_data = matfile('data/data-travelling-wave-structured-y-iomat.mat', 'Writable', true);
     obj_data.data = data;
     obj_data.X = X;
     obj_data.Y = Y;
@@ -212,7 +212,7 @@ fprintf('%s \n', strcat('neural-flows:: ', mfilename, ...
     data = [data(end:-1:1, :); data];
 
     % save MatFile 
-    obj_data = matfile('data/data-travelling-wave-unstructured-iomat.mat', 'Writable', true);
+    obj_data = matfile('data/data-travelling-wave-unstructured-y-iomat.mat', 'Writable', true);
     % save in regular matfile
     save('data/data-travelling-wave-unstructured.mat', 'data', 'locs');
 
