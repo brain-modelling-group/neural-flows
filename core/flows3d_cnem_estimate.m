@@ -41,6 +41,9 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_cnem_estimate(params
     params.flows.file.name = obj_flows_cell{end};
 
     % Save some things in the flow file too
+    if ~isprop(obj_data, 'masks')
+        get_convex_hull(obj_data, params.data.boundary.alpha_radius, 1:params.data.shape.nodes, []);
+    end
     masks = obj_data.masks;
     obj_flows.masks = masks;
     obj_flows.locs = obj_data.locs;
