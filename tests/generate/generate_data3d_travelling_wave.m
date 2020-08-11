@@ -203,7 +203,7 @@ function [data, X, Y, Z] = get_unstructured_data()
           idy_start = 1;
           idy_end = length(y);
           idz_start = offset;
-          idz_end   = offset+size(X, 3)-1;
+          idz_end   = offset+size(XX, 3)-1;
     end
 
     for tt=1:length(time)
