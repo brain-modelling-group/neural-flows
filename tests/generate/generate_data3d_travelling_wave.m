@@ -191,10 +191,10 @@ function [data, X, Y, Z] = get_unstructured_data()
           data(length(time), size(locs, 1)) = 0;
           idz_end = length(z);
         case 'z'
-          x = min(X(:)):hxyz:max(X(:));
-          y = min(Y(:)):hxyz:max(Y(:));
+          x = min(XX(:)):hxyz:max(XX(:));
+          y = min(YY(:)):hxyz:max(YY(:));
           offset = 25;
-          z1 = (min(Z(:))-2*offset):hxyz:max(Z(:));
+          z1 = (min(ZZ(:))-2*offset):hxyz:max(ZZ(:));
           [~, ~, Z1] = meshgrid(x, y, z1);
           circshift_dim = 3;
           A = Z1;
