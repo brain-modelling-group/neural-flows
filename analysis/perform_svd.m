@@ -15,6 +15,6 @@ function perform_svd(params)
 svd_struct = svd_3d(params);
 obj_flows = load_iomat_flows(params);
 obj_flows.Properties.Writable = true;
-obj_flows.svd = svd_struct;
+obj_flows.flow_modes = svd_struct;
 obj_flows.Properties.Writable = false;
 end % function perform_mode_decomposition()
