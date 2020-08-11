@@ -16,6 +16,8 @@ end
 switch case_label
     case 'uah'
         input_params_filename = 'travelling_reflected_wave_uah_in.json';
+    case 'uac'
+        input_params_filename = 'travelling_reflected_wave_uac_in.json';
 end
 
 
