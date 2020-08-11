@@ -31,10 +31,10 @@ obj_flows = load_iomat_flows(params);
 
 %% Define which function we will use
 switch params.flows.decomposition.svd.grid.type
-     case {'grid', 'structured', 'voxel'}
-         svd_fun = @svd_grid;
-     case {'unstructured', 'nodal', 'scattered'}
-         svd_fun = @svd_nodal;
+     case {'grid', 'structured', 'voxel', 'meshgrid'}
+         svd_fun = @svd_meshgrid;
+     case {'unstructured', 'nodal', 'scattered', 'meshless'}
+         svd_fun = @svd_meshless;
      otherwise
         error(['neural-flows:' mfilename ':UnknownCase'], ...
                    'Requested unknown case of grid. Options: {"structured", "unstructured"}'); 
@@ -65,7 +65,7 @@ svd_struct.prct_var = prct_var;
 end % function perform_svd_mode_decomposition()
 
 
-function [X, Y, Z, ux, uy, uz, num_points] = svd_grid(params, obj_flows)
+function [X, Y, Z, ux, uy, uz, num_points] = svd_meshgrid(params, obj_flows)
     obj_interp = load_iomat_interp(params);
     masks = obj_interp.masks;
     innies_idx = find(masks.innies == true);
@@ -89,19 +89,22 @@ function [X, Y, Z, ux, uy, uz, num_points] = svd_grid(params, obj_flows)
     ux(num_points, nt) = 0;
     uy(num_points, nt) = 0;
     uz(num_points, nt) = 0;
-
+    threshold = 1e-4; % Should be a parameter
     for tt=1:nt
         temp = reshape(obj_flows.ux(:, :, :, tt), nx*ny*nz, []);
         temp = temp(innies_idx);
         temp(isnan(temp)) = 0;
+        temp(temp <= threshold) = 0;
         ux(:, tt) = temp;
         temp = reshape(obj_flows.uy(:, :, :, tt), nx*ny*nz, []);
         temp = temp(innies_idx);
         temp(isnan(temp)) = 0;
+        temp(temp <= threshold) = 0;
         uy(:, tt) = temp;
         temp = reshape(obj_flows.uz(:, :, :, tt), nx*ny*nz, []);
         temp = temp(innies_idx);
         temp(isnan(temp)) = 0;
+        temp(temp <= threshold) = 0;
         uz(:, tt) = temp;
     end
 
@@ -116,7 +119,7 @@ function [X, Y, Z, ux, uy, uz, num_points] = svd_grid(params, obj_flows)
 end % function svd_grid()
 
 
-function [X, Y, Z, ux, uy, uz, num_points] = svd_nodal(params, obj_flows)
+function [X, Y, Z, ux, uy, uz, num_points] = svd_meshless(params, obj_flows)
 
     num_points = params.data.shape.nodes;
     nt = params.flows.data.shape.t;
@@ -128,16 +131,16 @@ function [X, Y, Z, ux, uy, uz, num_points] = svd_nodal(params, obj_flows)
     uz(num_points, nt) = 0;
     
     if strcmp(params.flows.method.data.mode, 'amplitude') 
-
+         threshold = 1e-4; % Should be a parameter
          for tt=1:nt
             temp = squeeze(obj_flows.uxyz(:, xdim, tt));
-            %temp(isnan(temp)) = 0;
+            temp(temp <= threshold) = 0;
             ux(:, tt) = temp;
             temp = squeeze(obj_flows.uxyz(:, ydim, tt));
-            %temp(isnan(temp)) = 0;
+            temp(temp <= threshold) = 0;
             uy(:, tt) = temp;
             temp = squeeze(obj_flows.uxyz(:, zdim, tt));
-            %temp(isnan(temp)) = 0;
+            temp(temp <= threshold) = 0;
             uz(:, tt) = temp;
          end
     else % assume phase
