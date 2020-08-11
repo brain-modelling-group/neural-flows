@@ -20,13 +20,18 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, 
     x_idx = 1:num_points;
     y_idx = num_points+1:2*num_points;
     z_idx = 2*num_points+1:3*num_points;
-    
+    threshold = 1e-6;
+    V(abs(V) < threshold) = 0;
     Vnorm =  sqrt(V(x_idx, :).^2+ V(y_idx, :).^2+ V(z_idx, :).^2);
     
     % Get overall direction along each axis
-    Vx = sign(sum(V(x_idx, :)));
-    Vy = sign(sum(V(y_idx, :)));
-    Vz = sign(sum(V(z_idx, :)));
+    Vx_sign = sign(sum(V(x_idx, :)));
+    Vy_sign = sign(sum(V(y_idx, :)));
+    Vz_sign = sign(sum(V(z_idx, :)));
+    
+    Vx = V(x_idx, :);
+    Vy = V(y_idx, :);
+    Vz = V(z_idx, :);
     
     % NOTE: maybe enable this check to avoid zero division
     %Vnorm(Vnorm < 2^-9) = 1;
@@ -47,9 +52,9 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, 
     draw_arrow_fun = @(axh, x, y, z, varargin) vfield3(axh, x(1), y(1), z(1), x(2)-x(1), y(2)-y(1), z(2)-z(1), varargin{:});    
     mode_str = cell(num_modes, 1);
     for imode = 1:num_modes
-        quiver3(ax(xy, imode), X, Y, Z, V(x_idx, imode)./Vnorm(:, imode), ...
-                                        V(y_idx, imode)./Vnorm(:, imode), ...
-                                        V(z_idx, imode)./Vnorm(:, imode), ...
+        quiver3(ax(xy, imode), X, Y, Z, Vx(:, imode)./Vnorm(:, imode), ...
+                                        Vy(:, imode)./Vnorm(:, imode), ...
+                                        Vz(:, imode)./Vnorm(:, imode), ...
                                         quiver_scale_factor, 'Linewidth', 1, ...
                                         'Color', cmap(imode, :));
         quiver3(ax(xz, imode), X, Y, Z, V(x_idx, imode)./Vnorm(:, imode), ...
@@ -63,16 +68,16 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, time_vec, num_modes, 
                                         quiver_scale_factor, 'Linewidth', 1, ...
                                         'Color', cmap(imode, :));
         % XY
-        draw_arrow_fun(ax(xy, imode), [0 scaling_vxyz*Vx(imode)], [0 0], [z_lims(end) z_lims(end)], 'color', [1 0 0]);
-        draw_arrow_fun(ax(xy, imode), [0 0], [0 scaling_vxyz*Vy(imode)], [z_lims(end) z_lims(end)], 'color', [0 1 0]);
+        draw_arrow_fun(ax(xy, imode), [0 scaling_vxyz*Vx_sign(imode)], [0 0], [z_lims(end) z_lims(end)], 'color', [1 0 0]);
+        draw_arrow_fun(ax(xy, imode), [0 0], [0 scaling_vxyz*Vy_sign(imode)], [z_lims(end) z_lims(end)], 'color', [0 1 0]);
    
         % XZ
-        draw_arrow_fun(ax(xz, imode), [0 scaling_vxyz*Vx(imode)], [y_lims(1) y_lims(1)], [0 0], 'color', [1 0 0]);
-        draw_arrow_fun(ax(xz, imode), [0 0], [y_lims(1) y_lims(1)], [0 scaling_vxyz*Vz(imode)], 'color', [0 0 1]);
+        draw_arrow_fun(ax(xz, imode), [0 scaling_vxyz*Vx_sign(imode)], [y_lims(1) y_lims(1)], [0 0], 'color', [1 0 0]);
+        draw_arrow_fun(ax(xz, imode), [0 0], [y_lims(1) y_lims(1)], [0 scaling_vxyz*Vz_sign(imode)], 'color', [0 0 1]);
         
         % ZY
-        draw_arrow_fun(ax(zy, imode), [x_lims(end) x_lims(end)], [0 0], [0 scaling_vxyz*Vz(imode)], 'color', [0 0 1]);
-        draw_arrow_fun(ax(zy, imode), [x_lims(end) x_lims(end)], [0 scaling_vxyz*Vy(imode)], [0 0], 'color', [0 1 0]);
+        draw_arrow_fun(ax(zy, imode), [x_lims(end) x_lims(end)], [0 0], [0 scaling_vxyz*Vz_sign(imode)], 'color', [0 0 1]);
+        draw_arrow_fun(ax(zy, imode), [x_lims(end) x_lims(end)], [0 scaling_vxyz*Vy_sign(imode)], [0 0], 'color', [0 1 0]);
         
         ax(xy, imode).View = [ 0 90];
         ax(xz, imode).View = [ 0  0];
