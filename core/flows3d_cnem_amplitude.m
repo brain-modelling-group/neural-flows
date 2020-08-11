@@ -29,7 +29,7 @@ function [params] = flows3d_cnem_amplitude(obj_data, obj_flows, params, varargin
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if nargin > 3
-    intial_conditions = varargin{1};
+    initial_conditions = varargin{1};
 end
      
 % Get parameters
