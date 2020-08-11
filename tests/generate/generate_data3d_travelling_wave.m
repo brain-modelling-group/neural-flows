@@ -159,11 +159,10 @@ function [data, X, Y, Z] = get_unstructured_data()
 
     switch direction
         case 'x'
-            
           y = min(YY(:)):hxyz:max(YY(:));
           z = min(ZZ(:)):hxyz:max(ZZ(:));
           offset = 25;
-          x1 = (min(X(:))-2*offset):hxyz:max(X(:));
+          x1 = (min(XX(:))-2*offset):hxyz:max(XX(:));
           [XX1, ~, ~] = meshgrid(x1, y, z);
           circshift_dim = 2;
           A = XX1;
