@@ -49,57 +49,71 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
     
     draw_arrow_fun = @(axh, x, y, z, varargin) vfield3(axh, x(1), y(1), z(1), x(2)-x(1), y(2)-y(1), z(2)-z(1), varargin{:});    
     mode_str = cell(num_modes, 1);
-    for imode = 1:num_modes
-        quiver3(ax(xy, imode), X, Y, Z, V.vx(:, imode)./Vnorm(:, imode), ...
-                                        V.vy(:, imode)./Vnorm(:, imode), ...
-                                        V.vz(:, imode)./Vnorm(:, imode), ...
-                                        quiver_scale_factor, 'Linewidth', 1, ...
-                                        'Color', cmap(imode, :));
-        quiver3(ax(xz, imode), X, Y, Z, V.vx(:, imode)./Vnorm(:, imode), ...
-                                        V.vy(:, imode)./Vnorm(:, imode), ...
-                                        V.vz(:, imode)./Vnorm(:, imode), ...
-                                        quiver_scale_factor, 'Linewidth', 1, ...
-                                        'Color', cmap(imode, :));
-        quiver3(ax(zy, imode), X, Y, Z, V.vx(:, imode)./Vnorm(:, imode), ...
-                                        V.vy(:, imode)./Vnorm(:, imode), ...
-                                        V.vz(:, imode)./Vnorm(:, imode), ...
-                                        quiver_scale_factor, 'Linewidth', 1, ...
-                                        'Color', cmap(imode, :));
+    for kthmode = 1:num_modes
+        this_color = cmap(:, kthmode);
+        [faces,vertices,colors] = quiver3Dpatch(X, Y, Z, ...
+                                V.vx(:, kthmode), ...
+                                V.vy(:, kthmode), ...
+                                V.vz(:, kthmode), ...
+                                this_color(ones(1, numel(V.vz(:, kthmode))), :), [20 21]); 
+        hp=patch(ax(xy, kthmode), 'faces', faces,'vertices', vertices,'cdata', colors,'edgecolor','none','facecolor','flat');
+
+        ax(xy, kthmode).DataAspectRatio = [1 1 1];
+        axis off
+
+        [faces,vertices,colors] = quiver3Dpatch(X, Y, Z, ...
+                                V.vx(:, kthmode), ...
+                                V.vy(:, kthmode), ...
+                                V.vz(:, kthmode), ...
+                                this_color(ones(1, numel(V.vz(:, kthmode))), :), [20 21]); 
+        hp=patch(ax(xz, kthmode), 'faces', faces,'vertices', vertices,'cdata', colors,'edgecolor','none','facecolor','flat');
+
+        ax(xz, kthmode).DataAspectRatio = [1 1 1];
+        axis off
+                [faces,vertices,colors] = quiver3Dpatch(X, Y, Z, ...
+                                V.vx(:, kthmode), ...
+                                V.vy(:, kthmode), ...
+                                V.vz(:, kthmode), ...
+                                this_color(ones(1, numel(V.vz(:, kthmode))), :), [20 21]); 
+        hp=patch(ax(zy, kthmode), 'faces', faces,'vertices', vertices,'cdata', colors,'edgecolor','none','facecolor','flat');
+
+        ax(zy, kthmode).DataAspectRatio = [1 1 1];
+        axis off
         % XY
-        draw_arrow_fun(ax(xy, imode), [0 scaling_vxyz*Vx_sign(imode)], [0 0], [z_lims(end) z_lims(end)], 'color', [1 0 0]);
-        draw_arrow_fun(ax(xy, imode), [0 0], [0 scaling_vxyz*Vy_sign(imode)], [z_lims(end) z_lims(end)], 'color', [0 1 0]);
+        draw_arrow_fun(ax(xy, kthmode), [0 scaling_vxyz*Vx_sign(kthmode)], [0 0], [z_lims(end) z_lims(end)], 'color', [1 0 0]);
+        draw_arrow_fun(ax(xy, kthmode), [0 0], [0 scaling_vxyz*Vy_sign(kthmode)], [z_lims(end) z_lims(end)], 'color', [0 1 0]);
    
         % XZ
-        draw_arrow_fun(ax(xz, imode), [0 scaling_vxyz*Vx_sign(imode)], [y_lims(1) y_lims(1)], [0 0], 'color', [1 0 0]);
-        draw_arrow_fun(ax(xz, imode), [0 0], [y_lims(1) y_lims(1)], [0 scaling_vxyz*Vz_sign(imode)], 'color', [0 0 1]);
+        draw_arrow_fun(ax(xz, kthmode), [0 scaling_vxyz*Vx_sign(kthmode)], [y_lims(1) y_lims(1)], [0 0], 'color', [1 0 0]);
+        draw_arrow_fun(ax(xz, kthmode), [0 0], [y_lims(1) y_lims(1)], [0 scaling_vxyz*Vz_sign(kthmode)], 'color', [0 0 1]);
         
         % ZY
-        draw_arrow_fun(ax(zy, imode), [x_lims(end) x_lims(end)], [0 0], [0 scaling_vxyz*Vz_sign(imode)], 'color', [0 0 1]);
-        draw_arrow_fun(ax(zy, imode), [x_lims(end) x_lims(end)], [0 scaling_vxyz*Vy_sign(imode)], [0 0], 'color', [0 1 0]);
+        draw_arrow_fun(ax(zy, kthmode), [x_lims(end) x_lims(end)], [0 0], [0 scaling_vxyz*Vz_sign(kthmode)], 'color', [0 0 1]);
+        draw_arrow_fun(ax(zy, kthmode), [x_lims(end) x_lims(end)], [0 scaling_vxyz*Vy_sign(kthmode)], [0 0], 'color', [0 1 0]);
         
-        ax(xy, imode).View = [ 0 90];
-        ax(xz, imode).View = [ 0  0];
-        ax(zy, imode).View = [90  0];
+        ax(xy, kthmode).View = [ 0 90];
+        ax(xz, kthmode).View = [ 0  0];
+        ax(zy, kthmode).View = [90  0];
 
-        ax(xy, imode).Title.String = sprintf('Mode %i, Var = %0.1f%%', imode, prct_var(imode));
-        mode_str{imode} = sprintf('%i', imode);
+        ax(xy, kthmode).Title.String = sprintf('Mode %i, Var = %0.1f%%', kthmode, prct_var(kthmode));
+        mode_str{kthmode} = sprintf('%i', kthmode);
         
         % Axis Limits
-        ax(xy, imode).XLim = x_lims;
-        ax(xy, imode).YLim = y_lims;
-        ax(xy, imode).ZLim = z_lims;
+        ax(xy, kthmode).XLim = x_lims;
+        ax(xy, kthmode).YLim = y_lims;
+        ax(xy, kthmode).ZLim = z_lims;
         
-        ax(xz, imode).XLim = x_lims;
-        ax(xz, imode).YLim = y_lims;
-        ax(xz, imode).ZLim = z_lims;
+        ax(xz, kthmode).XLim = x_lims;
+        ax(xz, kthmode).YLim = y_lims;
+        ax(xz, kthmode).ZLim = z_lims;
         
-        ax(zy, imode).XLim = x_lims;
-        ax(zy, imode).YLim = y_lims;
-        ax(zy, imode).ZLim = z_lims;
+        ax(zy, kthmode).XLim = x_lims;
+        ax(zy, kthmode).YLim = y_lims;
+        ax(zy, kthmode).ZLim = z_lims;
         
-        axis(ax(xy, imode), 'tight', 'off')
-        axis(ax(xz, imode), 'tight', 'off')
-        axis(ax(zy, imode), 'equal', 'off')
+        axis(ax(xy, kthmode), 'tight', 'off')
+        axis(ax(xz, kthmode), 'tight', 'off')
+        axis(ax(zy, kthmode), 'equal', 'off')
 
     end
     
@@ -108,8 +122,8 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
      max_u_val = 1.1*max(abs(Upeak(:)));
      ulims = [-max_u_val max_u_val];
      
-     for imode=1:num_modes
-         plot(ax(num_planes+1, 1), time_vec, U(:, imode), 'Color', cmap(imode, :))
+     for kthmode=1:num_modes
+         plot(ax(num_planes+1, 1), time_vec, U(:, kthmode), 'Color', cmap(kthmode, :))
      end
      ax(num_planes+1, 1).Title.String = sprintf('Modes timeseries');
      ax(num_planes+1, 1).YLim = ulims;
