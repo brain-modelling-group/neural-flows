@@ -49,36 +49,34 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
     
     draw_arrow_fun = @(axh, x, y, z, varargin) vfield3(axh, x(1), y(1), z(1), x(2)-x(1), y(2)-y(1), z(2)-z(1), varargin{:});    
     mode_str = cell(num_modes, 1);
+    colormap(cmap)
     for kthmode = 1:num_modes
         this_color = cmap(:, kthmode);
         [faces,vertices,colors] = quiver3Dpatch(X, Y, Z, ...
                                 V.vx(:, kthmode), ...
                                 V.vy(:, kthmode), ...
                                 V.vz(:, kthmode), ...
-                                this_color(ones(1, numel(V.vz(:, kthmode))), :), [20 21]); 
+                                this_color(ones(1, numel(V.vz(:, kthmode))), :), [10 11]); 
         hp=patch(ax(xy, kthmode), 'faces', faces,'vertices', vertices,'cdata', colors,'edgecolor','none','facecolor','flat');
 
         ax(xy, kthmode).DataAspectRatio = [1 1 1];
-        axis off
 
         [faces,vertices,colors] = quiver3Dpatch(X, Y, Z, ...
                                 V.vx(:, kthmode), ...
                                 V.vy(:, kthmode), ...
                                 V.vz(:, kthmode), ...
-                                this_color(ones(1, numel(V.vz(:, kthmode))), :), [20 21]); 
+                                this_color(ones(1, numel(V.vz(:, kthmode))), :), [10 11]); 
         hp=patch(ax(xz, kthmode), 'faces', faces,'vertices', vertices,'cdata', colors,'edgecolor','none','facecolor','flat');
 
         ax(xz, kthmode).DataAspectRatio = [1 1 1];
-        axis off
                 [faces,vertices,colors] = quiver3Dpatch(X, Y, Z, ...
                                 V.vx(:, kthmode), ...
                                 V.vy(:, kthmode), ...
                                 V.vz(:, kthmode), ...
-                                this_color(ones(1, numel(V.vz(:, kthmode))), :), [20 21]); 
+                                this_color(ones(1, numel(V.vz(:, kthmode))), :), [10 11]); 
         hp=patch(ax(zy, kthmode), 'faces', faces,'vertices', vertices,'cdata', colors,'edgecolor','none','facecolor','flat');
 
         ax(zy, kthmode).DataAspectRatio = [1 1 1];
-        axis off
         % XY
         draw_arrow_fun(ax(xy, kthmode), [0 scaling_vxyz*Vx_sign(kthmode)], [0 0], [z_lims(end) z_lims(end)], 'color', [1 0 0]);
         draw_arrow_fun(ax(xy, kthmode), [0 0], [0 scaling_vxyz*Vy_sign(kthmode)], [z_lims(end) z_lims(end)], 'color', [0 1 0]);
@@ -95,7 +93,7 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
         ax(xz, kthmode).View = [ 0  0];
         ax(zy, kthmode).View = [90  0];
 
-        ax(xy, kthmode).Title.String = sprintf('Mode %i, Var = %0.1f%%', kthmode, prct_var(kthmode));
+        ax(xy, kthmode).Title.String = sprintf('Spatial mode %i\n Var = %0.1f%%', kthmode, prct_var(kthmode));
         mode_str{kthmode} = sprintf('%i', kthmode);
         
         % Axis Limits
@@ -111,9 +109,9 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
         ax(zy, kthmode).YLim = y_lims;
         ax(zy, kthmode).ZLim = z_lims;
         
-        axis(ax(xy, kthmode), 'tight', 'off')
-        axis(ax(xz, kthmode), 'tight', 'off')
-        axis(ax(zy, kthmode), 'equal', 'off')
+        axis(ax(xy, kthmode), 'off')
+        axis(ax(xz, kthmode), 'off')
+        axis(ax(zy, kthmode), 'off')
 
     end
     
@@ -125,12 +123,12 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
      for kthmode=1:num_modes
          plot(ax(num_planes+1, 1), time_vec, U(:, kthmode), 'Color', cmap(kthmode, :))
      end
-     ax(num_planes+1, 1).Title.String = sprintf('Modes timeseries');
+     ax(num_planes+1, 1).Title.String = sprintf('Temporal modes');
      ax(num_planes+1, 1).YLim = ulims;
      ax(num_planes+1, 1).XLim = [time_vec(1), time_vec(end)];
      line(ax(num_planes+1, 1), ax(num_planes+1, 1).XLim, [0 0], 'Color', 'k', 'LineStyle', '--')
      ax(num_planes+1, 1).XLabel.String = 'Time';
-     ax(num_planes+1, 1).YLabel.String = 'Component score';
+     ax(num_planes+1, 1).YLabel.String = 'Mode score';
      ax(num_planes+1, 1).Box = 'on';
      lg_obj = legend(ax(num_planes+1, 1));
      lg_obj.String = mode_str;
