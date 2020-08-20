@@ -1,4 +1,4 @@
-function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, time_vec, quiver_scale_factor)
+function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, time_vec)
     % V struct with components of spatial svd modes
     % U array temporal svd modes
     
