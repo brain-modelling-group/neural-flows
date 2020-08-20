@@ -44,7 +44,7 @@ switch params.flows.decomposition.svd.grid.type
 [X0, Y0, Z0, ux, uy, uz, num_points] = svd_fun(params, obj_flows);
 
 num_modes = params.flows.decomposition.svd.modes;
-[U, S, V, prct_var] = svd_decomposition(ux, uy, uz, num_modes);
+[U, ~, V, prct_var] = svd_decomposition(ux, uy, uz, num_modes);
 
 [vx, vy, vz] = reshape_svd_modes(V, num_points);
 clear V 
@@ -94,17 +94,17 @@ function [X, Y, Z, ux, uy, uz, num_points] = svd_meshgrid(params, obj_flows)
         temp = reshape(obj_flows.ux(:, :, :, tt), nx*ny*nz, []);
         temp = temp(innies_idx);
         temp(isnan(temp)) = 0;
-        temp(temp <= threshold) = 0;
+        temp(abs(temp) <= threshold) = 0;
         ux(:, tt) = temp;
         temp = reshape(obj_flows.uy(:, :, :, tt), nx*ny*nz, []);
         temp = temp(innies_idx);
         temp(isnan(temp)) = 0;
-        temp(temp <= threshold) = 0;
+        temp(abs(temp) <= threshold) = 0;
         uy(:, tt) = temp;
         temp = reshape(obj_flows.uz(:, :, :, tt), nx*ny*nz, []);
         temp = temp(innies_idx);
         temp(isnan(temp)) = 0;
-        temp(temp <= threshold) = 0;
+        temp(abs(temp) <= threshold) = 0;
         uz(:, tt) = temp;
     end
 
@@ -134,13 +134,13 @@ function [X, Y, Z, ux, uy, uz, num_points] = svd_meshless(params, obj_flows)
          threshold = 1e-4; % Should be a parameter
          for tt=1:nt
             temp = squeeze(obj_flows.uxyz(:, xdim, tt));
-            temp(temp <= threshold) = 0;
+            temp(abs(temp) <= threshold) = 0;
             ux(:, tt) = temp;
             temp = squeeze(obj_flows.uxyz(:, ydim, tt));
-            temp(temp <= threshold) = 0;
+            temp(abs(temp) <= threshold) = 0;
             uy(:, tt) = temp;
             temp = squeeze(obj_flows.uxyz(:, zdim, tt));
-            temp(temp <= threshold) = 0;
+            temp(abs(temp) <= threshold) = 0;
             uz(:, tt) = temp;
          end
     else % assume phase
@@ -164,7 +164,7 @@ function [U, S, V, prct_var] = svd_decomposition(ux, uy, uz, num_modes)
 
     % Pefrom svd
     [U, S, V] = svd(svdmat, 'econ');
-
+    
     % Calculate total energy then crop to specified number of modes
     eig_vals = diag(S);
     tot_var  = sum(eig_vals.^2);
@@ -184,7 +184,6 @@ end % function svd_decomposition()
     x_idx = 1:num_points;
     y_idx = num_points+1:2*num_points;
     z_idx = 2*num_points+1:3*num_points;
-    
     Vx = V(x_idx, :); 
     Vy = V(y_idx, :);
     Vz = V(z_idx, :);                                         
