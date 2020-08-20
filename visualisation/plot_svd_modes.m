@@ -21,8 +21,6 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
     V.vx(abs(V.vx) < threshold) = 0;
     V.vy(abs(V.vy) < threshold) = 0;
     V.vz(abs(V.vz) < threshold) = 0;
-
-    Vnorm =  sqrt(V.vx.^2+ V.vy.^2+ V.vz.^2);
     
     % Get overall direction along each axis = +/-/null 
     Vx_sign = sign(sum(V.vx));
