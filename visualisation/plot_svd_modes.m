@@ -24,7 +24,8 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
         width_02  = 0.8;
         height_01 = 0.8/num_rows;
         height_02 = 1.0/num_rows;
-        start_offset = 0.2;
+        start_offset_01 = 0.15;
+        start_offset_02 = 0.25;
         sep_offset = 0.0;
     elseif num_modes == 4
         fig_spatial_modes.Position = [1340  360 fig_width fig_height];
@@ -33,7 +34,9 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
         width_02 = 1.25*width_01;
         height_01 = 1.11*width_01;
         height_02 = 1.38*width_01;
-        width_offset = 0.03*width_01;
+        start_offset = 0.02;
+        sep_offset_01 = 0.0;
+        sep_offset_02 = 0.1;
     elseif num_modes > 4
         fig_spatial_modes.Position = [1340  360 fig_width+fig_width_col*(num_modes-4) fig_height-fig_height_row*(num_modes-4)];
         width_01 = 0.95/num_modes;
@@ -138,10 +141,10 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
         ax(xz, kthmode).View = [ 0  0];
         ax(zy, kthmode).View = [90  0];
         
-        ax(xy, kthmode).Position = [start_offset+(width_02+sep_offset)*(kthmode-1) 0.7 width_01 height_01];
-        ax(xz, kthmode).Position = [start_offset+(width_02+sep_offset)*(kthmode-1) 0.5 width_02 height_01];
-        ax(zy, kthmode).Position = [start_offset+(width_02+sep_offset)*(kthmode-1) 0.3 width_02 height_02];
-        ax(tt, kthmode).Position = [start_offset+(width_02+sep_offset)*(kthmode-1) 0.1 width_01 height_01];
+        ax(xy, kthmode).Position = [start_offset_01+(width_02+sep_offset)*(kthmode-1) 0.7 width_01 height_01];
+        ax(xz, kthmode).Position = [start_offset_01+(width_02+sep_offset)*(kthmode-1) 0.5 width_02 height_01];
+        ax(zy, kthmode).Position = [start_offset_01+(width_02+sep_offset)*(kthmode-1) 0.3 width_02 height_02];
+        ax(tt, kthmode).Position = [start_offset_02+(width_02+sep_offset)*(kthmode-1) 0.1 width_01 height_01];
 
         ax(xy, kthmode).Title.String = sprintf('Spatial mode %i\n Var = %0.1f%%', kthmode, prct_var(kthmode));
         mode_str{kthmode} = sprintf('%i', kthmode);
