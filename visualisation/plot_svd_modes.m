@@ -27,9 +27,9 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
         start_offset_01 = 0.15;
         start_offset_02 = 0.25;
         sep_offset = 0.0;
-    elseif num_modes == 4
+    elseif num_modes > 1 && num_modes <=4 % figure was developed and optimised for four modes
         fig_spatial_modes.Position = [1340  360 fig_width fig_height];
-        width_01 = 0.18;
+        width_01 = 0.2;
         % Subplot sizes
         width_02 = 1.25*width_01;
         height_01 = 1.11*width_01;
@@ -37,18 +37,30 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
         start_offset_01 = 0.06;
         start_offset_02 = 0.08;
         sep_offset = 0.0;
-    elseif num_modes > 4
+    elseif num_modes > 4 && num_modes <=10
         fig_spatial_modes.Position = [1340  360 fig_width+fig_width_col*(num_modes-4) fig_height-fig_height_row*(num_modes-4)];
-        width_01 = 0.95/num_modes;
+        width_01 = 0.95/(num_modes+1);
         width_02 = width_01;
-        height_01 = 1.11*width_01;
-        height_02 = 1.38*width_01;
-        width_offset = 0.03*width_01;
+        height_01 = 0.8/num_rows;
+        height_02 = 1.0/num_rows;
+        start_offset_01 = 0.04;
+        start_offset_02 = 0.04;
+        sep_offset = 0.01;
+        
+    else
+        fig_spatial_modes.Position = [1340  360 3300 1200];
+        width_01 = 0.95/(num_modes+1);
+        width_02 = width_01;
+        height_01 = 0.8/num_rows;
+        height_02 = 1.0/num_rows;
+        start_offset_01 = 0.04;
+        start_offset_02 = 0.04;
+        sep_offset = 0.005;
+
     end
        
 
     ax = gobjects(num_rows, num_cols);
-    
     for ii=1:num_rows
         for kk=1:num_cols
             ax(ii, kk) = subplot(num_rows, num_cols, sub2ind([num_rows, num_cols], ii, kk), 'Parent', fig_spatial_modes);
@@ -177,6 +189,7 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
             ax(tt, kthmode).YLabel.String = 'Temporal Mode Score';
         else
             ax(tt, kthmode).YLabel.String = '';
+            ax(tt, kthmode).YTick = [];
         end
         ax(tt, kthmode).Box = 'on';
 %         lg_obj = legend(ax(tt, kthmode));
