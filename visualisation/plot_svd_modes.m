@@ -4,15 +4,16 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
     
     % Graphics elements
     fig_spatial_modes = figure('Name', 'nflows-spatial-modes');
+    fig_spatial_modes.Position = [1340         360        1240        1600];
     num_planes = 3; % number of spatial projections
     num_temp_plot = 1;
     num_rows = num_planes + num_temp_plot;
     num_cols = num_modes;
-    ax = gobjects(num_planes+1, num_modes);
+    ax = gobjects(num_rows, num_cols);
     
     for ii=1:num_rows
         for kk=1:num_cols
-            ax(ii, kk) = subplot(num_rows, num_cols, sub2ind([num_rows, num_cols], kk, ii), 'Parent', fig_spatial_modes);
+            ax(ii, kk) = subplot(num_rows, num_cols, sub2ind([num_rows, num_cols], ii, kk), 'Parent', fig_spatial_modes);
             hold(ax(ii, kk), 'on');
         end
     end
@@ -47,6 +48,9 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
     xz = 2;
     zy = 3;
     tt = 4;
+    
+    width_01 = 0.2;
+    width_02 = 0.25;
     
     scaling_vxyz = 32;
     axes_offset = 4;
@@ -99,6 +103,16 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
         ax(xy, kthmode).View = [ 0 90];
         ax(xz, kthmode).View = [ 0  0];
         ax(zy, kthmode).View = [90  0];
+        
+        posxy = ax(xy, kthmode).Position;
+        posxz = ax(xz, kthmode).Position;
+        poszy = ax(zy, kthmode).Position;
+        postt = ax(tt, kthmode).Position;
+        
+        ax(xy, kthmode).Position = [0.05+width_01*(kthmode-1) 0.7 width_01 0.20];
+        ax(xz, kthmode).Position = [0.02+width_02*(kthmode-1) 0.5 width_02 0.20];
+        ax(zy, kthmode).Position = [0.02+width_02*(kthmode-1) 0.3 width_02 0.25];
+        ax(tt, kthmode).Position = [0.05+width_01*(kthmode-1) 0.1 width_01 0.20];
 
         ax(xy, kthmode).Title.String = sprintf('Spatial mode %i\n Var = %0.1f%%', kthmode, prct_var(kthmode));
         mode_str{kthmode} = sprintf('%i', kthmode);
@@ -129,10 +143,10 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
         ax(tt, kthmode).XLabel.String = 'Time';
         ax(tt, kthmode).YLabel.String = 'Mode score';
         ax(tt, kthmode).Box = 'on';
-        lg_obj = legend(ax(tt, kthmode));
-        lg_obj.String = mode_str;
-        lg_obj.Title.String = ['Temporal mode ' num2str(kthmode)];
-        lg_obj.Orientation = 'horizontal';
+%         lg_obj = legend(ax(tt, kthmode));
+%         lg_obj.String = mode_str;
+%         lg_obj.Title.String = ['Temporal mode ' num2str(kthmode)];
+%         lg_obj.Orientation = 'horizontal';
     end
      
  end % function plot_svd_modes()
