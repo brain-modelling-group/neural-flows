@@ -5,16 +5,19 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
     % Graphics elements
     fig_spatial_modes = figure('Name', 'nflows-spatial-modes');
     num_planes = 3; % number of spatial projections
+    num_temp_plot = 1;
+    num_rows = num_planes + num_temp_plot;
+    num_cols = num_modes;
     ax = gobjects(num_planes+1, num_modes);
     
-    for ii=1:num_planes
-        for kk=1:num_modes
-            ax(ii, kk) = subplot(num_planes+1, num_modes, sub2ind([num_modes, num_planes+1], kk, ii), 'Parent', fig_spatial_modes);
+    for ii=1:num_rows
+        for kk=1:num_cols
+            ax(ii, kk) = subplot(num_rows, num_cols, sub2ind([num_rows, num_cols], kk, ii), 'Parent', fig_spatial_modes);
             hold(ax(ii, kk), 'on');
         end
     end
     
-    ax(num_planes+1, 1) = subplot(num_planes+1, num_modes, [(num_planes*num_modes)+1 (num_modes*num_planes)+num_modes], 'Parent', fig_spatial_modes);
+    %ax(num_rows, 1) = subplot(num_rows, num_cols, [(num_planes*num_modes)+1 (num_modes*num_planes)+num_modes], 'Parent', fig_spatial_modes);
     hold(ax(num_planes+1, 1), 'on');
 
     threshold = 1e-6; % NOTE: should be a parameter
@@ -27,17 +30,23 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
     Vy_sign = sign(sum(V.vy));
     Vz_sign = sign(sum(V.vz));
     
-    % NOTE: maybe enable this check to avoid zero division
-    %Vnorm(Vnorm < 2^-9) = 1;
-    
+    % NOTE: maybe enable this check to avoid zero division    
     cmap = plasma(num_modes+2);
     cmap = cmap(1:num_modes, :);
     cmap = cmap(end:-1:1, :);
+    
+    % Temporal modes
+    
+    smooth_window = 2; % number of samples to smooth the envelope
+    [~, Upeak] = envelope(U, smooth_window, 'peak');
+    max_u_val = 1.1*max(abs(Upeak(:)));
+    ulims = [-max_u_val max_u_val];
 
     % Orthognal plane indices
     xy = 1;
     xz = 2;
     zy = 3;
+    tt = 4;
     
     scaling_vxyz = 32;
     axes_offset = 4;
@@ -110,27 +119,20 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
         axis(ax(xy, kthmode), 'off')
         axis(ax(xz, kthmode), 'off')
         axis(ax(zy, kthmode), 'off')
-
+        
+        % Temporal modes
+        plot(ax(tt, kthmode), time_vec, U(:, kthmode), 'Color', cmap(kthmode, :))
+        %ax(tt, kthmode).Title.String = sprintf('Temporal mode %i', kthmode);
+        ax(tt, kthmode).YLim = ulims;
+        ax(tt, kthmode).XLim = [time_vec(1), time_vec(end)];
+        line(ax(tt, kthmode), ax(tt, kthmode).XLim, [0 0], 'Color', 'k', 'LineStyle', '--')
+        ax(tt, kthmode).XLabel.String = 'Time';
+        ax(tt, kthmode).YLabel.String = 'Mode score';
+        ax(tt, kthmode).Box = 'on';
+        lg_obj = legend(ax(tt, kthmode));
+        lg_obj.String = mode_str;
+        lg_obj.Title.String = ['Temporal mode ' num2str(kthmode)];
+        lg_obj.Orientation = 'horizontal';
     end
-    
-     smooth_window = 2; % number of samples to smooth the envelope
-     [~, Upeak] = envelope(U, smooth_window, 'peak');
-     max_u_val = 1.1*max(abs(Upeak(:)));
-     ulims = [-max_u_val max_u_val];
-     
-     for kthmode=1:num_modes
-         plot(ax(num_planes+1, 1), time_vec, U(:, kthmode), 'Color', cmap(kthmode, :))
-     end
-     ax(num_planes+1, 1).Title.String = sprintf('Temporal modes');
-     ax(num_planes+1, 1).YLim = ulims;
-     ax(num_planes+1, 1).XLim = [time_vec(1), time_vec(end)];
-     line(ax(num_planes+1, 1), ax(num_planes+1, 1).XLim, [0 0], 'Color', 'k', 'LineStyle', '--')
-     ax(num_planes+1, 1).XLabel.String = 'Time';
-     ax(num_planes+1, 1).YLabel.String = 'Mode score';
-     ax(num_planes+1, 1).Box = 'on';
-     lg_obj = legend(ax(num_planes+1, 1));
-     lg_obj.String = mode_str;
-     lg_obj.Title.String = 'Modes';
-     lg_obj.Orientation = 'horizontal';
      
  end % function plot_svd_modes()
