@@ -1,7 +1,10 @@
 function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, time_vec)
     % V struct with components of spatial svd modes
     % U array temporal svd modes
-    
+    % X, Y, Z - grid points
+    % prct_var - avector with percentage of variance explained by each mode
+    % num_modes - number of modes to plot
+    % time_vec  - time vector generated using time step
     % Graphics elements
     fig_spatial_modes = figure('Name', 'nflows-spatial-modes');
     fig_spatial_modes.Position = [1340         360        1240        1600];
@@ -19,7 +22,6 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
     end
     
     %ax(num_rows, 1) = subplot(num_rows, num_cols, [(num_planes*num_modes)+1 (num_modes*num_planes)+num_modes], 'Parent', fig_spatial_modes);
-    hold(ax(num_planes+1, 1), 'on');
 
     threshold = 1e-6; % NOTE: should be a parameter
     V.vx(abs(V.vx) < threshold) = 0;
@@ -35,9 +37,9 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
     cmap = plasma(num_modes+2);
     cmap = cmap(1:num_modes, :);
     cmap = cmap(end:-1:1, :);
+    colormap(cmap);
     
     % Temporal modes
-    
     smooth_window = 2; % number of samples to smooth the envelope
     [~, Upeak] = envelope(U, smooth_window, 'peak');
     max_u_val = 1.1*max(abs(Upeak(:)));
@@ -49,8 +51,8 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
     zy = 3;
     tt = 4;
     
-    width_01 = 0.2;
-    width_02 = 0.25;
+    width_01 = 0.18;
+    width_02 = 0.225;
     
     scaling_vxyz = 32;
     axes_offset = 4;
@@ -62,30 +64,31 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
     mode_str = cell(num_modes, 1);
     colormap(cmap)
     for kthmode = 1:num_modes
-        this_color = cmap(:, kthmode);
-        [faces,vertices,colors] = quiver3Dpatch(X, Y, Z, ...
+        this_color = cmap(kthmode, :);
+        [faces,vertices,~] = quiver3Dpatch(X, Y, Z, ...
                                 V.vx(:, kthmode), ...
                                 V.vy(:, kthmode), ...
                                 V.vz(:, kthmode), ...
                                 this_color(ones(1, numel(V.vz(:, kthmode))), :), [10 11]); 
-        hp=patch(ax(xy, kthmode), 'faces', faces,'vertices', vertices,'cdata', colors,'edgecolor','none','facecolor','flat');
+        hp=patch(ax(xy, kthmode), 'Faces', faces,'Vertices', vertices,'FaceVertexCData', kthmode,'edgecolor','none','facecolor','flat');
 
         ax(xy, kthmode).DataAspectRatio = [1 1 1];
 
-        [faces,vertices,colors] = quiver3Dpatch(X, Y, Z, ...
+        [faces,vertices,~] = quiver3Dpatch(X, Y, Z, ...
                                 V.vx(:, kthmode), ...
                                 V.vy(:, kthmode), ...
                                 V.vz(:, kthmode), ...
                                 this_color(ones(1, numel(V.vz(:, kthmode))), :), [10 11]); 
-        hp=patch(ax(xz, kthmode), 'faces', faces,'vertices', vertices,'cdata', colors,'edgecolor','none','facecolor','flat');
+        hp=patch(ax(xz, kthmode), 'Faces', faces,'Vertices', vertices,'FaceVertexCData', kthmode,'edgecolor','none','facecolor','flat');
 
         ax(xz, kthmode).DataAspectRatio = [1 1 1];
-                [faces,vertices,colors] = quiver3Dpatch(X, Y, Z, ...
+        [faces,vertices,~] = quiver3Dpatch(X, Y, Z, ...
                                 V.vx(:, kthmode), ...
                                 V.vy(:, kthmode), ...
                                 V.vz(:, kthmode), ...
                                 this_color(ones(1, numel(V.vz(:, kthmode))), :), [10 11]); 
-        hp=patch(ax(zy, kthmode), 'faces', faces,'vertices', vertices,'cdata', colors,'edgecolor','none','facecolor','flat');
+                            
+        hp=patch(ax(zy, kthmode), 'Faces', faces,'Vertices', vertices,'FaceVertexCData', kthmode,'edgecolor','none','facecolor','flat');
 
         ax(zy, kthmode).DataAspectRatio = [1 1 1];
         % XY
@@ -109,10 +112,10 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
         poszy = ax(zy, kthmode).Position;
         postt = ax(tt, kthmode).Position;
         
-        ax(xy, kthmode).Position = [0.05+width_01*(kthmode-1) 0.7 width_01 0.20];
-        ax(xz, kthmode).Position = [0.02+width_02*(kthmode-1) 0.5 width_02 0.20];
-        ax(zy, kthmode).Position = [0.02+width_02*(kthmode-1) 0.3 width_02 0.25];
-        ax(tt, kthmode).Position = [0.05+width_01*(kthmode-1) 0.1 width_01 0.20];
+        ax(xy, kthmode).Position = [0.08+width_02*(kthmode-1) 0.7 width_01 width_01];
+        ax(xz, kthmode).Position = [0.02+width_02*(kthmode-1) 0.5 width_02 width_01];
+        ax(zy, kthmode).Position = [0.02+width_02*(kthmode-1) 0.3 width_02 width_02];
+        ax(tt, kthmode).Position = [0.05+width_02*(kthmode-1) 0.1 width_01 width_01];
 
         ax(xy, kthmode).Title.String = sprintf('Spatial mode %i\n Var = %0.1f%%', kthmode, prct_var(kthmode));
         mode_str{kthmode} = sprintf('%i', kthmode);
@@ -150,3 +153,4 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
     end
      
  end % function plot_svd_modes()
+ 
