@@ -7,11 +7,11 @@
       "params": {
         "input": {
           "filename": "rotating_wave_uah_in.json",
-          "dir": "examples" 
+          "dir": "examples/config" 
         },
         "output": {
           "filename": "rotating_wave_uah_ou.json",
-          "dir": "examples" 
+          "dir": "examples/config" 
         }
       },
       "format": "iomat"     
