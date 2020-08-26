@@ -51,7 +51,7 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_cnem_estimate(params
 
     % Here is where the magic happens -- assumes data input is always
     % amplitude, we calculate phases internally
-    switch params.flows.method.data.mode
+    switch params.flows.modality
         case 'phase'
              params = flows3d_cnem_phase(obj_data, obj_flows, params);
         case 'amplitude'
