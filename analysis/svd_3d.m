@@ -130,7 +130,7 @@ function [X, Y, Z, ux, uy, uz, num_points] = svd_meshless(params, obj_flows)
     uy(num_points, nt) = 0;
     uz(num_points, nt) = 0;
     
-    if strcmp(params.flows.method.data.mode, 'amplitude') 
+    if strcmp(params.flows.modality, 'amplitude') 
          threshold = 1e-4; % Should be a parameter
          for tt=1:nt
             temp = squeeze(obj_flows.uxyz(:, xdim, tt));
