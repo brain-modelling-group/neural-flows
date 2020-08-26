@@ -68,7 +68,7 @@
       }
     },
     "visualisation": {
-      "enabled": true
+      "enabled": false
     },
     "decomposition": {
       "svd": {
@@ -81,7 +81,7 @@
     },
     "quantification": {
       "energy": {
-        "enabled": true,
+        "enabled": false,
         "modality": "nodal"
       }
     }
@@ -134,7 +134,7 @@
     "quantification": {
       "enabled": false,
       "nodal_occupancy" : {
-        "enabled": true,
+        "enabled": false,
         "distance_threshold" : 20
       }
     },
