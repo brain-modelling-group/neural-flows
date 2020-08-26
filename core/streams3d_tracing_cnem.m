@@ -119,7 +119,7 @@ function stream_cell = tracing_cnem_tracing_loop(locs, boundary_faces, flow_fiel
         %if already been here, done
         % % how likely is this though!?
         
-        % Inteprolate velocity field 
+        % Interpolate velocity field 
         flowfield_interp = cnem_interpol_obj.interpolate(flow_field); % has same length as number of live points
         
         % check if step length has hit zero
@@ -168,7 +168,7 @@ end % function tracing_cnem_amplitude_step()
 
 
 function output_cell = tracing_cnem_phase_step(idx)
-        flow_field = [obj_flows.vx(idx, :) obj_flows.vy(idx, :) obj_flows.vz(idx, :)]; 
+        flow_field = [obj_flows.vx(idx, :); obj_flows.vy(idx, :); obj_flows.vz(idx, :)].'; 
         output_cell = tracing_cnem_tracing_loop(locs, boundary_faces, flow_field, seeding_locs, time_step, max_stream_length);
 end % function tracing_cnem_phase_step()
 
