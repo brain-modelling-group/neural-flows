@@ -35,9 +35,6 @@
     },
     "modality": "phase",
     "method": {
-      "data": {
-        "mode": "phase"
-      },
       "name": "cnem",
       "cnem": {
         "convex_hull": "bi"
@@ -120,11 +117,6 @@
     "boundary": {
       "alpha_radius" : 30
     },
-    "mode": "amplitude"
-  },
-  "visualisation": {
-    "quiver": {
-      "scale": 1
-    }
+    "modality": "amplitude"
   }
 }

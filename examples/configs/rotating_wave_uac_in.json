@@ -54,9 +54,6 @@
     },
     "modality": "amplitude",
     "method": {
-      "data": {
-        "mode": "amplitude"
-      },
       "name": "cnem",
       "cnem": {
         "convex_hull": "bi",
@@ -168,12 +165,6 @@
     "boundary": {
       "alpha_radius" : 30
     },
-    "mode": "amplitude"
-  },
-
-"visualisation": {
-    "quiver": {
-      "scale": 1
-    }  
+    "modality": "amplitude"
   }
 }
