@@ -21,7 +21,7 @@ switch case_label
 end
 
 
-input_params_dir  = 'examples/config';
+input_params_dir  = 'examples/configs';
 json_mode = 'read';
 
 %% Load configuration file with options
