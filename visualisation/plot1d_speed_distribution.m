@@ -13,7 +13,7 @@ for jj=1:numsubplot
     hold(ax(jj), 'on')
 end
 
-if strcmp(params.flows.method.data.mode, 'amplitude')
+if strcmp(params.flows.modality, 'amplitude')
    uxyz = obj_flows.uxyz;
 else
    uxyz(:, 1, :) = obj_flows.vx; 
