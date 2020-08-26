@@ -97,7 +97,7 @@
   "data": {
     "file": {
       "dir": "demo-data",
-      "name": "sink-source_wave_W_c1_d1ms_iomat.mat"
+      "name": "sink-source_wave_W_c1_d1ms_trial1.mat"
     },
     "slice": {
       "enabled": false,
