@@ -1,0 +1,122 @@
+{
+  "general": {
+    "storage": {
+      "time_stamp": [],
+      "dir": "scratch",
+      "dir_tmp": "/tmp",
+      "params": {
+        "input": {
+          "filename": "sink-source_wave_upc_in.json",
+          "dir": "examples/configs"
+        },
+        "output": {
+          "filename": "sink-sources_wave_upc_out.json",
+          "dir": "examples/configs"
+        }
+      },
+      "format": "iomat"
+    },
+    "parallel": {
+      "enabled": false,
+      "workers_fraction": 0.8
+    }
+  },
+  "interpolation": {
+    "enabled": false
+    },
+  "flows": {
+    "enabled": true,
+    "file": {
+      "exists": false,
+      "keep": true,
+      "dir": "",
+      "name": "",
+      "label": ""
+    },
+    "modality": "phase",
+    "method": {
+      "name": "cnem",
+      "cnem": {
+        "convex_hull": "bi"
+      }
+    },
+    "visualisation": {
+      "enabled": true
+    },
+    "decomposition": {
+      "svd": {
+        "enabled": true,
+        "modes": 4,
+        "grid": {
+          "type": "unstructured"
+        }
+      }
+    },
+    "quantification": {
+      "energy": {
+        "enabled": false,
+        "modality": "nodal"
+      }
+    }
+  },
+  "streamlines": {
+      "enabled": true ,
+      "file": {
+          "exists": false,
+          "dir": "",
+          "name": "",
+          "label": "",
+          "keep": true
+    },
+
+      "tracing": {
+               "grid": {
+                   "type": "unstructured"
+                  },
+               "seeding_points": {
+                                  "modality": "random-sparse",
+                                  "seed": 42
+              },
+              "max_stream_length" : 200,
+              "time_step": 0.5
+          },
+
+    "visualisation": {
+      "enabled": true
+    }
+  },
+  "singularity": {
+    "enabled": false,
+    "visualisation": {
+      "enabled": false
+    },
+    "quantification": {
+      "enabled": false
+    }
+  },
+  "data": {
+    "file": {
+      "dir": "demo-data",
+      "name": "sink-source_wave_W_c1_d1ms_iomat.mat"
+    },
+    "slice": {
+      "enabled": false,
+      "id": 0
+    },
+    "grid": {
+      "type": "unstructured"
+    },
+    "ht": 0.25,
+    "hx": [],
+    "hy": [],
+    "hz": [],
+    "units": {
+      "space":"mm",
+      "time": "ms"
+    },
+    "boundary": {
+      "alpha_radius" : 30
+    },
+    "modality": "amplitude"
+  }
+}
