@@ -58,7 +58,7 @@ function tracing_cnem_time_loop()
 end % function tracing_cnem_step()
 
 
-function stream_cell = tracing_cnem_loop(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length)
+function stream_cell = tracing_cnem_tracing_loop(locs, boundary_faces, flow_field, seed_locs, time_step, max_stream_length)
 % Tracing loop
 % ARGUMENTS:
 %          locs     -- a 2D array of size [nodes x 3] with the x,y,z
@@ -163,13 +163,13 @@ end %tracing_cnem_loop()
 
 function output_cell = tracing_cnem_amplitude_step(idx)
         flow_field = obj_flows.uxyz(:, :, idx);
-        output_cell = tracing_cnem_loop(locs, boundary_faces, flow_field, seeding_locs, time_step, max_stream_length);
+        output_cell = tracing_cnem_tracing_loop(locs, boundary_faces, flow_field, seeding_locs, time_step, max_stream_length);
 end % function tracing_cnem_amplitude_step()
 
 
 function output_cell = tracing_cnem_phase_step(idx)
         flow_field = [obj_flows.vx(idx, :) obj_flows.vy(idx, :) obj_flows.vz(idx, :)]; 
-        output_cell = tracing_cnem_loop(locs, boundary_faces, flow_field, seeding_locs, time_step, max_stream_length);
+        output_cell = tracing_cnem_tracing_loop(locs, boundary_faces, flow_field, seeding_locs, time_step, max_stream_length);
 end % function tracing_cnem_phase_step()
 
 end %function streams3d_tracing_cnem()
