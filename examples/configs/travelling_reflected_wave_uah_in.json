@@ -81,7 +81,7 @@
     },
     "quantification": {
       "energy": {
-        "enabled": false,
+        "enabled": true,
         "modality": "nodal"
       }
     }
