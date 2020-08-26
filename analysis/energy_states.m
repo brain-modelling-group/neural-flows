@@ -40,11 +40,11 @@ function [stable, transient, stable_points, transient_points] = energy_states(en
 %     Modified, PSL, QIMR Berghofer 2018
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if display_flag
-    figure_handle = figure;
-    ax_handles(1) = subplot(2,1,1, 'Parent', figure_handle);
-    ax_handles(2) = subplot(2,1,2, 'Parent', figure_handle);
-end
+% if display_flag
+%     figure_handle = figure;
+%     ax_handles(1) = subplot(2,1,1, 'Parent', figure_handle);
+%     ax_handles(2) = subplot(2,1,2, 'Parent', figure_handle);
+% end
 
 % Setup: get displacement energy, this is a kinectic energy-like expression: 1/2 m v^2
 % The mass is m=1. This step calculates the averagsamplingIntervale kinetic energy per edge
