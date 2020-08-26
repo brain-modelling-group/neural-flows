@@ -162,6 +162,6 @@
       "space": "mm",
       "time": "ms"
     },
-    "mode": "amplitude"
+    "modality": "amplitude"
   }
 }
