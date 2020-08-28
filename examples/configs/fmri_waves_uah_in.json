@@ -54,9 +54,6 @@
     },
     "modality": "amplitude",
     "method": {
-      "data": {
-        "mode": "amplitude"
-      },
       "name": "hs3d",
       "hs3d": {
         "alpha_smooth": 0.2,
@@ -148,7 +145,7 @@
   "data": {
     "file": {
       "dir": "demo-data", 
-      "name": "fmri_waves_unstructured_super_long.mat"
+      "name": "fmri_waves_unstructured_single_subject_01.mat"
     },
     "slice": {
       "enabled": false,
@@ -157,7 +154,7 @@
     "grid": {
       "type": "unstructured"
     },
-    "ht": 0.25,
+    "ht": 0.5,
     "hx": [],
     "hy": [],
     "hz": [],
@@ -166,11 +163,5 @@
       "time":  "ms"
     },
     "mode": "amplitude"
-  },
-
-"visualisation": {
-    "quiver": {
-      "scale": 1
-    }  
   }
 }

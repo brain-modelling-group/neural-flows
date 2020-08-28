@@ -36,7 +36,7 @@ switch case_label
         input_params_filename = 'fmri_waves_in_uap.json';
 end
 
-input_params_dir  = 'examples';
+input_params_dir  = 'examples/configs';
 json_mode = 'read';
 
 % Load options
