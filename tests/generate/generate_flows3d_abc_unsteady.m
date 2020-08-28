@@ -1,4 +1,4 @@
-function [ux, uy, uz] = generate_flows3d_abc_unsteady(abc, varargin)
+function [ux, uy, uz] = generate_flows3d_abc_unsteady(abc_vec, varargin)
 % Generates time-dependent (unsteady) Arnold-Beltrami-Childress (ABC) 3D flow 
 %
 % ARGUMENTS:
@@ -68,43 +68,45 @@ else
 end
 
 
-max_t = size(abc, 1);
+max_t = size(abc_vec, 1);
 
 switch grid_type
     case {'structured', 'grid', 'voxel'}
-        [ux, uy, uz] = get_flow_structured(abc, max_t);
+        [xx, yy, zz] = meshgrid(x, y, z);
+        ux = zeros(size(xx, 1), size(xx, 2), size(xx, 3), max_t);
+        uy = ux;
+        uz = uy;
+        for tt=1:max_t-1
+            abc = abc_vec(tt, :);
+            [uxo, uyo, uzo] = generate_flows3d_abc(abc,'x', xx, ...
+                                                       'y', yy, ...
+                                                       'z', zz, ...
+                                                       'visual_debugging', plot_stuff);
+            ux(:, :, :, tt) =  uxo;
+            uy(:, :, :, tt) =  uyo;
+            uz(:, :, :, tt) =  uzo;
+        end
+
     case {'unstructured', 'scattered', 'points', 'nodal'}
-        [ux, uy, uz] = get_flow_unstructured(abc, max_t);
+        xx = x;
+        yy = y;
+        zz = z;
+        ux = zeros(size(xx, 1), max_t);
+        uy = ux;
+        uz = uy;
+        for tt=1:max_t-1
+            abc = abc_vec(tt, :);
+            [uxo, uyo, uzo] = generate_flows3d_abc(abc,'x', xx, ...
+                                                       'y', yy, ...
+                                                       'z', zz, ...
+                                                       'visual_debugging', plot_stuff);
+            ux(:, tt) =  uxo;
+            uy(:, tt) =  uyo;
+            uz(:, tt) =  uzo;
+        end
     otherwise
         error(['neural-flows:' mfilename ':UnknownCase'], ...
                'Requested unknown grid type. Options: {"structured", "unstructured"}');
-end
-
-
-function [ux, uy, uz] = get_flow_structured(abc, max_t)
-	for tt=1:max_t-1
-         [ux, uy, uz, ~, ~, ~] = generate_flow3d_abc_grid(abc(tt, :), ...
-                                                         'x', x, ...
-                                                         'y', y, ...
-                                                         'z', z, ...
-                                                         'visual_debugging', plot_stuff));
-         ux(:, :, :, tt) =  ux;
-         uy(:, :, :, tt) =  uy;
-         uz(:, :, :, tt) =  uz;
-     end
-end
-
-function [ux, uy, uz] = get_flow_unstructured(abc, max_t)
-	for tt=1:max_t
-         [ux, uy, uz] = generate_flow3d_abc_grid(abc(tt, :), ...
-                                                 'x', x, ...
-                                                 'y', y, ...
-                                                 'z', z, ...
-                                                 'visual_debugging', plot_stuff));
-         ux(tt, :) =  ux;
-         uy(tt, :) =  uy;
-         uz(tt, :) =  uz;
-     end
 end
 
 end % generate_flow3d_abc_unsteady()
