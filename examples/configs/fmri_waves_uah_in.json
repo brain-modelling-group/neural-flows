@@ -7,11 +7,11 @@
       "params": {
         "input": {
           "filename": "fmri_waves_uah_in.json",
-          "dir": "examples" 
+          "dir": "examples/configs" 
         },
         "output": {
           "filename": "fmri_waves_uah_ou.json",
-          "dir": "examples" 
+          "dir": "examples/configs" 
         }
       },
       "format": "iomat"     
