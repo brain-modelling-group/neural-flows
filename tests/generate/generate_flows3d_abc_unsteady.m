@@ -21,7 +21,7 @@ b = sqrt(b2);
 c = sqrt(c2);
 abc = horzcat(a, b, c);
 
-[ux, uy, uz] = generate_flow3d_abc_unsteady(abc, 'visual_debugging', false);
+[ux, uy, uz] = generate_flows3d_abc_unsteady(abc, 'visual_debugging', false, 'grid_type', 'structured');
 
     
 %}
