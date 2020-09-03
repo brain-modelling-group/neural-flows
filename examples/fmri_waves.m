@@ -31,9 +31,9 @@ switch case_label
     case 'uah'
         input_params_filename = 'fmri_waves_uah_in.json';
     case 'uac'
-        input_params_filename = 'fmri_waves_in_uac.json';
+        input_params_filename = 'fmri_waves_uac_in.json';
     case 'upc'
-        input_params_filename = 'fmri_waves_in_uap.json';
+        input_params_filename = 'fmri_waves_uap_in.json';
 end
 
 input_params_dir  = 'examples/configs';
