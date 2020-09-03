@@ -32,8 +32,8 @@ for jj=1:numsubplot
     ax(jj).YLabel.String = 'pdf';
 end
 
-ax(1).XLabel.String = 'speed [m/s]';
-ax(2).XLabel.String = 'log10(speed) [m/s]';
+ax(1).XLabel.String = ['speed [' params.data.units.space '/'  params.data.units.time ']'];
+ax(2).XLabel.String = ['log10(speed) [' params.data.units.space '/'  params.data.units.time ']'];
 
 
 end
