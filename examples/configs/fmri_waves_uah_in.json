@@ -10,7 +10,7 @@
           "dir": "examples/configs" 
         },
         "output": {
-          "filename": "fmri_waves_uah_ou.json",
+          "filename": "fmri_waves_uah_ou_short.json",
           "dir": "examples/configs" 
         }
       },
@@ -56,8 +56,8 @@
     "method": {
       "name": "hs3d",
       "hs3d": {
-        "alpha_smooth": 0.2,
-        "max_iterations": 128,
+        "alpha_smooth": 1.0,
+        "max_iterations": 256,
         "initial_conditions": {
           "mode": "random",
           "seed": 42
@@ -73,7 +73,7 @@
     "decomposition": {
       "svd": {
         "enabled": true,
-        "modes": 4,
+        "modes": 12,
         "grid": {
           "type": "unstructured"
         }
@@ -87,7 +87,7 @@
     }
   },
   "streamlines": {
-      "enabled": true,
+      "enabled": false,
       "file": {
           "exists": false,
           "dir": "",
@@ -98,10 +98,10 @@
 
       "tracing": {
                "grid": {
-                   "type": "structured"
+                   "type": "unstructured"
                   },
                "seeding_points": {
-                                  "modality": "random-dense",
+                                  "modality": "random-sparse",
                                   "seed": 42
               },
               "max_stream_length" : 300,
@@ -125,7 +125,7 @@
       "mode": "null-flow-field",
       "threshold": [
         0,
-        0.04
+        0.05
       ]
     },
     "classification": {
@@ -145,7 +145,7 @@
   "data": {
     "file": {
       "dir": "demo-data", 
-      "name": "fmri_waves_unstructured_single_subject_01.mat"
+      "name": "fmri_waves_unstructured_single_subject_01_short.mat"
     },
     "slice": {
       "enabled": false,
@@ -160,7 +160,7 @@
     "hz": [],
     "units": {
       "space": "mm",
-      "time":  "ms"
+      "time":  "s"
     },
     "mode": "amplitude"
   }
