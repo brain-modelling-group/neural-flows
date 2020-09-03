@@ -7,11 +7,11 @@
       "params": {
         "input": {
           "filename": "rotating_wave_upc_in.json",
-          "dir": "examples/config"
+          "dir": "examples/configs"
         },
         "output": {
           "filename": "rotating_wave_upc_out.json",
-          "dir": "examples/config"
+          "dir": "examples/configs"
         }
       },
       "format": "iomat"
