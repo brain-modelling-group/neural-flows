@@ -1,4 +1,5 @@
 function [tracking_3d_matrix, tracking_2d_matrix] = step_nodal_singularity_occupancy(singularity_classification_frame, singularity_locs, nodal_locs, num_base_sngs, dist_th)
+% Finds the singularity closest to each node
 % TODOC: Function to be invoked by a parfor
 
     num_nodes = size(nodal_locs, 1);
