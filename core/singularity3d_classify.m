@@ -63,7 +63,7 @@ function params = singularity3d_classify(params)
     obj_singularity.classification_num = classification_cell_num;
     obj_singularity.count = counts;
     
-    if params.singularity.nodal_critical_points.enabled
+    if params.singularity.quantification.nodal_occupancy.enabled
         % Here we try to assing a critical point to every node.
         fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started assignment of node-based critical points.'))
         params = analyse_nodal_singularity_occupancy(params);
