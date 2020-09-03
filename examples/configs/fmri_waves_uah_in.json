@@ -104,7 +104,7 @@
                                   "modality": "random-sparse",
                                   "seed": 42
               },
-              "max_stream_length" : 300,
+              "max_stream_length" : 256,
               "time_step": 0.5
           },
 
@@ -135,7 +135,7 @@
       "enabled": true,
       "nodal_occupancy" : {
         "enabled": true,
-        "distance_threshold" : 25
+        "distance_threshold" : 1
       }
     },
     "visualisation": {
