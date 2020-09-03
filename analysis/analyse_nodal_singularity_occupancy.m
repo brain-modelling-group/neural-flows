@@ -24,13 +24,14 @@ function params = analyse_nodal_singularity_occupancy(params)
 
 % TODO: split function into smaller functions
 %       or, save locations into obj_singularity
-
+% Load object handles
 obj_singularity = load_iomat_singularity(params);
 obj_flows = load_iomat_flows(params);
 
+% If we do this, we will need the nodal locations
+obj_singularity.locs = obj_flows.locs;
 
 dist_threshold = params.singularity.quantification.nodal_occupancy.distance_threshold;
-%dist_threshold = 20;
 locs = obj_flows.locs;
 
 % Sizes
