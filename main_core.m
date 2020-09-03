@@ -57,14 +57,14 @@ save_params_checkpoint(tmp_params);
 %---------------------------------STREAMLINES----------------------------------%
 
 % Check what else we want to do
-if tmp_params.streamlines.enabled
+if inparams.streamlines.enabled
     [tmp_params, ~, obj_streamline_sentinel] = streams3d_trace(tmp_params);
 end 
 %---------------------------------STREAMLINES----------------------------------%
 % Save parameters up to this point
 save_params_checkpoint(tmp_params);
 %---------------------------------SINGULARITY----------------------------------%
-if tmp_params.singularity.enabled
+if inparams.singularity.enabled
     % DETECTION
     if tmp_params.singularity.detection.enabled 
         [tmp_params, ~, obj_singularity_sentinel] = singularity3d_detect(tmp_params);
@@ -96,8 +96,17 @@ read_write_json(ouparams.general.storage.params.output.filename, ...
                 ouparams);
 
 % Delete files if we don't want to keep them
-delete(obj_interp_sentinel)
-delete(obj_flows_sentinel)
-delete(obj_streamline_sentinel)
-delete(obj_singularity_sentinel)
-end % function main()
+if inparams.interpolation.enabled
+   delete(obj_interp_sentinel)
+end
+if inparams.flows.enabled
+   delete(obj_flows_sentinel)
+end
+if inparams.streamlines.enabled
+   delete(obj_streamline_sentinel)
+end
+
+if inparams.singularity.enabled
+   delete(obj_singularity_sentinel)
+end
+end % function main_core()
