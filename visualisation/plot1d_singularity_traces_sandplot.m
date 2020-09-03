@@ -42,7 +42,7 @@ else
 end
 
 if nargin < 4
-    marker_plot = 'scatter';
+    marker_plot = 'line';
 else
     marker_plot = varargin{3};
 end
