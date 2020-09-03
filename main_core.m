@@ -1,14 +1,13 @@
-function ouparams = main(inparams)
-%% Wrapper function to decide which workflow to use
-% This function takes as input neural activity recorded from scattered 
-% points in 3D space (aka an unstructured grid)
-% This function performs all the analysis steps availabe in neural-flows: 
+function ouparams = main_core(inparams)
+%% High-level function that navigates through available workflows based on 
+% the parameters of the configuration file .json, which are stored in `inparams`.
+% This function performs a combination of the following stages in neural-flows: 
 %              1) interpolates the data onto a regular grid (ie, meshgrid).
-%              2a) estimates neural flows (ie, velocity fields).
-%              2b) estimates neural flows (ie, velocity fields).
+%              2a) estimates neural flows using mesh-based methods.
+%              2b) estimates neural flows using meshless methods  .
 %              3) detects singularities (ie, detects null flows).
 %              4) classifies singularities.
-%              5) Track singularities
+%              5) traces streamlines
 % Tic
 tstart = tik();
 %-------------------------------------------------------------------------------%
@@ -88,9 +87,7 @@ end
 ouparams = tmp_params;
 
 % Toc
-tok(tstart, 'seconds');
 tok(tstart, 'minutes');
-tok(tstart, 'hours');
 
 % Save parameter structure with updated fields and values
 read_write_json(ouparams.general.storage.params.output.filename, ...
@@ -99,8 +96,8 @@ read_write_json(ouparams.general.storage.params.output.filename, ...
                 ouparams)
 
 % Delete files if we don't want to keep them
-%delete(obj_interp_sentinel)
-%delete(obj_flows_sentinel)
-%delete(obj_streamline_sentinel)
-%delete(obj_singularity_sentinel)
+delete(obj_interp_sentinel)
+delete(obj_flows_sentinel)
+delete(obj_streamline_sentinel)
+delete(obj_singularity_sentinel)
 end % function main()
