@@ -3,9 +3,6 @@ function ouparams = main_visualisation(inparams)
 % People can write their own main function calling different combinations of 
 % plotting functions
 
-% Tic
-tstart = tik();
-
 %---------------------------------DECOMPOSITION--------------------------------%
 if inparams.flows.visualisation.enabled
     plot1d_speed_distribution(inparams);
@@ -21,9 +18,4 @@ end
 % save_tmp_params(tmp_params)
 %TRACKING
 % TODO: write output parameters if reequired
-
-% Toc
- tok(tstart, 'seconds');
- tok(tstart, 'minutes');
- tok(tstart, 'hours');
 end % function main_analysis()
