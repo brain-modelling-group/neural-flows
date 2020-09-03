@@ -73,7 +73,7 @@
     "decomposition": {
       "svd": {
         "enabled": true,
-        "modes": 12,
+        "modes": 4,
         "grid": {
           "type": "unstructured"
         }
@@ -87,7 +87,7 @@
     }
   },
   "streamlines": {
-      "enabled": false,
+      "enabled": true,
       "file": {
           "exists": false,
           "dir": "",
