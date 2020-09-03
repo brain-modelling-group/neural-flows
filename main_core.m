@@ -29,7 +29,7 @@ if inparams.interpolation.enabled
 
     elseif strcmp(tmp_params.data.grid.type, 'unstructured') && tmp_params.interpolation.enabled
        % Do the interpolation  
-       [tmp_params, obj_data, obj_interp_sentinel] = data3d_interpolate(tmp_params);
+       [tmp_params, ~, obj_interp_sentinel] = data3d_interpolate(tmp_params);
     else
       % Presumably structured data
     end
@@ -43,9 +43,9 @@ if inparams.flows.enabled
     switch tmp_params.flows.method.name
         case {'hs3d', 'horn-schunk', 'hs'}
             %
-            [tmp_params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(tmp_params);
+            [tmp_params, ~, obj_flows_sentinel] = flows3d_hs3d_estimate(tmp_params);
         case {'cnem'}
-            [tmp_params, obj_flows, obj_flows_sentinel] = flows3d_cnem_estimate(tmp_params);
+            [tmp_params, ~, obj_flows_sentinel] = flows3d_cnem_estimate(tmp_params);
         otherwise
             error(['neural-flows:' mfilename ':UnknownCase'], ...
                    'Requested unknown method. Options: {"hs3d", "cnem"}');
@@ -58,7 +58,7 @@ save_params_checkpoint(tmp_params);
 
 % Check what else we want to do
 if tmp_params.streamlines.enabled
-    streams3d_trace(tmp_params);
+    [tmp_params, ~, obj_streamline_sentinel] = streams3d_trace(tmp_params);
 end 
 %---------------------------------STREAMLINES----------------------------------%
 % Save parameters up to this point
@@ -67,7 +67,7 @@ save_params_checkpoint(tmp_params);
 if tmp_params.singularity.enabled
     % DETECTION
     if tmp_params.singularity.detection.enabled 
-        [tmp_params, obj_singularity, obj_singularity_sentinel] = singularity3d_detect(tmp_params);
+        [tmp_params, ~, obj_singularity_sentinel] = singularity3d_detect(tmp_params);
     end
     %-------------------------------------------------------------------------------%
     % Save parameters up to this point
