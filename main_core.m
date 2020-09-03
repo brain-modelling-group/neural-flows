@@ -12,7 +12,7 @@ function ouparams = main_core(inparams)
 tstart = tik();
 %-------------------------------------------------------------------------------%
 if inparams.general.parallel.enabled
-  open_parpool(inparams.general.parallel.workers_fraction)
+  open_parpool(inparams.general.parallel.workers_fraction);
 end
 % Copy structure
 tmp_params = inparams;
@@ -25,7 +25,7 @@ if inparams.interpolation.enabled
 
     elseif strcmp(tmp_params.data.grid.type, 'unstructured') && ~tmp_params.interpolation.enabled
        warning(['neural-flows:' mfilename ':NoInterpolation'], ...
-                'Skipping interpolation ...')
+                'Skipping interpolation ...');
 
     elseif strcmp(tmp_params.data.grid.type, 'unstructured') && tmp_params.interpolation.enabled
        % Do the interpolation  
@@ -36,7 +36,7 @@ if inparams.interpolation.enabled
 end
 %---------------------------------INTERPOLATION--------------------------------%
 % Save parameters up to this point
-save_params_checkpoint(tmp_params)
+save_params_checkpoint(tmp_params);
 %---------------------------------FLOWS----------------------------------------%
 if inparams.flows.enabled
     % Check which method we want to use - hsd3 only works with interpolated data, while cnem
@@ -53,16 +53,16 @@ if inparams.flows.enabled
 end
 %---------------------------------FLOWS----------------------------------------%
 % Save parameters up to this point
-save_params_checkpoint(tmp_params)
+save_params_checkpoint(tmp_params);
 %---------------------------------STREAMLINES----------------------------------%
 
 % Check what else we want to do
 if tmp_params.streamlines.enabled
-    streams3d_trace(tmp_params)
+    streams3d_trace(tmp_params);
 end 
 %---------------------------------STREAMLINES----------------------------------%
 % Save parameters up to this point
-save_params_checkpoint(tmp_params)
+save_params_checkpoint(tmp_params);
 %---------------------------------SINGULARITY----------------------------------%
 if tmp_params.singularity.enabled
     % DETECTION
@@ -71,7 +71,7 @@ if tmp_params.singularity.enabled
     end
     %-------------------------------------------------------------------------------%
     % Save parameters up to this point
-    save_params_checkpoint(tmp_params)
+    save_params_checkpoint(tmp_params);
     %-------------------------------------------------------------------------------%
     % CLASSIFICATION
     if tmp_params.singularity.classification.enabled 
@@ -93,7 +93,7 @@ tok(tstart, 'minutes');
 read_write_json(ouparams.general.storage.params.output.filename, ...
                 ouparams.general.storage.params.output.dir, ...
                 'write', ...
-                ouparams)
+                ouparams);
 
 % Delete files if we don't want to keep them
 delete(obj_interp_sentinel)
