@@ -26,8 +26,5 @@ end
 % TODO: write output parameters if reequired
 
 % Toc
- tok(tstart, 'seconds');
- tok(tstart, 'minutes');
- tok(tstart, 'hours');
-
+tok(tstart, 'minutes');
 end % function main_analysis()
