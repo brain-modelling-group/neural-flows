@@ -1,4 +1,4 @@
-function ouparams = main_analysis(inparams)
+function main_analysis(inparams)
 %% Wrapper function to perform basic analysis:
 %  (1): flows: svd decomposition
 %  (2): flows: energy quantification
@@ -8,7 +8,7 @@ function ouparams = main_analysis(inparams)
 tstart = tik();
 
 % Copy structure
-tmp_params = inparams;
+%tmp_params = inparams;
 
 %---------------------------------DECOMPOSITION-------------------------%
 if inparams.flows.decomposition.svd.enabled
