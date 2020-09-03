@@ -58,11 +58,17 @@ function params = singularity3d_classify(params)
     % Allocate output and save to file
     [classification_cell_str, classification_cell_num, counts] = singularity3d_classify_fun(nullflow_points3d, params);
     
-    
-    % XXXX: temporary
+    % Save classification cells
     obj_singularity.classification_str = classification_cell_str;
     obj_singularity.classification_num = classification_cell_num;
     obj_singularity.count = counts;
+    
+    if params.singularity.nodal_critical_points.enabled
+        % Here we try to assing a critical point to every node.
+        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started assignment of node-based critical points.'))
+        singularity3d_get_nodal_critical_points_parallel(obj_singularity, locs, params);
+        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished assignment of node-based critical points.'))
+    end
     
     % Disable classification
     params.singularity.classification.enabled = false;
