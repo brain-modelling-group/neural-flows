@@ -4,11 +4,12 @@ function figure_handles = plot1d_singularity_stats(inparams)
 
 obj_sings = load_iomat_singularity(inparams);
 
-figure_handles{1} = plot1d_singularity_traces_counts(obj_sings.count);
-
 if inparams.singularity.quantification.nodal_occupancy.enabled
-    figure_handles{2} = plot1d_singularity_histograms(obj_sings.tracking_3d_matrix);
+   singularity_count = squeeze(sum(obj_sings.tracking_3d_matrix, 2)).';
 else
-    figure_handles{2} = plot1d_singularity_histograms(obj_sings.count);
+   singularity_count = obj_sings.count;
 end
+figure_handles{1} = plot1d_singularity_traces_counts(singularity_count);
+figure_handles{2} = plot1d_singularity_histograms(singularity_count);
+
 end % function plot1d_singularity_stats()
