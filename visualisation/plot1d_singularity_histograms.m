@@ -2,6 +2,9 @@ function figure_handle = plot1d_singularity_histograms(singularity_count)
 % This function takes as input the counts of each singularity type per
 % timepoint or frame.
 
+if length(size(singularity_count)) == 3
+    singularity_count = squeeze(sum(singularity_count, 2)).';
+end
 base_cp = s3d_get_base_singularity_list();
 cmap = s3d_get_colours('critical-points');
 
@@ -25,16 +28,22 @@ for kk=2:2:8
     axes2(kk).Position = [10 16-(2.2*(kk-2)) subplot_width subplot_height];
 end
 
-
-bin_edges = [1:1:20] -0.5;
+% hardcoded, we do not expect to have more than 1000 critical points per
+% frame
+bin_edges = [1:1:50] - 0.5;
 
 for ii=1:8
-histogram(singularity_count(:, ii), bin_edges, 'DisplayName',base_cp{ii},'Parent', axes2(ii), ...
+    
+hist_handle = histogram(singularity_count(:, ii), bin_edges, ...
+                      'DisplayName',base_cp{ii},'Parent', axes2(ii), ...
                       'Linewidth', 2, ...
                       'EdgeColor', [0.4 0.4 0.4], ...
-                      'FaceColor', cmap(ii, 1:3))
+                      'FaceColor', cmap(ii, 1:3));
 
-axes2(ii).XLim = [0 10];
+% Find maximum for which counts are nonzero, sets the x-axis. 
+%[~, idx] = find(diff(cumsum(hist_handle.Values)));
+%axes2(ii).XLim = [0 idx(end)+1];
+axes2(ii).XLim = [0 200];
 if ii > 6
     axes2(ii).XTick = bin_edges + 0.5;
 else
