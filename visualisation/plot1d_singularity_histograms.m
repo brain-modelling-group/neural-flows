@@ -2,9 +2,6 @@ function figure_handle = plot1d_singularity_histograms(singularity_count)
 % This function takes as input the counts of each singularity type per
 % timepoint or frame.
 
-if length(size(singularity_count)) == 3
-    singularity_count = squeeze(sum(singularity_count, 2)).';
-end
 base_cp = s3d_get_base_singularity_list();
 cmap = s3d_get_colours('critical-points');
 
