@@ -39,8 +39,8 @@ stream_length = options.stream_length_steps;
 curved_arrow  = options.curved_arrow;
 
 % Vmag is used for colouring
-options.Vmag = get_set_options(options,'Vmag', sqrt(U.^2 + V.^2));
-options.cmap = get_set_options(options,'cmap', colormap(gray));
+%options.Vmag = get_set_options(options,'Vmag', sqrt(U.^2 + V.^2));
+%options.cmap = get_set_options(options,'cmap', colormap(gray));
 cmap = options.cmap;
 
 
@@ -156,7 +156,7 @@ end % function draw_stream_arrows()
 
 
 function plot_arrow(P, ~, ~, this_colour, ~) 
-       alpha = 2;        % Size of arrow head relative to the length of the vector
+       alpha = 8;        % Size of arrow head relative to the length of the vector
        beta  = 0.2;      % Width of the base of the arrow head relative to the length
 
        x1 = P(1,1); 

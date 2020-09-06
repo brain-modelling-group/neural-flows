@@ -27,7 +27,7 @@ end
 
 % hardcoded, we do not expect to have more than 1000 critical points per
 % frame
-bin_edges = [1:1:50] - 0.5;
+bin_edges = [1:2:50] - 0.5;
 
 for ii=1:8
     
@@ -40,7 +40,7 @@ hist_handle = histogram(singularity_count(:, ii), bin_edges, ...
 % Find maximum for which counts are nonzero, sets the x-axis. 
 %[~, idx] = find(diff(cumsum(hist_handle.Values)));
 %axes2(ii).XLim = [0 idx(end)+1];
-axes2(ii).XLim = [0 200];
+axes2(ii).XLim = [0 50];
 if ii > 6
     axes2(ii).XTick = bin_edges + 0.5;
 else

@@ -1,4 +1,4 @@
-function tok(tstart, time_unit)
+function varargout = tok(tstart, time_unit)
 %% Gets currrent datetime, calculates and prints elapsed time based on the input datetime string `tsart`
 %  
 % ARGUMENTS:
@@ -40,4 +40,7 @@ function tok(tstart, time_unit)
      end % switch case block
     
     fprintf('%s%s%s%s\n', ['Elapsed time: ' string(tik_tok/divisor) ' ' time_unit]);
+    if nargout > 0
+        varargout{1} = tik_tok;
+    end
 end % function tok()
