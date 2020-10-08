@@ -119,7 +119,10 @@ FB = obj_data.data(:, :, :, this_tpt+1);
 if ~isfield(params.flows.method.hs3d, 'burnin')
     burnin_length = 8; % for iterations, not much but better than one
     params.flows.method.hs3d.burnin.length = burnin_length;
+else
+    burnin_length = params.flows.method.hs3d.burnin.length;
 end
+    
 
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started burn-in period for random initial velocity conditions.'))
 for bb=1:burnin_length
