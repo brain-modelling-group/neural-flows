@@ -10,7 +10,7 @@
           "dir": "examples/configs" 
         },
         "output": {
-          "filename": "fmri_waves_uah_ou_short.json",
+          "filename": "fmri_waves_uah_ou.json",
           "dir": "examples/configs" 
         }
       },
@@ -145,7 +145,7 @@
   "data": {
     "file": {
       "dir": "demo-data", 
-      "name": "fmri_waves_unstructured_single_subject_01_short.mat"
+      "name": "fmri_waves_unstructured_single_subject_20_short.mat"
     },
     "slice": {
       "enabled": false,
@@ -154,7 +154,7 @@
     "grid": {
       "type": "unstructured"
     },
-    "ht": 0.5,
+    "ht": [],
     "hx": [],
     "hy": [],
     "hz": [],
