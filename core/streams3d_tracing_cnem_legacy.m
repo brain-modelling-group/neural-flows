@@ -39,32 +39,34 @@ function stream_cell = streams3d_tracing_cnem_legacy(locs, boundary_faces, flow_
     locs = [x(loc_idx); y(loc_idx); z(loc_idx)].';
     flow_field = [u(loc_idx); v(loc_idx); w(loc_idx)].';
     dt = 0.5; % this value needs to be carefully selected
-    max_stream_length = 256;
+    max_stream_length = 512;
      
     % Get boundary/convex hull
-    [~, bdy] = get_boundary_info(locs, locs(:, 1), locs(:, 2), locs(:, 3));
+    [~, bdy] = get_boundary_triangles(locs, locs(:, 1), locs(:, 2), locs(:, 3));
 
  
-    streams = trace_streams_cnem(locs, bdy, flow_field, locs, dt, max_stream_length);
-    % Visualize what we just did
+    streams = streams3d_tracing_cnem_legacy(locs, bdy, -flow_field, locs, dt, max_stream_length);
+   
+ % Visualize what we just did
     fig_handle = figure('Name', 'nflow_traced_streams');
     ax = axes('Parent', fig_handle);
     hold(ax, 'on')
 
-    quiver3(locs(:, 1), locs(:, 2), locs(:, 3), ...
-            flow_field(:, 1), flow_field(:, 2), ...
-            flow_field(:, 3));
-    % Start locations
-    plot3(locs(:, 1), locs(:, 2), locs(:, 3), 'k.')
+%     quiver3(locs(:, 1), locs(:, 2), locs(:, 3), ...
+%             flow_field(:, 1), flow_field(:, 2), ...
+%             flow_field(:, 3));
     
     for ii=1:length(streams);
         plot3(squeeze(streams{ii}(:, 1)), ...
               squeeze(streams{ii}(:, 2)), ...
-              squeeze(streams{ii}(:, 3)), 'color', [0.5 0.5 0.5 0.1]);
+              squeeze(streams{ii}(:, 3)), 'color', [0.5 0.0 0.0 0.2]);
        plot3(squeeze(streams{ii}(end, 1)), ...
               squeeze(streams{ii}(end, 2)), ...
-              squeeze(streams{ii}(end, 3)), 'r.');
+              squeeze(streams{ii}(end, 3)), 'r.', 'markersize', 4.2);
     end
+%   start locations
+    plot3(locs(:, 1), locs(:, 2), locs(:, 3), 'kx', 'markersize', 4.2)
+
 
 % TODO: prepare an example with brain data -- save one frame of phase flow.
  from brain waves.
