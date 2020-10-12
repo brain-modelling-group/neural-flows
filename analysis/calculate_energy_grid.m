@@ -1,17 +1,14 @@
-function [energy] = calculate_energy_grid(mflow_obj)
+function [energy] = calculate_energy_grid(params, obj_flows)
 %Computation of kinetic energy. The kinetic energy is similar to the norm of the
 % vector field, but it emphasizes low ( val < 1) vs high energy states (val > 1)
 % ARGUMENTS:
-%  mflow_obj         -- a Matfile handle or structure with similar fields
+%  obj_flows         -- a Matfile handle or structure with similar fields
 % 
 % OUTPUT:
-%
-%   energy.node       -- Displacement energy in the flow field,
-%                             returns energy for node    
-% 
-%   energy.sum        -- Displacement energy in the flow,
+%% 
+%   energy.spatial_sum        -- Displacement energy in the flow,
 %                             summed over space. 
-%   energy.av         -- Average displacement enegy
+%   energy.spatial_average    -- Average displacement enegy
 % REQUIRES: 
 %
 % USAGE:
@@ -24,25 +21,23 @@ function [energy] = calculate_energy_grid(mflow_obj)
 %     Paula Sanz-Leon, QIMR Berghofer 2018
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% NOTE: Displacement energy, this is a kinectic energy-like expression: 1/2 m v^2
-% The mass is m=1
- 
-tpts = size(mflow_obj, 'ux', 4);
+tpts   = params.flows.data.shape.t;
 
 % Probably best to iterate over time
+innies_idx = obj_flows.masks.innies == true;
+temp_energy(length(innies), tpts) = 0;
 
-temp_energy(length(find(mflow_obj.in_bdy_mask)), tpts) = 0;
-good_idx = find(mflow_obj.interp_mask == true);
 parfor tt=1:tpts
-    ux = mflow_obj.ux(:, :, :, tt);
-    uy = mflow_obj.uy(:, :, :, tt);
-    uz = mflow_obj.uz(:, :, :, tt);
-    temp_energy(:, tt) = 0.5*(ux(good_idx).^2 + uy(good_idx).^2 + uz(good_idx).^2);
+    un = obj_flows.un(:, :, :, tt);
+    temp_energy(:, tt) = kinetic_energy(un(innies_idx));
 end
 % 
-energy.sum = nansum(temp_energy);
-
-energy.av = nanmean(temp_energy);
-
+norm_sum_flow = sqrt(obj_flows.ux_sum.^2 + obj_flows.uy_sum.^2 + obj_flows.uz_sum.^2); 
+energy.spatial_sum = nansum(temp_energy);
+energy.spatial_average = nanmean(temp_energy);
+energy.spatial_median  = nanmedian(temp_energy);
+energy.component_sum_norm = kinetic_energy(norm_sum_flow);
+energy.component_sum_ux = kinetic_energy(obj_flows.ux_sum);
+energy.component_sum_uy = kinetic_energy(obj_flows.uy_sum);
+energy.component_sum_uz = kinetic_energy(obj_flows.uz_sum);
 end % end calculate_energy_grid()

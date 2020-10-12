@@ -28,7 +28,7 @@ bool Construction_Topologie_Frontiere
 (long Nb_Noeud, double* Tab_Noeud,long Nb_Tri_Front,long* Tab_Ind_Noeud_Tri_Front,
  vector<S_Tri_Front>* P_List_Tri_Front,vector<S_Arete_Tri_Front>* P_List_Arete_Tri_Front,double* LAMMTF)
 {
-    cout<<"\nConstruction topologie frontiere-----------------------------------------------\n"<<endl;
+    //cout<<"\nConstruction topologie frontiere-----------------------------------------------\n"<<endl;
         
     //-----------------------------------------------------------------------//
 
@@ -37,7 +37,7 @@ bool Construction_Topologie_Frontiere
 
     //-----------------------------------------------------------------------//
     
-    cout<<"Nb triangle = "<<Nb_Tri_Front<<endl;
+    //cout<<"Nb triangle = "<<Nb_Tri_Front<<endl;
 
     multimap<long ,long> MMap_SommeIndNA_IndA;
     typedef multimap<long ,long>::iterator mmit;
@@ -266,7 +266,7 @@ bool Construction_Topologie_Frontiere
         Ind_Groupe_Temp++;
     }
 
-    cout<<"nb groupe tri : "<<Ind_Groupe_Temp<<endl;
+    //cout<<"nb groupe tri : "<<Ind_Groupe_Temp<<endl;
 
     //-----------------------------------------------------------------------//
 
@@ -363,8 +363,8 @@ bool Construction_Topologie_Frontiere
         }
     }
 
-    cout<<"Triangulation correct.\nAire triangulation = "<<Aire_Triangulation<<"\nVolume triangulation = "<<Volume_Triangulation<<endl;
-    cout<<"Longuer Arete: Min = "<<LAMMTF[0]<<", Max = "<<LAMMTF[1]<<endl; 
+    //cout<<"Triangulation correct.\nAire triangulation = "<<Aire_Triangulation<<"\nVolume triangulation = "<<Volume_Triangulation<<endl;
+    //cout<<"Longuer Arete: Min = "<<LAMMTF[0]<<", Max = "<<LAMMTF[1]<<endl; 
     
     //-----------------------------------------------------------------------//
 

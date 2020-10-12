@@ -1,65 +1,45 @@
-% This script runs the whole neural-flows workflow on a small epoch of
-% simulated data, that mostly corresponds to a pattern in which two sinks are 
-% prominent, one on each hemisphere
+function sink_source_wave(case_label)
+% This script runs the whole neural-flows workflow on a small epoch of simulated 
+% data, that corresponds to a pattern with a defined sink and source.
+% NOTE: Assumes this function is run from the top level directory neural-flows/
 
-% Performance: This takes about 5 minutes to run with 11 workers for parallel
-% functions. Memory usage is approximately 6GB.
+% PERFORMANCE:
+% |    Host   | Data Domain    | Data Mode   | Flow Method     | # workers  |  Runtime |  Memory |
+% |-----------|----------------|-------------|-----------------|------------|----------|---------|
+% | tesseract | (u)nstructured | (a)mplitude | (h)orn-schunk3d |      6     |  3.73 min| XX  GB  |  
 
-% Load data and centroid locations
-load('sink-source_wave_W_c1_d1ms_trial1.mat')
+if nargin < 1
+    case_label = 'uah';
+end
 
-% Options for the data interpolation
-options.interpolation.file.exists = false;
-options.interpolation.file.keep = true;
-    
-% Resolution
-options.interpolation.hx = 3;
-options.interpolation.hy = 3;
-options.interpolation.hz = 3;
-    
-options.interpolation.boundary.alpha_radius = 30;
-options.interpolation.boundary.thickness = 2;
-options.data.ht = 0.25;
-options.data.slice.id = 0;
+switch case_label
+    case 'uah'
+        input_params_filename = 'sink-source_wave_uah_in.json';
+    case 'uac'
+        input_params_filename = 'sink-source_wave_uac_in.json';
+    case 'upc'
+        input_params_filename = 'sink-source_wave_upc_in.json';
+end
 
-% Storage options
-options.storedir = '/home/paula/Work/Code/Networks/neural-flows/scratch';
-cd(options.storedir)
 
-% Flow calculation
-options.flows.file.keep = true;
-options.flows.init_conditions.mode = 'random';
-options.flows.init_conditions.seed = 42;
-options.flows.method.name = 'hs3d';
-options.flows.method.alpha_smooth   = 0.1;
-options.flows.method.max_iterations = 128;
+input_params_dir  = 'examples/configs';
+json_mode = 'read';
 
-% Singularity detection and classification
-options.singularity.file.keep = true;
-options.singularity.detection.enabled = true;    
-options.singularity.detection.mode  = 'vel';
-options.singularity.detection.threshold = [0 2^-6];
-options.singularity.classification.enabled = true;    
+%% Load configuration file with options
+input_params = read_write_json(input_params_filename, input_params_dir, json_mode);
 
-    
-% Define Parallel Cluster properties for parallel processing
-workers_fraction = 0.8;
-open_parpool(workers_fraction)
+%% Check that the input tmp folder and output folder exist and are consistent with OS,
+% if they aren't, it will try to fix the problem, or error
+input_params = check_storage_dirs(input_params, 'temp');
+input_params = check_storage_dirs(input_params, 'output');
 
-% Tic
-tstart = tik();
+%% Run core functions: interpolation, estimation and classification, streamlines, this function writes to a new json file
+output_params = main_core(input_params); 
 
-% Do the stuff 
-[minterp_obj, mflows_obj, msings_obj] = main_neural_flows_hs3d_scatter(data, locs, options);
-     
-% Toc
-tok(tstart)
+%% Run basic analysis
+main_analysis(output_params);
 
-% SVD decompostion
-data_type = 'scattered';
-perform_mode_decomposition_svd(mflows_obj, data_type);
+%% Visualisation
+main_visualisation(output_params);
 
-analyse_singularities(msings_obj)
-
-plot1d_speed_distribution(mflows_obj)
-
+end %function sink_source_wave()

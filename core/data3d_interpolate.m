@@ -1,55 +1,44 @@
-function [mfile_interp_obj, mfile_interp_sentinel] = data3d_interpolate(data, locs, X, Y, Z, mask, keep_interp_data)
-% This is a wrapper function for scattered interpolant. We can interpolate
-% each frame independtly using parfor and save the interpolated data for 
-% later use with optical flow and then just delete the interpolated data
-% or offer to keep it.
+function [params, obj_interp, obj_interp_sentinel] = data3d_interpolate(params)
+% This is a wrapper function for data interpolation step
+% works only for unstructured data
 
-%  locs: locations of known data
-%  data: scatter data known at locs of size tpts x nodes
-% X, Y Z -- grid points to get interpolation out
-% mask -- indices with points of the grid that are inside the
-% convex hull of the brain/cortex, should be interpolating mask
-
-% This is the key step for the optical flow method to work
-% These parameters are essential
-    neighbour_method = 'natural';
-    extrapolation_method = 'nearest';
-
-
-    x_dim = 1;
-    y_dim = 2;
-    z_dim = 3;
-    tpts = size(data, 1);
-
-    % Create file for the interpolated data
-    root_fname = 'temp_interp';
-    [mfile_interp_obj, mfile_interp_sentinel] = create_temp_file(root_fname, keep_interp_data);
-    
-    % Write dummy data to disk
-    mfile_interp_obj.data(size(X, x_dim), size(Y, y_dim), size(Z, z_dim), tpts) = 0;
-    
-    temp_data = nan(size(X));
-    
-    
-    %  Here we should put the function that handles multiple 
-    
-
-    % NOTE: We could do this with a parfor loop but at the expense of RAM memory
-    %       Also, with a parfor we can't use the matfile object
-    for this_tpt=1:tpts
-
-        data_interpolant = scatteredInterpolant(locs(:, x_dim), ...
-                                                locs(:, y_dim), ...
-                                                locs(:, z_dim), ...
-                                                data(this_tpt, :).', ...
-                                                neighbour_method, ...
-                                                extrapolation_method);
-
-        temp_data(mask) = data_interpolant(X(mask).', Y(mask).', Z(mask).');
-
-        % Only get 
-        mfile_interp_obj.data(:, :, :, this_tpt) = temp_data;
-
+    % Write internal interpolation and extrapolation methods
+    % ::TODO:: this field may not exist in the original json file 
+    if strcmp(params.interpolation.neighbour_method, '')
+       params.interpolation.neighbour_method = 'linear';
     end
+    if strcmp(params.interpolation.extrapolation_method, '')
+       params.interpolation.extrapolation_method = 'linear';
+    end
+    % Load data
+    [data, params, locs] = load_data(params); 
 
-end
+    % Determine meshgrid for interpolated data.
+    [X, Y, Z, params] = data3d_get_interpolation_meshgrid(locs, params);
+
+    % Calculate boundary masks
+    [masks, params]  = data3d_calculate_boundary_masks(locs, X, Y, Z, params);
+
+    if params.general.parallel.enabled
+        data3d_interpolate_fun = @data3d_interpolate_parallel;
+    else
+        data3d_interpolate_fun = @data3d_interpolate_serial;
+    end
+    % Interpolate data
+    [params, obj_interp, obj_interp_sentinel] = data3d_interpolate_fun(data, locs, X, Y, Z, masks.outties, params);
+    
+    % Save
+    obj_interp.masks = masks;
+
+    % Update parameter fields on params.data
+    params.data.hx = params.interpolation.hx;
+    params.data.hy = params.interpolation.hy;
+    params.data.hz = params.interpolation.hz;
+    params.data.shape.x = params.interpolation.data.shape.x; 
+    params.data.shape.y = params.interpolation.data.shape.y;
+    params.data.shape.z = params.interpolation.data.shape.z;
+
+    % Disable interpolation if we already did it
+    params.general.interpolation.enabled = false;
+    params.interpolation.file.exists = true;
+end % function data3d_interpolate()

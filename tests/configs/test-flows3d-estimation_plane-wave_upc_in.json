@@ -1,0 +1,97 @@
+{
+  "general": {
+    "storage": {
+      "time_stamp": [],
+      "dir": "data",
+      "dir_tmp": "/tmp",
+      "params": {
+        "input": {
+          "filename": "test-flows3d-estimation_plane-wave_upc_in.json",
+          "dir": "json"
+        },
+        "output": {
+          "filename": "test-flows3d-estimation_plane-wave_upc_out.json",
+          "dir": "json"
+        }
+      },
+      "format": "iomat"
+    },
+    "parallel": {
+      "enabled": false,
+      "workers_fraction": 0.8
+    }
+  },
+  "interpolation": {
+    "enabled": false
+    },
+  "flows": {
+    "enabled": true,
+    "file": {
+      "exists": false,
+      "keep": true,
+      "dir": "",
+      "name": "",
+      "label": ""
+    },
+    "method": {
+      "data": {
+        "mode": "phase"
+      },
+      "name": "cnem",
+      "cnem": {
+        "convex_hull": "bi"
+      }
+    },
+    "visualisation": {
+      "enabled": true
+    },
+    "decomposition": {
+      "svd": {
+        "enabled": false,
+        "modes": 4,
+        "grid": {
+          "type": "unstructured"
+        }
+      }
+    },
+    "streamlines": {
+      "enabled": false,
+      "grid": {
+        "type": "unstructured"
+      }
+    }
+  },
+  "singularity": {
+    "enabled": false
+  },
+  "data": {
+    "file": {
+      "dir": "data",
+      "name": "data-plane-wave-unstructured-iomat.mat"
+    },
+    "slice": {
+      "enabled": false,
+      "id": 0
+    },
+    "grid": {
+      "type": "unstructured"
+    },
+    "ht": 1.0,
+    "hx": [],
+    "hy": [],
+    "hz": [],
+    "units": {
+      "space":"mm",
+      "time": "ms"
+    },
+    "boundary": {
+      "alpha_radius" : 30
+    },
+    "mode": "amplitude"
+  },
+  "visualisation": {
+    "quiver": {
+      "scale": 1
+    }
+  }
+}

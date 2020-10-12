@@ -62,7 +62,7 @@ vector<size_t>* P_Vec_Ind_Noeud_Tet)
 
     C_Meshless_3d* PML= new C_Meshless_3d(Nb_Noeud,Copy_Tab_Noeud,Nb_Tri_Front,Copy_Tab_Ind_Noeud_Tri_Front,1.e-9,0);
 
-    cout<<"\nConstruction base--------------------------------------------------------------\n"<<endl;
+    //cout<<"\nConstruction base--------------------------------------------------------------\n"<<endl;
 
     vector<long> Ind_Voisin;
     vector<double> Phi_Voisin;
@@ -107,16 +107,16 @@ vector<size_t>* P_Vec_Ind_Noeud_Tet)
                    &Tab_Coord_Noeud_Elem,
                    &Tab_Nb_Voisin_Noeud_Elem,&Tab_Ind_Voisin_Noeud_Elem,&Tab_Phi_Voisin_Noeud_Elem);
 
-    cout<<"\nConstruction base ok...\n"<<endl;
+    //cout<<"\nConstruction base ok...\n"<<endl;
 
     //-----------------------------------------------------------------------//
 
-    cout<<"\nIntegration -------------------------------------------------------------------\n"<<endl;
+    //cout<<"\nIntegration -------------------------------------------------------------------\n"<<endl;
 
     //task_scheduler_init init(nb_core_for_gs_cal);
 	size_t nb_core_for_gs_cal=8; //task_scheduler_init::default_num_threads();
     
-    cout<<"\nnb thread : "<<nb_core_for_gs_cal<<endl;
+    //cout<<"\nnb thread : "<<nb_core_for_gs_cal<<endl;
         
     concurrent_hash_map<const long,C_Vec3d,HashCompareGSKey>** Tab_Gradiant_Stabilisee=NULL;
     double* Tab_Volume_Cellule=NULL;
@@ -126,7 +126,7 @@ vector<size_t>* P_Vec_Ind_Noeud_Tet)
          &Ind_Voisin,&Phi_Voisin,
          &Tab_Ind_Noeud_Tet,&Tab_Ind_Cel_Elem_Tet,&Tab_Ind_S_Elem_Tet,&Tab_Id_in_S_Elem_Tet,&Tab_Coord_Noeud_Elem);
 
-    cout<<"\nIntegration ok...\n"<<endl;
+    //cout<<"\nIntegration ok...\n"<<endl;
 
     //-----------------------------------------------------------------------//
     // Sortie corespandance noeus new to old et inv:
@@ -187,7 +187,7 @@ vector<size_t>* P_Vec_Ind_Noeud_Tet)
     }
 
     //-----------------------------------------------------------------------//
-    cout<<"\nFreeing stuff...\n"<<endl;
+    //cout<<"\nFreeing stuff...\n"<<endl;
 
     for(i=0;i<Size_Tab_GS;i++)delete Tab_Gradiant_Stabilisee[i];
     free(Tab_Gradiant_Stabilisee);

@@ -1,21 +1,15 @@
-function [msings_obj] = singularity3d_classify_parallel(msings_obj, mflow_obj)
-% This is a wrapper function for Matlab's ScatteredInterpolant. We can interpolate
-% each frame of a 4D array independtly using parfor and save the interpolated data for 
-% later use with optical flow. Then, just delete the interpolated data
-% or offer to keep it, because this step is really a time piggy.
-% ARGUMENTS:
-%           locs: locations of known data
-%           data: scatter data known at locs of size tpts x nodes
-%           X, Y Z: -- grid points to get interpolation out, must be 3D
-%                      arrays
-%           mask -- indices of points within the brain's convex hull boundary. 
-%                    Same size as X, Y, or Z.
+function [classification_cell_str, classification_cell_num, singularity_count] = singularity3d_classify_parallel(nullflow_points3d, params)
+% ARGUMENTS: XXXX Document
+%      .null_points_3d        -- a struct of size [1 x no. timepoints]
+%                                                -- .xyz_idx [no. of singularities x 1] -- linear indices 
+%                                                            [no. of singularities x 3] -- subscripts      
 %    
 % OUTPUT:
-%       mfile_interp_obj: matfile handle to the file with the interpolated
-%                         data.
-%       mfile_interp_sentinel: OnCleanUp object. If keep_interp_data is
-%                              true, then this variable is an empty array.
+%    % classification_cell  --  a cell array of size [1 x no. timepoints]
+%                                                          where each element is a cell of size
+%                                                          [no. of singularities]. The cells
+%                                                          have human readable strings with
+%                                                          the type of singularity detected.    
 %
 % AUTHOR:   
 %     Paula Sanz-Leon
@@ -25,93 +19,66 @@ function [msings_obj] = singularity3d_classify_parallel(msings_obj, mflow_obj)
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
 
+    % Load flows data - nonwritable
+    obj_flows = load_iomat_flows(params);
+    % Get important parameters
+    tpts = params.flows.data.shape.t;
+    grid_size = [params.flows.data.shape.y, params.flows.data.shape.x, params.flows.data.shape.z];
+    %TODO: ENABLE: grid_size = params.flows.data.shape.grid; 
+    hx = params.flows.data.hx; 
+    hy = params.flows.data.hy; 
+    hz = params.flows.data.hz; 
 
+    % Calculate jacobian and classify singularities
+    classification_cell_str = cell(size(nullflow_points3d));
+    classification_cell_num = cell(size(nullflow_points3d));
+    base_singularity_num_list = cellfun(@(x) s3d_get_numlabel(x), s3d_get_base_singularity_list());
+    singularity_count = zeros(length(classification_cell_num), length(base_singularity_num_list));
 
-% Calculate jacobian and classify singularities
+    null_points_cell = struct2cell(nullflow_points3d);
+    % Get only relevant data -- subscripts
+    null_points_cell = squeeze(null_points_cell(1, 1, :));
+    
+    % Convert string labels to numeric labels based on our mapping
+    str2num_cellfun = @(y) cellfun(@(x) s3d_get_numlabel(x), y); 
 
-null_points_3d =  msings_obj.null_points_3d; 
-singularity_classification_list = cell(size(null_points_3d));
-msings_obj.singularity_classification_list = cell(size(null_points_3d)); 
+    fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started classification of singularities.'))
+    parfor tt=1:tpts 
+           % Check if we have critical points. There are 'frames' for which
+           % nothing was detected, we should not attempt to calculate jacobian.
+           nullflow_points3d_frame = null_points_cell{tt};
 
+           if isempty(nullflow_points3d_frame.subscripts)
+               singularity_labels = {'empty'};
+               %obj_singularity.classification_cell(1, tt) = {singularity_labels};
+               classification_cell{1, tt} = singularity_labels;
+               continue
+           end
+           
+           num_critical_points = size(nullflow_points3d_frame, 1);
+           singularity_labels  = cell(num_critical_points, 1);
 
-tpts = size(null_points_3d, 2);
+           [boundary_vec_idx, innies_vec_idx] = detect_boundary_points(nullflow_points3d_frame.subscripts, grid_size);
 
-% Load options structure
-options   = mflow_obj.options;
-grid_size = options.flows.grid_size;
+           % Create temp variables with partial load of a matfile. 
+           ux = obj_flows.ux(:, :, :, tt);
+           uy = obj_flows.uy(:, :, :, tt);
+           uz = obj_flows.uz(:, :, :, tt);
+           tmp = classify_points(nullflow_points3d_frame.subscripts, innies_vec_idx, ux, uy, uz, hx, hy, hz);
+           singularity_labels(innies_vec_idx) = tmp;
+           singularity_labels(boundary_vec_idx) = {'boundary'};
+           
+           %obj_singularity.classification_cell(1, tt) = {singularity_labels};
+           classification_cell_str{1, tt} = singularity_labels;
+           % Get numeric labels
+           classification_cell_num{1, tt} = str2num_cellfun(singularity_labels);
+           % Count singularities
+           singularity_count(tt, :) = singularity3d_count(classification_cell_num{1, tt}, base_singularity_num_list);
+    end
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished classification of singularities.'))
+end % singularity3d_classify_parallel()
 
-% Check if we stored linear indices or subscripts 
-if size(null_points_3d(1).xyz_idx, 2) < 2
-    fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started converting lindear indices into subscripts.'))
-
-    for tt=1:tpts
-        xyz_subs = switch_index_mode(null_points_3d(tt).xyz_idx, 'subscript', grid_size);
-        null_points_3d(tt).xyz_idx = xyz_subs;
-    end    
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished converting lindear indices into subscripts.'))
- 
-end
-
-hx = options.interpolation.hx; 
-hy = options.interpolation.hy; 
-hz = options.interpolation.hz; 
-grid_size = options.interpolation.grid_size;
-
-null_points_cell = struct2cell(null_points_3d);
-% Get only relevant data -- subscripts
-null_points_cell = squeeze(null_points_cell(1, 1, :));
-fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started classification of singularities.'))
-
-parfor tt=1:tpts 
-       % Check if we have critical points. There are 'frames' for which
-       % nothing was detected, we should not attempt to calculate jacobian.
-       null_points_3d_xyz_idx = null_points_cell{tt};
-
-       if isempty(null_points_3d_xyz_idx)
-           singularity_labels = {'empty'};
-           %msings_obj.singularity_classification_list(1, tt) = {singularity_labels};
-           singularity_classification_list{1, tt} = singularity_labels;
-
-           continue
-       end
-       
-       num_critical_points = size(null_points_3d_xyz_idx, 1);
-       singularity_labels  = cell(num_critical_points, 1);
-
-       [boundary_vec_idx, in_bdy_vec_idx] = detect_boundary_points(null_points_3d_xyz_idx, grid_size);
-
-       % Create temp variables with partial load of a matfile. 
-       ux = mflow_obj.ux(:, :, :, tt);
-       uy = mflow_obj.uy(:, :, :, tt);
-       uz = mflow_obj.uz(:, :, :, tt);
-       
-       temp_labels = classify_points(null_points_3d_xyz_idx, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz);
-       singularity_labels(in_bdy_vec_idx) = temp_labels;
-       singularity_labels(boundary_vec_idx) = {'boundary'};
-       
-       %msings_obj.singularity_classification_list(1, tt) = {singularity_labels};
-       singularity_classification_list{1, tt} = singularity_labels;
-
-
-end
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished classification of singularities.'))
-fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Saving classification list to file.'))
-
-msings_obj.singularity_classification_list = singularity_classification_list;
-
-end % singularity3d_classify_singularities_parallel()
-
-   
-function label = classify_points(null_points_3d_xyz_idx, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz)
-    num_points = length(in_bdy_vec_idx);
-     parfor idx=1:num_points
-         tmp = classification_step(idx, null_points_3d_xyz_idx, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz)
-         label{idx} = tmp;
-     end
-
-end % function data3d_interpolate_parallel()
-
-function [boundary_vec_idx, in_bdy_vec_idx] = detect_boundary_points(points_idx, grid_size)
+function [boundary_vec_idx, innies_vec_idx] = detect_boundary_points(points_idx, grid_size)
 % This function only detects points on the faces of the grid.
 % It does not handle an irregular domain.
 
@@ -125,18 +92,26 @@ function [boundary_vec_idx, in_bdy_vec_idx] = detect_boundary_points(points_idx,
     bv = bv_x + bv_y + bv_z;
     
     boundary_vec_idx = find(bv > 0);
-    in_bdy_vec_idx = find(bv ==0);
+    innies_vec_idx = find(bv ==0);
 
 end % function detect_boundary_points()
 
+function label = classify_points(nullflow_points3d_subscripts, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz)
+    num_points = length(in_bdy_vec_idx);
+     parfor idx=1:num_points
+         tmp = classification_step(idx, nullflow_points3d_subscripts, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz);
+         label{idx} = tmp;
+     end
 
-function temp_data = classification_step(idx, null_points_3d_xyz_idx, in_bdy_vec_idx, ux, uy, uz, hx, hy, hz)
+end % function classify_points()
+
+function temp_data = classification_step(idx, nullflow_points3d_subscripts, innies_vec_idx, ux, uy, uz, hx, hy, hz)
 
            % Check if any subscript is on the boundary of the grid. 
            % This will cause a problem in the jacobian calculation. 
-           point_idx = null_points_3d_xyz_idx(in_bdy_vec_idx(idx), :);
+           point_idx = nullflow_points3d_subscripts(innies_vec_idx(idx), :);
  
            % Calculate the Jacobian at each critical point 
-           [J3D] = singularity3d_calculate_jacobian(point_idx, ux, uy, uz, hx, hy, hz);
+           [J3D] = singularity3d_jacobian(point_idx, ux, uy, uz, hx, hy, hz);
            temp_data = singularity3d_classify_critical_points(J3D);
-end
+end % function classification_step()

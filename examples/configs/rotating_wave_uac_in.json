@@ -1,0 +1,170 @@
+{
+  "general": {
+    "storage": {
+      "time_stamp": [],
+      "dir": "scratch",
+      "dir_tmp": "/tmp",
+      "params": {
+        "input": {
+          "filename": "rotating_wave_uac_in.json",
+          "dir": "examples/configs"
+        },
+        "output": {
+          "filename": "rotating_wave_uac_ou.json",
+          "dir": "examples/configs"
+        }
+      },
+      "format": "iomat"
+    },
+    "parallel": {
+      "enabled": false,
+      "workers_fraction": 0.8
+    }
+  },
+  "interpolation": {
+    "enabled": false,
+    "file": {
+      "exists": false,
+      "dir": "",
+      "name": "",
+      "label": "",
+      "keep": true
+    },
+    "hx": 3,
+    "hy": 3,
+    "hz": 3,
+    "neighbour_method": "",
+    "extrapolation_method": "",
+    "boundary": {
+      "alpha_radius": 30,
+      "thickness": 2
+    },
+    "visualisation": {
+      "enabled": true
+    }
+  },
+  "flows": {
+    "enabled": true,
+    "file": {
+      "exists": false,
+      "keep": true,
+      "dir": "",
+      "name": "",
+      "label": ""
+    },
+    "modality": "amplitude",
+    "method": {
+      "name": "cnem",
+      "cnem": {
+        "convex_hull": "bi",
+        "alpha_smooth": 0.1,
+        "max_iterations": 128,
+        "burnin": {
+          "length": 8
+        },
+        "initial_conditions": {
+          "mode": "random",
+          "seed": 42
+        },
+        "nodal_flows": {
+          "enabled": false
+        }
+      }
+    },
+    "visualisation": {
+      "enabled": true
+    },
+    "decomposition": {
+      "svd": {
+        "enabled": true,
+        "modes": 4,
+        "grid": {
+          "type": "unstructured"
+        }
+      }
+    },
+  "quantification": {
+      "energy": {
+        "enabled": true,
+        "modality": "nodal"
+      }
+    }
+  },
+  "streamlines": {
+      "enabled": true,
+      "file": {
+          "exists": false,
+          "dir": "",
+          "name": "",
+          "label": "",
+          "keep": true
+    },
+
+      "tracing": {
+               "grid": {
+                   "type": "unstructured"
+                  },
+               "seeding_points": {
+                                  "modality": "random-sparse",
+                                  "seed": 42
+              },
+              "max_stream_length" : 200,
+              "time_step": 0.5
+          },
+
+    "visualisation": {
+      "enabled": true
+    }
+  },
+  "singularity": {
+    "enabled": false,
+    "file": {
+      "keep": true,
+      "dir": "",
+      "name": "",
+      "label": ""
+    },
+    "detection": {
+      "enabled": false,
+      "mode": "null-flow-field",
+      "threshold": [
+        0,
+        0.015625
+      ]
+    },
+    "classification": {
+      "enabled": false
+    },
+    "quantification": {
+      "enabled": false
+    },
+    "visualisation": {
+      "enabled": false
+    }
+  },
+  "data": {
+    "file": {
+      "dir": "demo-data",
+      "name": "rotating_wave_W_c1_d1ms_iomat.mat"
+    },
+    "slice": {
+      "enabled": false,
+      "id": 0
+    },
+    "grid": {
+      "type": "unstructured"
+    },
+    "ht": 0.25,
+    "hx": [],
+    "hy": [],
+    "hz": [],
+    "units": {
+      "space": "mm",
+      "time": "ms"
+    },
+    "boundary": {
+      "alpha_radius" : 30
+    },
+    "modality": "amplitude"
+  }
+}

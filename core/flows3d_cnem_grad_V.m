@@ -24,11 +24,11 @@ gradV = flows3d_cnem_grad_V(B, V);
 %     Updated, documented by Paula Sanz-Leon -- QIMR 2019
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%  gradV = grad_cnem(XYZ,V,[IN_Tri_Ini])
+% gradV = grad_cnem(XYZ,V,[IN_Tri_Ini])
 % Gradient \nabla V evaluated at 3-D scattered points in matrix XYZ
 %
 % Alternatively, can call 
-%  gradV = grad_cnem(B,V);
+% gradV = grad_cnem(B,V);
 % to use a precalculated B matrix
 %
 % Uses CNEM.

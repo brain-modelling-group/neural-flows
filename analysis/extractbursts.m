@@ -6,13 +6,13 @@ function out = extractbursts(data, thr, nburstsflag)
 % ARGUMENTS:
 %          data    --  a 1D array of size [time x 1] with the bursty data.
 %          thr     --  a float with the threshold to detect bursts
-%          nburstflag -- an boolean flag to determine if the output are the
+%          nburstflag -- a boolean flag to determine if the output are the
 %                        bursts (out is a cell) or the number of bursts (out is a number). 
-%                        Default 0. 
+%                        Default false. 
 %
 % OUTPUT: 
-%          bursts     --  a cell (nburstflag=0) with the suprathreshold bursts,
-%                         or a number (nburstflag=1) with the number of
+%          bursts     --  a cell (nburstflag=false) with the suprathreshold bursts,
+%                         or a number (nburstflag=true) with the number of
 %                         bursts detected.
 %
 % REQUIRES: 
@@ -81,7 +81,7 @@ end
 
 nflucts = length(upcrossings);
 
-if nburstsflag % if only want number of bursts bursts, end now
+if nburstsflag % if only want number of bursts, end now
     out = nflucts;
     return
 end
@@ -94,7 +94,7 @@ end
 
 out = store_flucts;
 
-function o=emptyout
+function o = emptyout
     if nburstsflag
         o = 0;
     else

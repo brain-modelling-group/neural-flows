@@ -1,55 +1,105 @@
 
-## Brain Waves: Generation, detection and classification of measured spatiotemporal patterns in brain network models.
-## Patch Flow
-## Neural Flows
+## Neural Flows: estimation of velocities, detection and classification singularities in 3D+t brain data
+
 If you use this toolbox, please cite:
 
-Roberts JA, Gollo LL, Abeysuriya R, Roberts G, Mitchell PB, Woolrich MW, Breakspear M. Metastable brain waves. (2018) (submitted). [Preprint available on bioarxiv.](https://www.biorxiv.org/content/early/2018/10/03/347054)
+[![DOI](https://zenodo.org/badge/163922377.svg)](https://zenodo.org/badge/latestdoi/163922377)
+
+Roberts JA, Gollo LL, Abeysuriya R, Roberts G, Mitchell PB, Woolrich MW, Breakspear M. Metastable brain waves. (2019) [Available from here.](https://www.nature.com/articles/s41467-019-08999-0)
+
+
+Sanz-Leon P, Gollo LL, and Roberts JA (2020) (in prep).
+
+
+## Brief Description 
+This is `neural-flows`, a library to estimate wave velocities and singularities in 3D+t in neuroimaging data.  
+The figure below gives you an idea of a typical workflow you can run with this toolbox:  
+Each link of the path is a component of the `core-module` namely: 
++ data interpolation, 
++ flow estimation, 
++ singularity detection and classification, and
++ streamline tracing. 
+
+The toolbox has a number of ancillary modules, including `examples` with  exemplary scripts to execute a full or partial
+workflow; `external`, which contains code implemented by others, the
+most prominent being C-NEM invoked by so-called
+meshless methods, and the Hungarian method 
+used track singularities; and finally, `utils` which gathers small
+standalone functions that support the main modules. 
 
 
 
-#### Dependencies:
+![alt text](https://github.com/brain-modelling-group/neural-flows/blob/master/demo-data/img/fig_workflow_pretty_vis.png?raw=true)
 
+## Getting started
 
-1. [Brain Dynamics Toolbox](http://www.bdtoolbox.org/)
-    - this code has been tested with version 2017c, available at:
-      https://github.com/breakspear/bdtoolkit/releases/download/2017c/bdtoolkit-2017c.zip
+### Dependencies:
 
-2. [Constrained Natural Element Method (CNEM)](https://m2p.cnrs.fr/sphinxdocs/cnem/index.html)
+**MATLAB**
+   
+   - tested on R2018b & R2020a
+   - in principle should work on any OS that MATLAB supports; tested on Windows 10, Debian 10, Ubuntu 20.04, Ubuntu 16.l4, OpenSuse 15.1 
+
+**CNEM**, https://m2p.cnrs.fr/sphinxdocs/cnem/index.html
+    
     - used version (v03, 2014-05-04) available here: https://ff-m2p.cnrs.fr/frs/?group_id=14
     - aka cnemlib: https://au.mathworks.com/matlabcentral/linkexchange/links/3875
 
-3. A connectivity matrix:
-    - an n-by-n matrix giving the strength of connectivity between each pair of n nodes, with zeros on the
-      diagonal (no self connections).
+**input data**
+    
+    - `data`: a tpts-by-n 2D array with the data for unstructured datasets (i.e., soruce reconstructed MEG data) 
+    - `locs`: a n-by-3 2D array with the locations of nodes/rois/sources, expressed in mm or m.
+    - `ht`  : sampling period expressed in ms or s.
+    
+### Installation:
+
+If you download the zip folder, first unzip and then ... 
+
+- Windows 10: see the instructions [here](https://github.com/brain-modelling-group/neural-flows/wiki/Getting-started::Windows10::). 
+- Linux: on the terminal change directory to `neura-flows` folder, then start matlab. That's it. The toolbox paths should be appended automatically. 
+
+If you clone the repo, same rules as above apply. 
+
+### What can the toolbox do?
+A bunch of things, mostly the ones described in the diagram above.
+
+To get started follow the next steps (timestamp: Fri 31 Jul 2020 21:21:17 AEST): 
+
+0. (Optional) Inside directory `neural-flows`, make a new directory call `scratch` (by default we will store results there, you can change it later ...)
+1. (Optional) Open the file `rotating_wave_uah_in.json` under `examples/`
+1a.(Optional) if you are on Windows change line 6 of that file
+```
+      "dir_tmp": "/tmp",    
+
+```
+
+to 
+
+```
+   "dir_tmp": "C:\Users\guest\AppData\Local\Temp",    
+```
+
+or any other directory where some temporary files will be stored during execution.
+
+1b. (Optional) If you are on Mac, the default value `/tmp` should work, otherwise change it to an appropriate temp folder.
+
+1c. (Optional) If you re on Linux, you're good to go.
+
+2. Run the function under `examples/` at
+```matlab
+rotating_wave('uah')
+``` 
+It should take about 5 minutes to run everything and pop up figures with flow mode decomposition and singularity tracking!
+
+##### Flow mode decomposition
+![alt text](https://github.com/brain-modelling-group/neural-flows/blob/master/demo-data/img/fig_rotating_wave_svd.png?raw=true)
+
+#### Singularity statistics
+![alt text](https://github.com/brain-modelling-group/neural-flows/blob/master/demo-data/img/fig_summary_stats.png?raw=true)
+![alt text](https://github.com/brain-modelling-group/neural-flows/blob/master/demo-data/img/fig_sing_tracking.png?raw=true)
 
 
+### Where is the user manual?
 
-### Contents:
-
-
-+ `brainwaves_sim.m` - script to simulate the model, using the Brain Dynamics Toolbox.
-
-
-+ `cohcorrgram.m` - function to calculate the time-windowed cross-correlation between the phase coherences of 
-                two groups of nodes (e.g. left hemisphere vs right hemisphere).
-
-
-+ `corrgram.m` - (slightly modified) version of `corrgram.m` from the MATLAB File Exchange, URL:
-             https://au.mathworks.com/matlabcentral/fileexchange/15299-windowed-cross-correlation--corrgram-
-
-
-+ `phases_nodes.m` - helper function to calculate instantaneous phase for all nodes of the network.
-
-
-+ `phaseflow_cnem.m` - function to calculate phase flow (velocity vector field) at all points (uses CNEM).
-
-
-+ `traceStreamScattered.m` - function to calculate streamlines for a velocity vector field sampled at scattered points in 3-D (uses CNEM).
-
-
-+ `grad_cnem.m` - helper function to calculate gradient for scattered points (uses CNEM).
-
-
-+ `grad_B_cnem.m` - helper function to calculate the B matrix for grad_cnem (uses CNEM).
+Coming soon, sorry `<(~.~)>` ...
 
