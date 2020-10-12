@@ -38,7 +38,7 @@ function obj_streams = streams3d_tracing_mlab_parallel(obj_flows, obj_streams, p
     %spmd_parfor_with_matfiles(number_of_things, parfun, temp_fname_obj, storage_expression)
     parfun = @tracing_mlab_step;
     streamtracing_3d_storage_expression = 'streamlines(1, jdx)';
-    [obj_interp] = spmd_parfor_with_matfiles(tpts, parfun, obj_streams, streamtracing_3d_storage_expression);
+    [obj_streams] = spmd_parfor_with_matfiles(tpts, parfun, obj_streams, streamtracing_3d_storage_expression);
     
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished parallel tracing of streamlines.'))
     
