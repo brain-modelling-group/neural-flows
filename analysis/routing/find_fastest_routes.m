@@ -38,7 +38,7 @@ Z = mobj.Z;
 % NOTE: without the parfor, this is excruciatingly slow ... about 1.5h to
 % process 1024 samples.
 
-parfor tt=1:tpts
+for tt=1:1
     % Get current frame
     uu = sqrt(mobj.ux(:, :, :, tt).^2 + mobj.uy(:, :, :, tt).^2 + mobj.uz(:, :, :, tt).^2);
     speeds = uu(in_bdy_mask);
