@@ -53,7 +53,7 @@ switch params.flows.modality
 end
 
 % Initialise cell to save pathlines
-pathlines_cell = cell(size(initial_seeding_locs, 1), 1);
+pathlines_cell = cell(1, size(initial_seeding_locs, 1));
 
 % Call everything
 trace_pathlines()
