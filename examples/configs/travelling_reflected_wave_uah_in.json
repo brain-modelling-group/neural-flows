@@ -154,7 +154,7 @@
     "grid": {
       "type": "unstructured"
     },
-    "ht": 0.5,
+    "ht": [],
     "hx": [],
     "hy": [],
     "hz": [],
