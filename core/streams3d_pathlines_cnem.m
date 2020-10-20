@@ -56,9 +56,9 @@ end
 pathlines_cell = cell(size(initial_seeding_locs, 1));
 
 % Call everything
-tracing_cnem_time_loop()
+trace_pathlines()
 
-function tracing_cnem_time_loop()
+function trace_pathlines()
     output_cell = tracing_cnem_step(1, initial_seeding_locs);
     new_seeding_locs = get_pathlines_end_vertices(output_cell);
     for pp = 1:size(initial_seeding_locs, 1)
