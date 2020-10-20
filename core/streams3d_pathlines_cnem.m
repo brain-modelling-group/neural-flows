@@ -23,7 +23,7 @@ function obj_streams = streams3d_pathlines_cnem(obj_flows, obj_streams, params)
 
 
 % Load necessary stuff
-max_pathline_length = params.streamlines.tracing.max_pathline_length;
+max_pathline_length = 8; %params.streamlines.tracing.max_pathline_length;
 masks = obj_flows.masks;
 locs  = obj_flows.locs;
 
@@ -59,7 +59,7 @@ pathlines_cell = cell(size(initial_seeding_locs, 1));
 trace_pathlines()
 
 function trace_pathlines()
-    output_cell = tracing_cnem_step(1, initial_seeding_locs);
+    output_cell = tracing_cnem_fun_step(1, initial_seeding_locs);
     new_seeding_locs = get_pathlines_end_vertices(output_cell);
     for pp = 1:size(initial_seeding_locs, 1)
         pathlines_cell{pp} = initial_seeding_locs(pp, :);
@@ -180,13 +180,13 @@ function pathline_cell = tracing_cnem_tracing_loop(locs, boundary_faces, flow_fi
 end %tracing_cnem_loop()
 
 
-function output_cell = tracing_cnem_amplitude_step(idx)
+function output_cell = tracing_cnem_amplitude_step(idx, seeding_locs)
         flow_field = obj_flows.uxyz(:, :, idx);
         output_cell = tracing_cnem_tracing_loop(locs, boundary_faces, flow_field, seeding_locs, time_step, max_pathline_length);
 end % function tracing_cnem_amplitude_step()
 
 
-function output_cell = tracing_cnem_phase_step(idx)
+function output_cell = tracing_cnem_phase_step(idx, seeding_locs)
         flow_field = [obj_flows.vx(idx, :); obj_flows.vy(idx, :); obj_flows.vz(idx, :)].'; 
         output_cell = tracing_cnem_tracing_loop(locs, boundary_faces, flow_field, seeding_locs, time_step, max_pathline_length);
 end % function tracing_cnem_phase_step()
