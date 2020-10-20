@@ -53,7 +53,7 @@ switch params.flows.modality
 end
 
 % Initialise cell to save pathlines
-pathlines_cell = cell(size(initial_seeding_locs, 1));
+pathlines_cell = cell(size(initial_seeding_locs, 1), 1);
 
 % Call everything
 trace_pathlines()
@@ -140,7 +140,7 @@ function pathline_cell = tracing_cnem_tracing_loop(locs, boundary_faces, flow_fi
         
         % Interpolate velocity field 
         flowfield_interp = cnem_interpol_obj.interpolate(flow_field); % has same length as number of live points
-        
+
         % check if step length has hit zero
         validsteps = ~all(~flowfield_interp, 2);
         %if any(~validsteps), fprintf('%d steps hit zero\n',sum(~validsteps)), end
@@ -191,9 +191,11 @@ function output_cell = tracing_cnem_phase_step(idx, seeding_locs)
         output_cell = tracing_cnem_tracing_loop(locs, boundary_faces, flow_field, seeding_locs, time_step, max_pathline_length);
 end % function tracing_cnem_phase_step()
 
-function loci = get_pathlines_end_vertices(output_cell)
-    loci = cellfun(@(x) [x(end, :)], output_cell, 'UniformOutput', false);
-    loci = cell2mat(loci);
+function new_seeds = get_pathlines_end_vertices(output_cell)
+    loci = cellfun(@(x) x(end, :), output_cell, 'UniformOutput', false);
+    for pp=1:length(loci)
+        new_seeds(pp, :) = loci{pp};
+    end
 end
 
 function pathlines_cell = append_pathline_vertices(pathlines_cell, pathline_segment_cell)
