@@ -5,8 +5,7 @@ locs = obj_streams.initial_seeding_locs;
 
 
 % Start locations
-plot3(locs(:, 1), locs(:, 2), locs(:, 3), 'k.')
-fig_handle = figure('Name', 'neural-flows-pathlines');
+fig_handle = figure('Name', 'neural-flows-pathlines-coloured');
 ax = subplot(1,1,1, 'Parent', fig_handle); 
 ax.Color = [0 0 0];
 hold(ax, 'on')
@@ -15,6 +14,7 @@ cmap = magma(256);
 ax.Colormap = cmap;
 c_ref = linspace(0,1,256);
 pathlines = obj_streams.pathlines;
+plot3(ax, locs(:, 1), locs(:, 2), locs(:, 3), 'k.')
 
     for ii=1:length(pathlines)
        x = squeeze(pathlines{ii}(:, 1));
