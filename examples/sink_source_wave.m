@@ -4,9 +4,11 @@ function sink_source_wave(case_label)
 % NOTE: Assumes this function is run from the top level directory neural-flows/
 
 % PERFORMANCE:
-% |    Host   | Data Domain    | Data Mode   | Flow Method     | # workers  |  Runtime |  Memory |
-% |-----------|----------------|-------------|-----------------|------------|----------|---------|
-% | tesseract | (u)nstructured | (a)mplitude | (h)orn-schunk3d |      6     |  3.73 min| XX  GB  |  
+% |    Host   | Input Data Domain    | Input Data Mode   | Flow Method     | # workers  |  Runtime |  Memory |
+% |-----------|----------------------|-------------------|-----------------|------------|----------|---------|
+% | tesseract | (u)nstructured       | (a)mplitude       | (h)orn-schunk3d |      6     |  3.73 min| XX  GB  |  
+% |
+% 
 
 if nargin < 1
     case_label = 'uah';
@@ -20,7 +22,6 @@ switch case_label
     case 'upc'
         input_params_filename = 'sink-source_wave_upc_in.json';
 end
-
 
 input_params_dir  = 'examples/configs';
 json_mode = 'read';
