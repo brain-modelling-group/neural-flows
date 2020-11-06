@@ -1,12 +1,18 @@
 function sink_source_wave(case_label)
-% This script runs the whole neural-flows workflow on a small epoch of simulated 
-% data, that corresponds to a pattern with a defined by sinks and sources.
+% This function runs the whole neural-flows workflow on a small epoch of simulated 
+% data, that corresponds to a brain wave pattern which has sinks and sources.
 % NOTE: Assumes this function is run from the top level directory neural-flows/
 
-% MAIN PROPERTIES:
-% | Input Dataset Type    | Input Data Modality   | Flow Estimation Type | Flow Estimation Method |  
-% |-----------------------|-----------------------|----------------------|------------------------| 
-% |  (u)nstructured       | (a)mplitude           |   (h)orn-(s)chunk3d  |       (m)esh-(b)ased
+% CASE_LABEL MEANING: 
+% |  Input Dataset Type    | Input Data Modality   | Flow Estimation Method | Flow Estimation Type   |  
+% |-----------------------|-----------------------|------------------------|-------------------------| 
+% |  (u)nstructured       | (a)mplitude           |   (h)orn-(s)chunk3d    |     (m)esh-(b)ased
+% |  (s)tructured         | (p)hase               |   (p)hase-(g)radient   |     (m)esh(l)ess
+
+% Available case_label combinations:
+% Case A: u-a-hs-mb
+% Case B: u-a-hs-ml
+% Case C: u-p-pg-ml
 
 % PERFORMANCE:
 % |    Host   |  # workers  |  Runtime |  Memory |
@@ -14,16 +20,16 @@ function sink_source_wave(case_label)
 % | tesseract |     6       |  3.73 min| XX  GB  |  
 
 if nargin < 1
-    case_label = 'uah';
+    case_label = 'u-a-hs-mb'; 
 end
 
 switch case_label
-    case 'uah'
-        input_params_filename = 'sink-source_wave_uah_in.json';
-    case 'uac'
-        input_params_filename = 'sink-source_wave_uac_in.json';
-    case 'upc'
-        input_params_filename = 'sink-source_wave_upc_in.json';
+    case 'u-a-hs-mb'
+        input_params_filename = 'sink-source_wave_case_u-a-hs-mb_in.json';
+    case 'u-a-hs-ml'
+        input_params_filename = 'sink-source_wave_case_u-a-hs-ml_in.json';
+    case 'u-p-pg-ml'
+        input_params_filename = 'sink-source_wave_case_u-p-pg-ml_in.son';
 end
 
 input_params_dir  = 'examples/configs';
