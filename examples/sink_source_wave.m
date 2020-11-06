@@ -1,14 +1,17 @@
 function sink_source_wave(case_label)
 % This script runs the whole neural-flows workflow on a small epoch of simulated 
-% data, that corresponds to a pattern with a defined sink and source.
+% data, that corresponds to a pattern with a defined by sinks and sources.
 % NOTE: Assumes this function is run from the top level directory neural-flows/
 
+% MAIN PROPERTIES:
+% | Input Dataset Type    | Input Data Modality   | Flow Estimation Type | Flow Estimation Method |  
+% |-----------------------|-----------------------|----------------------|------------------------| 
+% |  (u)nstructured       | (a)mplitude           |   (h)orn-(s)chunk3d  |       (m)esh-(b)ased
+
 % PERFORMANCE:
-% |    Host   | Input Data Domain    | Input Data Mode   | Flow Method     | # workers  |  Runtime |  Memory |
-% |-----------|----------------------|-------------------|-----------------|------------|----------|---------|
-% | tesseract | (u)nstructured       | (a)mplitude       | (h)orn-schunk3d |      6     |  3.73 min| XX  GB  |  
-% |
-% 
+% |    Host   |  # workers  |  Runtime |  Memory |
+% |-----------|-------------|----------|---------|
+% | tesseract |     6       |  3.73 min| XX  GB  |  
 
 if nargin < 1
     case_label = 'uah';
