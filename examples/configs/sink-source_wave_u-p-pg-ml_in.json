@@ -6,11 +6,11 @@
       "dir_tmp": "/tmp",
       "params": {
         "input": {
-          "filename": "sink-source_wave_upc_in.json",
+          "filename": "sink-source_wave_u-p-pg-ml_in.json",
           "dir": "examples/configs"
         },
         "output": {
-          "filename": "sink-sources_wave_upc_out.json",
+          "filename": "sink-sources_wave_u-p-pg-ml_out.json",
           "dir": "examples/configs"
         }
       },

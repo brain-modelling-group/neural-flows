@@ -6,11 +6,11 @@
       "dir_tmp": "/tmp",
       "params": {
         "input": {
-          "filename": "sink-source_wave_uac_in.json",
+          "filename": "sink-source_wave_u-a-hs-ml_in.json",
           "dir": "examples/configs"
         },
         "output": {
-          "filename": "sink-source_wave_uac_ou.json",
+          "filename": "sink-source_wave_u-a-hs-ml_ou.json",
           "dir": "examples/configs"
         }
       },
