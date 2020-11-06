@@ -10,7 +10,7 @@
           "dir": "examples/configs" 
         },
         "output": {
-          "filename": "rotating_wave_uah_ou_4mm.json",
+          "filename": "rotating_wave_uah_ou.json",
           "dir": "examples/configs" 
         }
       },
