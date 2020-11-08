@@ -54,7 +54,7 @@ num_sing_to_plot = length(cp_type);
 % Anonymous function to get the indices of the singularity we want to plot
 get_idx_cp_type = @(sing_list_frame, num_label_cp_type) find(sing_list_frame == num_label_cp_type);
 
-marker_size = 20;
+marker_size = 42;
 marker_alpha = 0.3;
 
 if strcmp(plotting_fun, 'scatter')
