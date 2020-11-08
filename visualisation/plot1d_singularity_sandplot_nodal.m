@@ -1,4 +1,4 @@
-function figure_handle_xyz = plot1d_singularity_sandplot_nodal(tracking_2d_matrix, locs, cp_type, xyz_lims, marker_plot, varargin)
+function figure_handle_xyz = plot1d_singularity_sandplot_nodal(tracking_2d_matrix, locs, cp_type, xyz_lims, plotting_fun, varargin)
 % This function plots singularities as a a function of 
 % their position along one axis (X, Y, Z) vs time.
 %
@@ -13,7 +13,7 @@ function figure_handle_xyz = plot1d_singularity_sandplot_nodal(tracking_2d_matri
 %                             the function in subsequent calls.
 %        xyz_lims    -- a 1 x 3 cell with [1 x 2] vectors determinign the
 %                       ranges of the X,Y, Z grid
-%        marker_plot -- a string to determine which function to use:
+%        plotting_fun -- a string to determine which function to use:
 %                       scatter or plot. 'scatter' makes prettier dots, but
 %                       pplot is faster and uses less memory.
 %         varargin   -- for the time being a 1 x 2 cell array with
@@ -57,7 +57,7 @@ get_idx_cp_type = @(sing_list_frame, num_label_cp_type) find(sing_list_frame == 
 marker_size = 20;
 marker_alpha = 0.3;
 
-if strcmp(marker_plot, 'scatter')
+if strcmp(plotting_fun, 'scatter')
    plotfun = @scatter_plot;
 else
    plotfun = @line_plot;   
@@ -119,4 +119,4 @@ end
     end % scatter_plot()
 
 end
-% function plot1d_singularity_sandplot()
+% function plot1d_singularity_sandplot_nodal()
