@@ -6,14 +6,14 @@ nodal_singularity_summary = obj_singularity.nodal_singularity_summary;
 
 % TODO: configiure graphics property to handle paper units so we can plot
 % stuff and give figure sizes
-figure_handle = figure('Name', 'nflows-nodal-punchcard');
+figure_handle = figure('Name', 'nflows-nodal-punchcard-nodal-occupancy');
 ax_pc = subplot(2, 4, [1 2 3 5 6 7], 'Parent', figure_handle);
 ax_sc = subplot(2, 4, [4 8], 'Parent', figure_handle);
 hold(ax_pc, 'on');
 base_cp = s3d_get_base_singularity_list();
 cmap = s3d_get_colours('critical-points');
 num_base_sngs = size(obj_singularity, 'tracking_3d_matrix', 1);
-total_nodes = size(obj_singularity, 'tracking_3d_matrix', 1);
+active_nodes = length(nodal_singularity_summary.active_nodes.idx); 
 total_frames = size(obj_singularity, 'tracking_3d_matrix', 3);
 
 % Load data to plot
@@ -34,9 +34,8 @@ varargout{1} = ax_handles;
         
         for kk=1:num_base_sngs
             cdata = cmap(kk*ones(length(xdata), 1), :);
-            %sizedata = sum(sum(data(:, :, :), 1), 2) / total_nodes;
-            sizedata = sum(squeeze(data(kk, :, :))); %/ total_nodes;
-            sizedata = sizedata*100; % percentage;
+            sizedata = sum(squeeze(data(kk, :, :))) / active_nodes;
+            sizedata = sizedata*1000; % percentage;
             max(sizedata(:))
             sizedata(sizedata == 0) = 0.01; % Make super small dots
             scatter(ax_pc, xdata, ydata(9-kk)*ones(1,length(xdata)), sizedata, cdata, ...
@@ -53,12 +52,12 @@ varargout{1} = ax_handles;
     end % function plot_stacked_bars
 
     function ax_sc = plot_size_scale(ax_sc)
-        ydata = [1 2 3 4 5 6 7 8];
-        scatter(ax_sc, 2*ones(1, length(ydata)), ydata, ydata*100, [0.5 0.5 0.5], 'filled');
-        ax_sc.YLabel.String = 'occupancy [number of nods]';
+        ydata = [5 10 15 20 25 30 35 40 45 50];
+        scatter(ax_sc, ones(1, length(ydata)), ydata, ydata*10, [0.5 0.5 0.5], 'filled');
+        ax_sc.YLabel.String = 'occupancy [% singular nodes]';
         ax_sc.XTick = [];
-        ax_sc.YLim = [0.5, 8.5];
-        ax_sc.XLim = [1.5 2.5];
+        ax_sc.YLim = [2.5, 52.5];
+        ax_sc.XLim = [0.5 1.5];
         ax_sc.YLim = [0.5, 8.5];        
         ax_sc.TickLength = [0 0];
         ax_sc.Box = 'on';
