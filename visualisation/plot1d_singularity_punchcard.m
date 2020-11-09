@@ -1,4 +1,4 @@
-function figure_handle = plot1d_singularity_punchcard(params)
+function [figure_handle, varargout] = plot1d_singularity_punchcard(params)
 
 nodes_str_lbl = params.data.nodes_str_lbl;
 obj_singularity = load_iomat_singularity(params);
@@ -15,10 +15,13 @@ base_cp = s3d_get_base_singularity_list();
 cmap = s3d_get_colours('critical-points');
 total_frames = size(obj_singularity, 'tracking_2d_matrix', 2);
 
- plot_punchcard(ax_pc)
- plot_size_scale(ax_sc)
+ax_pc = plot_punchcard(ax_pc);
+ax_sc = plot_size_scale(ax_sc);
+ax_handles{1} = ax_pc;
+ax_handles{2} = ax_sc;
+varargout{1} = ax_handles;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Plotting functions %%%%%%%%%%%%%%%%%%%%%%%
-    function plot_punchcard(ax_pc)
+    function ax_pc = plot_punchcard(ax_pc)
         % 
         xdata = 1:length(nodal_singularity_summary.active_nodes.idx);
         ydata = 1:size(cmap, 1);
@@ -46,7 +49,7 @@ total_frames = size(obj_singularity, 'tracking_2d_matrix', 2);
         lgd_ax.Location = 'south';
     end % function plot_stacked_bars
 
-    function plot_size_scale(ax_sc)
+    function ax_sc = plot_size_scale(ax_sc)
         ydata = [5 10 15 20 25 30 35 40 45 50];
         scatter(ax_sc, ones(1, length(ydata)), ydata, ydata*10, [0.5 0.5 0.5], 'filled');
         ax_sc.YLabel.String = 'occupancy [% of time]';
@@ -57,5 +60,4 @@ total_frames = size(obj_singularity, 'tracking_2d_matrix', 2);
         ax_sc.TickLength = [0 0];
     end
    
-
 end % function plot1d_singularity_punchcard()
