@@ -34,7 +34,7 @@ varargout{1} = ax_handles;
         end 
         ax_pc.XTick = 1:length(nodal_singularity_summary.active_nodes.idx);
         ax_pc.XTickLabel = nodes_str_lbl(nodal_singularity_summary.active_nodes.idx);
-        ax_pc.XTickLabelRotation = 45;
+        ax_pc.XTickLabelRotation = 90;
         %ax_pc.XAxisLocation = 'top';
         ax_pc.YTick = 1:size(cmap, 1); 
         ax_pc.YTickLabel = base_cp(8:-1:1);
@@ -53,11 +53,12 @@ varargout{1} = ax_handles;
 
     function ax_sc = plot_size_scale(ax_sc)
         ydata = [5 10 15 20 25 30 35 40 45 50];
-        scatter(ax_sc, ones(1, length(ydata)), ydata, ydata*10, [0.5 0.5 0.5], 'filled');
+        xdata = ones(1, length(ydata));
+        scatter(ax_sc, xdata, ydata, ydata*10, [0.5 0.5 0.5], 'filled');
         ax_sc.YLabel.String = 'occupancy [% of time]';
         ax_sc.XTick = [];
         ax_sc.YLim = [0.5, 8.5];
-        ax_sc.XLim = [0.5 length(xdata)+0.5];
+        ax_sc.XLim = [0.5 1.5];
         ax_sc.YLim = [2.5, 52.5];        
         ax_sc.TickLength = [0 0];
         ax_sc.Box = 'on';

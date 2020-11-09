@@ -35,8 +35,7 @@ varargout{1} = ax_handles;
         for kk=1:num_base_sngs
             cdata = cmap(kk*ones(length(xdata), 1), :);
             sizedata = sum(squeeze(data(kk, :, :))) / active_nodes;
-            sizedata = sizedata*1000; % percentage;
-            max(sizedata(:))
+            sizedata = sizedata*1000; % sort of percentage;
             sizedata(sizedata == 0) = 0.01; % Make super small dots
             scatter(ax_pc, xdata, ydata(9-kk)*ones(1,length(xdata)), sizedata, cdata, ...
                     'filled', 'markerfacealpha', 0.2, 'markeredgecolor', 'none');
@@ -52,13 +51,12 @@ varargout{1} = ax_handles;
     end % function plot_stacked_bars
 
     function ax_sc = plot_size_scale(ax_sc)
-        ydata = [5 10 15 20 25 30 35 40 45 50];
+        ydata = [5 10 15 20 25 30 35 40 45 50]; % percentages
         scatter(ax_sc, ones(1, length(ydata)), ydata, ydata*10, [0.5 0.5 0.5], 'filled');
         ax_sc.YLabel.String = 'occupancy [% singular nodes]';
         ax_sc.XTick = [];
         ax_sc.YLim = [2.5, 52.5];
         ax_sc.XLim = [0.5 1.5];
-        ax_sc.YLim = [0.5, 8.5];        
         ax_sc.TickLength = [0 0];
         ax_sc.Box = 'on';
     end
