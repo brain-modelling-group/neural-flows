@@ -42,6 +42,8 @@ varargout{1} = ax_handles;
         ax_pc.XLabel.String = 'nodes';
         ax_pc.YLim = [0.5, 8.5];
         ax_pc.XLim = [0.5 length(xdata)+0.5];
+        ax_pc.Box = 'on';
+
         
         lgd_ax = legend(base_cp(1:num_base_sngs));
         lgd_ax.Title.String = 'Singularity Type';
@@ -58,6 +60,7 @@ varargout{1} = ax_handles;
         ax_sc.XLim = [0.5 length(xdata)+0.5];
         ax_sc.YLim = [2.5, 52.5];        
         ax_sc.TickLength = [0 0];
+        ax_sc.Box = 'on';
     end
    
 end % function plot1d_singularity_punchcard()
