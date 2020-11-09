@@ -27,7 +27,7 @@ total_frames = size(obj_singularity, 'tracking_2d_matrix', 2);
             sizedata = nodal_singularity_summary.occupancy_partial(kk, nodal_singularity_summary.active_nodes.idx) / total_frames; 
             sizedata = sizedata*1000; % percentage;
             sizedata(sizedata == 0) = 0.01; % Make super small dots
-            sh(kk) = scatter(ax_pc, xdata, ydata(9-kk)*ones(1,length(xdata)), sizedata, cdata, 'filled');
+            scatter(ax_pc, xdata, ydata(9-kk)*ones(1,length(xdata)), sizedata, cdata, 'filled');
         end 
         ax_pc.XTick = 1:length(nodal_singularity_summary.active_nodes.idx);
         ax_pc.XTickLabel = nodes_str_lbl(nodal_singularity_summary.active_nodes.idx);
