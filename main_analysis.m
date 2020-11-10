@@ -5,7 +5,7 @@ function main_analysis(inparams)
 %  (3): singularity: quantification
 
  disp('------------------------------------------------------------------------')
- fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: ANALYSIS.'))              
+ fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: MAIN ANALYSIS.'))              
  disp('------------------------------------------------------------------------')
 
 % Tic 

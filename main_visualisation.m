@@ -3,7 +3,7 @@ function ouparams = main_visualisation(inparams)
 % People can write their own main function calling different combinations of 
 % plotting functions
 disp('------------------------------------------------------------------------')
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: VISUALISATION.'))              
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: MAIN VISUALISATION.'))              
 disp('------------------------------------------------------------------------')
 %---------------------------------DECOMPOSITION--------------------------------%
 if inparams.flows.visualisation.enabled
