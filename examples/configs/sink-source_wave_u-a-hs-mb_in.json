@@ -1,10 +1,6 @@
 {
   "general": {
-    "storage": {
-      "timestamp": [],
-      "dir_out": "scratch",    
-      "dir_tmp": "/tmp",    
-      "params": {
+    "params": {
         "input": {
           "file": {
             "name": "",
@@ -15,7 +11,11 @@
           "file": {
             "name": "sink-source_wave_u-a-hs-mb_ou.json",
             "dir": "examples/configs"} 
-        }
+        },
+    "storage": {
+      "timestamp": [],
+      "dir_out": "scratch",    
+      "dir_tmp": "/tmp",    
       },
       "format": "iomat"     
     },
@@ -80,7 +80,7 @@
     "decomposition": {
       "svd": {
         "enabled": true,
-        "modes": 4,
+        "modes": 6,
         "grid": {
           "type": "unstructured"
         }
