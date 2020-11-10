@@ -27,13 +27,13 @@ hh(1) = histogram(ax(1), un, 'Normalization', 'pdf');
 hh(2) = histogram(ax(2), log10(un), 'Normalization', 'pdf');
 
 for jj=1:numsubplot
-    hh(jj).EdgeColor = 'none';
-    hh(jj).FaceAlpha = 0.5;
-    ax(jj).YLabel.String = 'pdf';
+   hh(jj).EdgeColor = 'none';
+   hh(jj).FaceAlpha = 0.5;
+   ax(jj).YLabel.String = 'pdf';
 end
 
-ax(1).XLabel.String = ['speed [' params.data.units.space '/'  params.data.units.time ']'];
-ax(2).XLabel.String = ['log10(speed) [' params.data.units.space '/'  params.data.units.time ']'];
+ax(1).XLabel.String = ['speed [' params.data.units.space '/'  params.data.resolution.units.time ']'];
+ax(2).XLabel.String = ['log10(speed) [' params.data.units.space '/'  params.data.resolution.units.time ']'];
 
 
 end
