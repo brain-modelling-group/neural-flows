@@ -2,9 +2,9 @@ function [X, Y, Z, params] = data3d_get_interpolation_meshgrid(locs, params)
 
 % TODO: document 
 
-    hx = params.interpolation.hx; 
-    hy = params.interpolation.hy;
-    hz = params.interpolation.hz; 
+    hx = params.interpolation.resolution.hx; 
+    hy = params.interpolation.resolution.hy;
+    hz = params.interpolation.resolution.hz; 
   
     % Generate a structured grid 
     % TODO: save this parameter somewhere

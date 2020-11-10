@@ -33,9 +33,12 @@
       "label": "",
       "keep": true
     },
-    "hx": 3,
-    "hy": 3,
-    "hz": 3,
+    "resolution": {
+      "ht": [],
+      "hx": 3,                                     
+      "hy": 3,                                     
+      "hz": 3                                    
+    },
     "neighbour_method": "",
     "extrapolation_method": "",
     "boundary": {
