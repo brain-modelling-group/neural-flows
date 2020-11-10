@@ -57,7 +57,7 @@ function[params, obj_singularity, obj_singularity_sentinel] = singularity3d_dete
 
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started detection of null flows.'))
 
-    switch params.singularity.detection.mode
+    switch params.singularity.detection.modality
         case {'null-flow-field', 'vel', 'flowfield', 'vectorfield'}
              % Use velocity vector fields
              flows3d_detect_null_flow_field(obj_singularity, obj_flows, params);
