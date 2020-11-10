@@ -1,6 +1,6 @@
 function [varargout] = read_write_json(options_filename, options_dir, rw_mode, varargin)
 %% This function read input parameters from a json file and translates to a Matlab structure, or 
-%  alternatively writes the `options` structure to a json file. 
+%  alternatively writes the `params` structure to a json file. 
 % 
 % ARGUMENTS:
 %      options_filename  --   a string with the name of the input json file. 
@@ -33,6 +33,8 @@ switch rw_mode
     case {'read', 'r', 'R'}
         options_json = fileread(options_path);
         options_strc = jsondecode(options_json);
+        options_strc.general.params.input.file.name = options_filename;
+        options_strc.general.params.input.file.dir = options_dir;
         varargout{1} = options_strc;
     case {'write', 'w', 'W'}
         options_strc = varargin{1}; % Not really necessary but makes the process explicit
