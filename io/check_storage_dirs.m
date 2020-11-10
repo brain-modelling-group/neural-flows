@@ -14,9 +14,9 @@ switch dir_to_check
               input_params.general.storage.dir_tmp = temp_dir_name;
           end
     case {'output', 'out', 'storage', 'results'}
-        if ~exist(input_params.general.storage.dir, 'dir')
+        if ~exist(input_params.general.storage.dir_out, 'dir')
             % Check if it doesn't exist because it was an empty string
-            if strcmp(input_params.general.storage.dir, '')
+            if strcmp(input_params.general.storage.dir_out, '')
                 wrn_message = "neural-flows:: Unspecified storage directory for output files";
             else
                 wrn_message = "neural-flows:: Invalid storage directory for output files. It seems this directory doesn't exist";
