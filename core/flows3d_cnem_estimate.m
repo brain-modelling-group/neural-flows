@@ -32,12 +32,12 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_cnem_estimate(params
     
     % Save flow calculation parameters
     [obj_flows, obj_flows_sentinel] = create_iomat_file(params.flows.file.label, ...
-                                                        params.general.storage.dir, ...
+                                                        params.general.storage.dir_out, ...
                                                         params.flows.file.keep);
     obj_flows_cell = strsplit(obj_flows.Properties.Source, filesep);
     % Save properties of file
     params.flows.file.exists = true;
-    params.flows.file.dir  = params.general.storage.dir;
+    params.flows.file.dir  = params.general.storage.dir_out;
     params.flows.file.name = obj_flows_cell{end};
 
     % Save some things in the flow file too

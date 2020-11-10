@@ -50,13 +50,13 @@ function [params, obj_interp, obj_interp_sentinel] = data3d_interpolate_parallel
 
     % Create file for the interpolated data
     [obj_interp, obj_interp_sentinel] = create_iomat_file(params.interpolation.file.label, ...
-                                                          params.general.storage.dir, ...
+                                                          params.general.storage.dir_out, ...
                                                           params.interpolation.file.keep);
 
     obj_interp_cell = strsplit(obj_interp.Properties.Source, filesep);
     % Save properties of file
     params.interpolation.file.exists = true;
-    params.interpolation.file.dir  = params.general.storage.dir;
+    params.interpolation.file.dir  = params.general.storage.dir_out;
     params.interpolation.file.name = obj_interp_cell{end};
 
     % Write dummy data to disk to create matfile

@@ -46,13 +46,13 @@ function[params, obj_singularity, obj_singularity_sentinel] = singularity3d_dete
     
     % Save flow calculation parameters
     [obj_singularity, obj_singularity_sentinel] = create_iomat_file(params.singularity.file.label, ...
-                                                                    params.general.storage.dir, ...
+                                                                    params.general.storage.dir_out, ...
                                                                     params.singularity.file.keep); 
 
     obj_singularity_cell = strsplit(obj_singularity.Properties.Source, filesep);
     % Save properties of file
     params.singularity.file.exists = true;
-    params.singularity.file.dir  = params.general.storage.dir;
+    params.singularity.file.dir  = params.general.storage.dir_out;
     params.singularity.file.name = obj_singularity_cell{end};
 
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started detection of null flows.'))

@@ -31,12 +31,12 @@ function  [params, obj_streams, obj_streams_sentinel] = streams3d_trace(params)
     
     % Save flow calculation parameters
     [obj_streams, obj_streams_sentinel] = create_iomat_file(params.streamlines.file.label, ...
-                                                            params.general.storage.dir, ...
+                                                            params.general.storage.dir_out, ...
                                                             params.streamlines.file.keep);
     obj_streams_cell = strsplit(obj_streams.Properties.Source, filesep);
     % Save properties of file
     params.streamlines.file.exists = true;
-    params.streamlines.file.dir  = params.general.storage.dir;
+    params.streamlines.file.dir  = params.general.storage.dir_out;
     params.streamlines.file.name = obj_streams_cell{end};
 
     % Save masks with convex hulls of the brain
