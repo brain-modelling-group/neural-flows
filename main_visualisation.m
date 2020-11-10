@@ -13,11 +13,12 @@ end
 %---------------------------SINGULARITY----------------------------------------%
 if inparams.singularity.visualisation.enabled
    plot2d_singularity_occupancy(inparams);
+   plot2d_singularity_cross_stitch_tracking(inparams);
+   plot1d_singularity_punchcard(inparams);
+   plot1d_singularity_punchcard_nodal(inparams);
    plot1d_singularity_traces_sandplot(inparams);
    plot1d_singularity_stats(inparams);
 end
 %------------------------------------------------------------------------------%
-% save_tmp_params(tmp_params)
-%TRACKING
-% TODO: write output parameters if reequired
+% TODO: write output parameters if required
 end % function main_analysis()
