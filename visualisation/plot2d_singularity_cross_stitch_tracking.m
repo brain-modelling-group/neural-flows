@@ -22,7 +22,6 @@ data = data(nodal_singularity_summary.active_nodes.idx, :);
 cmap = [cmap ; 1.0 1.0 1.0];
 ax_pc = plot_cross_stitch(ax_pc);
 ax_handles{1} = ax_pc;
-ax_handles{2} = ax_sc;
 varargout{1} = ax_handles;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Plotting functions %%%%%%%%%%%%%%%%%%%%%%%
     function ax_pc = plot_cross_stitch(ax_pc)
