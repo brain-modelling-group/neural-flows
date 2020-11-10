@@ -1,6 +1,6 @@
 function ouparams = main_visualisation(inparams)
 %% Wrapper function to perform basic visualisation:
-% People can write their own main function calling different combinations of 
+% People can write their own main_visualisation function calling different combinations of 
 % plotting functions
 disp('------------------------------------------------------------------------')
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: MAIN VISUALISATION.'))              
