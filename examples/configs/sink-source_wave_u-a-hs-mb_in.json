@@ -6,12 +6,15 @@
       "dir_tmp": "/tmp",    
       "params": {
         "input": {
-          "filename": "sink-source_wave_u-a-hs-mb_in.json",
-          "dir": "examples/configs" 
-        },
+          "file": {
+            "name": "sink-source_wave_u-a-hs-mb_in.json",
+            "dir": "examples/configs" 
+          }
+          },
         "output": {
-          "filename": "sink-source_wave_u-a-hs-mb_ou.json",
-          "dir": "examples/configs" 
+          "file": {
+            "name": "sink-source_wave_u-a-hs-mb_ou.json",
+            "dir": "examples/configs"} 
         }
       },
       "format": "iomat"     
