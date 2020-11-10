@@ -61,6 +61,7 @@
     "modality": "amplitude",
     "method": {
       "name": "hs3d",
+      "implementation": "mesh-based",
       "hs3d": {
         "alpha_smooth": 0.1,
         "max_iterations": 128,
@@ -103,15 +104,13 @@
     },
 
       "tracing": {
-               "grid": {
-                   "type": "unstructured"
-                  },
+               "implementation": "meshless", 
                "seeding_points": {
                                   "modality": "random-sparse",
                                   "seed": 42
               },
               "max_stream_length" : 200,
-              "time_step": 0.5
+              "step_size": 0.5
           },
 
     "visualisation": {
@@ -128,7 +127,7 @@
     },
     "detection": {
       "enabled": true,
-      "mode": "null-flow-field",
+      "modality": "null-flow-field",
       "threshold": [
         0,
         0.1
@@ -160,14 +159,16 @@
     "grid": {
       "type": "unstructured"
     },
-    "ht": [],
-    "hx": [],
-    "hy": [],
-    "hz": [],
-    "units": {
-      "space": "mm",
-      "time": "ms"
-    },
+    "resolution": {
+      "ht": [],
+      "hx": [],                                       
+      "hy": [],
+      "hz": [],
+      "units": {
+         "space":"mm",                                
+          "time": "ms"                               
+     }
+  },
     "modality": "amplitude"
   }
 }
