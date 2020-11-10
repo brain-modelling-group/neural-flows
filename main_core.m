@@ -18,7 +18,7 @@ fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: MAIN CORE.'))
 disp('------------------------------------------------------------------------')
 % Tic
 tstart = tik();
-%-------------------------------------------------------------------------------%
+disp('------------------------------------------------------------------------')
 if inparams.general.parallel.enabled
     
   open_parpool(inparams.general.parallel.workers_fraction);
@@ -93,23 +93,20 @@ if inparams.singularity.enabled
     if tmp_params.singularity.detection.enabled 
         [tmp_params, ~, obj_singularity_sentinel] = singularity3d_detect(tmp_params);
     end
-    %-------------------------------------------------------------------------------%
+    %--------------------------------------------------------------------------%
     % Save parameters up to this point
     save_params_checkpoint(tmp_params);
-    %-------------------------------------------------------------------------------%
+    %--------------------------------------------------------------------------%
     % CLASSIFICATION
     if tmp_params.singularity.classification.enabled 
        tmp_params = singularity3d_classify(tmp_params);
     end
 end
-%-------------------------------------------------------------------------------%
-% save_tmp_params(tmp_params)
-%TRACKING
 %---------------------------------SINGULARITY----------------------------------%
 %---------------------------------THE END -------------------------------------%
 % Save parameters up to this point
 ouparams = tmp_params;
-
+disp('------------------------------------------------------------------------')
 % Toc
 tok(tstart, 'minutes');
 
