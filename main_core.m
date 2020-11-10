@@ -8,6 +8,9 @@ function ouparams = main_core(inparams)
 %              3) detects singularities (ie, detects null flows).
 %              4) classifies singularities.
 %              5) traces streamlines
+disp('#########################################################################')
+disp('#                       ~~~~ NEURAL FLOWS ~~~~                          #')
+disp('#########################################################################')
 % Tic
 tstart = tik();
 %-------------------------------------------------------------------------------%
