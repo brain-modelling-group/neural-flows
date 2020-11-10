@@ -89,7 +89,7 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params
         % [varargout(obj_flows)] = ...
         % Save original locations, just in case
         obj_flows.locs = obj_data.locs;
-        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished extraction of node-based flows.'))
+        fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished extraction of node-based flows.'))
 
     end
     % Disable flows calculation if we already did it
