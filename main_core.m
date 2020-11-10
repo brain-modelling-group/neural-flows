@@ -16,6 +16,8 @@ if inparams.general.parallel.enabled
 end
 % Copy structure
 tmp_params = inparams;
+% Save the date
+tmp_params.general.timestamp = datetime;
 %---------------------------------INTERPOLATION--------------------------------%
 if inparams.interpolation.enabled
     % Check if we need to interpolate data
