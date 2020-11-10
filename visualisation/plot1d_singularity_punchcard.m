@@ -45,7 +45,7 @@ varargout{1} = ax_handles;
         ax_pc.Box = 'on';
 
         
-        lgd_ax = legend(base_cp(1:num_base_sngs));
+        lgd_ax = legend(ax_pc, base_cp(1:num_base_sngs));
         lgd_ax.Title.String = 'Singularity Type';
         lgd_ax.Orientation = 'horizontal';
         lgd_ax.Location = 'south';

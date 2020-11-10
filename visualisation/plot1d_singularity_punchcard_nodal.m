@@ -1,3 +1,4 @@
+
 function [figure_handle, varargout] = plot1d_singularity_punchcard_nodal(params)
 
 nodes_str_lbl = params.data.nodes_str_lbl;
@@ -38,7 +39,7 @@ varargout{1} = ax_handles;
             sizedata = sizedata*1000; % sort of percentage;
             sizedata(sizedata == 0) = 0.01; % Make super small dots
             scatter(ax_pc, xdata, ydata(9-kk)*ones(1,length(xdata)), sizedata, cdata, ...
-                    'filled', 'markerfacealpha', 0.2, 'markeredgecolor', 'none');
+                    'filled', 'markerfacealpha', 1.0, 'markeredgecolor', [0.65 0.65 0.65]);
         end 
         ax_pc.YTick = 1:size(cmap, 1); 
         ax_pc.YTickLabel = base_cp(8:-1:1);
