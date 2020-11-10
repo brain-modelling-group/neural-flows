@@ -1,4 +1,6 @@
-function varargout = plot_sphereanim(data, locs, time, crange, cmap, animation_env)
+function varargout = plot_sphereanim(data, locs, time, crange, cmap, animation_env, sphereradii)
+% >> varargout = plot_sphereanim(data, locs, time, crange, cmap, animation_env)
+%
 % Animate brain with nodes drawn as spheres colored by timeseries in 'data'
 % give the locations 'locs' of the nodes in a 3d Euclidean space.
 %
@@ -73,6 +75,8 @@ end
 if nargin < 6
     animation_env = 'workspace'; % animates the plot without saving
 end
+
+
     
 figure_handle = figure('Name', 'sphere animation'); 
 colormap(cmap)
@@ -81,14 +85,15 @@ caxis(crange)
 colorbar
 
 nnodes=size(data,2);
-
-if nnodes==112
-    sphereradius=0.5; % mouse brain is small
-else
-    sphereradius=10;
+if nargin < 7
+     if nnodes==112
+        sphereradius=0.5; % mouse brain is small
+     else
+        sphereradius=4;
+     end
+     sphereradii = sphereradius*ones(nnodes,1);
 end
-
-sp_handle = add_sphere_size_internal(locs(:,1),locs(:,2),locs(:,3),sphereradius*ones(nnodes,1),data(1,:));
+sp_handle = add_sphere_size_internal(locs(:,1),locs(:,2),locs(:,3),sphereradii,data(1,:));
 set(sp_handle, 'facealpha', 0.7)
 drawnow
 cdata = get(sp_handle,'cdata');
