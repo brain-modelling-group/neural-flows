@@ -30,9 +30,6 @@
       "label": "",
       "keep": true
     },
-    "hx": 3,
-    "hy": 3,
-    "hz": 3,
     "neighbour_method": "",
     "extrapolation_method": "",
     "boundary": {
@@ -54,9 +51,12 @@
     },
     "modality": "amplitude",
     "method": {
-      "name": "cnem",
+      "name": "hs3d",
+      "implementation": "meshless", 
       "cnem": {
-        "convex_hull": "bi",
+        "convex_hull": "bi"
+      },
+      "hs3d":{
         "alpha_smooth": 0.1,
         "max_iterations": 128,
         "burnin": {

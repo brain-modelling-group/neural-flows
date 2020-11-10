@@ -4,7 +4,11 @@ function main_analysis(inparams)
 %  (2): flows: energy quantification
 %  (3): singularity: quantification
 
-% Tic
+ disp('------------------------------------------------------------------------')
+ fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: ANALYSIS.'))              
+ disp('------------------------------------------------------------------------')
+
+% Tic 
 tstart = tik();
 
 % Copy structure

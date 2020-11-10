@@ -35,7 +35,8 @@
     },
     "modality": "phase",
     "method": {
-      "name": "cnem",
+      "name": "phase-gradient",
+      "implementation": "meshless",
       "cnem": {
         "convex_hull": "bi"
       }

@@ -8,6 +8,8 @@ function ouparams = main_core(inparams)
 %              3) detects singularities (ie, detects null flows).
 %              4) classifies singularities.
 %              5) traces streamlines
+%              6) performs analysis
+%              7) plots results
 disp('#########################################################################')
 disp('#                       ~~~~ NEURAL FLOWS ~~~~                          #')
 disp('#########################################################################')
@@ -15,6 +17,7 @@ disp('#########################################################################'
 tstart = tik();
 %-------------------------------------------------------------------------------%
 if inparams.general.parallel.enabled
+    
   open_parpool(inparams.general.parallel.workers_fraction);
 end
 % Copy structure
@@ -23,7 +26,11 @@ tmp_params = inparams;
 tmp_params.general.timestamp = datetime;
 %---------------------------------INTERPOLATION--------------------------------%
 if inparams.interpolation.enabled
-    % Check if we need to interpolate data
+ disp('------------------------------------------------------------------------')
+ fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: DATA INTERPOLATION STAGE.'))              
+ disp('------------------------------------------------------------------------')
+
+ % Check if we need to interpolate data
     if strcmp(tmp_params.data.grid.type, 'structured') && tmp_params.interpolation.enabled
        error(['neural-flows:' mfilename ':IncompatibleOptions'], ...
               'Will not perform interpolation on gridded/structured data.');
@@ -44,6 +51,9 @@ end
 save_params_checkpoint(tmp_params);
 %---------------------------------FLOWS----------------------------------------%
 if inparams.flows.enabled
+ disp('------------------------------------------------------------------------')
+ fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: FLOWS ESTIMATION STAGE.'))              
+ disp('------------------------------------------------------------------------')
     % Check which method we want to use - hsd3 only works with interpolated data, while cnem
     switch tmp_params.flows.method.name
         case {'hs3d', 'horn-schunk', 'hs'}
@@ -63,6 +73,9 @@ save_params_checkpoint(tmp_params);
 
 % Check what else we want to do
 if inparams.streamlines.enabled
+ disp('------------------------------------------------------------------------')
+ fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: STREAMLINES TRACING STAGE.'))              
+ disp('------------------------------------------------------------------------')
     [tmp_params, ~, obj_streamline_sentinel] = streams3d_trace(tmp_params);
 end 
 %---------------------------------STREAMLINES----------------------------------%
@@ -70,6 +83,9 @@ end
 save_params_checkpoint(tmp_params);
 %---------------------------------SINGULARITY----------------------------------%
 if inparams.singularity.enabled
+ disp('------------------------------------------------------------------------')
+ fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: SINGULARITY IDENTIFICATION STAGE.'))              
+ disp('------------------------------------------------------------------------')
     % DETECTION
     if tmp_params.singularity.detection.enabled 
         [tmp_params, ~, obj_singularity_sentinel] = singularity3d_detect(tmp_params);

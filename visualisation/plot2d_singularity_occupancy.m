@@ -3,7 +3,7 @@ function figure_handle = plot2d_singularity_occupancy(params)
 nodes_str_lbl = params.data.nodes_str_lbl;
 obj_singularity = load_iomat_singularity(params);
 % NOTE: this variable should be part of params or stored in obj_singularity
-num_nodes = size(obj_singularity, 'tracking_2d_matrix', 1);
+%num_nodes = size(obj_singularity, 'tracking_2d_matrix', 1);
 %nodes_str_lbl = params.data.nodes_str_lbl;
 num_base_sngs = 8;
 nodal_singularity_summary = obj_singularity.nodal_singularity_summary;
@@ -41,7 +41,7 @@ plot_3d_matrix_b(ax_3d_mat_b)
         ax_bar.XAxisLocation = 'top';
         ax_bar.YLabel.String = 'occupancy [#frames]';
         ax_bar.XLabel.String = 'nodes';
-        lgd_ax = legend(base_cp(1:num_base_sngs));
+        lgd_ax = legend(ax_bar, base_cp(1:num_base_sngs));
         lgd_ax.Title.String = 'Singularity Type';
         lgd_ax.Orientation = 'vertical';
         lgd_ax.Location = 'northwest';
