@@ -81,7 +81,7 @@ switch params.flows.method.hs3d.initial_conditions.mode
          seed_init = params.flows.method.hs3d.initial_conditions.seed;
          [uxo, uyo, uzo] = flows3d_hs3d_set_initial_flows(grid_size, ~masks.outties, seed_init);
      case {'precal', 'precalculated', 'prev', 'user'}
-        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Using pre-calculated initial velocity conditions.'))
+        fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Using pre-calculated initial velocity conditions.'))
         % NOTE: I need to pass initial conditions in the flow files 
         uxo = initial_conditions.uxo;
         uyo = initial_conditions.uyo;
@@ -124,7 +124,7 @@ else
 end
     
 
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started burn-in period for random initial velocity conditions.'))
+fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started burn-in period for random initial velocity conditions.'))
 for bb=1:burnin_length
     % Calculate the velocity components
     [uxo, uyo, uzo] = flows3d_hs3d_step(FA, FB, alpha_smooth, ...
@@ -136,7 +136,7 @@ end
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished burn-in period for random initial velocity conditions.'))
 %---------------------------------BURN-IN--------------------------------------%
 
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started estimation of flows.'))
+fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started estimation of flows.'))
 
 for this_tpt = 1:tpts-1
     

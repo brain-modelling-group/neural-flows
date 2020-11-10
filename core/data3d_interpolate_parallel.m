@@ -71,13 +71,13 @@ function [params, obj_interp, obj_interp_sentinel] = data3d_interpolate_parallel
     obj_interp.Z = Z;
     obj_interp.locs = locs;
     
-    fprintf('\n %s \n\n', strcat('neural-flows:: ', mfilename, '::Info:: Started interpolating data.'))              
+    fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started interpolating data.'))              
     %spmd_parfor_with_matfiles(number_of_things, parfun, temp_fname_obj, storage_expression)
     parfun = @interpolate_step;
     interpolation_3d_storage_expression = 'data(:, :, :, jdx)';
     [obj_interp] = spmd_parfor_with_matfiles(tpts, parfun, obj_interp, interpolation_3d_storage_expression);
     
-    fprintf('\n %s \n\n', strcat('neural-flows:: ', mfilename, '::Info:: Finished interpolating data.'))
+    fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished interpolating data.'))
     
     % Child function with access to local scope variables from parent
     % function

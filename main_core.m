@@ -13,6 +13,9 @@ function ouparams = main_core(inparams)
 disp('#########################################################################')
 disp('#                       ~~~~ NEURAL FLOWS ~~~~                          #')
 disp('#########################################################################')
+disp('------------------------------------------------------------------------')
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: MAIN CORE.'))              
+disp('------------------------------------------------------------------------')
 % Tic
 tstart = tik();
 %-------------------------------------------------------------------------------%
@@ -109,6 +112,10 @@ ouparams = tmp_params;
 
 % Toc
 tok(tstart, 'minutes');
+
+disp('------------------------------------------------------------------------')
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: MAIN CORE END.'))              
+disp('------------------------------------------------------------------------')
 
 % Save parameter structure with updated fields and values
 read_write_json(ouparams.general.params.output.file.name, ...

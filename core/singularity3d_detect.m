@@ -55,7 +55,7 @@ function[params, obj_singularity, obj_singularity_sentinel] = singularity3d_dete
     params.singularity.file.dir  = params.general.storage.dir_out;
     params.singularity.file.name = obj_singularity_cell{end};
 
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started detection of null flows.'))
+    fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started detection of null flows.'))
 
     switch params.singularity.detection.modality
         case {'null-flow-field', 'vel', 'flowfield', 'vectorfield'}

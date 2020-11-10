@@ -83,7 +83,7 @@ function  [params, obj_flows, obj_flows_sentinel] = flows3d_hs3d_estimate(params
         % Here we get the flows on defined on the nodes -- It adds 30% to the current runtime because it uses ScatterInterpolant
         % Also, the file gets large, but having this additional variable help us with visualisations. 
         % Perhaps consider only returning this file and deleting the gridded flow file.
-        fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started extraction of node-based flows.'))
+        fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started extraction of node-based flows.'))
         flows3d_get_unstructured_flows_parallel(obj_flows, obj_data.locs, params);
         % Alternative for working with structures
         % [varargout(obj_flows)] = ...

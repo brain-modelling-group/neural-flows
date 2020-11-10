@@ -54,8 +54,9 @@ function [output_matfile_obj] = spmd_parfor_with_matfiles(number_of_things, parf
     % This allows the worker-local-variable to used inside PARFOR
     matfile_constant = parallel.pool.Constant(worker_matfile);
 
-    tik_parfor = tik();
-    fprintf('%s \n', strcat('neural-flows::Parallel::Info:: Started parallel computation.'))              
+    
+    fprintf('\n%s \n', strcat('neural-flows::spmd_parallel::Info:: Started parallel computation.'))
+    tik_parfor = tik();              
     %%Step 3: run PARFOR
     parfor idx = 1:number_of_things
         % DO THE THING HERE
@@ -66,14 +67,16 @@ function [output_matfile_obj] = spmd_parfor_with_matfiles(number_of_things, parf
         matfile_obj.result(1, idx) = {result_to_save}
         matfile_obj.got_result(1, idx) = true;
     end
-    fprintf('%s \n', strcat('neural-flows::Parallel::Info:: Finished parallel computation.'))              
     tok(tik_parfor, 'minutes')
+    fprintf('%s \n', strcat('neural-flows::spmd_parallel::Info:: Finished parallel computation.'))              
+   
 
     % Step 4: accumulate results on a separate file 
     % Here we retrieve the filenames from 'WorkerFname' Composite,
     % and use them to accumulate the overall result in disk
+   
+   fprintf('\n%s \n', strcat('neural-flows::spmd_parallel::Info:: Started collating results.'))              
    tik_glue_files = tik();
-   fprintf('%s \n', strcat('neural-flows::Parallel::Info:: Started collating results.'))              
    for this_temp_file = 1:numel(WorkerFname)
        worker_fname = WorkerFname{this_temp_file};
        worker_matfile = matfile(worker_fname);
@@ -87,7 +90,8 @@ function [output_matfile_obj] = spmd_parfor_with_matfiles(number_of_things, parf
         end
         delete([worker_fname '.mat'])
     end
-    fprintf('%s \n', strcat('neural-flows::Parallel::Info:: Finished collating results.'))              
     tok(tik_glue_files, 'hours');
+    fprintf('%s \n', strcat('neural-flows::spmd_parallel::Info:: Finished collating results.'))              
+    
 
 end % function spdm_parfor_with_matfiles()
