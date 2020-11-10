@@ -8,8 +8,6 @@ function ouparams = main_core(inparams)
 %              3) detects singularities (ie, detects null flows).
 %              4) classifies singularities.
 %              5) traces streamlines
-%              6) performs analysis
-%              7) plots results
 disp('#########################################################################')
 disp('#                       ~~~~ NEURAL FLOWS ~~~~                          #')
 disp('#########################################################################')
