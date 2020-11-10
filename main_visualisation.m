@@ -2,9 +2,9 @@ function ouparams = main_visualisation(inparams)
 %% Wrapper function to perform basic visualisation:
 % People can write their own main function calling different combinations of 
 % plotting functions
- disp('------------------------------------------------------------------------')
- fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: VISUALISATION.'))              
- disp('------------------------------------------------------------------------')
+disp('------------------------------------------------------------------------')
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: VISUALISATION.'))              
+disp('------------------------------------------------------------------------')
 %---------------------------------DECOMPOSITION--------------------------------%
 if inparams.flows.visualisation.enabled
     plot1d_speed_distribution(inparams);
