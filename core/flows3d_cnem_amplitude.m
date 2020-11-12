@@ -34,14 +34,14 @@ end
      
 % Get parameters
 tpts           = params.data.shape.timepoints;
-alpha_smooth   = params.flows.method.cnem.alpha_smooth;
-max_iterations = params.flows.method.cnem.max_iterations;
+alpha_smooth   = params.flows.method.hs3d.alpha_smooth;
+max_iterations = params.flows.method.hs3d.max_iterations;
 num_nodes = params.data.shape.nodes;
 
 % Save parameters for flows
 params.flows.data.shape.n = params.data.shape.nodes;
 params.flows.data.shape.t = params.data.shape.timepoints-1;
-ht = params.data.ht;
+ht = params.data.resolution.ht;
 params.flows.data.ht = ht;
 
 % Get location and boundary masks
