@@ -56,11 +56,10 @@ if inparams.flows.enabled
  fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: FLOWS ESTIMATION STAGE.'))              
  disp('------------------------------------------------------------------------')
     % Check which method we want to use - hsd3 only works with interpolated data, while cnem
-    switch tmp_params.flows.method.name
-        case {'hs3d', 'horn-schunk', 'hs'}
-            %
+    switch tmp_params.flows.method.implementation 
+        case {'mesh-based'} % ONLY HS available       
             [tmp_params, ~, obj_flows_sentinel] = flows3d_hs3d_estimate(tmp_params);
-        case {'cnem'}
+        case {'meshless'}
             [tmp_params, ~, obj_flows_sentinel] = flows3d_cnem_estimate(tmp_params);
         otherwise
             error(['neural-flows:' mfilename ':UnknownCase'], ...
