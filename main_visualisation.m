@@ -12,10 +12,10 @@ if inparams.flows.visualisation.enabled
 end
 %---------------------------SINGULARITY----------------------------------------%
 if inparams.singularity.visualisation.enabled
-   plot3d_singularity_local_occupancy(inparams);
+   plot3d_singularity_temporal_occupancy(inparams);
    plot2d_singularity_tracking_cross_stitch(inparams);
-   plot1d_singularity_local_occupancy(inparams);
-   plot1d_singularity_global_occupancy(inparams);
+   plot1d_singularity_temporal_occupancy(inparams);
+   plot1d_singularity_spatial_occupancy(inparams);
    plot1d_singularity_traces_sandplot(inparams);
    plot1d_singularity_stats(inparams);
    plotcomp_singularity_absolute_occupancy(inparams);
