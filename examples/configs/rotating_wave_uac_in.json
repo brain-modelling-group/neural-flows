@@ -30,9 +30,12 @@
       "label": "",
       "keep": true
     },
-    "hx": 3,
-    "hy": 3,
-    "hz": 3,
+    "resolution": {
+      "ht": [],
+      "hx": 3,                                     
+      "hy": 3,                                     
+      "hz": 3                                    
+    },
     "neighbour_method": "",
     "extrapolation_method": "",
     "boundary": {
@@ -91,7 +94,7 @@
     }
   },
   "streamlines": {
-      "enabled": true,
+      "enabled": false,
       "file": {
           "exists": false,
           "dir": "",
@@ -101,15 +104,13 @@
     },
 
       "tracing": {
-               "grid": {
-                   "type": "unstructured"
-                  },
+               "implementation": "meshless", 
                "seeding_points": {
                                   "modality": "random-sparse",
                                   "seed": 42
               },
               "max_stream_length" : 200,
-              "time_step": 0.5
+              "step_size": 0.5
           },
 
     "visualisation": {
@@ -154,14 +155,16 @@
     "grid": {
       "type": "unstructured"
     },
-    "ht": 0.25,
-    "hx": [],
-    "hy": [],
-    "hz": [],
-    "units": {
-      "space": "mm",
-      "time": "ms"
-    },
+    "resolution": {
+      "ht": [],
+      "hx": [],                                       
+      "hy": [],
+      "hz": [],
+      "units": {
+         "space":"mm",                                
+          "time": "ms"                               
+     }
+  },
     "boundary": {
       "alpha_radius" : 30
     },

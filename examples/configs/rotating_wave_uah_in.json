@@ -30,9 +30,12 @@
       "label": "",
       "keep": true
     },
-    "hx": 4,
-    "hy": 4,
-    "hz": 4,
+    "resolution": {
+      "ht": [],
+      "hx": 3,                                     
+      "hy": 3,                                     
+      "hz": 3                                    
+    },
     "neighbour_method": "",
     "extrapolation_method": "",
     "boundary": {
@@ -97,15 +100,13 @@
     },
 
       "tracing": {
-               "grid": {
-                   "type": "structured"
-                  },
+               "implementation": "meshless", 
                "seeding_points": {
                                   "modality": "random-sparse",
                                   "seed": 42
               },
               "max_stream_length" : 200,
-              "time_step": 0.5
+              "step_size": 0.5
           },
 
     "visualisation": {
@@ -154,14 +155,16 @@
     "grid": {
       "type": "unstructured"
     },
-    "ht": [],
-    "hx": [],
-    "hy": [],
-    "hz": [],
-    "units": {
-      "space": "mm",
-      "time": "ms"
-    },
+    "resolution": {
+      "ht": [],
+      "hx": [],                                       
+      "hy": [],
+      "hz": [],
+      "units": {
+         "space":"mm",                                
+          "time": "ms"                               
+     }
+  },
     "modality": "amplitude"
   }
 }
