@@ -55,9 +55,9 @@ function  [params, obj_streams, obj_streams_sentinel] = streams3d_trace(params)
             streams3d_tracing_cnem(obj_flows, obj_streams, params)
         case 'mesh-based'
             if params.general.parallel.enabled
-                streams3d_tracing_mlab_parallel(obj_flows, obj_streams, params)
+                streams3d_tracing_mlab_parallel(obj_flows, obj_streams, params);
             else
-                streams3d_tracing_mlab_serial(obj_flows, obj_stremas, params)
+                streams3d_tracing_mlab_serial(obj_flows, obj_stremas, params);
             end
     end
     obj_streams.xyz_lims = obj_flows.xyz_lims; 
