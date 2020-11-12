@@ -68,9 +68,9 @@ obj_flows.neighbours_matrix = neighbours_matrix;
 
 B = flows3d_cnem_get_B_mat(locs, boundary_triangles);
 
-switch params.flows.method.cnem.initial_conditions.mode
+switch params.flows.method.hs3d.initial_conditions.mode
      case {'random', 'rand'}
-         seed_init = params.flows.method.cnem.initial_conditions.seed;
+         seed_init = params.flows.method.hs3d.initial_conditions.seed;
          [uxo, uyo, uzo] = flows3d_cnem_set_initial_flows(num_nodes, seed_init);
      case {'precal', 'precalculated', 'prev', 'user'}
         fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Using pre-calculated initial flow conditions.'))
@@ -93,11 +93,11 @@ this_tpt = 1;
 FA = obj_data.data(this_tpt, :);
 FB = obj_data.data(this_tpt+1, :);
 
-if ~isfield(params.flows.method.cnem, 'burnin')
+if ~isfield(params.flows.method.hs3d, 'burnin')
     burnin_length = 8; % for iterations, not much but better than one
-    params.flows.method.cnem.burnin.length = burnin_length;
+    params.flows.method.hs3d.burnin.length = burnin_length;
 else
-    burnin_len = params.flows.method.cnem.burnin.length;
+    burnin_len = params.flows.method.hs3d.burnin.length;
 end
 
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started burn-in period for random initial velocity conditions.'))

@@ -1,19 +1,22 @@
 {
   "general": {
-    "storage": {
-      "time_stamp": [],
-      "dir": "scratch",
-      "dir_tmp": "/tmp",
-      "params": {
+    "params": {
         "input": {
-          "filename": "sink-source_wave_u-a-hs-ml_in.json",
-          "dir": "examples/configs"
-        },
+          "file": {
+            "name": "",
+            "dir":  "" 
+          }
+          },
         "output": {
-          "filename": "sink-source_wave_u-a-hs-ml_ou.json",
-          "dir": "examples/configs"
+          "file": {
+            "name": "sink-source_wave_u-a-hs-mb_ou.json",
+            "dir": "examples/configs"} 
         }
       },
+    "storage": {
+      "time_stamp": [],
+      "dir_out": "scratch",
+      "dir_tmp": "/tmp",
       "format": "iomat"
     },
     "parallel": {
@@ -77,7 +80,7 @@
     "decomposition": {
       "svd": {
         "enabled": true,
-        "modes": 4,
+        "modes": 6,
         "grid": {
           "type": "unstructured"
         }
@@ -101,15 +104,13 @@
     },
 
       "tracing": {
-               "grid": {
-                   "type": "unstructured"
-                  },
+               "implementation": "meshless", 
                "seeding_points": {
                                   "modality": "random-sparse",
                                   "seed": 42
               },
               "max_stream_length" : 200,
-              "time_step": 0.5
+              "step_size": 0.5
           },
 
     "visualisation": {
@@ -145,7 +146,7 @@
   "data": {
     "file": {
       "dir": "demo-data",
-      "name": "rotating_wave_W_c1_d1ms_iomat.mat"
+      "name": "sink-source_wave_W_c1_d1ms_iomat.mat"
     },
     "slice": {
       "enabled": false,
@@ -154,14 +155,16 @@
     "grid": {
       "type": "unstructured"
     },
-    "ht": 0.25,
-    "hx": [],
-    "hy": [],
-    "hz": [],
-    "units": {
-      "space": "mm",
-      "time": "ms"
-    },
+    "resolution": {
+      "ht": [],
+      "hx": [],                                       
+      "hy": [],
+      "hz": [],
+      "units": {
+         "space":"mm",                                
+          "time": "ms"                               
+     }
+  },
     "boundary": {
       "alpha_radius" : 30
     },

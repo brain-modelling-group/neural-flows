@@ -22,16 +22,16 @@ switch params.data.grid.type
                  nodes_str_lbl = obj_data.nodes_str_lbl;
              end
             params.data.nodes_strl_lbl = nodes_str_lbl;
-            params.data.ht =  obj_data.ht;
+            params.data.resolution.ht =  obj_data.ht;
         case 'structured'
             params.data.shape.timepoints = params.data.shape.size(4);
             params.data.shape.x = params.data.shape.size(2); 
             params.data.shape.y = params.data.shape.size(1);
             params.data.shape.z = params.data.shape.size(3);
-            params.data.hx = obj_data.hx;
-            params.data.hy = obj_data.hy;
-            params.data.hz = obj_data.hz;
-            params.data.ht = obj_data.ht;
+            params.data.resolution.hx = obj_data.hx;
+            params.data.resolution.hy = obj_data.hy;
+            params.data.resolution.hz = obj_data.hz;
+            params.data.resolution.ht = obj_data.ht;
 end
  
  % Human readable indexing locs array

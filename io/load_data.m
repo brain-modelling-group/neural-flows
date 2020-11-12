@@ -30,17 +30,17 @@ function [data, params, varargout] = load_data(params)
                 nodes_str_lbl = data_struct.nodes_str_lbl;
             end
             params.data.nodes_str_lbl = nodes_str_lbl;
-            params.data.ht =  data_struct.ht;
+            params.data.resolution.ht =  data_struct.ht;
         case 'structured'
             params.data.shape.timepoints = params.data.shape.size(4);
             % This may bring problems if x, y are swapped
             params.data.shape.x = params.data.shape.size(2); 
             params.data.shape.y = params.data.shape.size(1);
             params.data.shape.z = params.data.shape.size(3);
-            params.data.ht = data_struct.ht;
-            params.data.hx = data_struct.hx;
-            params.data.hy = data_struct.hy;
-            params.data.hz = data_struct.hz;
+            params.data.resolution.ht = data_struct.ht;
+            params.data.resolution.hx = data_struct.hx;
+            params.data.resolution.hy = data_struct.hy;
+            params.data.resolution.hz = data_struct.hz;
         otherwise
             error(['neural-flows:' mfilename ':UnknownCase'], ...
                    'Unknown grid type. Options: {"unstructured", "structured"}');

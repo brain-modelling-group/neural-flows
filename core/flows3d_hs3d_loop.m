@@ -49,10 +49,10 @@ params.flows.data.shape.t = params.data.shape.timepoints-1;
 params.flows.data.shape.grid = [params.data.shape.y, params.data.shape.x, params.data.shape.z];
 
 % Resolution
-hx = params.data.hx;
-hy = params.data.hy;
-hz = params.data.hz;
-ht = params.data.ht;
+hx = params.data.resolution.hx;
+hy = params.data.resolution.hy;
+hz = params.data.resolution.hz;
+ht = params.data.resolution.ht;
 
 % Save it in flows -- 
 params.flows.data.hx = hx;

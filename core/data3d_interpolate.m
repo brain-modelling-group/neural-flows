@@ -31,9 +31,9 @@ function [params, obj_interp, obj_interp_sentinel] = data3d_interpolate(params)
     obj_interp.masks = masks;
 
     % Update parameter fields on params.data
-    params.data.hx = params.interpolation.resolution.hx;
-    params.data.hy = params.interpolation.resolution.hy;
-    params.data.hz = params.interpolation.resolution.hz;
+    params.data.resolution.hx = params.interpolation.resolution.hx;
+    params.data.resolution.hy = params.interpolation.resolution.hy;
+    params.data.resolution.hz = params.interpolation.resolution.hz;
     params.data.shape.x = params.interpolation.data.shape.x; 
     params.data.shape.y = params.interpolation.data.shape.y;
     params.data.shape.z = params.interpolation.data.shape.z;
