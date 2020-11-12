@@ -39,7 +39,7 @@ display_flag = 'true';
 extrema_detection = 'peaks';
 % TODO: TOFIX: use resolution and length of FLOWS/NOT DATA
 time_vec = params.data.resolution.ht:params.data.resolution.ht:params.flows.data.shape.t*params.data.resolution.ht;
-min_duration_stable_state = params.data.ht * 30;
+min_duration_stable_state = params.data.resolution.ht * 30;
 [stable, transient, stablePoints, transientPoints] = energy_states(energy_struct.component_sum_norm, time_vec, params.data.ht, min_duration_stable_state, extrema_detection, display_flag);
 
 
