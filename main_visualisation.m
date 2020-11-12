@@ -12,6 +12,7 @@ if inparams.flows.visualisation.enabled
 end
 %---------------------------SINGULARITY----------------------------------------%
 if inparams.singularity.visualisation.enabled
+   plot3d_singularity_spheres(inparams);
    plot2d_singularity_occupancy(inparams);
    plot2d_singularity_cross_stitch_tracking(inparams);
    plot1d_singularity_punchcard(inparams);
