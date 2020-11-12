@@ -1,4 +1,4 @@
-function plot3d_singularity_spheres(params)
+function plot3d_singularity_local_occupancy(params)
 
 obj_singularity = load_iomat_singularity(params);
 % TODO: configiure graphics property to handle paper units so we can plot
