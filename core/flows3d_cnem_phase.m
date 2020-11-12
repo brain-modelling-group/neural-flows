@@ -47,7 +47,7 @@ function params = flows3d_cnem_phase(obj_data, obj_flows, params)
 % Get location and boundary masks
 masks = obj_data.masks;
 locs  = obj_data.locs;
-ht    = params.data.ht;
+ht    = params.data.resolution.ht;
 tpts  = params.data.shape.timepoints;
 
 switch params.flows.method.cnem.convex_hull
