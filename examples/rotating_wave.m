@@ -1,8 +1,18 @@
 function rotating_wave(case_label)
-% This script runs the whole neural-flows workflow on a small epoch of simulated 
-% data, that mostly corresponds to rotating wave.
-% 
+% This function runs the whole neural-flows workflow on a small epoch of simulated 
+% data, that corresponds to a rotating brain wave pattern.
 % NOTE: Assumes this function is run from the top level directory neural-flows/
+
+% CASE_LABEL MEANING: 
+% |  Input Dataset Type    | Input Data Modality   | Flow Estimation Method | Flow Estimation Type   |  
+% |-----------------------|-----------------------|------------------------|-------------------------| 
+% |  (u)nstructured       | (a)mplitude           |   (h)orn-(s)chunk3d    |     (m)esh-(b)ased
+% |  (s)tructured         | (p)hase               |   (p)hase-(g)radient   |     (m)esh(l)ess
+
+% Available case_label combinations:
+% Case A: u-a-hs-mb
+% Case B: u-a-hs-ml
+% Case C: u-p-pg-ml
 
 % PERFORMANCE:
 % |    Host   | Data Domain    | Data Mode   | Flow Method     | # workers  |  Runtime |  Memory |
@@ -14,16 +24,16 @@ function rotating_wave(case_label)
 % | tesseract | (u)nstructured | (p)hase     | (c)nem          |      8     |  0.75 min| 500 MB  |
 
 if nargin < 1
-    case_label = 'uah';
+    case_label = 'u-a-hs-mb'; 
 end
 
 switch case_label
-    case 'uah'
-        input_params_filename = 'rotating_wave_uah_in.json';
-    case 'uac'
-        input_params_filename = 'rotating_wave_uac_in.json';
-    case 'upc'
-        input_params_filename = 'rotating_wave_upc_in.json';
+    case 'u-a-hs-mb'
+        input_params_filename = 'rotating_wave_u-a-hs-mb_in.json';
+    case 'u-a-hs-ml'
+        input_params_filename = 'rotating_wave_u-a-hs-ml_in.json';
+    case 'u-p-pg-ml'
+        input_params_filename = 'rotating_wave_u-p-pg-ml_in.json';
 end
 
 
