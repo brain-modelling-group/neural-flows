@@ -1,19 +1,22 @@
 {
   "general": {
-    "storage": {
-      "time_stamp": [],
-      "dir": "scratch",
-      "dir_tmp": "/tmp",
-      "params": {
+    "params": {
         "input": {
-          "filename": "rotating_wave_uac_in.json",
-          "dir": "examples/configs"
-        },
+          "file": {
+            "name": "",
+            "dir":  "" 
+          }
+          },
         "output": {
-          "filename": "rotating_wave_uac_ou.json",
-          "dir": "examples/configs"
+          "file": {
+            "name": "rotating_wave_u-a-hs-ml_ou.json",
+            "dir": "examples/configs"} 
         }
       },
+    "storage": {
+      "time_stamp": [],
+      "dir_out": "scratch",
+      "dir_tmp": "/tmp",
       "format": "iomat"
     },
     "parallel": {
@@ -57,9 +60,12 @@
     },
     "modality": "amplitude",
     "method": {
-      "name": "cnem",
+      "name": "hs3d",
+      "implementation": "meshless", 
       "cnem": {
-        "convex_hull": "bi",
+        "convex_hull": "bi"
+      },
+      "hs3d":{
         "alpha_smooth": 0.1,
         "max_iterations": 128,
         "burnin": {

@@ -29,7 +29,7 @@ switch case_label
     case 'u-a-hs-ml'
         input_params_filename = 'sink-source_wave_u-a-hs-ml_in.json';
     case 'u-p-pg-ml'
-        input_params_filename = 'sink-source_wave_u-p-pg-ml_in.son';
+        input_params_filename = 'sink-source_wave_u-p-pg-ml_in.json';
 end
 
 input_params_dir  = 'examples/configs';

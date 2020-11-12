@@ -1,19 +1,22 @@
 {
   "general": {
+  "params": {
+        "input": {
+          "file": {
+            "name": "",
+            "dir":  "" 
+          }
+          },
+        "output": {
+          "file": {
+            "name": "rotating_wave_u-p-pg-ml_ou.json",
+            "dir": "examples/configs"} 
+        }
+    },
     "storage": {
       "time_stamp": [],
-      "dir": "scratch",
+      "dir_out": "scratch",
       "dir_tmp": "/tmp",
-      "params": {
-        "input": {
-          "filename": "rotating_wave_upc_in.json",
-          "dir": "examples/configs"
-        },
-        "output": {
-          "filename": "rotating_wave_upc_out.json",
-          "dir": "examples/configs"
-        }
-      },
       "format": "iomat"
     },
     "parallel": {
@@ -35,7 +38,8 @@
     },
     "modality": "phase",
     "method": {
-      "name": "cnem",
+      "name": "phase-gradient",
+      "implementation": "meshless",
       "cnem": {
         "convex_hull": "bi"
       }
