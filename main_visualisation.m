@@ -14,8 +14,8 @@ end
 if inparams.singularity.visualisation.enabled
    plot3d_singularity_temporal_occupancy(inparams);
    plot2d_singularity_tracking_cross_stitch(inparams);
-   plot1d_singularity_temporal_occupancy(inparams);
-   plot1d_singularity_spatial_occupancy(inparams);
+   plot1d_singularity_relative_temporal_occupancy(inparams);
+   plot1d_singularity_relative_spatial_occupancy(inparams);
    plot1d_singularity_traces_sandplot(inparams);
    plot1d_singularity_stats(inparams);
    plotcomp_singularity_absolute_occupancy(inparams);
