@@ -133,10 +133,10 @@ task* Interpol_Task::execute()
         if(id_task==0)
         {
             long I=100.*double(Ind_Point)/double(Nb_Point);
-            if(!(I%5))
-            {
-                char Char[255];sprintf(Char,"%ld",I);string Nb(Char);for(i=0;i<=Nb_C_Nb;i++)cout<<"\b";Nb_C_Nb=Nb.size();cout<<I<<'%';cout.flush();
-            }
+            //if(!(I%5))
+            //{
+            //    char Char[255];sprintf(Char,"%ld",I);string Nb(Char);//for(i=0;i<=Nb_C_Nb;i++)cout<<"\b";Nb_C_Nb=Nb.size();cout<<I<<'%';cout.flush();
+            //}
         }
         
         Vec_Ind_Point_Loc.push_back(Ind_Point);
@@ -258,8 +258,8 @@ void InterpolParal
     
     //-----------------------------------------------------------------------//
         
-    cout<<"\nFF Type : "<<Type_FF<<"\n\n";
-    cout.flush();
+    //cout<<"\nFF Type : "<<Type_FF<<"\n\n";
+    //cout.flush();
 
     long i;
     for(i=0;i<nb_thread;i++)

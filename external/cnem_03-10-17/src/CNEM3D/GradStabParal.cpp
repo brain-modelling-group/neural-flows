@@ -33,7 +33,7 @@ void Calcul_Erreur_Gradiant_Stabilise
     //ofstream data("erreur_moy.txt");
     //data.precision(16);
 
-    cout<<"\nCalcul erreur gradiant stabilise-----------------------------------------------\n"<<endl;
+    //cout<<"\nCalcul erreur gradiant stabilise-----------------------------------------------\n"<<endl;
 
     double Erreur_Max=0.;
     double Erreur_Moy=0.;
@@ -160,10 +160,10 @@ void Calcul_Erreur_Gradiant_Stabilise
 
     Erreur_Moy/=(Nb_Noeud*9.);
 
-    cout<<"Erreur max gradiant satabilisee = "<<Erreur_Max<<"\nErreur moy gradiant satabilisee = "<<Erreur_Moy<<endl<<endl; 
+    //cout<<"Erreur max gradiant satabilisee = "<<Erreur_Max<<"\nErreur moy gradiant satabilisee = "<<Erreur_Moy<<endl<<endl; 
 
-    cout<<"Volume cellule min-max-moy : "<<Vol_Cel[0]<<" - "<<Vol_Cel[1]<<" - "<<Vol_Cel[2]/Nb_Noeud<<endl;
-    cout<<"Somme volume cellule = "<<Vol_Cel[2]<<endl;
+    //cout<<"Volume cellule min-max-moy : "<<Vol_Cel[0]<<" - "<<Vol_Cel[1]<<" - "<<Vol_Cel[2]/Nb_Noeud<<endl;
+    //cout<<"Somme volume cellule = "<<Vol_Cel[2]<<endl;
 }
 
 //---------------------------------------------------------------------------//
@@ -344,10 +344,10 @@ task* GradStabCal_B_Task::execute()
         if(id_task==0)
         {
             long I=100.*double(Ind_Sommet)/double(Nb_Sommet);
-            if(!(I%5))
-            {
-                char Char[255];sprintf(Char,"%ld",I);string Nb(Char);for(i=0;i<=Nb_C_Nb;i++)cout<<"\b";Nb_C_Nb=Nb.size();cout<<I<<'%';cout.flush();
-            }
+            //if(!(I%5))
+            //{
+            //    char Char[255];sprintf(Char,"%ld",I);string Nb(Char);//for(i=0;i<=Nb_C_Nb;i++)cout<<"\b";Nb_C_Nb=Nb.size();cout<<I<<'%';cout.flush();
+            //}
         }
 
         C_Sommet* P_Sommet=PML->Diag_Vor.List_Sommet[Ind_Sommet];
@@ -573,10 +573,10 @@ task* GradStabCal_B_Task::execute()
         if(id_task==0)
         {
             long I=100.*double(Ind_Tet)/double(Nb_Tet);
-            if(!(I%5))
-            {
-                char Char[255];sprintf(Char,"%ld",I);string Nb(Char);for(i=0;i<=Nb_C_Nb;i++)cout<<"\b";Nb_C_Nb=Nb.size();cout<<I<<'%';cout.flush();
-            }
+            //if(!(I%5))
+            //{
+            //    char Char[255];sprintf(Char,"%ld",I);string Nb(Char);//for(i=0;i<=Nb_C_Nb;i++)cout<<"\b";Nb_C_Nb=Nb.size();cout<<I<<'%';cout.flush();
+            //}
         }
 
         Nb_T++;
@@ -726,8 +726,8 @@ void Integration_Stabilisee_Paral
     {
     case 0:
         {
-            cout<<"\nIntegration stabilisee Type B, FF Type "<<Type_FF<<"\n\n";
-            cout.flush();
+            //cout<<"\nIntegration stabilisee Type B, FF Type "<<Type_FF<<"\n\n";
+            //cout.flush();
             
             for(i=0;i<nb_thread;i++)
             {
@@ -793,7 +793,7 @@ void Integration_Stabilisee_Paral
     Calcul_Erreur_Gradiant_Stabilise(Tab_Gradiant_Stabilisee,Tab_Volume_Cellule,PML->Diag_Vor.Tab_Noeud,Size_Tab_GS);
 
     double Temp_de_Calcul=(T_1-T_0)/double(CLOCKS_PER_SEC);
-    cout<<"\nTemp de calcul = "<<Temp_de_Calcul<<" s."<<endl;
+    //cout<<"\nTemp de calcul = "<<Temp_de_Calcul<<" s."<<endl;
 
     //-----------------------------------------------------------------------//
     

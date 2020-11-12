@@ -291,7 +291,7 @@ int C_Meshless_3d::Load_Tetgen_TDC(int in_numberofpoints,int out_numberofpoints,
         New_Ind_Old_Noeud_Ini_bis[Old_Ind_New_Noeud_Ini_bis[i]]=i;
     }
     
-    cout<<Nb_Noeud_Ini-(long)in_numberofpoints<<" points supprimes :\n"<<endl;
+    //cout<<Nb_Noeud_Ini-(long)in_numberofpoints<<" points supprimes :\n"<<endl;
 
     //-----------------------------------------------------------------------//
 
@@ -664,7 +664,7 @@ bool C_Meshless_3d::Voronoi_Contrain_TetGen(int Type_Appel,char* Arg_Tet,long in
             
         case 1:
             {
-                cout<<"Exe..."<<endl;
+                //cout<<"Exe..."<<endl;
 
                 int Retour_Fonction_Tetgen_Exe=Appel_Tetgen_Exe((void*)Args_List);
 

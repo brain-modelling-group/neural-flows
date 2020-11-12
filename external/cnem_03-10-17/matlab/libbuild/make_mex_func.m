@@ -18,7 +18,7 @@ end
 for i=1:size(src,1)
     for j=1:size(src{i,2},2)
         src_ij=strcat(char(src{i,1}),char(src{i,2}(j)),'.cpp');
-        cmd=['mex ' char(src{i,3}) ' ' libI ' -c ' src_ij]
+        cmd=['mex ' char(src{i,3}) ' ' libI ' -c ' src_ij];
         eval(cmd);
     end
 end

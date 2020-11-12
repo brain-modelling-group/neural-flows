@@ -39,7 +39,7 @@ void C_Meshless_3d::Calcul_Interpolation_Noeud_Esclave(vector<long>* P_List_Ind_
 
 void C_Meshless_3d::Calcul_Interpolation_Noeud_Esclave_Front(vector<long>* P_List_Ind_Noeud_Esclave,vector<long>* P_List_Ind_Noeud_FoFo,vector<double>* P_List_FoFo)
 {
-    cout<<"\nCalcul interpolation noeuds esclave:-------------------------------------------\n"<<endl;
+    //cout<<"\nCalcul interpolation noeuds esclave:-------------------------------------------\n"<<endl;
 
     long T_0=clock();
 
@@ -52,10 +52,10 @@ void C_Meshless_3d::Calcul_Interpolation_Noeud_Esclave_Front(vector<long>* P_Lis
     vector<long> List_Ind_Tri_Front_Ini;
     
     Trouve_Ind_Noeud_Tri_Front_Ini_Proche(P_List_Ind_Noeud_Esclave,&List_Ind_Noeud_Tri_Front_Ini_Proche);
-    cout<<"1->";cout.flush();
+    //cout<<"1->";cout.flush();
 
     Trouve_Ind_Tri_Front_Ini(P_List_Ind_Noeud_Esclave,&List_Ind_Noeud_Tri_Front_Ini_Proche,&List_Ind_Tri_Front_Ini);
-    cout<<"2->";cout.flush();
+    //cout<<"2->";cout.flush();
 
     double Erreur_Max=0;
     long i;
@@ -85,15 +85,15 @@ void C_Meshless_3d::Calcul_Interpolation_Noeud_Esclave_Front(vector<long>* P_Lis
         List_Pnt_Tri.push_back(&Diag_Vor.Tab_Noeud[3*Tab_Ind_Noeud_Tri_Front_Ini[3*List_Ind_Tri_Front_Ini[i]+2]]);
         Dessine_Polygone(&List_Pnt_Tri,&List_Tri_Front_Ini[List_Ind_Tri_Front_Ini[i]].Normale,1,1,Wire,Face,1,1,Quantity_NOC_YELLOW,Quantity_NOC_RED,.5);*/
     }
-    cout<<"3"<<endl;
+    //cout<<"3"<<endl;
 
-    cout<<"\nErreur max = "<<Erreur_Max<<"\n"<<endl;
+    //cout<<"\nErreur max = "<<Erreur_Max<<"\n"<<endl;
 
     //-----------------------------------------------------------------------//
 
     long T_1=clock();
     double Temp_de_Calcul=(T_1-T_0)/double(CLOCKS_PER_SEC);
-    cout<<"\nTemp de calcul = "<<Temp_de_Calcul<<" s."<<endl;
+    //cout<<"\nTemp de calcul = "<<Temp_de_Calcul<<" s."<<endl;
 }
 
 //---------------------------------------------------------------------------//

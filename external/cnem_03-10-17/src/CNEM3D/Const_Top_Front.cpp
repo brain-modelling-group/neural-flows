@@ -313,9 +313,9 @@ bool Construction_Topologie_Frontiere
         }
     }
 
-    cout<<"Tab vol tri : ";
-    for(i=0;i<Ind_Groupe_Temp;i++)cout<<'('<<Tab_Ind_Groupe[i]<<") : "<<Tab_Vol_Tri[i]<<" | ";
-    cout<<endl;
+    //cout<<"Tab vol tri : ";
+    //for(i=0;i<Ind_Groupe_Temp;i++)cout<<'('<<Tab_Ind_Groupe[i]<<") : "<<Tab_Vol_Tri[i]<<" | ";
+    //cout<<endl;
 
     long Nb_Arete_Tri_Front=P_List_Arete_Tri_Front->size();
     bool* Tab_Rev_Arete_01=(bool*)malloc(Nb_Arete_Tri_Front*sizeof(bool));

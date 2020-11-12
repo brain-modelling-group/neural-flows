@@ -187,7 +187,7 @@ void C_Diag_Vor::Build_Topologie()
     
     //-----------------------------------------------------------------------//
 
-    cout<<"Nb sommet = "<<List_Sommet.size()<<endl;
+    //cout<<"Nb sommet = "<<List_Sommet.size()<<endl;
 
     //-----------------------------------------------------------------------//
 
@@ -200,7 +200,7 @@ void C_Diag_Vor::Build_Topologie()
             Creation_Arete_et_face(P_Sommet_j);
     }
 
-    cout<<"Nb arete = "<<List_Arete.size()<<endl<<"Nb face = "<<List_Face.size()<<endl;
+    //cout<<"Nb arete = "<<List_Arete.size()<<endl<<"Nb face = "<<List_Face.size()<<endl;
 
     //-----------------------------------------------------------------------//
 
@@ -211,7 +211,7 @@ void C_Diag_Vor::Build_Topologie()
         Range_Arete_dans_Face(P_Face_k);
     }
 
-    cout<<"Arete face rangee"<<endl;
+    //cout<<"Arete face rangee"<<endl;
 
     //-----------------------------------------------------------------------//
 
