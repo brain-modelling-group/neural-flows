@@ -54,7 +54,7 @@ varargout{1} = ax_handles;
     function ax_sc = plot_size_scale(ax_sc)
         ydata = [5 10 15 20 25 30 35 40 45 50]; % percentages
         scatter(ax_sc, ones(1, length(ydata)), ydata, ydata*10, [0.5 0.5 0.5], 'filled');
-        ax_sc.YLabel.String = 'occupancy [% singular nodes]';
+        ax_sc.YLabel.String = 'occupancy [% space]';
         ax_sc.XTick = [];
         ax_sc.YLim = [2.5, 52.5];
         ax_sc.XLim = [0.5 1.5];
