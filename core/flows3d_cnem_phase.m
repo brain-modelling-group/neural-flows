@@ -78,7 +78,7 @@ dphidxp = zeros(size(phi));
 dphidyp = zeros(size(phi));
 dphidzp = zeros(size(phi));
 
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Calculating phase-based flows with CNEM.'))
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Calculating phase-based flows using meshless implmentation (CNEM).'))
 xdim = 1;
 ydim = 2;
 zdim = 3;
