@@ -50,10 +50,10 @@ function  [params, obj_streams, obj_streams_sentinel] = streams3d_trace(params)
     fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started tracing of streamlines.'))
     % Check if it's phase-based streams, or amplitude based
     % If it's amplitude-based it can be nodal or gridded
-    switch params.streamlines.tracing.grid.type
-        case 'unstructured'
+    switch params.streamlines.tracing.implementation
+        case 'meshless'
             streams3d_tracing_cnem(obj_flows, obj_streams, params)
-        case 'structured'
+        case 'mesh-based'
             if params.general.parallel.enabled
                 streams3d_tracing_mlab_parallel(obj_flows, obj_streams, params)
             else

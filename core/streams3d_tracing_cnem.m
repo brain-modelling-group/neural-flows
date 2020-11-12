@@ -30,7 +30,7 @@ else
     boundary_faces = masks.innies_triangles;
 end
 
-time_step = params.streamlines.tracing.time_step; % fake time step for streamline tracing
+time_step = params.streamlines.tracing.step_size; % fake time step for streamline tracing
 tpts = params.flows.data.shape.t;
 
 % Get seeding locations
