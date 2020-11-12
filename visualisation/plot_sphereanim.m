@@ -97,7 +97,8 @@ sp_handle = add_sphere_size_internal(locs(:,1),locs(:,2),locs(:,3),sphereradii,d
 set(sp_handle, 'facealpha', 0.7)
 drawnow
 cdata = get(sp_handle,'cdata');
-view_val = [180 -90];
+%view_val = [180 -90];
+view_val = 2;
 view(view_val)
 switch animation_env
     case 'workspace'
