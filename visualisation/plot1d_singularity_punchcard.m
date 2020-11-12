@@ -1,4 +1,4 @@
-function [figure_handle, varargout] = plot1d_singularity_punchcard(params)
+function [figure_handle, varargout] = plot1d_singularity_local_occupancy(params)
 
 nodes_str_lbl = params.data.nodes_str_lbl;
 obj_singularity = load_iomat_singularity(params);
@@ -7,7 +7,7 @@ nodal_singularity_summary = obj_singularity.nodal_singularity_summary;
 
 % TODO: configiure graphics property to handle paper units so we can plot
 % stuff and give figure sizes
-figure_handle = figure('Name', 'nflows-nodal-punchcard');
+figure_handle = figure('Name', 'nflows-singularity-local-occupancy');
 ax_pc = subplot(2, 4, [1 2 3 5 6 7], 'Parent', figure_handle);
 ax_sc = subplot(2, 4, [4 8], 'Parent', figure_handle);
 hold(ax_pc, 'on')
