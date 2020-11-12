@@ -22,7 +22,7 @@ switch params.data.grid.type
                  nodes_str_lbl = obj_data.nodes_str_lbl;
              end
             params.data.nodes_strl_lbl = nodes_str_lbl;
-            params.data.ht =  data_struct.ht;
+            params.data.ht =  obj_data.ht;
         case 'structured'
             params.data.shape.timepoints = params.data.shape.size(4);
             params.data.shape.x = params.data.shape.size(2); 
