@@ -109,7 +109,7 @@ task* Interpol_Task::execute()
     long Ind_Point;
     Nb_P=0;
     
-    cout<<endl;
+    //cout<<endl;
 
     long Ind_Sommet_Initialisation=-1;
     long Nb_C_Nb=-1;
@@ -194,7 +194,7 @@ task* Interpol_Task::execute()
     
     }while(1);
 
-    if(id_task==0)cout<<endl;
+    //if(id_task==0)cout<<endl;
         
     /*{
         mutex::scoped_lock Lock_P(*P_Mutex_P);

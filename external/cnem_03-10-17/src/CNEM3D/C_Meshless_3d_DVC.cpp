@@ -311,7 +311,7 @@ int C_Meshless_3d::Load_Tetgen_TDC(int in_numberofpoints,int out_numberofpoints,
         else
             cout<<i<<endl;
     }
-    cout<<endl;
+    //cout<<endl;
 
     Nb_Noeud_Ini=in_numberofpoints;
 

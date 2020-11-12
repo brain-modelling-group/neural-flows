@@ -2557,7 +2557,7 @@ vector<double>* P_Vec_Phi
 
     //-----------------------------------------------------------------------//
 
-    cout<<endl;
+    //cout<<endl;
     long Nb_C_Nb=-1;
     for(i=0;i<Nb_PntInt;i++)
     {
