@@ -1,4 +1,4 @@
-function figure_handle = plot2d_singularity_occupancy(params)
+function figure_handle = plotcomp_singularity_absolute_occupancy(params)
 
 nodes_str_lbl = params.data.nodes_str_lbl;
 obj_singularity = load_iomat_singularity(params);
