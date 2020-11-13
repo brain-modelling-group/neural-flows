@@ -1,3 +1,4 @@
+
 function rotating_wave(case_label)
 % This function runs the whole neural-flows workflow on a small epoch of simulated 
 % data, that corresponds to a rotating brain wave pattern.
