@@ -52,7 +52,7 @@ function  [params, obj_streams, obj_streams_sentinel] = streams3d_trace(params)
     % If it's amplitude-based it can be nodal or gridded
     switch params.streamlines.tracing.implementation
         case 'meshless'
-            streams3d_tracing_cnem(obj_flows, obj_streams, params)
+            streams3d_tracing_cnem(obj_flows, obj_streams, params);
         case 'mesh-based'
             if params.general.parallel.enabled
                 streams3d_tracing_mlab_parallel(obj_flows, obj_streams, params);
