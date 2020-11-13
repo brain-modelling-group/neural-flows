@@ -140,7 +140,7 @@ function stream_cell = tracing_cnem_tracing_loop(locs, boundary_faces, flow_fiel
     
     end
 
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started pruning streamline cell array.'))
+    %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started pruning streamline cell array.'))
     % Transform the streams array into a cell.
     conn = zeros(3, 3, 3);
     conn(2, 2, :) =1; 
@@ -155,7 +155,7 @@ function stream_cell = tracing_cnem_tracing_loop(locs, boundary_faces, flow_fiel
     for jj=1:num_streams
         stream_cell{jj} = streams([ids{jj,:}]);
     end
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished pruning streamline cell array.'))
+    %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished pruning streamline cell array.'))
 
 
 end %tracing_cnem_loop()
