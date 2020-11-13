@@ -9,7 +9,7 @@ function ouparams = main_core(inparams)
 %              4) classifies singularities.
 %              5) traces streamlines
 disp('#########################################################################')
-disp('#                       ~~~~ NEURAL FLOWS ~~~~                          #')
+disp('#                   ☺☺☺☺🧠🧠~~~~ NEURAL FLOWS ~~~~☺☺☺☺ 🧠                     #')
 disp('#########################################################################')
 disp('------------------------------------------------------------------------')
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: MAIN CORE.'))              
