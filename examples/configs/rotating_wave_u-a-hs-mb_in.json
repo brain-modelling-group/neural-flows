@@ -127,7 +127,7 @@
     },
     "detection": {
       "enabled": true,
-      "mode": "null-flow-field",
+      "modality": "null-flow-field",
       "threshold": [
         0,
         0.1
