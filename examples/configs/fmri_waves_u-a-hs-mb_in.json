@@ -9,7 +9,7 @@
           },
         "output": {
           "file": {
-            "name": "fmri_waves_u-a-hs-mb_ou.json",
+            "name": "fmri_waves_u-a-hs-mb_ou_subject_28.json",
             "dir": "examples/configs"} 
         }
       },
@@ -30,7 +30,7 @@
       "exists": false,
       "dir": "",
       "name": "",
-      "label": "",
+      "label": "fmri_interp_subject_28",
       "keep": true
     },
     "resolution": {
@@ -54,9 +54,9 @@
     "file": {
       "exists": false,
       "keep": true,
-      "dir": "",
+      "dir": "scratch",
       "name": "",
-      "label": "fmri_flows"
+      "label": "fmri_flows_subject_28"
     },
     "modality": "amplitude",
     "method": {
@@ -99,7 +99,7 @@
           "exists": false,
           "dir": "",
           "name": "",
-          "label": "",
+          "label": "fmri_streams_subject_28",
           "keep": true
     },
       "trace_pathlines": true, 
@@ -123,14 +123,14 @@
       "keep": true,
       "dir": "",
       "name": "",
-      "label": ""
+      "label": "fmri_singularity_subject_28"
     },
     "detection": {
       "enabled": true,
       "modality": "null-flow-field",
       "threshold": [
         0,
-        0.05
+        0.025
       ]
     },
     "classification": {
@@ -150,7 +150,7 @@
   "data": {
     "file": {
       "dir": "demo-data", 
-      "name": "fmri_waves_unstructured_single_subject_20_short.mat"
+      "name": "fmri_waves_unstructured_single_subject_28_short.mat"
     },
     "slice": {
       "enabled": false,
@@ -166,7 +166,7 @@
       "hz": [],
       "units": {
          "space":"mm",                                
-          "time": "ms"                               
+          "time": "s"                               
      }
   },
     "modality": "amplitude"
