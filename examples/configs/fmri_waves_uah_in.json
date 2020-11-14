@@ -1,19 +1,22 @@
 {
   "general": {
-    "storage": {
-      "time_stamp": [],
-      "dir": "scratch",    
-      "dir_tmp": "/tmp",    
-      "params": {
+    "params": {
         "input": {
-          "filename": "fmri_waves_uah_in.json",
-          "dir": "examples/configs" 
-        },
+          "file": {
+            "name": "",
+            "dir":  "" 
+          }
+          },
         "output": {
-          "filename": "fmri_waves_uah_ou.json",
-          "dir": "examples/configs" 
+          "file": {
+            "name": "fmri_waves_u-a-hs-mb_ou.json",
+            "dir": "examples/configs"} 
         }
       },
+    "storage": {
+      "time_stamp": [],
+      "dir_out": "scratch",    
+      "dir_tmp": "/tmp",    
       "format": "iomat"     
     },
     "parallel": {
@@ -27,17 +30,20 @@
       "exists": false,
       "dir": "",
       "name": "",
-      "label": "fmri_interp",
+      "label": "",
       "keep": true
     },
-    "hx": 3,
-    "hy": 3,
-    "hz": 3,
+    "resolution": {
+      "ht": [],
+      "hx": 3,                                     
+      "hy": 3,                                     
+      "hz": 3                                    
+    },
     "neighbour_method": "",
     "extrapolation_method": "",
     "boundary": {
       "alpha_radius": 35,
-      "thickness": 3
+      "thickness":4
     },
     "visualisation": {
       "enabled": true
@@ -55,6 +61,7 @@
     "modality": "amplitude",
     "method": {
       "name": "hs3d",
+      "implementation": "mesh-based",
       "hs3d": {
         "alpha_smooth": 1.0,
         "max_iterations": 256,
@@ -73,7 +80,7 @@
     "decomposition": {
       "svd": {
         "enabled": true,
-        "modes": 4,
+        "modes": 12,
         "grid": {
           "type": "unstructured"
         }
@@ -92,20 +99,18 @@
           "exists": false,
           "dir": "",
           "name": "",
-          "label": "fmri_streams",
+          "label": "",
           "keep": true
     },
-
+      "trace_pathlines": true, 
       "tracing": {
-               "grid": {
-                   "type": "unstructured"
-                  },
+               "implementation": "meshless", 
                "seeding_points": {
                                   "modality": "random-sparse",
                                   "seed": 42
               },
-              "max_stream_length" : 256,
-              "time_step": 0.5
+              "max_stream_length" : 512,
+              "step_size": 0.5
           },
 
     "visualisation": {
@@ -118,11 +123,11 @@
       "keep": true,
       "dir": "",
       "name": "",
-      "label": "fmri_singularity"
+      "label": ""
     },
     "detection": {
       "enabled": true,
-      "mode": "null-flow-field",
+      "modality": "null-flow-field",
       "threshold": [
         0,
         0.05
@@ -135,7 +140,7 @@
       "enabled": true,
       "nodal_occupancy" : {
         "enabled": true,
-        "distance_threshold" : 1
+        "distance_threshold" : 2
       }
     },
     "visualisation": {
@@ -154,14 +159,16 @@
     "grid": {
       "type": "unstructured"
     },
-    "ht": [],
-    "hx": [],
-    "hy": [],
-    "hz": [],
-    "units": {
-      "space": "mm",
-      "time":  "s"
-    },
+    "resolution": {
+      "ht": [],
+      "hx": [],                                       
+      "hy": [],
+      "hz": [],
+      "units": {
+         "space":"mm",                                
+          "time": "ms"                               
+     }
+  },
     "modality": "amplitude"
   }
-}     
+}
