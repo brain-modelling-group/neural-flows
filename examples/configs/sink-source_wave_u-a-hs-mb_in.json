@@ -91,7 +91,7 @@
         "alpha_smooth": 0.1,
         "max_iterations": 128,
         "initial_conditions": {
-          "mode": "random",
+          "modality": "random",
           "seed": 42
         },
         "nodal_flows": {
