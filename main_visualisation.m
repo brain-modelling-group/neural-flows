@@ -7,18 +7,18 @@ fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: MAIN VISUALISATI
 disp('------------------------------------------------------------------------')
 %---------------------------------DECOMPOSITION--------------------------------%
 if inparams.flows.visualisation.enabled
-    plot1d_speed_distribution(inparams);
+    %plot1d_speed_distribution(inparams);
     plot2d_svd_modes(inparams);
 end
 %---------------------------SINGULARITY----------------------------------------%
 if inparams.singularity.visualisation.enabled
-   plot3d_singularity_temporal_occupancy(inparams);
-   plot2d_singularity_tracking_cross_stitch(inparams);
-   plot1d_singularity_relative_temporal_occupancy(inparams);
-   plot1d_singularity_relative_spatial_occupancy(inparams);
-   plot1d_singularity_traces_sandplot(inparams);
-   plot1d_singularity_stats(inparams);
-   plotcomp_singularity_absolute_occupancy(inparams);
+   %plot3d_singularity_temporal_occupancy(inparams);
+   %plot2d_singularity_tracking_cross_stitch(inparams);
+   %plot1d_singularity_relative_temporal_occupancy(inparams);
+   %plot1d_singularity_relative_spatial_occupancy(inparams);
+   %plot1d_singularity_traces_sandplot(inparams);
+   %plot1d_singularity_stats(inparams);
+   %plotcomp_singularity_absolute_occupancy(inparams);
 end
 %------------------------------------------------------------------------------%
 % TODO: write output parameters if required

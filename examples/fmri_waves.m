@@ -1,4 +1,4 @@
-function fmri_waves(case_label)
+function fmri_waves()
 % This script runs the whole neural-flows workflow on a small epoch of 
 % fmri data. Relevant links below. 
 %
@@ -23,19 +23,7 @@ function fmri_waves(case_label)
 % NOTE: Assumes this function is run from the top level directory neural-flows/
 
 
-if nargin < 1
-    case_label = 'uah';
-end
-
-switch case_label
-    case 'uah'
-        input_params_filename = 'fmri_waves_uah_in.json';
-    case 'uac'
-        input_params_filename = 'fmri_waves_uac_in.json';
-    case 'upc'
-        input_params_filename = 'fmri_waves_uap_in.json';
-end
-
+input_params_filename = 'fmri_waves_u-a-hs-mb_in.json';
 input_params_dir  = 'examples/configs';
 json_mode = 'read';
 

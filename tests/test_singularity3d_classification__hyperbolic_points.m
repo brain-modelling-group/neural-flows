@@ -53,7 +53,7 @@ for this_cp=1:length(s3d_list)
     cp_type = s3d_list(this_cp);
     [ux, uy, uz, X, Y, Z, p1, p2] = generate_singularity3d_hyperbolic_critical_points(cp_type{:});
 
-    plot3d_hyperbolic_critical_point([], p1, p2, ux, uy, uz, X, Y, Z, cp_type{:})
+    plot3d_hyperbolic_critical_point([], p1, p2, ux, uy, uz, X, Y, Z, cp_type{:});
     
     hx = X(1, 2, 1) - X(1, 1, 1);
     hy = Y(2, 1, 1) - Y(1, 1, 1);

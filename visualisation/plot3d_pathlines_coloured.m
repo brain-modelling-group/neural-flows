@@ -3,7 +3,6 @@ function plot3d_pathlines_coloured(obj_streams)
 
 locs = obj_streams.initial_seeding_locs;
 
-
 % Start locations
 fig_handle = figure('Name', 'neural-flows-pathlines-coloured');
 ax = subplot(1,1,1, 'Parent', fig_handle); 
@@ -30,4 +29,4 @@ plot3(ax, locs(:, 1), locs(:, 2), locs(:, 3), 'k.')
        line_colormap = cat(2, line_color, line_color);
        color_line3(x, y, z, line_colormap, '.');
     end
-end % function plot3d_pathlines()
+end % function plot3d_pathlines_coloured()

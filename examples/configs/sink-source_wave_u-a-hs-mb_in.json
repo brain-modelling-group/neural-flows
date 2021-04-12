@@ -1,28 +1,53 @@
 {
   "general": {
     "params": {
-        "input": {
-          "file": {
-            "name": "",
-            "dir":  "" 
-          }
-          },
-        "output": {
-          "file": {
-            "name": "sink-source_wave_u-a-hs-mb_ou.json",
-            "dir": "examples/configs"} 
+      "input": {
+        "file": {
+          "name": "",
+          "dir": ""
         }
       },
+      "output": {
+        "file": {
+          "name": "sink-source_wave_u-a-hs-mb_ou.json",
+          "dir": "examples/configs"
+        }
+      }
+    },
     "storage": {
       "timestamp": [],
-      "dir_out": "scratch",    
-      "dir_tmp": "/tmp"    
-      },
-    "format": "iomat",     
+      "dir_out": "scratch",
+      "dir_tmp": "/tmp"
+    },
+    "format": "iomat",
     "parallel": {
       "enabled": true,
       "workers_fraction": 0.8
     }
+  },
+  "data": {
+    "file": {
+      "dir": "demo-data",
+      "name": "sink-source_wave_W_c1_d1ms_trial1.mat"
+    },
+    "slice": {
+      "enabled": false,
+      "id": 0
+    },
+    "grid": {
+      "type": "unstructured"
+    },
+    "resolution": {
+      "ht": [],
+      "hx": [],
+      "hy": [],
+      "hz": [],
+      "units": {
+        "space": "mm",
+        "time": "ms"
+      }
+    },
+    "modality": "amplitude"
   },
   "interpolation": {
     "enabled": true,
@@ -35,9 +60,9 @@
     },
     "resolution": {
       "ht": [],
-      "hx": 3,                                     
-      "hy": 3,                                     
-      "hz": 3                                    
+      "hx": 3,
+      "hy": 3,
+      "hz": 3
     },
     "neighbour_method": "",
     "extrapolation_method": "",
@@ -66,7 +91,7 @@
         "alpha_smooth": 0.1,
         "max_iterations": 128,
         "initial_conditions": {
-          "mode": "random",
+          "modality": "random",
           "seed": 42
         },
         "nodal_flows": {
@@ -94,25 +119,23 @@
     }
   },
   "streamlines": {
-      "enabled": false,
-      "file": {
-          "exists": false,
-          "dir": "",
-          "name": "",
-          "label": "",
-          "keep": true
+    "enabled": false,
+    "file": {
+      "exists": false,
+      "dir": "",
+      "name": "",
+      "label": "",
+      "keep": true
     },
-
-      "tracing": {
-               "implementation": "meshless", 
-               "seeding_points": {
-                                  "modality": "random-sparse",
-                                  "seed": 42
-              },
-              "max_stream_length" : 200,
-              "step_size": 0.5
-          },
-
+    "tracing": {
+      "implementation": "meshless",
+      "seeding_points": {
+        "modality": "random-sparse",
+        "seed": 42
+      },
+      "max_stream_length": 200,
+      "step_size": 0.5
+    },
     "visualisation": {
       "enabled": true
     }
@@ -138,37 +161,13 @@
     },
     "quantification": {
       "enabled": true,
-      "nodal_occupancy" : {
+      "nodal_occupancy": {
         "enabled": true,
-        "distance_threshold" : 20
+        "distance_threshold": 20
       }
     },
     "visualisation": {
       "enabled": true
     }
-  },
-  "data": {
-    "file": {
-      "dir": "demo-data", 
-      "name": "sink-source_wave_W_c1_d1ms_trial1.mat"
-    },
-    "slice": {
-      "enabled": false,
-      "id": 0
-    },
-    "grid": {
-      "type": "unstructured"
-    },
-    "resolution": {
-      "ht": [],
-      "hx": [],                                       
-      "hy": [],
-      "hz": [],
-      "units": {
-         "space":"mm",                                
-          "time": "ms"                               
-     }
-  },
-    "modality": "amplitude"
   }
 }
