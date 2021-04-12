@@ -22,7 +22,6 @@ w = double(w);
 
   
 % Only 3D  
-[msg, x, y, z] = xyzuvwcheck(x,y,z,u,v,w);  error(msg) 
 if isempty(x)
     [px, ~, ~] = gradient(u); 
     [~, qy, ~] = gradient(v); 
@@ -48,6 +47,8 @@ end
     % Sum of signs equal +/-3  means divergence has the same sign along each direction
     div_equal_sign(div_sign==-3) = 1;
     div_equal_sign(div_sign== 3) = 1;
+    div_equal_sign(div_sign==-2) = 1;
+    div_equal_sign(div_sign== 2) = 1;
     % Sum of signs equal +/-1  means divergence does not have the same sign along each direction
     div_equal_sign(div_sign==-1) = 0;
     div_equal_sign(div_sign==-1) = 0;
