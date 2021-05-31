@@ -1,171 +1,94 @@
-function local_flow_label = classify_local_flow(div_mag, px, qy, rz, curl_mag)
+function local_flow_label = classify_local_flow(div_mag, px, qy, rz, curl_av)
 
 
  s_px = sign(px);
  s_qy = sign(qy);
  s_rz = sign(rz);
  
+  
+% Find well-edfined, rotationally invariant - zero-divergence flow
+zerodivergence = ismember([s_px(:) s_qy(:) s_rz(:)], [0  0  0], 'rows');
  
- div_sum_sign = s_px + s_qy + s_rz;
+% Find well-defined, rotationally invariant - diverging flow
+diverging  = ismember([s_px(:) s_qy(:) s_rz(:)], [1  1  1], 'rows');
  
- % Find well-edfined, rotationally invariant - laminar - zero-divergence
- laminar = ismember([s_px(:) s_qy(:) s_rz(:)], [0  0  0], 'rows');
- 
- diverging  = ismember([s_px(:) s_qy(:) s_rz(:)], [1  1  1], 'rows');
- 
- converging = ismember([s_px(:) s_qy(:) s_rz(:)], [-1  -1  -1], 'rows');
+% Find well-defined, rotationally invariant - converging flow
+converging = ismember([s_px(:) s_qy(:) s_rz(:)], [-1  -1  -1], 'rows');
 
-                                          
- div_sum_sign(lia) = 1;
- % Find fringe cases that are closer to laminar flow rather than
+% Other cases                                         
 
- % laminar, flow in one dimension parallel to the main
- % axes - nonzero divergence
-laminar_nonzerodivergence_positive = ismember([s_px(:) s_qy(:) s_rz(:)], [0  0  1;
-                                                                          1  0  0;
-                                                                          0  1  0], 'rows');
-                                       
-laminar_nonzerodivergence_negative = ismember([s_px(:) s_qy(:) s_rz(:)], [ 0   0  -1;
-                                                                          -1   0   0;
-                                                                           0  -1   0], 'rows');
-% Find fringe cases that yield zero sign but they are closer to straining
-% flows
-lia = ismember([s_px(:) s_qy(:) s_rz(:)], [1  1  0; 
-                                           0  1  1; 
-                                           1  0  1], 'rows');                                       
-                                       
-% Find fringe cases that yield zero sign but they are closer to straining
-% flows
-lia = ismember([s_px(:) s_qy(:) s_rz(:)], [0 -1  1; 
-                                           0  1 -1; 
-                                           1  0 -1; 
-                                          -1  0  1; 
-                                           0  1 -1; 
-                                           0 -1  1], 'rows');
+% nonzero divergence in one or two dimensions parallel to the main
+% axes, but zero in the other - diverging
+nonzerodivergence_diverging1d2d = ismember([s_px(:) s_qy(:) s_rz(:)], [0  0  1;
+                                                                       1  0  0;
+                                                                       0  1  0;
+                                                                       1  1  0;
+                                                                       0  1  1;
+                                                                       1  0  1], 'rows');
+ % nonzero divergence in one or two dimensions parallel to the main
+ % axes, but zero in the other - converging                                       
+nonzerodivergence_converging1d2d = ismember([s_px(:) s_qy(:) s_rz(:)], [ 0   0  -1;
+                                                                        -1   0   0;
+                                                                         0  -1   0;
+                                                                        -1  -1   0;
+                                                                        -1   0  -1;
+                                                                         0  -1  -1], 'rows');
+
+% Fringe case where sign sum is zero, but divergence is pos and neg in two other axis                                                                
+nonzerodivergence_straining = ismember([s_px(:) s_qy(:) s_rz(:)], [ 1   0  -1;
+                                                                    1  -1   0;
+                                                                    0   1  -1;
+                                                                    0  -1   1;
+                                                                   -1   1   0;
+                                                                   -1   0   1],'rows');
+                                                                                                                                  
                                         
-div_sum_sign(lia) = 0;
-    %div_equal_sign = div_sum_sign;
-    
-    % Sum of signs equal zero means zero divergence, equal sign is not applicable
-    %div_equal_sign(div_sum_sign==0)  = 0;
-    % Sum of signs equal +/-3  means divergence has the same sign along each direction
-    %div_equal_sign(div_sum_sign==-3) = 1;
-    %div_equal_sign(div_sum_sign== 3) = 1;
-    % Sum of signs equal +/-2  means divergence has the same sign along two
-    % directions and zero along a third. Divergence happens on a plane.
-    % Maybe points close to the boundary. Add them to equal sign.
-    %div_equal_sign(div_sum_sign==-2) = 1;
-    %div_equal_sign(div_sum_sign== 2) = 1;
-    % Sum of signs equal +/-1  means divergence does not have the same sign along each direction
-    %div_equal_sign(div_sum_sign==-1) = -1;
-    %div_equal_sign(div_sum_sign==-1) = -1;
 
+local_divg_flow_label = nan(size(curl_av));
+local_curl_flow_label = nan(size(curl_av));
 local_flow_label = nan(size(curl_av));
+
 % Hardcoced threshold for curl and divergence
-curl_th = 1e-3;
-%div_th = 1e-3;
+curl_th = 1e-6;
+div_th = 1e-3;
 
 %
 curl_m = abs(curl_av);
 curl_m(curl_m <= curl_th) = 0;
+curl_av(curl_m <= curl_th) = 0;
 
 % Threshold divergence based on the magnitude
-%div_m = abs(div);
-%div(div_m <= div_th) = 0;
+div_m = abs(div_mag);
+div(div_m <= div_th) = 0;
 
 % Classify stuff with curl==0 and with curl !=0
-zerocurl_idx = find(curl_m == 0);
-nonzerocurl_idx = find(curl_m > 0);
-%% Zero curl flows
-% Zero-divergent flow/ laminar flow - index 0
-laminar_idx = div_sum_sign(zerocurl_idx) == 0;
+local_curl_flow_label(curl_m == 0) = false;
+local_curl_flow_label(curl_m > 0) = true;
 
-[ii, jj, kk] = ind2sub(size(local_flow_label), zerocurl_idx(laminar_idx));
+% Zero curl
+class_00 = find((curl_av == 0) & (div_mag == 0));
+class_01 = find((curl_av == 0) & (div_mag > 0));
+class_02 = find((curl_av == 0) & (div_mag < 0));
+class_03 = find((curl_av > 0) & (div_mag > 0));
+class_04 = find((curl_av > 0) & (div_mag < 0));
 
-for idx=1:length(ii)
-    local_flow_label(ii(idx), jj(idx), kk(idx)) = 0;
-end
+class_05 = find((curl_av < 0) & (div_mag > 0));
+class_06 = find((curl_av < 0) & (div_mag < 0));
 
-% Find straining/elongational flows -- related to saddle points
-temp1 = find(div_sum_sign(zerocurl_idx) == -1);
-temp2 = find(div_sum_sign(zerocurl_idx) == 1);
-straining_idx = [temp1; temp2];
+class_07 = find((curl_av > 0) & (div_mag == 0));
+class_08 = find((curl_av < 0) & (div_mag == 0));
 
-[ii, jj, kk] = ind2sub(size(local_flow_label), zerocurl_idx(straining_idx));
+class_09 = find(isnan(curl_av) | isnan(div_mag));
 
-for idx=1:length(ii)
-    local_flow_label(ii(idx), jj(idx), kk(idx)) = 1;
-end
-
-% Find diverging flows -- related to sources
-temp1 = find(div_sum_sign(zerocurl_idx) == 3);
-temp2 = find(div_sum_sign(zerocurl_idx) == 2);
-diverging_idx = [temp1 temp2];
-
-[ii, jj, kk] = ind2sub(size(local_flow_label), zerocurl_idx(diverging_idx));
-
-for idx=1:length(ii)
-    local_flow_label(ii(idx), jj(idx), kk(idx)) = 2;
-end
-
-
-% Find diverging flows -- related to sources
-temp1 = find(div_sum_sign(zerocurl_idx) == -3);
-temp2 = find(div_sum_sign(zerocurl_idx) == -2);
-converging_idx = [temp1 temp2];
-
-[ii, jj, kk] = ind2sub(size(local_flow_label), zerocurl_idx(converging_idx));
-
-for idx=1:length(ii)
-    local_flow_label(ii(idx), jj(idx), kk(idx)) = 3;
-end
-
-
-%% Nonzero curl flows
-% Zero-divergent flow/ laminar flow - index 0
-bending_idx = div_sum_sign(nonzerocurl_idx) == 0;
-
-[ii, jj, kk] = ind2sub(size(local_flow_label), nonzerocurl_idx(bending_idx));
-
-for idx=1:length(ii)
-    local_flow_label(ii(idx), jj(idx), kk(idx)) = 4;
-end
-
-% Find straining/elongational flows -- related to saddle points
-temp1 = find(div_sum_sign(nonzerocurl_idx) == -1);
-temp2 = find(div_sum_sign(nonzerocurl_idx) == 1);
-bending_straining_idx = [temp1; temp2];
-
-[ii, jj, kk] = ind2sub(size(local_flow_label), nonzerocurl_idx(bending_straining_idx));
-
-for idx=1:length(ii)
-    local_flow_label(ii(idx), jj(idx), kk(idx)) = 5;
-end
-
-% Find diverging flows -- related to sources
-temp1 = find(div_sum_sign(nonzerocurl_idx) == 3);
-temp2 = find(div_sum_sign(nonzerocurl_idx) == 2);
-swirling_diverging_idx = [temp1; temp2];
-
-[ii, jj, kk] = ind2sub(size(local_flow_label), nonzerocurl_idx(swirling_diverging_idx));
-for idx=1:length(ii)
-    local_flow_label(ii(idx), jj(idx), kk(idx)) = 6;
-end
-
-
-% Find diverging flows -- related to sources
-temp1 = find(div_sum_sign(nonzerocurl_idx) == -3);
-temp2 = find(div_sum_sign(nonzerocurl_idx) == -2);
-swirling_converging_idx = [temp1; temp2];
-
-[ii, jj, kk] = ind2sub(size(local_flow_label), nonzerocurl_idx(swirling_converging_idx));
-
-for idx=1:length(ii)
-    local_flow_label(ii(idx), jj(idx), kk(idx)) = 7;
-end
+local_flow_label(class_00) = 0;
+local_flow_label(class_01) = 1; 
+local_flow_label(class_02) = 2;
+local_flow_label(class_03) = 3; 
+local_flow_label(class_04) = 4; 
+local_flow_label(class_05) = 5; 
+local_flow_label(class_06) = 6; 
+local_flow_label(class_07) = 7; 
+local_flow_label(class_08) = 8;
+local_flow_label(class_09) = 8; 
 
 end
-
-%function local_flow_label = set_flow_label(local_flow_label, curl_idx, local_flow_idx, local_flow_num)
-
-%end
