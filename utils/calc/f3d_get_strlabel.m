@@ -45,7 +45,7 @@ switch flow_num_label
     case 8
         flow_string_label = {'negative-rotational-zero-divergent'};% done
     case 9
-        flow_string_label = {'nan', 'empty', 'boundary'}; % done
+        flow_string_label = {'nan'}; % done
     otherwise
         error(['neural-flows::' mfilename '::BadInput'], ...
                'Unrecognised local flow numeric type');
