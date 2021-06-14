@@ -16,27 +16,30 @@ function params = flows3d_classify(params)
    
     % Load flow data-writable
     obj_flows = load_iomat_flows(params);
-
-    % Get shape of flow arrays
-    tpts = params.flows.data.shape.t;
-    grid_size = [params.flows.data.shape.y, params.flows.data.shape.x, params.flows.data.shape.z];
-
     
+    
+    if params.general.parallel.enabled
+        flows3d_classify_fun = @flows3d_classify_parallel; 
+    else
+        flows3d_classify_fun = @flows3d_classify_sequential; %NOTE:not implemented yet
+    end
+
     % Allocate output and save to file
-    % XXXX = flows3d_classify_fun(nullflow_points3d, params);
+    [classification_cell_str, classification_cell_num, counts] = flows3d_classify_fun(obj_flows, params);
     
     % Save classification cells
-    obj_flows.classification_str = classification_cell_str;
-    obj_singularity.classification_num = classification_cell_num;
+    obj_flows.flow_classification_str = classification_cell_str;
+    obj_flows.flow_classification_num = classification_cell_num;
+    obj_flows.flow_classification_count = counts;
     
-    if params.singularity.quantification.nodal_occupancy.enabled
+    if params.flows.quantification.nodal_classification.enabled
         % Here we try to assing a critical point to every node.
-        fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started classification of local flows.'))
-        params = analyse_nodal_singularity_occupancy(params);
-        fprintf('%s \n\n', strcat('neural-flows:: ', mfilename, '::Info:: Finished classification of local flows.'))
+        fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started assignment of node-based local flow labels.'))
+        params = assign_nodal_local_flow_labels(params);
+        fprintf('%s \n\n', strcat('neural-flows:: ', mfilename, '::Info:: Finished assignment of node-based local flow labels.'))
     end
     
     % Disable classification
     params.flows.classification.enabled = false;
-    
+     
 end % function flows3d_classify()
