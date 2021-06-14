@@ -1,5 +1,7 @@
-function params = flows3d_classify_local_flows(params)
-% Classifies local flow based on curl & divergence properties
+function params = flows3d_classify(params)
+% Classifies local flow based on:
+% + flow curl & divergence properties
+% + curvature of streamlines (to be implemented)
 % ARGUMENTS:
 %            params -- structure with input parameters
 % OUTPUT:
@@ -12,7 +14,7 @@ function params = flows3d_classify_local_flows(params)
     
 %}
    
-    % Load singularity data- writable
+    % Load flow data-writable
     obj_flows = load_iomat_flows(params);
 
     % Get shape of flow arrays
@@ -20,7 +22,6 @@ function params = flows3d_classify_local_flows(params)
     grid_size = [params.flows.data.shape.y, params.flows.data.shape.x, params.flows.data.shape.z];
 
     
-
     % Allocate output and save to file
     % XXXX = flows3d_classify_fun(nullflow_points3d, params);
     
