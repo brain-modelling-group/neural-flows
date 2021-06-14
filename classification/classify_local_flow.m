@@ -47,8 +47,8 @@ function local_flow_label = classify_local_flow(div_mag, curl_av, px, qy, rz)
 local_flow_label = nan(size(curl_av));
 
 % Hardcoced threshold for curl and divergence
-curl_th = 1e-6;
-div_th = 1e-3;
+curl_th = 1e-6; % NOTE: to add as a parameter in params
+div_th = 1e-3;  % NOTE: to add as a parameter in params
 
 %
 curl_abs = abs(curl_av);
