@@ -20,4 +20,5 @@ masks = obj_flows.masks;
 
 tmp = classification_cell_num{1, frame_idx};
 scatter3(ax, X(masks.innies), Y(masks.innies), Z(masks.innies), 200, cmap(tmp(masks.innies)+1, :), 'filled')
+colormap(cmap)
 end %function plot3d_scatter_local_flow_classes()
