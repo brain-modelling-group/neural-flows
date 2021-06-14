@@ -1,4 +1,4 @@
-function params = flows3d_classify(params)
+function params = flows3d_classify_local_flows(params)
 % Classifies local flow based on curl & divergence properties
 % ARGUMENTS:
 %            params -- structure with input parameters
