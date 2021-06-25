@@ -94,7 +94,7 @@
     }
   },
   "streamlines": {
-      "enabled": true,
+      "enabled": false,
       "file": {
           "exists": false,
           "dir": "",
@@ -102,7 +102,7 @@
           "label": "",
           "keep": true
     },
-      "trace_pathlines": true, 
+      "trace_pathlines": false, 
       "tracing": {
                "implementation": "meshless", 
                "seeding_points": {
@@ -114,7 +114,7 @@
           },
 
     "visualisation": {
-      "enabled": true
+      "enabled": false
     }
   },
   "singularity": {
