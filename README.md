@@ -5,11 +5,6 @@ If you use this toolbox, please cite:
 
 [![DOI](https://zenodo.org/badge/163922377.svg)](https://zenodo.org/badge/latestdoi/163922377)
 
-Roberts JA, Gollo LL, Abeysuriya R, Roberts G, Mitchell PB, Woolrich MW, Breakspear M. Metastable brain waves. (2019) [Available from here.](https://www.nature.com/articles/s41467-019-08999-0)
-
-
-Sanz-Leon P, Gollo LL, and Roberts JA (2020) (in prep).
-
 
 ## Brief Description 
 This is `neural-flows`, a library to estimate wave velocities and singularities in 3D+t in neuroimaging data.  
