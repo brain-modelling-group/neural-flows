@@ -94,7 +94,3 @@ It should take about 5 minutes to run everything and pop up figures with flow mo
 ![alt text](https://github.com/brain-modelling-group/neural-flows/blob/master/demo-data/img/fig_sing_tracking.png?raw=true)
 
 
-### Where is the user manual?
-
-Coming soon, sorry `<(~.~)>` ...
-
