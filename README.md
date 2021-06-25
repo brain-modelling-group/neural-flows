@@ -82,7 +82,7 @@ or any other directory where some temporary files will be stored during executio
 
 2. Run the function under `examples/` at
 ```matlab
-rotating_wave('uah')
+rotating_wave()
 ``` 
 It should take about 5 minutes to run everything and pop up figures with flow mode decomposition and singularity tracking!
 
