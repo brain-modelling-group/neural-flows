@@ -12,7 +12,7 @@ switch params.data.grid.type
         case 'unstructured'
             params.data.shape.timepoints = size(obj_data, 'data', 1);
             params.data.shape.nodes =  size(obj_data, 'data', 2);
-             if ~isprop(obj_data, 'nodes_str_lbl')
+             if ~isprop(obj_data, 'nodes_str_lbl') 
                  nodes_str_lbl = cell(params.data.shape.nodes,1); 
                 for nn=1:params.data.shape.nodes
                     nodes_str_lbl{nn} = num2str(nn, '%03d');
