@@ -116,6 +116,13 @@
         "enabled": true,
         "modality": "nodal"
       }
+    },
+    "classification":{
+      "enabled": true,
+      "scale": "local",
+      "nodal_classification":{
+        "enabled":false
+      }
     }
   },
   "streamlines": {
@@ -137,7 +144,7 @@
       "step_size": 0.5
     },
     "visualisation": {
-      "enabled": true
+      "enabled": false
     }
   },
   "singularity": {
