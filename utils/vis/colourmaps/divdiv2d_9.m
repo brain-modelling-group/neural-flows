@@ -2,8 +2,6 @@
 % NOTE: it only has 9 colours
 %
 % ARGUMENTS:
-%    m -- number of colours in colormap.
-%    ordering -- ['fwd'|'rev'] ordering of returned colormap array.
 %
 % OUTPUT:
 %    c -- [m,3] colormap array.
@@ -11,13 +9,12 @@
 % REQUIRES:
 %
 % AUTHOR:
-%     Paula Sanz-Leon (2019-11-04).
+%     Paula Sanz-Leon (2012-06-07).
 %
 % USAGE:
 %{
-    imagesc(rand(256))
-    cmap = viridis(64);
-    colormap(cmap)
+    cmap = divdiv2d_9();
+
 %}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -35,4 +32,4 @@ c = [200, 200, 200; % class 00
      255, 255, 255] ... % class 09 - nan
      ./255;
 
-end
+end % function divdiv2d_9()

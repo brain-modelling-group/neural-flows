@@ -62,4 +62,4 @@ function [c] = bluegred(m, ordering)
         c = c(end:-1:1, :);
     end
 
-end % function bluered()
+end % function bluegred()
