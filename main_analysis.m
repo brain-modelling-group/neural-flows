@@ -21,9 +21,19 @@ if inparams.flows.decomposition.svd.enabled
 end
 %--------------------------- LOCAL FLOW CLASSIFICATION -------------------------%
 
-if inparams.flows.decomposition.svd.enabled
+if inparams.flows.classification.enabled
    % If we want classify flows based on curl and divergence
-   flows3d_perform_local_flow_classification(inparams); 
+   switch inparams.flows.classification.scale
+       case {"local", "micro", "microscopic"}
+        flows3d_perform_local_flow_classification(inparams);  
+       case {"intermediate", "meso", "mesoscopic"}
+            error(['neural-flows:' mfilename ':NotImplemented']);
+       case {"global", "macro", "macroscopic", "whole-brain"}
+            error(['neural-flows:' mfilename ':NotImplemented']);
+       otherwise
+            error(['neural-flows:' mfilename ':UnknownCase'], ...
+                    'Requested unknown scale.');
+   end
 end
 
 
@@ -34,7 +44,6 @@ end
 if inparams.singularity.quantification.enabled
     %analyse_nodal_singularity_occupancy(inparams);   
 end
-% TODO: write output parameters if reequired
 
 % Toc
 tok(tstart, 'minutes');
