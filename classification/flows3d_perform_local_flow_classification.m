@@ -22,10 +22,11 @@ function params = flows3d_perform_local_flow_classification(params)
         flows3d_classify_fun = @flows3d_classify_parallel; 
     else
         flows3d_classify_fun = @flows3d_classify_sequential; %NOTE:not implemented yet
+        fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Warning:: Sequential classification of local flows has not been implemented!.'))
     end
 
     % Allocate output and save to file
-    [classification_cell_str, classification_cell_num, counts] = flows3d_classify_fun(obj_flows, params);
+    [classification_cell_str, classification_cell_num] = flows3d_classify_fun(obj_flows);
     
     % Save classification cells
     obj_flows.flow_classification_str = classification_cell_str;
@@ -42,4 +43,4 @@ function params = flows3d_perform_local_flow_classification(params)
     % Disable classification
     params.flows.classification.enabled = false;
      
-end % function flows3d_classify()
+end % function flows3d_perform_local_flow_classification()
