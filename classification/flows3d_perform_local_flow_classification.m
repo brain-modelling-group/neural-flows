@@ -16,8 +16,8 @@ function params = flows3d_perform_local_flow_classification(params)
    
     % Load flow data-writable
     obj_flows = load_iomat_flows(params);
-    
-    
+    obj_flows.Properties.Writable = true;
+     
     if params.general.parallel.enabled
         flows3d_classify_fun = @flows3d_classify_parallel; 
     else
@@ -33,10 +33,10 @@ function params = flows3d_perform_local_flow_classification(params)
     obj_flows.flow_classification_num = classification_cell_num;
     obj_flows.flow_classification_count = counts;
     
-    if params.flows.quantification.nodal_classification.enabled
+    if params.flows.classification.nodal_classification.enabled
         % Here we try to assing a critical point to every node.
         fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started assignment of node-based local flow labels.'))
-        params = assign_nodal_local_flow_labels(params);
+        %params = assign_nodal_local_flow_labels(params);
         fprintf('%s \n\n', strcat('neural-flows:: ', mfilename, '::Info:: Finished assignment of node-based local flow labels.'))
     end
     
