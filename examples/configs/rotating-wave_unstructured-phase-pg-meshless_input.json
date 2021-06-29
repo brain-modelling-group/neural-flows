@@ -1,6 +1,6 @@
 {
   "general": {
-  "params": {
+    "params": {
         "input": {
           "file": {
             "name": "",
@@ -9,7 +9,7 @@
           },
         "output": {
           "file": {
-            "name": "rotating_wave_u-p-pg-ml_ou.json",
+            "name": "rotating-wave_unstructured-phase-pg-meshless_output.json",
             "dir": "examples/configs"} 
         }
     },
