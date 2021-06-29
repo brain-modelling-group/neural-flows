@@ -15,7 +15,7 @@ function obj_streams = streams3d_tracing_mlab_parallel(obj_flows, obj_streams, p
     masks = obj_flows.masks;
     innies_idx = find(masks.innies == true);
     outties_idx = find(masks.innies == false);
-    time_step = params.streamlines.tracing.time_step; % fake time step for streamline tracing
+    time_step = params.streamlines.tracing.step_size; % fake time step for streamline tracing
     max_stream_length = params.streamlines.tracing.max_stream_length;
     tpts = params.flows.data.shape.t;
 
