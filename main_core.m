@@ -8,16 +8,15 @@ function ouparams = main_core(inparams)
 %              3) detects singularities (ie, detects null flows).
 %              4) classifies singularities.
 %              5) traces streamlines
-disp('#########################################################################\n')
-disp('#                           ~~~~ NEURAL FLOWS ~~~~☺☺☺☺                  #\n')
-disp('#########################################################################\n')
-disp('')
-fprintf('------------------------------------------------------------------------\n')
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: MAIN CORE.\n'))              
+disp('#########################################################################')
+disp('#                           ~~~~ NEURAL FLOWS ~~~~                      #')
+disp('#########################################################################')
+fprintf('\n------------------------------------------------------------------------\n')
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: STARTED.'))              
 fprintf('------------------------------------------------------------------------\n')
 % Tic
 tstart = tik();
-fprintf('------------------------------------------------------------------------\n')
+fprintf('\n------------------------------------------------------------------------\n')
 if inparams.general.parallel.enabled
     
   open_parpool(inparams.general.parallel.workers_fraction);
@@ -28,7 +27,7 @@ tmp_params = inparams;
 tmp_params.general.timestamp = datetime;
 %---------------------------------INTERPOLATION--------------------------------%
 if inparams.interpolation.enabled
- fprintf('\n------------------------------------------------------------------------')
+ fprintf('\n------------------------------------------------------------------------\n')
  fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: DATA INTERPOLATION STAGE.'))              
  fprintf('------------------------------------------------------------------------\n')
 
@@ -53,7 +52,7 @@ end
 save_params_checkpoint(tmp_params);
 %---------------------------------FLOWS----------------------------------------%
 if inparams.flows.enabled
-   fprintf('\n------------------------------------------------------------------------')
+   fprintf('------------------------------------------------------------------------\n')
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: FLOWS ESTIMATION STAGE.'))              
    fprintf('------------------------------------------------------------------------\n')
    % Check which method we want to use - hsd3 only works with interpolated data, while cnem
@@ -74,7 +73,7 @@ save_params_checkpoint(tmp_params);
 
 % Check what else we want to do
 if inparams.streamlines.enabled
-   fprintf('\n------------------------------------------------------------------------')
+   fprintf('------------------------------------------------------------------------\n')
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: STREAMLINES TRACING STAGE.'))              
    fprintf('------------------------------------------------------------------------\n')
    [tmp_params, ~, obj_streamline_sentinel] = streams3d_trace(tmp_params);
@@ -84,7 +83,7 @@ end
 save_params_checkpoint(tmp_params);
 %---------------------------------SINGULARITY----------------------------------%
 if inparams.singularity.enabled
-   fprintf('\n------------------------------------------------------------------------')
+   fprintf('------------------------------------------------------------------------\n')
    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: SINGULARITY IDENTIFICATION STAGE.'))              
    fprintf('------------------------------------------------------------------------\n')
    % DETECTION
@@ -108,7 +107,7 @@ fprintf('-----------------------------------------------------------------------
 % Toc
 tok(tstart, 'minutes');
 
-fprintf('------------------------------------------------------------------------')
+fprintf('------------------------------------------------------------------------\n')
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: MAIN CORE END.'))              
 fprintf('------------------------------------------------------------------------\n')
 
