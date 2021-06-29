@@ -9,18 +9,17 @@ If you use this toolbox, please cite:
 ## Brief Description 
 This is `neural-flows`, a library to estimate wave velocities and singularities in 3D+t in neuroimaging data.  
 The figure below gives you an idea of a typical workflow you can run with this toolbox:  
-Each link of the path is a component of the `core-module` namely: 
+Each link of the path is a component of the `core/` namely: 
 + data interpolation, 
 + flow estimation, 
 + singularity detection and classification, and
 + streamline tracing. 
 
-The toolbox has a number of ancillary modules, including `examples` with  exemplary scripts to execute a full or partial
-workflow; `external`, which contains code implemented by others, the
-most prominent being C-NEM invoked by so-called
-meshless methods, and the Hungarian method 
-used track singularities; and finally, `utils` which gathers small
-standalone functions that support the main modules. 
+The toolbox has a number of ancillary modules, including:
+
++ `examples/` with exemplary scripts to execute a full or partial workflow; 
++ `external/`, which contains code implemented by others, the most prominent being C-NEM invoked by so-called meshless methods, and the Hungarian method  used track singularities; and finally, 
++  `utils/` which gathers small standalone functions that support the main modules. 
 
 
 
@@ -60,9 +59,9 @@ A bunch of things, mostly the ones described in the diagram above.
 
 To get started follow the next steps (timestamp: Fri 31 Jul 2020 21:21:17 AEST): 
 
-0. (Optional) Inside directory `neural-flows`, make a new directory call `scratch` (by default we will store results there, you can change it later ...)
-1. (Optional) Open the file `rotating_wave_uah_in.json` under `examples/`
-1a.(Optional) if you are on Windows change line 6 of that file
+0. (Optional) Inside directory `neural-flows`, make a new directory called `scratch/` (by default we will store results there, you can change it later ...)
+1. (Optional) Open the file `rotating-wave_ustructured-amplitude-hs-meshless.json` under `examples/`
+1a.(Optional) if you are on Windows change line 6 of that file from
 ```
       "dir_tmp": "/tmp",    
 
@@ -76,11 +75,11 @@ to
 
 or any other directory where some temporary files will be stored during execution.
 
-1b. (Optional) If you are on Mac, the default value `/tmp` should work, otherwise change it to an appropriate temp folder.
+1b. (Optional) If you are on Mac, the default value `/tmp` should work, otherwise change it to an appropriate temporary folder.
 
 1c. (Optional) If you re on Linux, you're good to go.
 
-2. Run the function under `examples/` at
+2. Call the following function from within the top level directory `neural-flows/`
 ```matlab
 rotating_wave()
 ``` 
