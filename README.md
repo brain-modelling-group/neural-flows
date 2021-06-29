@@ -39,11 +39,7 @@ The toolbox has a number of ancillary modules, including:
     - used version (v03, 2014-05-04) available here: https://ff-m2p.cnrs.fr/frs/?group_id=14
     - aka cnemlib: https://au.mathworks.com/matlabcentral/linkexchange/links/3875
 
-**input data**
-    
-    - `data`: a tpts-by-n 2D array with the data for unstructured datasets (i.e., soruce reconstructed MEG data) 
-    - `locs`: a n-by-3 2D array with the locations of nodes/rois/sources, expressed in mm or m.
-    - `ht`  : sampling period expressed in ms or s.
+
     
 ### Installation:
 
@@ -57,7 +53,9 @@ If you clone the repo, same rules as above apply.
 ### What can the toolbox do?
 A bunch of things, mostly the ones described in the diagram above.
 
-To get started follow the next steps (timestamp: Fri 31 Jul 2020 21:21:17 AEST): 
+To get started follow the next steps (timestamp: Tue 29 Jun 2021 14:49:38 AEST): 
+
+### Out of the box examples
 
 0. (Optional) Inside directory `neural-flows`, make a new directory called `scratch/` (by default we will store results there, you can change it later ...)
 1. (Optional) Open the file `rotating-wave_ustructured-amplitude-hs-meshless.json` under `examples/`
@@ -93,3 +91,11 @@ It should take about 5 minutes to run everything and pop up figures with flow mo
 ![alt text](https://github.com/brain-modelling-group/neural-flows/blob/master/demo-data/img/fig_sing_tracking.png?raw=true)
 
 
+### What if I want to use my own data? Input data format
+    
+The toolbox reads data from a .mat file. It *will expect* the following variables to be stored.    
+    
+    - `data`: a tpts-by-n 2D array with the data for unstructured datasets (i.e., source reconstructed EEG/MEG data, whole-brain models/brain net) 
+    - `locs`: a n-by-3 2D array with the locations of nodes/rois/sources, expressed in mm or m.
+    - `ht`  : sampling period expressed in ms or s.
+    
