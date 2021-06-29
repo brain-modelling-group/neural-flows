@@ -5,27 +5,21 @@ If you use this toolbox, please cite:
 
 [![DOI](https://zenodo.org/badge/163922377.svg)](https://zenodo.org/badge/latestdoi/163922377)
 
-Roberts JA, Gollo LL, Abeysuriya R, Roberts G, Mitchell PB, Woolrich MW, Breakspear M. Metastable brain waves. (2019) [Available from here.](https://www.nature.com/articles/s41467-019-08999-0)
-
-
-Sanz-Leon P, Gollo LL, and Roberts JA (2020) (in prep).
-
 
 ## Brief Description 
 This is `neural-flows`, a library to estimate wave velocities and singularities in 3D+t in neuroimaging data.  
 The figure below gives you an idea of a typical workflow you can run with this toolbox:  
-Each link of the path is a component of the `core-module` namely: 
+Each link of the path is a component of the `core/` namely: 
 + data interpolation, 
 + flow estimation, 
 + singularity detection and classification, and
 + streamline tracing. 
 
-The toolbox has a number of ancillary modules, including `examples` with  exemplary scripts to execute a full or partial
-workflow; `external`, which contains code implemented by others, the
-most prominent being C-NEM invoked by so-called
-meshless methods, and the Hungarian method 
-used track singularities; and finally, `utils` which gathers small
-standalone functions that support the main modules. 
+The toolbox has a number of ancillary modules, including:
+
++ `examples/` with exemplary scripts to execute a full or partial workflow; 
++ `external/`, which contains code implemented by others, the most prominent being C-NEM invoked by so-called meshless methods, and the Hungarian method  used track singularities; and finally, 
++  `utils/` which gathers small standalone functions that support the main modules. 
 
 
 
@@ -45,11 +39,7 @@ standalone functions that support the main modules.
     - used version (v03, 2014-05-04) available here: https://ff-m2p.cnrs.fr/frs/?group_id=14
     - aka cnemlib: https://au.mathworks.com/matlabcentral/linkexchange/links/3875
 
-**input data**
-    
-    - `data`: a tpts-by-n 2D array with the data for unstructured datasets (i.e., soruce reconstructed MEG data) 
-    - `locs`: a n-by-3 2D array with the locations of nodes/rois/sources, expressed in mm or m.
-    - `ht`  : sampling period expressed in ms or s.
+
     
 ### Installation:
 
@@ -63,11 +53,13 @@ If you clone the repo, same rules as above apply.
 ### What can the toolbox do?
 A bunch of things, mostly the ones described in the diagram above.
 
-To get started follow the next steps (timestamp: Fri 31 Jul 2020 21:21:17 AEST): 
+To get started follow the next steps (timestamp: Tue 29 Jun 2021 14:49:38 AEST): 
 
-0. (Optional) Inside directory `neural-flows`, make a new directory call `scratch` (by default we will store results there, you can change it later ...)
-1. (Optional) Open the file `rotating_wave_uah_in.json` under `examples/`
-1a.(Optional) if you are on Windows change line 6 of that file
+### Out of the box examples
+
+0. (Optional) Inside directory `neural-flows`, make a new directory called `scratch/` (by default we will store results there, you can change it later ...)
+1. (Optional) Open the file `rotating-wave_ustructured-amplitude-hs-meshless.json` under `examples/`
+1a.(Optional) if you are on Windows change line 6 of that file from
 ```
       "dir_tmp": "/tmp",    
 
@@ -81,13 +73,13 @@ to
 
 or any other directory where some temporary files will be stored during execution.
 
-1b. (Optional) If you are on Mac, the default value `/tmp` should work, otherwise change it to an appropriate temp folder.
+1b. (Optional) If you are on Mac, the default value `/tmp` should work, otherwise change it to an appropriate temporary folder.
 
 1c. (Optional) If you re on Linux, you're good to go.
 
-2. Run the function under `examples/` at
+2. Call the following function from within the top level directory `neural-flows/`
 ```matlab
-rotating_wave('uah')
+rotating_wave()
 ``` 
 It should take about 5 minutes to run everything and pop up figures with flow mode decomposition and singularity tracking!
 
@@ -99,7 +91,19 @@ It should take about 5 minutes to run everything and pop up figures with flow mo
 ![alt text](https://github.com/brain-modelling-group/neural-flows/blob/master/demo-data/img/fig_sing_tracking.png?raw=true)
 
 
-### Where is the user manual?
+#### Movies
 
-Coming soon, sorry `<(~.~)>` ...
+Movies are not produced by default as they require more computational resources. However, we provide the visualisation tools to make movies like this one:
 
+![neural-flows-256](https://user-images.githubusercontent.com/1563810/123740938-92b2b980-d8ec-11eb-9406-22e9e2a77b03.gif)
+
+
+
+### What if I want to use my own data? Input data format
+    
+The toolbox reads data from a .mat file. It *will expect* the following variables to be stored.    
+    
+    - `data`: a tpts-by-n 2D array with the data for unstructured datasets (i.e., source reconstructed EEG/MEG data, whole-brain models/brain net) 
+    - `locs`: a n-by-3 2D array with the locations of nodes/rois/sources, expressed in mm or m.
+    - `ht`  : sampling period expressed in ms or s.
+    
