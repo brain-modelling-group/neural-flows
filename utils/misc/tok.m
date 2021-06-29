@@ -18,7 +18,7 @@ function varargout = tok(tstart, time_unit)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 
     tend = string(datetime('now'));
-    fprintf('%s%s\n', ['Finished: ' tend])
+    fprintf('\n%s%s\n', ['Finished: ' tend])
   
     if nargin < 2
 	    time_unit = 'seconds';
