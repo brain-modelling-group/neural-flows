@@ -101,7 +101,7 @@
     },
     "visualisation": {
       "enabled": true
-    },
+    },  
     "decomposition": {
       "svd": {
         "enabled": true,
