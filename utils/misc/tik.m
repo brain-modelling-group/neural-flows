@@ -1,4 +1,4 @@
-function tstart = tik()
+function tstart = tik(varargin)
 %% Prints string with the current date time - does not actually time execution  of programs
 % 
 % ARGUMENTS:

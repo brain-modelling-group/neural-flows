@@ -1,4 +1,4 @@
-function varargout = tok(tstart, time_unit)
+function varargout = tok(tstart, time_unit, varargin)
 %% Gets currrent datetime, calculates and prints elapsed time based on the input datetime string `tsart`
 %  
 % ARGUMENTS:
@@ -20,8 +20,8 @@ function varargout = tok(tstart, time_unit)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 
     tend = string(datetime('now'));
-    fprintf('\n%s%s\n', ['Finished: ' tend])
-  
+    
+
     if nargin < 2
 	    time_unit = 'seconds';
 	    divisor = 1;
@@ -42,9 +42,11 @@ function varargout = tok(tstart, time_unit)
      end % switch case block
     
     if nargin < 3
+        fprintf('%s%s\n', ['Finished: ' tend])
         fprintf('%s%s%s%s\n', ['Elapsed time: ' string(tik_tok/divisor) ' ' time_unit]);
     else
-        fprintf('\n\t%s%s%s%s\n', ['Elapsed time: ' string(tik_tok/divisor) ' ' time_unit]);
+        fprintf('\t%s%s\n', ['Finished: ' tend])
+        fprintf('\t%s%s%s%s\n', ['Elapsed time: ' string(tik_tok/divisor) ' ' time_unit]);
     end
 
     if nargout > 0
