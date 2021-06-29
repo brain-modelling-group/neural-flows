@@ -15,6 +15,8 @@ function varargout = tok(tstart, time_unit)
     tok(tsart)
 
 %}
+% TODO: generalise so as input argument we pass a number of \n and or \t,
+% that is a sequence of string formatters.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
 
     tend = string(datetime('now'));
@@ -39,7 +41,12 @@ function varargout = tok(tstart, time_unit)
 
      end % switch case block
     
-    fprintf('%s%s%s%s\n', ['Elapsed time: ' string(tik_tok/divisor) ' ' time_unit]);
+    if nargin < 3
+        fprintf('%s%s%s%s\n', ['Elapsed time: ' string(tik_tok/divisor) ' ' time_unit]);
+    else
+        fprintf('\n\t%s%s%s%s\n', ['Elapsed time: ' string(tik_tok/divisor) ' ' time_unit]);
+    end
+
     if nargout > 0
         varargout{1} = tik_tok;
     end

@@ -15,7 +15,13 @@ function tstart = tik()
     tok(tsart)
 
 %}
+% TODO: generalise so as input argument we pass a number of \n and or \t,
+% that is a sequence of string formatters.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
    tstart = string(datetime('now'));
-   fprintf('\n%s%s\n', ['Started: ' tstart]);
+   if nargin < 1
+      fprintf('\n%s%s\n', ['Started: ' tstart]);
+   else
+      fprintf('\n\t%s%s\n', ['Started: ' tstart]);
+   end
 end % function tik()
