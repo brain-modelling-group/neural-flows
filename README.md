@@ -91,6 +91,14 @@ It should take about 5 minutes to run everything and pop up figures with flow mo
 ![alt text](https://github.com/brain-modelling-group/neural-flows/blob/master/demo-data/img/fig_sing_tracking.png?raw=true)
 
 
+#### Movies
+
+Movies are not produced by default as they require more computational resources. However, we provide the visualisation tools to make movies like this one:
+
+![neural-flows-256](https://user-images.githubusercontent.com/1563810/123740938-92b2b980-d8ec-11eb-9406-22e9e2a77b03.gif)
+
+
+
 ### What if I want to use my own data? Input data format
     
 The toolbox reads data from a .mat file. It *will expect* the following variables to be stored.    
