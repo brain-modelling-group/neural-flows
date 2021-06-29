@@ -31,7 +31,7 @@ function params = flows3d_perform_local_flow_classification(params)
     % Save classification cells
     obj_flows.flow_classification_str = classification_cell_str;
     obj_flows.flow_classification_num = classification_cell_num;
-    obj_flows.flow_classification_count = counts;
+    %obj_flows.flow_classification_count = counts;
     
     if params.flows.classification.nodal_classification.enabled
         % Here we try to assing a critical point to every node.
