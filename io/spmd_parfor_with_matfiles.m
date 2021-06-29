@@ -90,7 +90,7 @@ function [output_matfile_obj] = spmd_parfor_with_matfiles(number_of_things, parf
         end
         delete([worker_fname '.mat'])
     end
-    tok(tik_glue_files, 'hours', []);
+    tok(tik_glue_files, 'minutes', []);
     fprintf('\t%s \n', strcat('->-> neural-flows::spmd_parallel::Info:: Finished collating results.'))              
     
 
