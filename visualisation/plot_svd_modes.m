@@ -179,7 +179,7 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
         axis(ax(zy, kthmode), 'off')
         
         % Temporal modes
-        plot(ax(tt, kthmode), time_vec, U(:, kthmode), 'Color', cmap(kthmode, :))
+        plot(ax(tt, kthmode), time_vec, U(:, kthmode), 'Color', cmap(kthmode, :), 'LineWidth', 1.5)
         %ax(tt, kthmode).Title.String = sprintf('Temporal mode %i', kthmode);
         ax(tt, kthmode).YLim = ulims;
         ax(tt, kthmode).XLim = [time_vec(1), time_vec(end)];

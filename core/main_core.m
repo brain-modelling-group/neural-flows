@@ -8,17 +8,10 @@ function ouparams = main_core(inparams)
 %              3) detects singularities (ie, detects null flows).
 %              4) classifies singularities.
 %              5) traces streamlines
-disp('#########################################################################')
-disp('#                           ~~~~ NEURAL FLOWS ~~~~                      #')
-disp('#########################################################################')
-fprintf('\n------------------------------------------------------------------------\n')
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: STARTED MAIN CORE.'))              
-fprintf('------------------------------------------------------------------------\n')
+display_info_banner(mfilename, 'STARTED CORE.', '#18181b', false);
 % Tic
 tstart = tik();
-fprintf('\n------------------------------------------------------------------------\n')
-if inparams.general.parallel.enabled
-    
+if inparams.general.parallel.enabled   
   open_parpool(inparams.general.parallel.workers_fraction);
 end
 % Copy structure
@@ -27,10 +20,7 @@ tmp_params = inparams;
 tmp_params.general.timestamp = datetime;
 %---------------------------------INTERPOLATION--------------------------------%
 if inparams.interpolation.enabled
- fprintf('\n------------------------------------------------------------------------\n')
- fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: DATA INTERPOLATION STAGE.'))              
- fprintf('------------------------------------------------------------------------\n')
-
+display_info_banner(mfilename, 'DATA INTERPOLATION', '#57a545', true)
  % Check if we need to interpolate data
     if strcmp(tmp_params.data.grid.type, 'structured') && tmp_params.interpolation.enabled
       error(['neural-flows:' mfilename ':IncompatibleOptions'], ...
@@ -52,9 +42,7 @@ end
 save_params_checkpoint(tmp_params);
 %---------------------------------FLOWS----------------------------------------%
 if inparams.flows.enabled
-   fprintf('\n------------------------------------------------------------------------\n')
-   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: FLOWS ESTIMATION STAGE.'))              
-   fprintf('------------------------------------------------------------------------\n')
+   display_info_banner(mfilename, 'FLOWS ESTIMATION', '#4e947a', true);
    % Check which method we want to use - hsd3 only works with interpolated data, while cnem
    switch tmp_params.flows.method.implementation 
        case {'mesh-based'} % ONLY HS available       
@@ -73,9 +61,7 @@ save_params_checkpoint(tmp_params);
 
 % Check what else we want to do
 if inparams.streamlines.enabled
-   fprintf('\n------------------------------------------------------------------------\n')
-   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: STREAMLINES TRACING STAGE.'))              
-   fprintf('------------------------------------------------------------------------\n')
+   display_info_banner(mfilename, 'STREAMLINES TRACING', '#507895', true)
    [tmp_params, ~, obj_streamline_sentinel] = streams3d_trace(tmp_params);
 end 
 %---------------------------------STREAMLINES----------------------------------%
@@ -83,9 +69,7 @@ end
 save_params_checkpoint(tmp_params);
 %---------------------------------SINGULARITY----------------------------------%
 if inparams.singularity.enabled
-   fprintf('\n------------------------------------------------------------------------\n')
-   fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: SINGULARITY IDENTIFICATION STAGE.'))              
-   fprintf('------------------------------------------------------------------------\n')
+   display_info_banner(mfilename, 'SINGULARITY IDENTIFICATION', '#455d86', true)
    % DETECTION
    if tmp_params.singularity.detection.enabled 
        [tmp_params, ~, obj_singularity_sentinel] = singularity3d_detect(tmp_params);
@@ -103,13 +87,9 @@ end
 %---------------------------------THE END -------------------------------------%
 % Save parameters up to this point
 ouparams = tmp_params;
-fprintf('------------------------------------------------------------------------\n')
 % Toc
 tok(tstart, 'minutes');
-
-fprintf('\n------------------------------------------------------------------------\n')
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: FINISHED MAIN CORE.'))              
-fprintf('------------------------------------------------------------------------\n\n')
+display_info_banner(mfilename, 'FINISHED CORE.', '#18181b', false);
 
 % Save parameter structure with updated fields and values
 read_write_json(ouparams.general.params.output.file.name, ...

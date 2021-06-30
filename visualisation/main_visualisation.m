@@ -2,9 +2,8 @@ function ouparams = main_visualisation(inparams)
 %% Wrapper function to perform basic visualisation:
 % People can write their own main_visualisation function calling different combinations of 
 % plotting functions
-disp('------------------------------------------------------------------------')
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: STARTED MAIN VISUALISATION.'))              
-disp('------------------------------------------------------------------------')
+
+display_info_banner(mfilename, 'STARTED VISUALISATION', '#966797', false)
 %---------------------------------DECOMPOSITION--------------------------------%
 if inparams.flows.visualisation.enabled
     %plot1d_speed_distribution(inparams);
@@ -22,8 +21,6 @@ if inparams.singularity.visualisation.enabled
 end
 %------------------------------------------------------------------------------%
 % TODO: write output parameters if required
+display_info_banner(mfilename, 'FINISHED VISUALISATION', '#966797', false)
 
-fprintf('\n------------------------------------------------------------------------\n')
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: FINISHED MAIN VISUALISATION.'))              
-fprintf('------------------------------------------------------------------------\n\n')
 end % function main_analysis()

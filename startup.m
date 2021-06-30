@@ -22,6 +22,6 @@ if ~(ismcc || isdeployed)
     % Add top directory 
     addpath('../neural-flows/', '-begin');
 end
-
+display_toolbox_name()
 fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished setting up Matlab paths.'))
 % end of startup()
