@@ -88,13 +88,13 @@
     },
     "quantification": {
       "energy": {
-        "enabled": true,
+        "enabled": false,
         "modality": "nodal"
       }
     }
   },
   "streamlines": {
-      "enabled": false,
+      "enabled": true,
       "file": {
           "exists": false,
           "dir": "",
@@ -104,7 +104,7 @@
     },
       "trace_pathlines": false, 
       "tracing": {
-               "implementation": "meshless", 
+               "implementation": "mesh-based", 
                "seeding_points": {
                                   "modality": "random-sparse",
                                   "seed": 42
