@@ -1,6 +1,6 @@
 function fig_handle = plotmov_flows(params)	
 % params: structure with all the parameters for neural-flows
-% Paula Sanz-Leon, QIMRB, 2020
+% Paula Sanz-Leon 2020
 
 % Load file handles
 obj_flows = load_iomat_flows(params);
@@ -38,15 +38,17 @@ open(vid_obj);
 
 for tt=1:1:num_frames
     ax_handle.View = [90 0];
+
     [F,V,C] = quiver3Dpatch(obj_flows.locs(:,1),obj_flows.locs(:, 2), obj_flows.locs(:, 3), ...
                             uxyz(:, 1, tt), uxyz(:, 2, tt), uxyz(:, 3, tt), ...
                             uxyz_n(:, tt), [15 16]); 
     hp=patch('faces',F,'vertices',V,'cdata',C,'edgecolor','none','facecolor','flat');
-    ax_handle.Position = [0.1300    0.1100    0.7750    0.8150];          
+    ax_handle.Position = [0.1300    0.1100    0.7750    0.8150];
+    axis off
     writeVideo(vid_obj, getframe(ax_handle));
     cla(ax_handle)
 end
 % Close file
 close(vid_obj);
 
-end % plotmov_flows()
+end
