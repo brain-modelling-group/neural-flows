@@ -20,8 +20,8 @@ function tstart = tik(varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
    tstart = string(datetime('now'));
    if nargin < 1
-      fprintf('\n%s%s\n', ['Started: ' tstart]);
+      fprintf('\n%s%s\n',   ['Started : ' tstart]);
    else
-      fprintf('\n\t%s%s\n', ['Started: ' tstart]);
+      fprintf('\n\t%s%s\n', ['Started : ' tstart]);
    end
 end % function tik()

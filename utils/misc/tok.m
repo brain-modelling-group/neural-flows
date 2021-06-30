@@ -43,10 +43,10 @@ function varargout = tok(tstart, time_unit, varargin)
     
     if nargin < 3
         fprintf('%s%s\n', ['Finished: ' tend])
-        fprintf('%s%s%s%s\n', ['Elapsed time: ' string(tik_tok/divisor) ' ' time_unit]);
+        fprintf('%s%s%s%s\n', ['Elapsed : ' string(tik_tok/divisor) ' ' time_unit]);
     else
         fprintf('\t%s%s\n', ['Finished: ' tend])
-        fprintf('\t%s%s%s%s\n', ['Elapsed time: ' string(tik_tok/divisor) ' ' time_unit]);
+        fprintf('\t%s%s%s%s\n', ['Elapsed : ' string(tik_tok/divisor) ' ' time_unit]);
     end
 
     if nargout > 0

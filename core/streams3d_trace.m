@@ -47,7 +47,7 @@ function  [params, obj_streams, obj_streams_sentinel] = streams3d_trace(params)
         obj_streams.locs = obj_flows.locs;
     end
        
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started tracing of streamlines.'))
+    fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started tracing of streamlines.'))
     % Check if it's phase-based streams, or amplitude-based
     % If it's amplitude-based it can be meshless or mesh-based 
     switch params.streamlines.tracing.implementation

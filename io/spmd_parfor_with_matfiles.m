@@ -55,7 +55,7 @@ function [output_matfile_obj] = spmd_parfor_with_matfiles(number_of_things, parf
     matfile_constant = parallel.pool.Constant(worker_matfile);
 
     
-    fprintf('\n\t%s', strcat('->-> neural-flows::spmd_parallel::Info:: Started parallel computation.'))
+    fprintf('\n\t%s', strcat('|| || neural-flows::spmd_parallel::Info:: Started parallel computation.'))
     tik_parfor = tik([]);              
     %%Step 3: run PARFOR
     parfor idx = 1:number_of_things
@@ -68,14 +68,14 @@ function [output_matfile_obj] = spmd_parfor_with_matfiles(number_of_things, parf
         matfile_obj.got_result(1, idx) = true;
     end
     tok(tik_parfor, 'minutes', [])
-    fprintf('\t%s\n', strcat('->-> neural-flows::spmd_parallel::Info:: Finished parallel computation.'))              
+    fprintf('\t%s\n', strcat('|| || neural-flows::spmd_parallel::Info:: Finished parallel computation.'))              
    
 
     % Step 4: accumulate results on a separate file 
     % Here we retrieve the filenames from 'WorkerFname' Composite,
     % and use them to accumulate the overall result in disk
    
-   fprintf('\n\t%s', strcat('->-> neural-flows::spmd_parallel::Info:: Started collating results.'))              
+   fprintf('\n\t%s', strcat('->->-> neural-flows::spmd_parallel::Info:: Started collating results.'))              
    tik_glue_files = tik([]);
    for this_temp_file = 1:numel(WorkerFname)
        worker_fname = WorkerFname{this_temp_file};
@@ -91,7 +91,7 @@ function [output_matfile_obj] = spmd_parfor_with_matfiles(number_of_things, parf
         delete([worker_fname '.mat'])
     end
     tok(tik_glue_files, 'minutes', []);
-    fprintf('\t%s \n', strcat('->-> neural-flows::spmd_parallel::Info:: Finished collating results.'))              
+    fprintf('\t%s \n', strcat('->->-> neural-flows::spmd_parallel::Info:: Finished collating results.'))              
     
 
 end % function spdm_parfor_with_matfiles()

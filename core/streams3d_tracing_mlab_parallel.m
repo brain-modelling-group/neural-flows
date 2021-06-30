@@ -34,13 +34,13 @@ function obj_streams = streams3d_tracing_mlab_parallel(obj_flows, obj_streams, p
     obj_streams.Z = obj_flows.Z;
 
 
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started parallel tracing of streamlines.'))              
+    %fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started parallel tracing of streamlines.'))              
     %spmd_parfor_with_matfiles(number_of_things, parfun, temp_fname_obj, storage_expression)
     parfun = @tracing_mlab_step;
     streamtracing_3d_storage_expression = 'streamlines(1, jdx)';
     [obj_streams] = spmd_parfor_with_matfiles(tpts, parfun, obj_streams, streamtracing_3d_storage_expression);
     
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished parallel tracing of streamlines.'))
+    %fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished parallel tracing of streamlines.'))
     
     % Child function with access to local scope variables from parent
     % function
