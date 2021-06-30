@@ -1,10 +1,10 @@
 function [output_matfile_obj] = spmd_parfor_with_matfiles(number_of_things, parfun, output_matfile_obj, storage_expression)
 %% This is a horrible name for a function, but I'm not sure what else to call it
-% This functions uses SPMD statements to generate temporary files that will
+% This functions uses SPMD (single program, multiple data) statements to generate temporary files that will
 % be accessed by the workers, at the end the partial results are glued
 % together into the (mat)file the user passed as an input. Assumes a
 % parpool is already open. If unsure call open_parpool(0.8).
-%
+% 
 %
 % ARGUMENTS:
 %        number_of_things   -- an integer. The number of things we are
