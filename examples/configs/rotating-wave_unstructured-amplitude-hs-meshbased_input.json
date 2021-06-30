@@ -1,52 +1,77 @@
 {
   "general": {
     "params": {
-        "input": {
-          "file": {
-            "name": "",
-            "dir":  "" 
-          }
-          },
-        "output": {
-          "file": {
-            "name": "fmri-waves_unstructured-aamplitude-hs-meshbased_subject-20_output.json",
-            "dir": "examples/configs"} 
+      "input": {
+        "file": {
+          "name": "",
+          "dir": ""
         }
       },
-    "storage": {
-      "time_stamp": [],
-      "dir_out": "scratch",    
-      "dir_tmp": "/tmp",    
-      "format": "iomat"     
+      "output": {
+        "file": {
+          "name": "rotating-wave_unstructured-amplitude-hs-meshbased_output.json",
+          "dir": "examples/configs"
+        }
+      }
     },
+    "storage": {
+      "timestamp": [],
+      "dir_out": "scratch",
+      "dir_tmp": "/tmp"
+    },
+    "format": "iomat",
     "parallel": {
       "enabled": true,
       "workers_fraction": 0.8
     }
   },
+  "data": {
+    "file": {
+      "dir": "demo-data",
+      "name": "rotating_wave_W_c1_d1ms_iomat.mat"
+    },
+    "slice": {
+      "enabled": false,
+      "id": 0
+    },
+    "grid": {
+      "type": "unstructured"
+    },
+    "resolution": {
+      "ht": [],
+      "hx": [],
+      "hy": [],
+      "hz": [],
+      "units": {
+        "space": "mm",
+        "time": "ms"
+      }
+    },
+    "modality": "amplitude"
+  },
   "interpolation": {
     "enabled": true,
     "file": {
       "exists": false,
-      "dir": "scratch",
+      "dir": "",
       "name": "",
-      "label": "fmri_interp_subject_20",
+      "label": "",
       "keep": true
     },
     "resolution": {
       "ht": [],
-      "hx": 3,                                     
-      "hy": 3,                                     
-      "hz": 3                                    
+      "hx": 3,
+      "hy": 3,
+      "hz": 3
     },
     "neighbour_method": "",
     "extrapolation_method": "",
     "boundary": {
-      "alpha_radius": 35,
-      "thickness":4
+      "alpha_radius": 30,
+      "thickness": 2
     },
     "visualisation": {
-      "enabled": false
+      "enabled": true
     }
   },
   "flows": {
@@ -54,17 +79,17 @@
     "file": {
       "exists": false,
       "keep": true,
-      "dir": "scratch",
+      "dir": "",
       "name": "",
-      "label": "fmri_flows_subject_20"
+      "label": ""
     },
     "modality": "amplitude",
     "method": {
       "name": "hs3d",
       "implementation": "mesh-based",
       "hs3d": {
-        "alpha_smooth": 1.0,
-        "max_iterations": 256,
+        "alpha_smooth": 0.1,
+        "max_iterations": 128,
         "initial_conditions": {
           "modality": "random",
           "seed": 42
@@ -80,7 +105,7 @@
     "decomposition": {
       "svd": {
         "enabled": true,
-        "modes": 12,
+        "modes": 6,
         "grid": {
           "type": "unstructured"
         }
@@ -88,33 +113,33 @@
     },
     "quantification": {
       "energy": {
-        "enabled": false,
+        "enabled": true,
         "modality": "nodal"
       }
     }
   },
-  "streamlines": {
+"streamlines": {
       "enabled": true,
       "file": {
           "exists": false,
           "dir": "",
           "name": "",
-          "label": "fmri_streams_subject_20",
+          "label": "",
           "keep": true
     },
-      "trace_pathlines": false, 
+
       "tracing": {
                "implementation": "mesh-based", 
                "seeding_points": {
                                   "modality": "random-sparse",
                                   "seed": 42
               },
-              "max_stream_length" : 512,
+              "max_stream_length" : 200,
               "step_size": 0.5
           },
 
     "visualisation": {
-      "enabled": false
+      "enabled": true
     }
   },
   "singularity": {
@@ -123,14 +148,14 @@
       "keep": true,
       "dir": "",
       "name": "",
-      "label": "fmri_singularity_subject_20"
+      "label": ""
     },
     "detection": {
       "enabled": true,
       "modality": "null-flow-field",
       "threshold": [
         0,
-        0.025
+        0.1
       ]
     },
     "classification": {
@@ -138,37 +163,13 @@
     },
     "quantification": {
       "enabled": true,
-      "nodal_occupancy" : {
+      "nodal_occupancy": {
         "enabled": true,
-        "distance_threshold" : 2
+        "distance_threshold": 20
       }
     },
     "visualisation": {
       "enabled": true
     }
-  },
-  "data": {
-    "file": {
-      "dir": "demo-data", 
-      "name": "fmri_waves_unstructured_single_subject_20_short.mat"
-    },
-    "slice": {
-      "enabled": false,
-      "id": 0
-    },
-    "grid": {
-      "type": "unstructured"
-    },
-    "resolution": {
-      "ht": [],
-      "hx": [],                                       
-      "hy": [],
-      "hz": [],
-      "units": {
-         "space":"mm",                                
-          "time": "s"                               
-     }
-  },
-    "modality": "amplitude"
   }
 }
