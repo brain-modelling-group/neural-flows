@@ -3,7 +3,7 @@ function ouparams = main_visualisation(inparams)
 % People can write their own main_visualisation function calling different combinations of 
 % plotting functions
 disp('------------------------------------------------------------------------')
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: MAIN VISUALISATION.'))              
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: STARTED MAIN VISUALISATION.'))              
 disp('------------------------------------------------------------------------')
 %---------------------------------DECOMPOSITION--------------------------------%
 if inparams.flows.visualisation.enabled
@@ -12,14 +12,18 @@ if inparams.flows.visualisation.enabled
 end
 %---------------------------SINGULARITY----------------------------------------%
 if inparams.singularity.visualisation.enabled
-   %plot3d_singularity_temporal_occupancy(inparams);
-   %plot2d_singularity_tracking_cross_stitch(inparams);
-   %plot1d_singularity_relative_temporal_occupancy(inparams);
-   %plot1d_singularity_relative_spatial_occupancy(inparams);
-   %plot1d_singularity_traces_sandplot(inparams);
-   %plot1d_singularity_stats(inparams);
-   %plotcomp_singularity_absolute_occupancy(inparams);
+   plot3d_singularity_temporal_occupancy(inparams);
+   plot2d_singularity_tracking_cross_stitch(inparams);
+   plot1d_singularity_relative_temporal_occupancy(inparams);
+   plot1d_singularity_relative_spatial_occupancy(inparams);
+   plot1d_singularity_traces_sandplot(inparams);
+   plot1d_singularity_stats(inparams);
+   plotcomp_singularity_absolute_occupancy(inparams);
 end
 %------------------------------------------------------------------------------%
 % TODO: write output parameters if required
+
+fprintf('\n------------------------------------------------------------------------\n')
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: FINISHED MAIN VISUALISATION.'))              
+fprintf('------------------------------------------------------------------------\n\n')
 end % function main_analysis()

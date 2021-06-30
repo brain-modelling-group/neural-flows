@@ -5,7 +5,7 @@ function main_analysis(inparams)
 %  (3): singularity: quantification
 
  disp('------------------------------------------------------------------------')
- fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: MAIN ANALYSIS.'))              
+ fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: STARTED MAIN ANALYSIS.'))              
  disp('------------------------------------------------------------------------')
 
 % Tic 
@@ -31,4 +31,8 @@ end
 
 % Toc
 tok(tstart, 'minutes');
+
+fprintf('\n------------------------------------------------------------------------\n')
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: FINISHED MAIN ANALYSIS.'))              
+fprintf('------------------------------------------------------------------------\n\n')
 end % function main_analysis()

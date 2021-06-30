@@ -12,7 +12,7 @@ disp('#########################################################################'
 disp('#                           ~~~~ NEURAL FLOWS ~~~~                      #')
 disp('#########################################################################')
 fprintf('\n------------------------------------------------------------------------\n')
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: STARTED.'))              
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: STARTED MAIN CORE.'))              
 fprintf('------------------------------------------------------------------------\n')
 % Tic
 tstart = tik();
@@ -103,13 +103,13 @@ end
 %---------------------------------THE END -------------------------------------%
 % Save parameters up to this point
 ouparams = tmp_params;
-fprintf('------------------------------------------------------------------------')
+fprintf('------------------------------------------------------------------------\n')
 % Toc
 tok(tstart, 'minutes');
 
 fprintf('\n------------------------------------------------------------------------\n')
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: MAIN CORE END.'))              
-fprintf('------------------------------------------------------------------------\n')
+fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: FINISHED MAIN CORE.'))              
+fprintf('------------------------------------------------------------------------\n\n')
 
 % Save parameter structure with updated fields and values
 read_write_json(ouparams.general.params.output.file.name, ...
