@@ -11,6 +11,7 @@ function ouparams = main_core(inparams)
 display_info_banner(mfilename, 'STARTED CORE.', '#18181b', false);
 % Tic
 tstart = tik();
+fprintf('\n')
 if inparams.general.parallel.enabled   
   open_parpool(inparams.general.parallel.workers_fraction);
 end
@@ -88,8 +89,8 @@ end
 % Save parameters up to this point
 ouparams = tmp_params;
 % Toc
-tok(tstart, 'minutes');
 display_info_banner(mfilename, 'FINISHED CORE.', '#18181b', false);
+tok(tstart, 'minutes');
 
 % Save parameter structure with updated fields and values
 read_write_json(ouparams.general.params.output.file.name, ...
