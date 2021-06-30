@@ -198,6 +198,10 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
 %         lg_obj.Orientation = 'horizontal';
     end
     colormap(cmap)
+    for kthmode=1:num_modes
+        ax_to_link(kthmode) = ax(tt, kthmode);
+    end
+    linkaxes(ax_to_link, 'xy');
      
  end % function plot_svd_modes()
  
