@@ -1,6 +1,7 @@
 % Add neural-flows modules to path at startup, provided we are not
 %  invoking the compiler(mcc) or running a deployed instance.
 if ~(ismcc || isdeployed)
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Adding neural-flows folders to Matlab''s path.'))
     % Add main modules 
     addpath('io', '-begin');
     addpath('core', '-begin');
@@ -21,7 +22,7 @@ if ~(ismcc || isdeployed)
     addpath(genpath('external'), '-begin');
     % Add top directory 
     addpath('../neural-flows/', '-begin');
+    display_toolbox_name()
+    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Done!'))
 end
-display_toolbox_name()
-fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished setting up Matlab paths.'))
 % end of startup()
