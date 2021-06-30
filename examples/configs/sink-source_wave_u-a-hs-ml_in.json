@@ -9,7 +9,7 @@
           },
         "output": {
           "file": {
-            "name": "sink-source_wave_u-a-hs-mb_ou.json",
+            "name": "sink-source-wave_unstructured-amplitude-hs-meshless_output.json",
             "dir": "examples/configs"} 
         }
       },
