@@ -6,11 +6,11 @@
       "dir_tmp": "/tmp",
       "params": {
         "input": {
-          "filename": "travelling_reflected_wave_uac_in.json",
+          "filename": "travelling-reflected-wave_unstructured-amplitude-meshless_input.json",
           "dir": "examples/configs"
         },
         "output": {
-          "filename": "travelling_reflected_wave_uac_ou.json",
+          "filename": "travelling-reflected-wave_unstructured-amplitude-meshless_output.json",
           "dir": "examples/configs"
         }
       },
