@@ -6,11 +6,11 @@
       "dir_tmp": "/tmp",    
       "params": {
         "input": {
-          "filename": "travelling-reflected-wave_unstructured-aamplitude-hs-meshbased_input.json",
+          "filename": "travelling-reflected-wave_unstructured-amplitude-hs-meshbased_input.json",
           "dir": "examples/configs" 
         },
         "output": {
-          "filename": "travelling-reflected-wave_unstructured-aamplitude-hs-meshbased_output.json",
+          "filename": "travelling-reflected-wave_unstructured-amplitude-hs-meshbased_output.json",
           "dir": "examples/configs" 
         }
       },
