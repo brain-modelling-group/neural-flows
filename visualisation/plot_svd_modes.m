@@ -6,7 +6,7 @@ function fig_spatial_modes = plot_svd_modes(V, U, X, Y, Z, prct_var, num_modes, 
     % num_modes - number of modes to plot
     % time_vec  - time vector generated using time step
     % Graphics elements
-    fig_spatial_modes = figure('Name', 'nflows-spatial-modes');
+    fig_spatial_modes = figure('Name', 'neural-flows-svd-spatiotemporal-modes');
     % This figure size is optimised for 4 modes, 
     fig_width = 1240;
     fig_height = 1.3*fig_width;
