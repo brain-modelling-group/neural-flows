@@ -1,5 +1,6 @@
 function fig_handle = plotmov_flows(params)	
 % params: structure with all the parameters for neural-flows
+% Paula Sanz-Leon, QIMRB, 2020
 
 % Load file handles
 obj_flows = load_iomat_flows(params);
