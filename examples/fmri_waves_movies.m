@@ -10,6 +10,7 @@ json_mode = 'read';
 % Load options
 ouparams = read_write_json(params_filename, params_dir, json_mode);
 plotmov_streamparticles(ouparams, 'particles',  10);
-plotmov_streamparticles(ouparams, 'streamlines', 10);
+plotmov_streamparticles(ouparams, 'streamlines', 2);
+plotmov_flows(ouparams);
 
 end
