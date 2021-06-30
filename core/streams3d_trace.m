@@ -56,7 +56,7 @@ function  [params, obj_streams, obj_streams_sentinel] = streams3d_trace(params)
             if params.streamlines.trace_pathlines
                 obj_streams = streams3d_pathlines_cnem(obj_flows, obj_streams, params);
             end
-        case 'mesh-based'
+        case {'mesh-based', 'meshbased'}
             if params.general.parallel.enabled
                 streams3d_tracing_mlab_parallel(obj_flows, obj_streams, params);
             else

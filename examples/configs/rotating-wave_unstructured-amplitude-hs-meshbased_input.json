@@ -127,7 +127,7 @@
           "label": "",
           "keep": true
     },
-
+      "trace_pathlines": false, 
       "tracing": {
                "implementation": "mesh-based", 
                "seeding_points": {

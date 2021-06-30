@@ -72,7 +72,7 @@
           "label": "",
           "keep": true
     },
-
+      "trace_pathlines": false, 
       "tracing": {
                "implementation": "meshless", 
                "seeding_points": {
