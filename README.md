@@ -15,9 +15,10 @@ Each link of the path is a component of the `core/` namely:
 + singularity detection and classification, and
 + streamline tracing. 
 
-The toolbox has a number of ancillary modules, including:
 
-+ `examples/` with exemplary scripts to execute a full or partial workflow; 
+The toolbox has a number of ancillary modules, including:
++ `io/` that handles read and write operations of .json and .mat files.
++ `visualisation/` contains lots of plotting functions including some that produce movies like the one you can see at the end of this document. 
 + `external/`, which contains code implemented by others, the most prominent being C-NEM invoked by so-called meshless methods, and the Hungarian method  used track singularities; and finally, 
 +  `utils/` which gathers small standalone functions that support the main modules. 
 
@@ -57,31 +58,19 @@ To get started follow the next steps (timestamp: Tue 29 Jun 2021 14:49:38 AEST):
 
 ### Out of the box examples
 
-0. (Optional) Inside directory `neural-flows`, make a new directory called `scratch/` (by default we will store results there, you can change it later ...)
-1. (Optional) Open the file `rotating-wave_ustructured-amplitude-hs-meshless.json` under `examples/`
-1a.(Optional) if you are on Windows change line 6 of that file from
-```
-      "dir_tmp": "/tmp",    
+0. (Optional) Inside directory `neural-flows/`, make a new directory called `scratch/` (by default we will store results there, you can change it later ...). If this directory doesn't exist the toolbox will print a warning message and then proceed to create it. 
 
-```
-
-to 
-
-```
-   "dir_tmp": "C:\Users\guest\AppData\Local\Temp",    
-```
-
-or any other directory where some temporary files will be stored during execution.
-
-1b. (Optional) If you are on Mac, the default value `/tmp` should work, otherwise change it to an appropriate temporary folder.
-
-1c. (Optional) If you re on Linux, you're good to go.
-
-2. Call the following function from within the top level directory `neural-flows/`
+1. Call the following function from within the top level directory `neural-flows/`
+```matlab
+fmri_waves()
+``` 
+or 
 ```matlab
 rotating_wave()
-``` 
-It should take about 5 minutes to run everything and pop up figures with flow mode decomposition and singularity tracking!
+```
+
+The first example take about 7 minutes to run everything and pop up figures with flow mode decomposition and singularity tracking! 
+The second one takes about 9 minutes. The execution times are estimated using a high-end workstation (circa 2018). On a laptop it can take 2.5 longer to run (o.O it's heavy stuff).
 
 ##### Flow mode decomposition
 ![alt text](https://github.com/brain-modelling-group/neural-flows/blob/master/demo-data/img/fig_rotating_wave_svd.png?raw=true)
