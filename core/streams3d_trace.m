@@ -64,7 +64,7 @@ function  [params, obj_streams, obj_streams_sentinel] = streams3d_trace(params)
             end
     end
     obj_streams.xyz_lims = obj_flows.xyz_lims; 
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished tracing of streamlines.'))
+    fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished tracing of streamlines.'))
 
     % Disable streams calculation if we already did it
     params.general.streamlines.enabled = false;
