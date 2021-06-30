@@ -36,9 +36,11 @@ The toolbox has a number of ancillary modules, including:
    - in principle should work on any OS that MATLAB supports; tested on Windows 10, Debian 10, Ubuntu 20.04, Ubuntu 16.l4, OpenSuse 15.1 
 
 **CNEM**, https://m2p.cnrs.fr/sphinxdocs/cnem/index.html
-    
+    - only relevant if you want to use the phase-gradient method for calculating flows and meshless method for tracing streamlines.
+    - meshless methods speed up calculations significantly but installing cnem can be tricky. 
     - used version (v03, 2014-05-04) available here: https://ff-m2p.cnrs.fr/frs/?group_id=14
     - aka cnemlib: https://au.mathworks.com/matlabcentral/linkexchange/links/3875
+    - if you have trouble, contact the author of the library (mail can be found on the cnrs.fr website linked above) who has been super helpful when we had issues. 
 
 
     
