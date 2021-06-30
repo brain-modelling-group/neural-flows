@@ -93,7 +93,7 @@ Movies are not produced by default as they require more computational resources.
     
 The toolbox reads data from a .mat file. It *will expect* the following variables to be stored.    
     
-    - `data`: a tpts-by-n 2D array with the data for unstructured datasets (i.e., source reconstructed EEG/MEG data, whole-brain models/brain net) 
-    - `locs`: a n-by-3 2D array with the locations of nodes/rois/sources, expressed in mm or m.
+    - `data`: a 2D array of size [number of timepoints x number of ROIs/nodes/sources] with the neuroimaging data for unstructured datasets (i.e., source reconstructed EEG/MEG data, whole-brain models/brain networks, parcellated fmri data) 
+    - `locs`: a 2D array of size [number of ROIs/nodes/sources x 3] with the x,y,z coordinates of ROIs/nodes/sources, expressed in mm or m.
     - `ht`  : sampling period expressed in ms or s.
     
