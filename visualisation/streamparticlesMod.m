@@ -129,7 +129,7 @@ if isempty(h)
     end
     h = line(nan,nan,'parent',cax);
 end
-set(h, 'linestyle', 'none', 'erasemode', 'xor', 'marker', 'o', ...
+set(h, 'linestyle', 'none', 'marker', 'o', ...
     'markeredgecolor', 'none', 'markerfacecolor', 'red');
 
 if ~isempty(props)
