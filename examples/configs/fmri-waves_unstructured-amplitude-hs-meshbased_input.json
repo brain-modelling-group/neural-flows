@@ -28,7 +28,7 @@
     "enabled": true,
     "file": {
       "exists": false,
-      "dir": "",
+      "dir": "scratch",
       "name": "",
       "label": "fmri_interp_subject_20",
       "keep": true
@@ -46,7 +46,7 @@
       "thickness":4
     },
     "visualisation": {
-      "enabled": true
+      "enabled": false
     }
   },
   "flows": {
