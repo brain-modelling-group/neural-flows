@@ -44,6 +44,7 @@ for tt=1:1:num_frames
                             uxyz_n(:, tt), [15 16]); 
     hp=patch('faces',F,'vertices',V,'cdata',C,'edgecolor','none','facecolor','flat');
     ax_handle.Position = [0.1300    0.1100    0.7750    0.8150];
+    pause(0.05)
     axis off
     writeVideo(vid_obj, getframe(ax_handle));
     cla(ax_handle)
