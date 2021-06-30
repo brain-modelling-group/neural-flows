@@ -70,7 +70,7 @@ or
 rotating_wave()
 ```
 
-The first example take about 7 minutes to run everything and pop up figures with flow mode decomposition and singularity tracking! 
+The first example takes about 7 minutes to run everything and then it pops up figures with flow mode decomposition and singularity tracking! 
 The second one takes about 9 minutes. The execution times are estimated using a high-end workstation (circa 2018). On a laptop it can take 2.5 longer to run (o.O it's heavy stuff).
 
 ##### Flow mode decomposition
