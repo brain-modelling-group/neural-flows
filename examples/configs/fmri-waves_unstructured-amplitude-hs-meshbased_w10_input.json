@@ -10,13 +10,13 @@
         "output": {
           "file": {
             "name": "fmri-waves_unstructured-amplitude-hs-meshbased_subject-20_output.json",
-            "dir": "examples/configs"} 
+            "dir": "examples\configs"} 
         }
       },
     "storage": {
       "time_stamp": [],
       "dir_out": "scratch",    
-      "dir_tmp": "/tmp",    
+      "dir_tmp": "C:\Users\guest\AppData\Local\Temp",    
       "format": "iomat"     
     },
     "parallel": {
