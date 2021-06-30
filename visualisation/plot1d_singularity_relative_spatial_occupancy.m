@@ -7,6 +7,7 @@ nodal_singularity_summary = obj_singularity.nodal_singularity_summary;
 % TODO: configure graphics property to handle paper units so we can plot
 % stuff and give figure sizes
 figure_handle = figure('Name', 'nflows-singularity-spatial-occupancy');
+figure_handle.Units = 'Normalized'; 
 figure_handle.Position = [0.10 0.34 0.8 0.3];
 
 ax_pc = subplot(2, 4, [1 2 3 5 6 7], 'Parent', figure_handle);
