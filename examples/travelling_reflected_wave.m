@@ -8,16 +8,17 @@ function travelling_reflected_wave(case_label)
 % |    Host   | Data Domain    | Data Mode   | Flow Method     | # workers  |  Runtime |  Memory |
 % |-----------|----------------|-------------|-----------------|------------|----------|---------|
 % | tesseract | (u)nstructured | (a)mplitude | (h)orn-schunk3d |      6     |  3.73 min| XX  GB  |  
+% TODO: test performance
 
 if nargin < 1
-    case_label = 'uah';
+    case_label = 'u-a-hs-mb';
 end
 
 switch case_label
-    case 'uah'
-        input_params_filename = 'travelling_reflected_wave_uah_in.json';
-    case 'uac'
-        input_params_filename = 'travelling_reflected_wave_uac_in.json';
+    case 'u-a-hs-mb'
+        input_params_filename = 'travelling-reflected-wave_unstructured-amplitude-hs-meshbased_input.json';
+    case 'u-a-hs-ml'
+        input_params_filename = 'travelling-reflected-wave_unstructured-amplitude-hs-meshless_input.json';
 end
 
 

@@ -53,9 +53,6 @@ switch data_modality
         %
         %movie([M{:}], 1, 75)   % play the movie. Do not close the figure window before playing the movie
         writeVideo(vid_obj, [M{2:end}]);
-    case {"particles-slider"}
-        fig = uifigure;
-        sld = uislider(fig);
     case {"streamlines"}
         fname = generate_temp_filename("p3_streamlines-movie", 3);
         vid_obj = VideoWriter([char(fname), '.avi']);
