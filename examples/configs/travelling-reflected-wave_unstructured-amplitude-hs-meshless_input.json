@@ -1,9 +1,5 @@
 {
   "general": {
-    "storage": {
-      "time_stamp": [],
-      "dir": "scratch",
-      "dir_tmp": "/tmp",
       "params": {
         "input": {
           "filename": "travelling-reflected-wave_unstructured-amplitude-meshless_input.json",
@@ -14,13 +10,17 @@
           "dir": "examples/configs"
         }
       },
+      "storage": {
+        "time_stamp": [],
+        "dir_out": "scratch",
+        "dir_tmp": "/tmp"},
+
       "format": "iomat"
     },
     "parallel": {
       "enabled": false,
       "workers_fraction": 0.8
-    }
-  },
+    },
   "interpolation": {
     "enabled": false,
     "file": {

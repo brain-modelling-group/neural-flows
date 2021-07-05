@@ -31,7 +31,7 @@ for jj=1:numsubplot
    hh(jj).EdgeColor = 'none';
    hh(jj).FaceAlpha = 0.5;
    ax(jj).YLabel.String = 'probability';
-end
+   endclc
 
 ax(1).XLabel.String = ['speed [' params.data.resolution.units.space '/'  params.data.resolution.units.time ']'];
 ax(2).XLabel.String = ['log_{10}(speed) [' params.data.resolution.units.space '/'  params.data.resolution.units.time ']'];
