@@ -70,7 +70,7 @@
           "length": 8
         },
         "initial_conditions": {
-          "mode": "random",
+          "modality": "random",
           "seed": 42
         },
         "nodal_flows": {
@@ -151,7 +151,7 @@
     "grid": {
       "type": "unstructured"
     },
-    "ht": 0.5,
+    "ht": [],
     "hx": [],
     "hy": [],
     "hz": [],

@@ -66,7 +66,7 @@
           "length": 8
         },
         "initial_conditions": {
-          "mode": "random",
+          "modality": "random",
           "seed": 42
         },
         "nodal_flows": {
@@ -168,6 +168,6 @@
     "boundary": {
       "alpha_radius" : 30
     },
-    "mode=ality": "amplitude"
+    "modality": "amplitude"
   }
 }
