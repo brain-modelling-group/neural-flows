@@ -3,22 +3,22 @@
       "params": {
         "input": {
           "file": {
-            "name": "travelling-reflected-wave_unstructured-amplitude-meshless_input.json",
+            "name": "travelling-reflected-wave_unstructured-amplitude-hs-meshless_input.json",
             "dir": "examples/configs"
           }
         },
         "output": {
           "file": {
-          "name": "travelling-reflected-wave_unstructured-amplitude-meshless_output.json",
+          "name": "travelling-reflected-wave_unstructured-amplitude-hs-meshless_output.json",
           "dir": "examples/configs"
         }
-      },
+      }
       },
       "storage": {
         "time_stamp": [],
         "dir_out": "scratch",
         "dir_tmp": "/tmp",
-        "format": "iomat",
+        "format": "mat"
       },
     "parallel": {
       "enabled": false,
