@@ -40,6 +40,23 @@ output_params = main_core(input_params);
 main_analysis(output_params);
 
 %% Visualisation
-main_visualisation(output_params);
+switch case_label
+    case 'u-a-hs-mb'
+        output_params_filename = 'travelling-reflected-wave_unstructured-amplitude-hs-meshbased_output.json';
+    case 'u-a-hs-ml'
+        output_params_filename = 'travelling-reflected-wave_unstructured-amplitude-hs-meshless_output.json';
+end
+
+
+% This is the json file that fmri_waves() generated. 
+params_filename  = output_params_filename;
+params_dir = 'examples/configs';
+json_mode = 'read';
+
+% Load options
+ouparams = read_write_json(params_filename, params_dir, json_mode);
+plot2d_svd_modes(ouparams);
+plotmov_streamparticles(ouparams, 'particles',  2);
+plotmov_flows(ouparams);
 
 end %function example_rotating_wave()

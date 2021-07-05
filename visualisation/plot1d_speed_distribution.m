@@ -21,19 +21,21 @@ else
    uxyz(:, 3, :) = obj_flows.vz; 
 end
 
+% Norm
 un = squeeze(sqrt(uxyz(:, 1, :).^2+uxyz(:, 2, :).^2+uxyz(:, 3, :).^2));
 
-hh(1) = histogram(ax(1), un, 'Normalization', 'pdf');
-hh(2) = histogram(ax(2), log10(un), 'Normalization', 'pdf');
+hh(1) = histogram(ax(1), un, 'Normalization', 'probability');
+hh(2) = histogram(ax(2), log10(un), 'Normalization', 'probability');
 
 for jj=1:numsubplot
    hh(jj).EdgeColor = 'none';
    hh(jj).FaceAlpha = 0.5;
-   ax(jj).YLabel.String = 'pdf';
+   ax(jj).YLabel.String = 'probability';
 end
 
 ax(1).XLabel.String = ['speed [' params.data.resolution.units.space '/'  params.data.resolution.units.time ']'];
-ax(2).XLabel.String = ['log10(speed) [' params.data.resolution.units.space '/'  params.data.resolution.units.time ']'];
-
+ax(2).XLabel.String = ['log_{10}(speed) [' params.data.resolution.units.space '/'  params.data.resolution.units.time ']'];
+ax(1).Box = 'on';
+ax(2).Box = 'on';
 
 end
