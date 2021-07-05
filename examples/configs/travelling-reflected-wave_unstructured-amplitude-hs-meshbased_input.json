@@ -1,25 +1,53 @@
 {
   "general": {
-    "storage": {
-      "time_stamp": [],
-      "dir": "scratch",    
-      "dir_tmp": "/tmp",    
-      "params": {
-        "input": {
-          "filename": "travelling-reflected-wave_unstructured-amplitude-hs-meshbased_input.json",
-          "dir": "examples/configs" 
-        },
-        "output": {
-          "filename": "travelling-reflected-wave_unstructured-amplitude-hs-meshbased_output.json",
-          "dir": "examples/configs" 
+    "params": {
+      "input": {
+        "file": {
+          "name": "travelling-reflected-wave_unstructured-amplitude-hs-meshbased_input.json",
+          "dir": "examples/config"
         }
       },
-      "format": "iomat"     
+      "output": {
+        "file": {
+          "name": "travelling-reflected-wave_unstructured-amplitude-hs-meshbased_output.json",
+          "dir": "examples/configs"
+        }
+      }
     },
+    "storage": {
+      "timestamp": [],
+      "dir_out": "scratch",
+      "dir_tmp": "/tmp"
+    },
+    "format": "iomat",
     "parallel": {
       "enabled": true,
       "workers_fraction": 0.8
     }
+  },
+  "data": {
+    "file": {
+      "dir": "demo-data",
+      "name": "data-travelling-wave-unstructured-y-iomat.mat"
+    },
+    "slice": {
+      "enabled": false,
+      "id": 0
+    },
+    "grid": {
+      "type": "unstructured"
+    },
+    "resolution": {
+      "ht": [],
+      "hx": [],
+      "hy": [],
+      "hz": [],
+      "units": {
+        "space": "mm",
+        "time": "ms"
+      }
+    },
+    "modality": "amplitude"
   },
   "interpolation": {
     "enabled": true,
@@ -34,7 +62,7 @@
       "ht": [],
       "hx": 10,
       "hy": 10,
-      "hz": 10,
+      "hz": 10
     },
     "neighbour_method": "",
     "extrapolation_method": "",
@@ -90,25 +118,26 @@
       }
     }
   },
- "streamlines": {
-    "enabled": true,
-    "file": {
-      "exists": false,
-      "dir": "",
-      "name": "",
-      "label": "",
-      "keep": true
+"streamlines": {
+      "enabled": true,
+      "file": {
+          "exists": false,
+          "dir": "",
+          "name": "",
+          "label": "",
+          "keep": true
     },
-    "trace_pathlines": false, 
-    "tracing": {
-      "implementation": "mesh-based",
-      "seeding_points": {
-        "modality": "random-sparse",
-        "seed": 42
-      },
-      "max_stream_length": 200,
-      "step_size": 0.5
-    },
+      "trace_pathlines": false, 
+      "tracing": {
+               "implementation": "mesh-based", 
+               "seeding_points": {
+                                  "modality": "random-sparse",
+                                  "seed": 42
+              },
+              "max_stream_length" : 200,
+              "step_size": 0.5
+          },
+
     "visualisation": {
       "enabled": true
     }
@@ -116,14 +145,14 @@
   "singularity": {
     "enabled": false,
     "file": {
-      "keep": true,
+      "keep": false,
       "dir": "",
       "name": "",
       "label": ""
     },
     "detection": {
       "enabled": false,
-      "mode": "null-flow-field",
+      "modality": "null-flow-field",
       "threshold": [
         0,
         0.1
@@ -134,37 +163,13 @@
     },
     "quantification": {
       "enabled": false,
-      "nodal_occupancy" : {
+      "nodal_occupancy": {
         "enabled": false,
-        "distance_threshold" : 20
+        "distance_threshold": 20
       }
     },
     "visualisation": {
-      "enabled": false
+      "enabled": true
     }
-  },
-    "data": {
-    "file": {
-      "dir": "demo-data",
-      "name": "data-travelling-wave-unstructured-y-iomat.mat"
-    },
-    "slice": {
-      "enabled": false,
-      "id": 0
-    },
-    "grid": {
-      "type": "unstructured"
-    },
-    "resolution": {
-      "ht": [],
-      "hx": [],
-      "hy": [],
-      "hz": [],
-      "units": {
-        "space": "mm",
-        "time": "ms"
-      }
-    },
-    "modality": "amplitude"
-  },
+  }
 }
