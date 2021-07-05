@@ -91,7 +91,7 @@
     }
   },
  "streamlines": {
-    "enabled": false,
+    "enabled": true,
     "file": {
       "exists": false,
       "dir": "",
@@ -99,6 +99,7 @@
       "label": "",
       "keep": true
     },
+    "trace_pathlines": false, 
     "tracing": {
       "implementation": "mesh-based",
       "seeding_points": {
