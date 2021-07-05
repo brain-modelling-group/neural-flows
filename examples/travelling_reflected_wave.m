@@ -59,4 +59,4 @@ plot2d_svd_modes(ouparams);
 plotmov_streamparticles(ouparams, 'particles',  2);
 plotmov_flows(ouparams);
 
-end %function example_rotating_wave()
+end %function travelling_reflected_wave()
