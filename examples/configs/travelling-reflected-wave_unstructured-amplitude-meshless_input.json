@@ -99,7 +99,7 @@
           "label": "",
           "keep": true
     },
-
+      "trace_pathlines": false, 
       "tracing": {
                "grid": {
                    "type": "unstructured"
