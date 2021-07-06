@@ -4,9 +4,7 @@ function main_analysis(inparams)
 %  (2): flows: energy quantification
 %  (3): singularity: quantification
 
- disp('------------------------------------------------------------------------')
- fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: MAIN ANALYSIS.'))              
- disp('------------------------------------------------------------------------')
+display_info_banner(mfilename, 'STARTED ANALYSIS.', '#5c5393', false)
 
 % Tic 
 tstart = tik();
@@ -42,9 +40,11 @@ if inparams.flows.quantification.energy.enabled
 end
 %---------------------------SINGULARITY----------------------------------------%
 if inparams.singularity.quantification.enabled
-    %analyse_nodal_singularity_occupancy(inparams);   
+    analyse_nodal_singularity_occupancy(inparams);   
 end
 
 % Toc
 tok(tstart, 'minutes');
+display_info_banner(mfilename, 'FINISHED ANALYSIS.', '#5c5393', false)
+
 end % function main_analysis()

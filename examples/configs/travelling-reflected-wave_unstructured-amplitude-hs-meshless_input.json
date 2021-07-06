@@ -1,21 +1,25 @@
 {
   "general": {
-    "storage": {
-      "time_stamp": [],
-      "dir": "scratch",
-      "dir_tmp": "/tmp",
       "params": {
         "input": {
-          "filename": "travelling_reflected_wave_uac_in.json",
-          "dir": "examples/configs"
+          "file": {
+            "name": "travelling-reflected-wave_unstructured-amplitude-hs-meshless_input.json",
+            "dir": "examples/configs"
+          }
         },
         "output": {
-          "filename": "travelling_reflected_wave_uac_ou.json",
+          "file": {
+          "name": "travelling-reflected-wave_unstructured-amplitude-hs-meshless_output.json",
           "dir": "examples/configs"
         }
+      }
       },
-      "format": "iomat"
-    },
+      "storage": {
+        "time_stamp": [],
+        "dir_out": "scratch",
+        "dir_tmp": "/tmp",
+        "format": "mat"
+      },
     "parallel": {
       "enabled": false,
       "workers_fraction": 0.8
@@ -54,16 +58,19 @@
     },
     "modality": "amplitude",
     "method": {
-      "name": "cnem",
+      "name": "hs3d",
+      "implementation": "meshless", 
       "cnem": {
-        "convex_hull": "bi",
+        "convex_hull": "bi"
+      },
+      "hs3d":{
         "alpha_smooth": 0.1,
         "max_iterations": 4,
         "burnin": {
           "length": 8
         },
         "initial_conditions": {
-          "mode": "random",
+          "modality": "random",
           "seed": 42
         },
         "nodal_flows": {
@@ -91,7 +98,7 @@
     }
   },
   "streamlines": {
-      "enabled": false,
+      "enabled": true,
       "file": {
           "exists": false,
           "dir": "",
@@ -99,17 +106,15 @@
           "label": "",
           "keep": true
     },
-
+      "trace_pathlines": false, 
       "tracing": {
-               "grid": {
-                   "type": "unstructured"
-                  },
+               "implementation": "meshless", 
                "seeding_points": {
                                   "modality": "random-sparse",
                                   "seed": 42
               },
-              "max_stream_length" : 200,
-              "time_step": 0.5
+              "max_stream_length" : 50,
+              "step_size": 0.1
           },
 
     "visualisation": {
@@ -146,14 +151,16 @@
     "grid": {
       "type": "unstructured"
     },
-    "ht": 0.5,
-    "hx": [],
-    "hy": [],
-    "hz": [],
-    "units": {
-      "space": "mm",
-      "time": "ms"
-    },
+    "resolution": {
+      "ht": [],
+      "hx": [],                                       
+      "hy": [],
+      "hz": [],
+      "units": {
+         "space":"mm",                                
+          "time": "ms"                               
+     }
+  },
     "boundary": {
       "alpha_radius" : 30
     },

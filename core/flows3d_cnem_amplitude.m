@@ -68,7 +68,7 @@ obj_flows.neighbours_matrix = neighbours_matrix;
 
 B = flows3d_cnem_get_B_mat(locs, boundary_triangles);
 
-switch params.flows.method.hs3d.initial_conditions.mode
+switch params.flows.method.hs3d.initial_conditions.modality
      case {'random', 'rand'}
          seed_init = params.flows.method.hs3d.initial_conditions.seed;
          [uxo, uyo, uzo] = flows3d_cnem_set_initial_flows(num_nodes, seed_init);

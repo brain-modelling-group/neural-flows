@@ -9,28 +9,28 @@
           },
         "output": {
           "file": {
-            "name": "fmri_waves_u-a-hs-mb_ou_subject_20.json",
+            "name": "rotating-wave_unstructured-amplitude-hs-meshless_output.json",
             "dir": "examples/configs"} 
         }
       },
     "storage": {
       "time_stamp": [],
-      "dir_out": "scratch",    
-      "dir_tmp": "/tmp",    
-      "format": "iomat"     
+      "dir_out": "scratch",
+      "dir_tmp": "/tmp",
+      "format": "iomat"
     },
     "parallel": {
-      "enabled": true,
+      "enabled": false,
       "workers_fraction": 0.8
     }
   },
   "interpolation": {
-    "enabled": true,
+    "enabled": false,
     "file": {
       "exists": false,
       "dir": "",
       "name": "",
-      "label": "fmri_interp_subject_20",
+      "label": "",
       "keep": true
     },
     "resolution": {
@@ -42,8 +42,8 @@
     "neighbour_method": "",
     "extrapolation_method": "",
     "boundary": {
-      "alpha_radius": 35,
-      "thickness":4
+      "alpha_radius": 30,
+      "thickness": 2
     },
     "visualisation": {
       "enabled": true
@@ -54,23 +54,29 @@
     "file": {
       "exists": false,
       "keep": true,
-      "dir": "scratch",
+      "dir": "",
       "name": "",
-      "label": "fmri_flows_subject_20"
+      "label": ""
     },
     "modality": "amplitude",
     "method": {
       "name": "hs3d",
-      "implementation": "mesh-based",
-      "hs3d": {
-        "alpha_smooth": 1.0,
-        "max_iterations": 256,
+      "implementation": "meshless", 
+      "cnem": {
+        "convex_hull": "bi"
+      },
+      "hs3d":{
+        "alpha_smooth": 0.1,
+        "max_iterations": 128,
+        "burnin": {
+          "length": 8
+        },
         "initial_conditions": {
           "mode": "random",
           "seed": 42
         },
         "nodal_flows": {
-          "enabled": true
+          "enabled": false
         }
       }
     },
@@ -80,13 +86,13 @@
     "decomposition": {
       "svd": {
         "enabled": true,
-        "modes": 12,
+        "modes": 4,
         "grid": {
           "type": "unstructured"
         }
       }
     },
-    "quantification": {
+  "quantification": {
       "energy": {
         "enabled": true,
         "modality": "nodal"
@@ -94,22 +100,22 @@
     }
   },
   "streamlines": {
-      "enabled": true,
+      "enabled": false,
       "file": {
           "exists": false,
           "dir": "",
           "name": "",
-          "label": "fmri_streams_subject_20",
+          "label": "",
           "keep": true
     },
-      "trace_pathlines": true, 
+      "trace_pathlines": false, 
       "tracing": {
                "implementation": "meshless", 
                "seeding_points": {
                                   "modality": "random-sparse",
                                   "seed": 42
               },
-              "max_stream_length" : 512,
+              "max_stream_length" : 200,
               "step_size": 0.5
           },
 
@@ -118,39 +124,35 @@
     }
   },
   "singularity": {
-    "enabled": true,
+    "enabled": false,
     "file": {
       "keep": true,
       "dir": "",
       "name": "",
-      "label": "fmri_singularity_subject_20"
+      "label": ""
     },
     "detection": {
-      "enabled": true,
-      "modality": "null-flow-field",
+      "enabled": false,
+      "mode": "null-flow-field",
       "threshold": [
         0,
-        0.025
+        0.015625
       ]
     },
     "classification": {
-      "enabled": true
+      "enabled": false
     },
     "quantification": {
-      "enabled": true,
-      "nodal_occupancy" : {
-        "enabled": true,
-        "distance_threshold" : 2
-      }
+      "enabled": false
     },
     "visualisation": {
-      "enabled": true
+      "enabled": false
     }
   },
   "data": {
     "file": {
-      "dir": "demo-data", 
-      "name": "fmri_waves_unstructured_single_subject_20_short.mat"
+      "dir": "demo-data",
+      "name": "rotating_wave_W_c1_d1ms_iomat.mat"
     },
     "slice": {
       "enabled": false,
@@ -166,9 +168,12 @@
       "hz": [],
       "units": {
          "space":"mm",                                
-          "time": "s"                               
+          "time": "ms"                               
      }
   },
+    "boundary": {
+      "alpha_radius" : 30
+    },
     "modality": "amplitude"
   }
 }

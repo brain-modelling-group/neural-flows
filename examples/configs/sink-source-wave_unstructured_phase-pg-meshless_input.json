@@ -1,18 +1,18 @@
 {
   "general": {
-  "params": {
+      "params": {
         "input": {
           "file": {
-            "name": "",
-            "dir":  "" 
+            "name": "sink-source-wave_unstructured-phase-pg-meshless_input.json",
+            "dir":  "examples/configs" 
           }
           },
         "output": {
           "file": {
-            "name": "rotating_wave_u-p-pg-ml_ou.json",
+            "name": "sink-source-wave_unstructured-phase-pg-meshless_output.json",
             "dir": "examples/configs"} 
         }
-    },
+      },
     "storage": {
       "time_stamp": [],
       "dir_out": "scratch",
@@ -64,7 +64,7 @@
     }
   },
   "streamlines": {
-      "enabled": false,
+      "enabled": true ,
       "file": {
           "exists": false,
           "dir": "",
@@ -79,8 +79,8 @@
                                   "modality": "random-sparse",
                                   "seed": 42
               },
-              "max_stream_length" : 200,
-              "step_size": 0.5
+              "max_stream_length" : 50,
+              "step_size": 0.1
           },
 
     "visualisation": {
@@ -99,7 +99,7 @@
   "data": {
     "file": {
       "dir": "demo-data",
-      "name": "rotating_wave_W_c1_d1ms_iomat.mat"
+      "name": "sink-source_wave_W_c1_d1ms_trial1.mat"
     },
     "slice": {
       "enabled": false,

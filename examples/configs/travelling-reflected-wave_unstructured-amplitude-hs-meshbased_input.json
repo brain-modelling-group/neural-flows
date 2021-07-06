@@ -1,31 +1,56 @@
 {
   "general": {
     "params": {
-        "input": {
-          "file": {
-            "name": "",
-            "dir":  "" 
-          }
-          },
-        "output": {
-          "file": {
-            "name": "rotating_wave_u-a-hs-ml_ou.json",
-            "dir": "examples/configs"} 
+      "input": {
+        "file": {
+          "name": "travelling-reflected-wave_unstructured-amplitude-hs-meshbased_input.json",
+          "dir": "examples/config"
         }
       },
-    "storage": {
-      "time_stamp": [],
-      "dir_out": "scratch",
-      "dir_tmp": "/tmp",
-      "format": "iomat"
+      "output": {
+        "file": {
+          "name": "travelling-reflected-wave_unstructured-amplitude-hs-meshbased_output.json",
+          "dir": "examples/configs"
+        }
+      }
     },
+    "storage": {
+      "timestamp": [],
+      "dir_out": "scratch",
+      "dir_tmp": "/tmp"
+    },
+    "format": "iomat",
     "parallel": {
-      "enabled": false,
+      "enabled": true,
       "workers_fraction": 0.8
     }
   },
+  "data": {
+    "file": {
+      "dir": "demo-data",
+      "name": "data-travelling-wave-unstructured-y-iomat.mat"
+    },
+    "slice": {
+      "enabled": false,
+      "id": 0
+    },
+    "grid": {
+      "type": "unstructured"
+    },
+    "resolution": {
+      "ht": [],
+      "hx": [],
+      "hy": [],
+      "hz": [],
+      "units": {
+        "space": "mm",
+        "time": "ms"
+      }
+    },
+    "modality": "amplitude"
+  },
   "interpolation": {
-    "enabled": false,
+    "enabled": true,
     "file": {
       "exists": false,
       "dir": "",
@@ -35,15 +60,15 @@
     },
     "resolution": {
       "ht": [],
-      "hx": 3,                                     
-      "hy": 3,                                     
-      "hz": 3                                    
+      "hx": 10,
+      "hy": 10,
+      "hz": 10
     },
     "neighbour_method": "",
     "extrapolation_method": "",
     "boundary": {
       "alpha_radius": 30,
-      "thickness": 2
+      "thickness": 3
     },
     "visualisation": {
       "enabled": true
@@ -61,22 +86,16 @@
     "modality": "amplitude",
     "method": {
       "name": "hs3d",
-      "implementation": "meshless", 
-      "cnem": {
-        "convex_hull": "bi"
-      },
-      "hs3d":{
+      "implementation": "mesh-based",
+      "hs3d": {
         "alpha_smooth": 0.1,
-        "max_iterations": 128,
-        "burnin": {
-          "length": 8
-        },
+        "max_iterations": 256,
         "initial_conditions": {
-          "mode": "random",
+          "modality": "random",
           "seed": 42
         },
         "nodal_flows": {
-          "enabled": false
+          "enabled": true
         }
       }
     },
@@ -86,21 +105,21 @@
     "decomposition": {
       "svd": {
         "enabled": true,
-        "modes": 4,
+        "modes": 1,
         "grid": {
           "type": "unstructured"
         }
       }
     },
-  "quantification": {
+    "quantification": {
       "energy": {
         "enabled": true,
         "modality": "nodal"
       }
     }
   },
-  "streamlines": {
-      "enabled": false,
+"streamlines": {
+      "enabled": true,
       "file": {
           "exists": false,
           "dir": "",
@@ -108,9 +127,9 @@
           "label": "",
           "keep": true
     },
-
+      "trace_pathlines": false, 
       "tracing": {
-               "implementation": "meshless", 
+               "implementation": "mesh-based", 
                "seeding_points": {
                                   "modality": "random-sparse",
                                   "seed": 42
@@ -126,54 +145,31 @@
   "singularity": {
     "enabled": false,
     "file": {
-      "keep": true,
+      "keep": false,
       "dir": "",
       "name": "",
       "label": ""
     },
     "detection": {
       "enabled": false,
-      "mode": "null-flow-field",
+      "modality": "null-flow-field",
       "threshold": [
         0,
-        0.015625
+        0.1
       ]
     },
     "classification": {
       "enabled": false
     },
     "quantification": {
-      "enabled": false
+      "enabled": false,
+      "nodal_occupancy": {
+        "enabled": false,
+        "distance_threshold": 20
+      }
     },
     "visualisation": {
-      "enabled": false
+      "enabled": true
     }
-  },
-  "data": {
-    "file": {
-      "dir": "demo-data",
-      "name": "rotating_wave_W_c1_d1ms_iomat.mat"
-    },
-    "slice": {
-      "enabled": false,
-      "id": 0
-    },
-    "grid": {
-      "type": "unstructured"
-    },
-    "resolution": {
-      "ht": [],
-      "hx": [],                                       
-      "hy": [],
-      "hz": [],
-      "units": {
-         "space":"mm",                                
-          "time": "ms"                               
-     }
-  },
-    "boundary": {
-      "alpha_radius" : 30
-    },
-    "modality": "amplitude"
   }
 }

@@ -47,7 +47,7 @@ function  [params, obj_streams, obj_streams_sentinel] = streams3d_trace(params)
         obj_streams.locs = obj_flows.locs;
     end
        
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started tracing of streamlines.'))
+    fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Started tracing of streamlines.'))
     % Check if it's phase-based streams, or amplitude-based
     % If it's amplitude-based it can be meshless or mesh-based 
     switch params.streamlines.tracing.implementation
@@ -56,7 +56,7 @@ function  [params, obj_streams, obj_streams_sentinel] = streams3d_trace(params)
             if params.streamlines.trace_pathlines
                 obj_streams = streams3d_pathlines_cnem(obj_flows, obj_streams, params);
             end
-        case 'mesh-based'
+        case {'mesh-based', 'meshbased'}
             if params.general.parallel.enabled
                 streams3d_tracing_mlab_parallel(obj_flows, obj_streams, params);
             else
@@ -64,7 +64,7 @@ function  [params, obj_streams, obj_streams_sentinel] = streams3d_trace(params)
             end
     end
     obj_streams.xyz_lims = obj_flows.xyz_lims; 
-    fprintf('%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished tracing of streamlines.'))
+    fprintf('\n%s \n', strcat('neural-flows:: ', mfilename, '::Info:: Finished tracing of streamlines.'))
 
     % Disable streams calculation if we already did it
     params.general.streamlines.enabled = false;

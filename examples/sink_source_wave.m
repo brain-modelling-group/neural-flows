@@ -25,11 +25,11 @@ end
 
 switch case_label
     case 'u-a-hs-mb'
-        input_params_filename = 'sink-source_wave_u-a-hs-mb_in.json';
+        input_params_filename = 'sink-source-wave_unstructured-amplitude-hs-meshbased_input.json';
     case 'u-a-hs-ml'
-        input_params_filename = 'sink-source_wave_u-a-hs-ml_in.json';
+        input_params_filename = 'sink-source-wave_unstructured-amplitude-hs-meshless_input.json';
     case 'u-p-pg-ml'
-        input_params_filename = 'sink-source_wave_u-p-pg-ml_in.json';
+        input_params_filename = 'sink-source-wave_unstructured-phase-pg-meshless_input.json';
 end
 
 input_params_dir  = 'examples/configs';

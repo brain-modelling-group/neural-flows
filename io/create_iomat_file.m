@@ -37,16 +37,16 @@ function [mfile_handle, mfile_sentinel] = create_iomat_file(filename, directory,
         mfile_sentinel = [];
     end
     
-    fprintf('%s \n', 'Creating file:')
-    fprintf('\t \t %s \n', mfile_name)
+    cprintf('#016500', '%s \n', 'Creating file:')
+    cprintf('Black', '\t %s \n', mfile_name)
 end % function create_iomat_file()
 
 function remove_temp_file(fname)
 % This action will be performed when
 % mfile_sentinel is destroyed
 
- fprintf('%s \n', 'Removing file:')
- fprintf('\t \t %s \n', fname)
+ cprintf('Red', '%s \n', 'Removing file:')
+ cprintf('Black', '\t %s \n', fname)
  delete(fname)
  
 end % function remove_temp_file()

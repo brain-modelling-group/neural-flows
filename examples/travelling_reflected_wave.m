@@ -8,16 +8,17 @@ function travelling_reflected_wave(case_label)
 % |    Host   | Data Domain    | Data Mode   | Flow Method     | # workers  |  Runtime |  Memory |
 % |-----------|----------------|-------------|-----------------|------------|----------|---------|
 % | tesseract | (u)nstructured | (a)mplitude | (h)orn-schunk3d |      6     |  3.73 min| XX  GB  |  
+% TODO: test performance
 
 if nargin < 1
-    case_label = 'uah';
+    case_label = 'u-a-hs-mb';
 end
 
 switch case_label
-    case 'uah'
-        input_params_filename = 'travelling_reflected_wave_uah_in.json';
-    case 'uac'
-        input_params_filename = 'travelling_reflected_wave_uac_in.json';
+    case 'u-a-hs-mb'
+        input_params_filename = 'travelling-reflected-wave_unstructured-amplitude-hs-meshbased_input.json';
+    case 'u-a-hs-ml'
+        input_params_filename = 'travelling-reflected-wave_unstructured-amplitude-hs-meshless_input.json';
 end
 
 
@@ -39,6 +40,23 @@ output_params = main_core(input_params);
 main_analysis(output_params);
 
 %% Visualisation
-main_visualisation(output_params);
+switch case_label
+    case 'u-a-hs-mb'
+        output_params_filename = 'travelling-reflected-wave_unstructured-amplitude-hs-meshbased_output.json';
+    case 'u-a-hs-ml'
+        output_params_filename = 'travelling-reflected-wave_unstructured-amplitude-hs-meshless_output.json';
+end
 
-end %function example_rotating_wave()
+
+% This is the json file that travelling_reflected_wave() generated. 
+params_filename  = output_params_filename;
+params_dir = 'examples/configs';
+json_mode = 'read';
+
+% Load options
+ouparams = read_write_json(params_filename, params_dir, json_mode);
+plot2d_svd_modes(ouparams);
+plotmov_streamparticles(ouparams, 'particles',  2);
+plotmov_flows(ouparams);
+
+end %function travelling_reflected_wave()
