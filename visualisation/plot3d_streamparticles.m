@@ -24,7 +24,7 @@ axs_handle = cell(num_frames, 1);
 
 for ff=1:num_frames
     stream_verts = get_verts(these_frames(ff));
-    fig_handle{ff} = figure('Name', 'nflows-flows-streamparticles');
+    fig_handle{ff} = figure('Name', 'nflows-flows-streamparticles-mb');
     axs_handle{ff} = p3_streamparticles(fig_handle{ff}, stream_verts, xyz_lims, display_modality);
 end
 
