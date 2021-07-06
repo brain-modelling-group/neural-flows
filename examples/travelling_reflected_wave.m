@@ -48,7 +48,7 @@ switch case_label
 end
 
 
-% This is the json file that fmri_waves() generated. 
+% This is the json file that travelling_reflected_wave() generated. 
 params_filename  = output_params_filename;
 params_dir = 'examples/configs';
 json_mode = 'read';

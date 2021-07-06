@@ -109,8 +109,8 @@
                                   "modality": "random-sparse",
                                   "seed": 42
               },
-              "max_stream_length" : 200,
-              "step_size": 0.5
+              "max_stream_length" : 50,
+              "step_size": 0.1
           },
 
     "visualisation": {

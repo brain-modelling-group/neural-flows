@@ -98,7 +98,7 @@
     }
   },
   "streamlines": {
-      "enabled": false,
+      "enabled": true,
       "file": {
           "exists": false,
           "dir": "",
@@ -113,8 +113,8 @@
                                   "modality": "random-sparse",
                                   "seed": 42
               },
-              "max_stream_length" : 200,
-              "step_size": 0.5
+              "max_stream_length" : 50,
+              "step_size": 0.1
           },
 
     "visualisation": {
@@ -151,14 +151,16 @@
     "grid": {
       "type": "unstructured"
     },
-    "ht": [],
-    "hx": [],
-    "hy": [],
-    "hz": [],
-    "units": {
-      "space": "mm",
-      "time": "ms"
-    },
+    "resolution": {
+      "ht": [],
+      "hx": [],                                       
+      "hy": [],
+      "hz": [],
+      "units": {
+         "space":"mm",                                
+          "time": "ms"                               
+     }
+  },
     "boundary": {
       "alpha_radius" : 30
     },
